@@ -95,10 +95,12 @@ module Facter
 
     desc 'query', 'query'
     def query(*args)
+
+      Facter.new(args)
       if options[:color]
         puts 'color'
       end
-      puts args
+      puts 'args: ' + args.inspect
     end
 
 
