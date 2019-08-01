@@ -107,7 +107,7 @@ module Facter
     desc '--version, -v', 'Print the version'
     map ['--version', '-v'] => :version
     def version
-      puts "#{VERSION}"
+      puts "#{FACTER_VERSION}"
     end
 
     desc 'help', 'Help for all arguments'
