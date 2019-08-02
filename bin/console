@@ -6,7 +6,7 @@ require_relative '../config/config'
 require_relative '../lib/cli'
 require_relative '../lib/base'
 require_relative '../lib/fact_loader'
-require_relative '../lib/option_parser'
+require_relative '../lib/query_parser'
 
 os = :linux
 require_relative "../lib/facts/#{os.to_s}/network_interface"
