@@ -13,6 +13,8 @@ before_install:
   - gem update --system
   - gem install bundler
   - sudo apt-get -y install libgmp-dev
+  - sudo apt-get install ruby-dev
+
 addons:
   sonarcloud:
     organization: "puppet"
