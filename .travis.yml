@@ -1,5 +1,6 @@
 sudo: false
 language: ruby
+dist: trusty
 rvm:
   - 2.6
   - 2.5
@@ -10,6 +11,12 @@ cache:
 before_install:
   - gem update --system
   - gem install bundler
+addons:
+  sonarcloud:
+    organization: "puppet"
+    token:
+      secure: "775bbcca7b9ed3903ba8beddbb961eb13d885e2d" # encrypted value of your token
 script:
-  - bundle exec rubocop
+#  - bundle exec rubocop
   - bundle exec rubycritic --no-browser -s 80 -f console
+  - sonar-scanner
