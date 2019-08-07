@@ -12,7 +12,7 @@ cache:
 before_install:
   - gem update --system
   - gem install bundler
-  - gem install devtools
+  - gem install devtools -v 0.1.21
 addons:
   sonarcloud:
     organization: "puppet"
