@@ -15,7 +15,7 @@ before_install:
   - gem install bundler
   - sudo apt-get -y install libyaml-dev
 #  - sudo apt-get -y install libgmp-dev
-#  - sudo apt-get install ruby-dev
+  - sudo apt-get install ruby-dev
 #  - sudo apt-get install build-essential
 
 #addons:
