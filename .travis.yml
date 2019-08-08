@@ -16,6 +16,7 @@ before_install:
   - sudo apt-get -y install libyaml-dev
 #  - sudo apt-get -y install libgmp-dev
   - sudo apt-get install ruby-dev
+  - bundle install
 #  - sudo apt-get install build-essential
 
 #addons:
