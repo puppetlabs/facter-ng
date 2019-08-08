@@ -17,11 +17,11 @@ before_install:
 #  - sudo apt-get install ruby-dev
 #  - sudo apt-get install build-essential
 
-addons:
-  sonarcloud:
-    organization: "puppet"
-    token:
-      secure: "775bbcca7b9ed3903ba8beddbb961eb13d885e2d" # encrypted value of your token
+#addons:
+#  sonarcloud:
+#    organization: "puppet"
+#    token:
+#      secure: "775bbcca7b9ed3903ba8beddbb961eb13d885e2d" # encrypted value of your token
 script:
 #  - bundle exec rubocop
 #  - bundle exec rubycritic --no-browser -s 80 -f console
