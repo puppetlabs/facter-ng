@@ -14,7 +14,7 @@ before_install:
   - gem install bundler
   - sudo apt-get -y install libgmp-dev
   - sudo apt-get install ruby-dev
-  - gem install psych -v '3.1.0' --source 'https://rubygems.org/'
+  - sudo apt-get install build-essential
 
 addons:
   sonarcloud:
