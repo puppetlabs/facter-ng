@@ -1,6 +1,6 @@
 sudo: false
 language: ruby
-jdk: openjdk12
+#jdk: openjdk12
 #dist: trusty
 rvm:
 #  - 2.6
