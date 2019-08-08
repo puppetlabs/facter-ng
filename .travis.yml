@@ -1,31 +1,26 @@
 sudo: false
 language: ruby
-#jdk: openjdk12
 #dist: trusty
 rvm:
-#  - 2.6
-#  - 2.5
-#  - 2.4
-#  - 2.3
+  - 2.6
+  - 2.5
+  - 2.4
+  - 2.3
   - jruby-head
 cache:
   bundler: true
 before_install:
   - gem update --system
   - gem install bundler
-#  - sudo apt-get -y install libyaml-dev
-#  - sudo apt-get -y install libgmp-dev
-#  - sudo apt-get install ruby-dev
   - bundle install
-#  - sudo apt-get install build-essential
 
-#addons:
-#  sonarcloud:
-#    organization: "puppet"
-#    token:
-#      secure: "775bbcca7b9ed3903ba8beddbb961eb13d885e2d" # encrypted value of your token
+addons:
+  sonarcloud:
+    organization: "puppet"
+    token:
+      secure: "775bbcca7b9ed3903ba8beddbb961eb13d885e2d" # encrypted value of your token
 script:
 #  - bundle exec rubocop
 #  - bundle exec rubycritic --no-browser -s 80 -f console
-#  - bundle exec rake spec
-#  - sonar-scanner
+  - bundle exec rake spec
+  - sonar-scanner
