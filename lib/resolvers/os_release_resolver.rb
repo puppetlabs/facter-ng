@@ -22,12 +22,19 @@ class OsReleaseResolver < BaseResolver
         return result unless result.nil?
 
         output, _status = Open3.capture2('cat /etc/os-release')
-        release_info = output.delete('\"').split("\n").map { |e| e.split('=') }
-
-        @@fact_list = Hash[*release_info.flatten]
+        build_fact_list(output)
 
         return @@fact_list[fact_name]
       end
+    end
+
+    private
+
+    def build_fact_list(output)
+      release_info = output.delete('\"').split("\n").map { |e| e.split('=') }
+
+      @@fact_list = Hash[*release_info.flatten]
+      @@fact_list[:slug] = @@fact_list['ID'].downcase
     end
   end
 end
