@@ -41,7 +41,7 @@ module Facter
       searched_facts.each do |searched_fact|
         threads << Thread.new do
           fact_class = searched_fact.fact_class
-          fact_class.new(searched_fact.filter_tokens).call_the_resolver
+          fact_class.new.call_the_resolver
         end
       end
 
