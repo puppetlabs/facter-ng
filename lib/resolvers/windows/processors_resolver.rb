@@ -50,8 +50,9 @@ class ProcessorsResolver < BaseResolver
     end
 
     def find_isa(arch)
-      architecture_array = %w[x86 MIPS Alpha PowerPC ARM Itanium x64]
-      isa = architecture_array[arch]
+      architecture_hash =
+        { 0 => 'x86', 1 => 'MIPS', 2 => 'Alpha', 3 => 'PowerPC', 5 => 'ARM', 6 => 'Itanium', 9 => 'x64' }
+      isa = architecture_hash[arch]
 
       return isa if isa
 
