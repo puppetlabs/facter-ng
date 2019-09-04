@@ -22,7 +22,7 @@ module Facter
 
     def build_fact_collection!(searched_facts)
       searched_facts.each do |fact|
-        bury(*fact.name.split('.') + fact.filter_tokens << fact.value)
+        bury(*fact.name.split('.') + fact.filter_tokens << fact.value) if fact.value
       end
 
       self

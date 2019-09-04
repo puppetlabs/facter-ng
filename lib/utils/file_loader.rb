@@ -19,6 +19,7 @@ def load_lib_dirs(*dirs)
   load_dir(['lib', dirs])
 end
 
+load_lib_dirs('facts_utils')
 load_lib_dirs('resolvers')
 load_lib_dirs('utils')
 load_lib_dirs('models')

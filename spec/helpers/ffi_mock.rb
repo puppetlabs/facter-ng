@@ -1,7 +1,19 @@
 # frozen_string_literal: true
 
 module FFI
+  ERROR_MORE_DATA = 234
+  CURRENT_PROCESS = 0
+  @error_number = nil
   def self.typedef(arg1, arg2); end
+
+  def self.errno
+    @error_number
+  end
+
+  def self.define_errno(arg)
+    @error_number = arg
+  end
+
   module Library
     def ffi_convention(arg); end
 
@@ -11,7 +23,17 @@ module FFI
   end
 
   class Pointer
+    NULL = nil
     def write_uint32(); end
+
     def read_uint32(); end
+  end
+
+  class MemoryPointer
+    def initialize; end
+  end
+
+  class Struct
+    def self.layout(*); end
   end
 end
