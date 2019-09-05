@@ -22,3 +22,4 @@ describe 'facter' do
     expect(fact_hash).to eq(expected_resolved_fact_list)
   end
 end
+
