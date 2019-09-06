@@ -5,7 +5,7 @@ require 'pathname'
 ROOT_DIR = Pathname.new(File.expand_path('..', __dir__)) unless defined?(ROOT_DIR)
 require "#{ROOT_DIR}/lib/utils/file_loader"
 
-require "#{ROOT_DIR}/lib/utils/formating/fact_form"
+require "#{ROOT_DIR}/lib/utils/formating/fact_formater"
 require "#{ROOT_DIR}/lib/utils/formating/hocon_fact_formatter"
 require "#{ROOT_DIR}/lib/utils/formating/json_fact_formatter"
 require "#{ROOT_DIR}/lib/utils/formating/yaml_fact_formatter"
@@ -18,7 +18,7 @@ module Facter
   def self.to_hocon(*args)
     fact_collection = Facter::Base.new.resolve_facts(args)
     # FactFormatter.new(args, fact_collection).to_hocon
-    fact_formatter = Facter::FactForm.new(args, fact_collection)
+    fact_formatter = Facter::FactFormater.new(args, fact_collection)
     fact_formatter.format_facts(Facter::HoconFactFormatter.new)
   end
 

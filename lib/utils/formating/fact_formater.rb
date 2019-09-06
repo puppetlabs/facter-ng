@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Facter
-  class FactForm
+  class FactFormater
     # If the user did not provide any query, use the fact collection unchanged.
     # If the user provided some search query,
     # use a hash containing search query as key and query result as value.
