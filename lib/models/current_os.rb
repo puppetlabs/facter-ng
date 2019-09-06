@@ -6,7 +6,7 @@ require 'singleton'
 class CurrentOs
   include Singleton
 
-  attr_accessor :identifier, :version
+  attr_reader :identifier, :version
 
   def detect
     host_os = RbConfig::CONFIG['host_os']
@@ -33,5 +33,15 @@ class CurrentOs
       break if @identifier
     end
     @identifier
+  end
+
+  private
+
+  def identifier=(value)
+    @identifier = value
+  end
+
+  def version=(value)
+    @version = value
   end
 end
