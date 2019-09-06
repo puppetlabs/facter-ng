@@ -9,13 +9,17 @@ class KernelResolver < BaseResolver
     def resolve(fact_name)
       @@semaphore.synchronize do
         result ||= @@fact_list[fact_name]
-        result || build_facts_list(fact_name)
+        result || read_os_version_information(fact_name)
       end
+    end
+
+    def invalidate_cache
+      @@fact_list = {}
     end
 
     private
 
-    def read_os_version_information
+    def read_os_version_information(fact_name)
       ver_ptr = FFI::MemoryPointer.new(Osversioninfoex.size)
       ver = Osversioninfoex.new(ver_ptr)
       ver[:dwOSVersionInfoSize] = Osversioninfoex.size
@@ -25,15 +29,16 @@ class KernelResolver < BaseResolver
         return
       end
 
-      { major: ver[:dwMajorVersion], minor: ver[:dwMinorVersion], build: ver[:dwBuildNumber] }
+      result = { major: ver[:dwMajorVersion], minor: ver[:dwMinorVersion], build: ver[:dwBuildNumber] }
+      build_facts_list(result)
+
+      @@fact_list[fact_name]
     end
 
-    def build_facts_list(fact_name)
-      result = read_os_version_information
+    def build_facts_list(result)
       @@fact_list[:kernelversion] = "#{result[:major]}.#{result[:minor]}.#{result[:build]}"
       @@fact_list[:kernelmajorversion] = "#{result[:major]}.#{result[:minor]}"
       @@fact_list[:kernel] = 'windows'
-      @@fact_list[fact_name]
     end
   end
 end

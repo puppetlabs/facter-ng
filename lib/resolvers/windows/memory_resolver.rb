@@ -13,12 +13,16 @@ class MemoryResolver < BaseResolver
       end
     end
 
+    def invalidate_cache
+      @@fact_list = {}
+    end
+
     private
 
     def read_performance_information
       state_ptr = FFI::MemoryPointer.new(PerformanceInformation.size)
       if MemoryFFI::GetPerformanceInfo(state_ptr, state_ptr.size) == FFI::WIN32_FALSE
-        @log.debug 'resolving memory facts failed'
+        @log.debug 'Resolving memory facts failed'
         return
       end
 
@@ -30,6 +34,8 @@ class MemoryResolver < BaseResolver
 
     def build_facts_list(fact_name)
       result = read_performance_information
+      return unless result
+
       @@fact_list[:total_bytes] = result[:total_bytes]
       @@fact_list[:available_bytes] = result[:available_bytes]
       @@fact_list[:used_bytes] = result[:used_bytes]

@@ -7,6 +7,7 @@ Coveralls.wear!
 
 require 'open3'
 require 'thor'
+require 'fileutils'
 
 require_relative '../lib/resolvers/base_resolver'
 require_relative '../spec/helpers/kernel_mock'
@@ -26,7 +27,7 @@ SimpleCov.start do
   add_filter 'spec'
 end
 
-default_coverage = 70
+default_coverage = 80
 SimpleCov.minimum_coverage ENV['COVERAGE'] || default_coverage
 
 # Configure RSpec
@@ -41,4 +42,8 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+end
+
+def load_fixture(filename)
+  File.open(File.join('spec', 'fixtures', filename))
 end
