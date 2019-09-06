@@ -13,6 +13,3 @@ Metrics/BlockLength:
 Style/ClassVars:
   Exclude:
     - !ruby/regexp /(?:(?!.+_resolver.rb).)*$/
-Style/TrivialAccessors:
-  Exclude:
-    - !ruby/regexp /(?:(?!current_os.rb).)*$/
