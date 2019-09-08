@@ -12,24 +12,16 @@ module Facter
         JSON.pretty_generate(fact_colection)
       else
         puts "one or more user queries"
-        # fact_colection = FactCollection.new
-        # resolved_facts.each do |resolved_fact|
-        #   fact_colection.bury(resolved_fact.user_query)
-        # end
-        #
-        #
-        # fact_colection = FactCollection.new.build_fact_collection!(resolved_facts)
+
         facts_to_display = {}
+        user_queries.each do |user_query|
+          facts_for_query = resolved_facts.select { |resolved_fact| resolved_fact.user_query == user_query.user_query}
+          fact_colection = FactCollection.new.build_fact_collection!(facts_for_query)
 
-        resolved_facts.each do |fact|
-          # printable_value = fact_colection.dig(*fact.user_query.split('.'))
-          facts_to_display.merge!(fact.user_query => fact.value)
+
+          printable_value = fact_colection.dig(*user_query.user_query.split('.'))
+          facts_to_display.merge!(user_query.user_query => printable_value)
         end
-
-
-        #     printable_value = resolved_facts.dig(*searched_fact.split('.'))
-        #     facts_to_display.merge!(searched_fact => printable_value)
-
 
         JSON.pretty_generate(facts_to_display)
       end
