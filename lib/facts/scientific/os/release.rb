@@ -14,7 +14,7 @@ module Facter
           }
         }
 
-        Fact.new(FACT_NAME, release)
+        ResolvedFact.new(FACT_NAME, release)
       end
     end
   end

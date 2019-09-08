@@ -3,7 +3,7 @@
 describe 'facter' do
   it 'returns one fact' do
     allow(OsDetector).to receive(:detect_family).and_return('ubuntu')
-    os_fact = Facter::Fact.new('os.name', 'ubuntu')
+    os_fact = Facter::ResolvedFact.new('os.name', 'ubuntu')
     allow_any_instance_of(Facter::Ubuntu::OsName).to receive(:call_the_resolver).and_return(os_fact)
     fact_hash = Facter::Base.new.resolve_facts(['os.name'])
 

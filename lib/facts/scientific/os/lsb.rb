@@ -14,7 +14,7 @@ module Facter
           'majdistrelease' => resolver('Release')
         }
 
-        Fact.new(FACT_NAME, lsb)
+        ResolvedFact.new(FACT_NAME, lsb)
       end
 
       def resolver(key)
