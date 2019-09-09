@@ -5,10 +5,10 @@ require 'json'
 require 'yaml'
 
 require "#{ROOT_DIR}/lib/resolvers/base_resolver"
-require "#{ROOT_DIR}/lib/facter"
+require "#{ROOT_DIR}/lib/framework/core/facter"
 
-require "#{ROOT_DIR}/lib/utils/logging/multilogger"
-require "#{ROOT_DIR}/lib/utils/logging/logger"
+require "#{ROOT_DIR}/lib/framework/logging/multilogger"
+require "#{ROOT_DIR}/lib/framework/logging/logger"
 
 def load_dir(*dirs)
   Dir.glob(File.join(ROOT_DIR, dirs, '*.rb'), &method(:require))
@@ -22,6 +22,7 @@ end
 
 load_lib_dirs('resolvers')
 load_lib_dirs('utils')
+load_lib_dirs('framework','core')
 load_lib_dirs('models')
 
 os = ENV['RACK_ENV'] == 'test' ? '' : OsDetector.detect_family

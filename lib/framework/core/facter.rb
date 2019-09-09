@@ -2,13 +2,13 @@
 
 require 'pathname'
 
-ROOT_DIR = Pathname.new(File.expand_path('..', __dir__)) unless defined?(ROOT_DIR)
-require "#{ROOT_DIR}/lib/utils/file_loader"
+ROOT_DIR = Pathname.new(File.expand_path('../..', __dir__)) unless defined?(ROOT_DIR)
+require "#{ROOT_DIR}/lib/framework/core/file_loader"
 
-require "#{ROOT_DIR}/lib/utils/formating/fact_formater"
-require "#{ROOT_DIR}/lib/utils/formating/hocon_fact_formatter"
-require "#{ROOT_DIR}/lib/utils/formating/json_fact_formatter"
-require "#{ROOT_DIR}/lib/utils/formating/yaml_fact_formatter"
+require "#{ROOT_DIR}/lib/framework/formatters/fact_formater"
+require "#{ROOT_DIR}/lib/framework/formatters/hocon_fact_formatter"
+require "#{ROOT_DIR}/lib/framework/formatters/json_fact_formatter"
+require "#{ROOT_DIR}/lib/framework/formatters/yaml_fact_formatter"
 
 require "#{ROOT_DIR}/lib/framework/core/fact_augmenter"
 
