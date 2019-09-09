@@ -22,7 +22,7 @@ end
 
 load_lib_dirs('resolvers')
 load_lib_dirs('utils')
-load_lib_dirs('framework','core')
+load_lib_dirs('framework', 'core')
 load_lib_dirs('models')
 
 os = ENV['RACK_ENV'] == 'test' ? '' : OsDetector.detect_family

@@ -22,7 +22,7 @@ module Facter
   def self.to_hocon(*args)
     resolved_facts = Facter::Base.new.resolve_facts(args)
     fact_formatter = Facter::FactFormater.new
-    fact_formatter.format_facts(resolved_facts, Facter::JsonFactFormatter.new)
+    fact_formatter.format_facts(resolved_facts, Facter::YamlFactFormatter.new)
   end
 
   def self.value(*args)
