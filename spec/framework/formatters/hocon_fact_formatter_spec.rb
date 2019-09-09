@@ -15,7 +15,7 @@ describe 'HoconFactFormatter' do
     formatted_output = Facter::HoconFactFormatter.new.format(resolved_fact_list)
 
     expected_output =
-      ["", "os => {", "  name => \"Darwin\",", "  family => \"Darwin\",", "  architecture => \"x86_64\"", "}"]
+      "os => {\n  name => \"Darwin\",\n  family => \"Darwin\",\n  architecture => \"x86_64\"\n}"
 
     expect(formatted_output).to eq(expected_output)
   end
@@ -26,7 +26,20 @@ describe 'HoconFactFormatter' do
     resolved_fact_list = [resolved_fact]
     formatted_output = Facter::HoconFactFormatter.new.format(resolved_fact_list)
 
-    expected_output = "Darwin"
+    expected_output = 'Darwin'
+
+    expect(formatted_output).to eq(expected_output)
+  end
+
+  it 'formats to hocon for multiple user queries' do
+    resolved_fact1 =
+      double(Facter::ResolvedFact, name: 'os.name', value: 'Darwin', user_query: 'os.name', filter_tokens: [])
+    resolved_fact2 =
+      double(Facter::ResolvedFact, name: 'os.family', value: 'Darwin', user_query: 'os.family', filter_tokens: [])
+    resolved_fact_list = [resolved_fact1, resolved_fact2]
+    formatted_output = Facter::HoconFactFormatter.new.format(resolved_fact_list)
+
+    expected_output = "os.name => Darwin,\nos.family => Darwin"
 
     expect(formatted_output).to eq(expected_output)
   end
