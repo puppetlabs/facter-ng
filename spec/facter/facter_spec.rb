@@ -7,8 +7,8 @@ describe 'facter' do
     allow_any_instance_of(Facter::Ubuntu::OsName).to receive(:call_the_resolver).and_return(os_fact)
     fact_hash = Facter::Base.new.resolve_facts(['os.name'])
 
-    expected_fact_hash = { 'os' => { 'name' => 'ubuntu' } }
+    expected_resolved_fact_list = [os_fact]
 
-    expect(fact_hash).to eq(expected_fact_hash)
+    expect(fact_hash).to eq(expected_resolved_fact_list)
   end
 end
