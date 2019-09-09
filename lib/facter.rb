@@ -93,22 +93,20 @@ module Facter
     end
 
     def resolve_user_query(searched_facts, resolved_facts)
-      resolved_fact_list = []
 
       searched_facts.each do |searched_fact|
 
         matched_facts = searched_fact.name.end_with?('.*') ?
-                          resolved_facts.select { |resolved_fact| resolved_fact.name.match(searched_fact.name) }.uniq { |elem| elem.name } :
-                          resolved_facts.select { |resolved_fact| searched_fact.name.match(resolved_fact.name) }.uniq { |elem| elem.name }
+                          resolved_facts.select { |resolved_fact| resolved_fact.name.match(searched_fact.user_query) && !resolved_fact.user_query}.uniq { |elem| elem.name } :
+                          resolved_facts.select { |resolved_fact| searched_fact.name.match(resolved_fact.name) && !resolved_fact.user_query}.uniq { |elem| elem.name }
+
         matched_facts.each do |matched_fact|
-          resolved_fact = ResolvedFact.new(matched_fact.name, matched_fact.value)
-          resolved_fact.user_query = searched_fact.user_query
-          resolved_fact.filter_tokens = searched_fact.filter_tokens
-          resolved_fact_list << resolved_fact
+          matched_fact.user_query = searched_fact.user_query
+          matched_fact.filter_tokens = searched_fact.filter_tokens
         end
       end
 
-      resolved_fact_list
+      resolved_facts
     end
 
     # def enrich_resolved_facts(searched_facts, resolved_facts)
