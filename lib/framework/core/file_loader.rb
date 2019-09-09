@@ -4,11 +4,12 @@ require 'open3'
 require 'json'
 require 'yaml'
 
-require "#{ROOT_DIR}/lib/resolvers/base_resolver"
-require "#{ROOT_DIR}/lib/framework/core/facter"
-
 require "#{ROOT_DIR}/lib/framework/logging/multilogger"
 require "#{ROOT_DIR}/lib/framework/logging/logger"
+
+require "#{ROOT_DIR}/lib/resolvers/base_resolver"
+
+require "#{ROOT_DIR}/lib/framework/core/facter"
 
 def load_dir(*dirs)
   Dir.glob(File.join(ROOT_DIR, dirs, '*.rb'), &method(:require))

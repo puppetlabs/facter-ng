@@ -64,18 +64,16 @@ module Facter
       @log.debug('Remove quates form parent nodes')
       pretty_json.gsub!(/\"(.*)\"\ =>/, '\1 =>')
 
-      @log.debug('Remove empty lines')
-      pretty_json.gsub!(/^$\n/, '')
-
       pretty_json
     end
 
     def remove_enclosing_accolades(pretty_fact_json)
       @log.debug('Removing enclosing accolades')
       pretty_fact_json[1..-2]
-    end
 
-    def fix_formatting(pretty_fact_json)
+      @log.debug('Remove empty lines')
+      pretty_fact_json.gsub!(/^$\n/, '')
+
       @log.debug('Fix indentation after removing enclosed accolades')
       pretty_fact_json.split("\n").map! { |line| line.gsub(/^  /, '') }
     end
