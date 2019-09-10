@@ -12,4 +12,3 @@ describe 'Windows DmiProductSerialNumber' do
     end
   end
 end
-

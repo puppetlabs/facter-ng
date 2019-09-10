@@ -12,4 +12,3 @@ describe 'Windows IdentityUser' do
     end
   end
 end
-

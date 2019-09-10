@@ -13,4 +13,3 @@ describe 'Windows MemorySystemAvailable' do
     end
   end
 end
-

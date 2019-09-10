@@ -12,4 +12,3 @@ describe 'Windows KernelRelease' do
     end
   end
 end
-

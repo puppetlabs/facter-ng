@@ -12,4 +12,3 @@ describe 'Windows Facterversion' do
     end
   end
 end
-

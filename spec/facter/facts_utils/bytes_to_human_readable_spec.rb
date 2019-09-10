@@ -12,7 +12,7 @@ describe 'BytesToHumanReadable' do
       expect(Facter::BytesToHumanReadable.convert(1024)).to eql('1.0 KiB')
     end
     it 'returns bytes if number exceeds etta bytes' do
-      expect(Facter::BytesToHumanReadable.convert(3296472651763232323235)).to eql('3296472651763232323235 bytes')
+      expect(Facter::BytesToHumanReadable.convert(3_296_472_651_763_232_323_235)).to eql('3296472651763232323235 bytes')
     end
   end
 end

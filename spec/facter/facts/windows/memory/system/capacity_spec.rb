@@ -12,4 +12,3 @@ describe 'Windows MemorySystemCapacity' do
     end
   end
 end
-

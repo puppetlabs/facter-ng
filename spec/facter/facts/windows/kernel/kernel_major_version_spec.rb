@@ -12,6 +12,3 @@ describe 'Windows Kernel' do
     end
   end
 end
-
-
-

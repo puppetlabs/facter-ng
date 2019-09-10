@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Facter
-  module Rhel
+  module Sles
     class OsFamily
       FACT_NAME = 'os.family'
 

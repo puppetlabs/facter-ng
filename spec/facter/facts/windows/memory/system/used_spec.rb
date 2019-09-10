@@ -13,5 +13,3 @@ describe 'Windows MemorySystemUsed' do
     end
   end
 end
-
-

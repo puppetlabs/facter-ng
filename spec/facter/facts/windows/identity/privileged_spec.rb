@@ -12,4 +12,3 @@ describe 'Windows IdentityPrivileged' do
     end
   end
 end
-

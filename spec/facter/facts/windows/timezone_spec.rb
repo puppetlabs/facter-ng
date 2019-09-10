@@ -12,4 +12,3 @@ describe 'Windows Timezone' do
     end
   end
 end
-

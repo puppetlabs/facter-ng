@@ -39,7 +39,7 @@ class MemoryResolver < BaseResolver
       @@fact_list[:total_bytes] = result[:total_bytes]
       @@fact_list[:available_bytes] = result[:available_bytes]
       @@fact_list[:used_bytes] = result[:used_bytes]
-      @@fact_list[:capacity] = (result[:used_bytes] / result[:total_bytes].to_f * 100).truncate(2).to_s + '%'
+      @@fact_list[:capacity] = format('%.2f', (result[:used_bytes] / result[:total_bytes].to_f * 100)) + '%'
       @@fact_list[fact_name]
     end
   end

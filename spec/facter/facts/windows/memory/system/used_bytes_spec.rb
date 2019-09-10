@@ -12,5 +12,3 @@ describe 'Windows MemorySystemUsedBytes' do
     end
   end
 end
-
-

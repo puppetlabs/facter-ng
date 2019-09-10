@@ -12,5 +12,3 @@ describe 'Windows KernelVersion' do
     end
   end
 end
-
-

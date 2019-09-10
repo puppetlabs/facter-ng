@@ -12,4 +12,3 @@ describe 'Windows MemorySystemTotalBytes' do
     end
   end
 end
-

@@ -12,5 +12,3 @@ describe 'Windows Path' do
     end
   end
 end
-
-
