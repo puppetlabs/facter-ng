@@ -10,8 +10,6 @@ describe 'HoconFactFormatter' do
       double(Facter::ResolvedFact, name: 'os.architecture', value: 'x86_64', user_query: '', filter_tokens: [])
     resolved_fact_list = [resolved_fact1, resolved_fact2, resolved_fact3]
 
-    double
-
     formatted_output = Facter::HoconFactFormatter.new.format(resolved_fact_list)
 
     expected_output =
