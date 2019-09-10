@@ -5,15 +5,6 @@ require 'pathname'
 ROOT_DIR = Pathname.new(File.expand_path('../..', __dir__)) unless defined?(ROOT_DIR)
 require "#{ROOT_DIR}/lib/framework/core/file_loader"
 
-require "#{ROOT_DIR}/lib/framework/formatters/fact_formater"
-require "#{ROOT_DIR}/lib/framework/formatters/hocon_fact_formatter"
-require "#{ROOT_DIR}/lib/framework/formatters/json_fact_formatter"
-require "#{ROOT_DIR}/lib/framework/formatters/yaml_fact_formatter"
-
-require "#{ROOT_DIR}/lib/framework/core/fact_augmenter"
-
-require "#{ROOT_DIR}/lib/framework/parsers/query_parser"
-
 module Facter
   def self.to_hash
     Facter::Base.new.resolve_facts([])
