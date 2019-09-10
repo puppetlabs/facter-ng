@@ -12,8 +12,8 @@ module Facter
       return format_for_multiple_user_queries(user_queries, resolved_facts) if user_queries.count > 1
 
       user_query = user_queries.first.user_query
-      return format_for_no_query(resolved_facts) if user_query.blank?
-      return format_for_single_user_query(user_queries.first, resolved_facts) if user_query.present?
+      return format_for_no_query(resolved_facts) if user_query.empty?
+      return format_for_single_user_query(user_queries.first, resolved_facts) unless user_query.empty?
     end
 
     private
