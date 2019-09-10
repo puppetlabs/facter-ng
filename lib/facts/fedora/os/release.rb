@@ -1,21 +1,20 @@
 # frozen_string_literal: true
 
 module Facter
-  module Sles
+  module Fedora
     class OsRelease
       FACT_NAME = 'os.release'
 
       def call_the_resolver
         version = OsReleaseResolver.resolve('VERSION_ID')
 
-        ResolvedFact.new(FACT_NAME, build_fact_list(version))
+        Fact.new(FACT_NAME, build_fact_list(version))
       end
 
       def build_fact_list(version)
         {
-          full: "#{version}.0",
-          major: version,
-          minor: 0
+          full: version,
+          major: version
         }
       end
     end
