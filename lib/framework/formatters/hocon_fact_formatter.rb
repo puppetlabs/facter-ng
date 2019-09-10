@@ -9,12 +9,11 @@ module Facter
     def format(resolved_facts)
       user_queries = resolved_facts.uniq(&:user_query)
 
-      return format_for_no_query(resolved_facts) if user_queries.count == 1 && user_queries.first.user_query == ''
-
-      return format_for_single_user_queries(user_queries, resolved_facts) if user_queries.count == 1 &&
-                                                                             user_queries.first.user_query != ''
-
       return format_for_multiple_user_queries(user_queries, resolved_facts) if user_queries.count > 1
+
+      user_query = user_queries.first.user_query
+      return format_for_no_query(resolved_facts) if user_query.blank?
+      return format_for_single_user_query(user_queries.first, resolved_facts) if user_query.present?
     end
 
     private
@@ -38,19 +37,18 @@ module Facter
 
       pretty_json = hash_to_hocon(facts_to_display)
       pretty_json = remove_enclosing_accolades(pretty_json)
+
+      @log.debug('Remove quotes from value if value is a string')
       pretty_json.gsub(/^(\S*) => \"(.*)\"/, '\1 => \2')
     end
 
-    def format_for_single_user_queries(user_queries, resolved_facts)
+    def format_for_single_user_query(user_query, resolved_facts)
       @log.debug('Formatting for single user query')
-      printable_value = nil
-      user_queries.each do |user_query|
-        fact_collection = build_fact_collection_for_user_query(user_query, resolved_facts)
-        printable_value = fact_collection.dig(*user_query.user_query.split('.'))
-      end
 
-      pretty_json = hash_to_hocon(printable_value)
-      # pretty_json.gsub(/^[^ ](.*) => \"(.*)\"/, '\2')
+      fact_collection = build_fact_collection_for_user_query(user_query, resolved_facts)
+      fact_value = fact_collection.dig(*user_query.user_query.split('.'))
+
+      pretty_json = hash_to_hocon(fact_value)
 
       @log.debug('Remove quotes from value if it is a simple string')
       pretty_json.gsub(/^"(.*)\"/, '\1')

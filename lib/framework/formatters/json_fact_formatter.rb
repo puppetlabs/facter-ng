@@ -9,7 +9,7 @@ module Facter
     def format(resolved_facts)
       user_queries = resolved_facts.uniq(&:user_query)
 
-      if user_queries.count == 1 && user_queries.first.user_query == ''
+      if user_queries.count == 1 && user_queries.first.user_query.blank?
         format_for_no_query(resolved_facts)
       else
         format_for_user_queries(user_queries, resolved_facts)
@@ -21,8 +21,8 @@ module Facter
     def format_for_no_query(resolved_facts)
       @log.debug('No user query provided')
 
-      fact_colection = FactCollection.new.build_fact_collection!(resolved_facts)
-      JSON.pretty_generate(fact_colection)
+      fact_collection = FactCollection.new.build_fact_collection!(resolved_facts)
+      JSON.pretty_generate(fact_collection)
     end
 
     def format_for_user_queries(user_queries, resolved_facts)
