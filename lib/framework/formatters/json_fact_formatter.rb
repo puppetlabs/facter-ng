@@ -4,7 +4,6 @@ module Facter
   class JsonFactFormatter
     def initialize
       @log = Facter::Log.new
-      @hash_sorter = HashSorter.new
     end
 
     def format(resolved_facts)
@@ -23,7 +22,7 @@ module Facter
       @log.debug('No user query provided')
 
       fact_collection = FactCollection.new.build_fact_collection!(resolved_facts)
-      fact_collection = @hash_sorter.sort_by_key(fact_collection)
+      fact_collection = Facter::Utils.sort_hash_by_key(fact_collection)
       JSON.pretty_generate(fact_collection)
     end
 
@@ -38,7 +37,7 @@ module Facter
         facts_to_display.merge!(user_query => printable_value)
       end
 
-      facts_to_display = @hash_sorter.sort_by_key(facts_to_display)
+      facts_to_display = Facter::Utils.sort_hash_by_key(facts_to_display)
       JSON.pretty_generate(facts_to_display)
     end
 

@@ -76,9 +76,8 @@ module Facter
       end
 
       resolved_facts.flatten!
-      fact_augmenter = FactAugmenter.new
 
-      fact_augmenter.augment_resolved_facts(searched_facts, resolved_facts)
+      FactAugmenter.augment_resolved_facts(searched_facts, resolved_facts)
     end
   end
 end

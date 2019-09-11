@@ -4,7 +4,6 @@ module Facter
   class HoconFactFormatter
     def initialize
       @log = Log.new
-      @hash_sorter = Facter::HashSorter.new
     end
 
     def format(resolved_facts)
@@ -22,7 +21,7 @@ module Facter
     def format_for_no_query(resolved_facts)
       @log.debug('Formatting for no user query')
       fact_collection = FactCollection.new.build_fact_collection!(resolved_facts)
-      fact_collection = @hash_sorter.sort_by_key(fact_collection)
+      fact_collection = Facter::Utils.sort_hash_by_key(fact_collection)
       pretty_json = hash_to_hocon(fact_collection)
 
       remove_enclosing_accolades(pretty_json)
@@ -37,7 +36,7 @@ module Facter
         facts_to_display.merge!(user_query => printable_value)
       end
 
-      facts_to_display = @hash_sorter.sort_by_key(facts_to_display)
+      facts_to_display = Facter::Utils.sort_hash_by_key(facts_to_display)
       pretty_json = hash_to_hocon(facts_to_display)
       pretty_json = remove_enclosing_accolades(pretty_json)
 
@@ -49,7 +48,7 @@ module Facter
       @log.debug('Formatting for single user query')
 
       fact_collection = build_fact_collection_for_user_query(user_query, resolved_facts)
-      fact_collection = @hash_sorter.sort_by_key(fact_collection)
+      fact_collection = Facter::Utils.sort_hash_by_key(fact_collection)
       fact_value = fact_collection.dig(*user_query.split('.'))
 
       pretty_json = hash_to_hocon(fact_value)

@@ -31,7 +31,7 @@ os = ENV['RACK_ENV'] == 'test' ? '' : OsDetector.detect_family
 load_lib_dirs('facts', os.to_s, '**')
 load_lib_dirs('resolvers', os.to_s, '**') if os.to_s =~ /win/
 
-require "#{ROOT_DIR}/lib/framework/helpers/hash_sorter"
+require "#{ROOT_DIR}/lib/framework/helpers/utils"
 require "#{ROOT_DIR}/lib/framework/formatters/fact_formater"
 require "#{ROOT_DIR}/lib/framework/formatters/hocon_fact_formatter"
 require "#{ROOT_DIR}/lib/framework/formatters/json_fact_formatter"
