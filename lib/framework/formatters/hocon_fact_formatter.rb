@@ -81,7 +81,10 @@ module Facter
       @log.debug('Fix indentation after removing enclosed accolades')
       pretty_fact_json = pretty_fact_json.split("\n").map! { |line| line.gsub(/^  /, '') }
 
-      pretty_fact_json.join("\n")
+      pretty_fact_json = pretty_fact_json.join("\n")
+
+      @log.debug('remove comas from query results')
+      pretty_fact_json.gsub(/^},/, '}')
     end
 
     def build_fact_collection_for_user_query(user_query, resolved_facts)
