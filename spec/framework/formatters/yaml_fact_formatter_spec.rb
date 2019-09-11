@@ -14,7 +14,7 @@ describe 'YamlFactFormatter' do
 
     formatted_output = Facter::YamlFactFormatter.new.format(resolved_fact_list)
 
-    expected_output = "os:\n  name: Darwin\n  family: Darwin\n  architecture: x86_64\n"
+    expected_output = "os:\n  architecture: x86_64\n  family: Darwin\n  name: Darwin\n"
 
     expect(formatted_output).to eq(expected_output)
   end
@@ -38,7 +38,7 @@ describe 'YamlFactFormatter' do
     resolved_fact_list = [resolved_fact1, resolved_fact2]
     formatted_output = Facter::YamlFactFormatter.new.format(resolved_fact_list)
 
-    expected_output = "os.name: Darwin\nos.family: Darwin\n"
+    expected_output = "os.family: Darwin\nos.name: Darwin\n"
 
     expect(formatted_output).to eq(expected_output)
   end

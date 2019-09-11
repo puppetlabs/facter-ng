@@ -15,7 +15,7 @@ describe 'JsonFactFormatter' do
     formatted_output = Facter::JsonFactFormatter.new.format(resolved_fact_list)
 
     expected_output =
-      "{\n  \"os\": {\n    \"name\": \"Darwin\",\n    \"family\": \"Darwin\",\n    \"architecture\": \"x86_64\"\n  }\n}"
+      "{\n  \"os\": {\n    \"architecture\": \"x86_64\",\n    \"family\": \"Darwin\",\n    \"name\": \"Darwin\"\n  }\n}"
 
     expect(formatted_output).to eq(expected_output)
   end
@@ -39,7 +39,7 @@ describe 'JsonFactFormatter' do
     resolved_fact_list = [resolved_fact1, resolved_fact2]
     formatted_output = Facter::JsonFactFormatter.new.format(resolved_fact_list)
 
-    expected_output = "{\n  \"os.name\": \"Darwin\",\n  \"os.family\": \"Darwin\"\n}"
+    expected_output = "{\n  \"os.family\": \"Darwin\",\n  \"os.name\": \"Darwin\"\n}"
 
     expect(formatted_output).to eq(expected_output)
   end
