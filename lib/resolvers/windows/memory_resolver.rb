@@ -26,9 +26,17 @@ class MemoryResolver < BaseResolver
         return
       end
 
-      state = PerformanceInformation.new(state_ptr)
+      calculate_bytes(PerformanceInformation.new(state_ptr))
+    end
+
+    def calculate_bytes(state)
       total_bytes = state[:PhysicalTotal] * state[:PageSize]
       available_bytes = state[:PhysicalAvailable] * state[:PageSize]
+      if total_bytes.zero? || available_bytes.zero?
+        @log.debug 'Available or Total bytes are zero could not proceed further'
+        return
+      end
+
       { total_bytes: total_bytes, available_bytes: available_bytes, used_bytes: total_bytes - available_bytes }
     end
 

@@ -33,7 +33,7 @@ class IdentityResolver < BaseResolver
         return
       end
 
-      { user: name_ptr.read_wide_string(size_ptr.read_uint32), privileged: privileged? }
+      [name_ptr.read_wide_string(size_ptr.read_uint32), privileged?]
     end
 
     def privileged?
@@ -42,9 +42,9 @@ class IdentityResolver < BaseResolver
     end
 
     def build_fact_list(fact_name)
-      result = find_username
-      @@fact_list[:user] = result ? result[:user] : nil
-      @@fact_list[:privileged] = result ? result[:privileged] : nil
+      user, privileged = find_username
+      @@fact_list[:user] = user
+      @@fact_list[:privileged] = privileged
       @@fact_list[fact_name]
     end
   end

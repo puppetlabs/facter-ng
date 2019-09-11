@@ -48,9 +48,7 @@ class ProcessorsResolver < BaseResolver
         models << proc.Name
         logical_count += proc.NumberOfLogicalProcessors if proc.NumberOfLogicalProcessors
 
-        next if isa
-
-        isa = find_isa(proc.Architecture)
+        isa ||= find_isa(proc.Architecture)
       end
 
       { models: models, isa: isa, logical_count: logical_count.zero? ? models.count : logical_count }
