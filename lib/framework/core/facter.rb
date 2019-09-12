@@ -10,10 +10,10 @@ module Facter
     Facter::Base.new.resolve_facts([])
   end
 
-  def self.to_hocon(*args)
+  def self.to_user_output(options, *args)
     resolved_facts = Facter::Base.new.resolve_facts(args)
-    fact_formatter = Facter::FactFormater.new
-    fact_formatter.format_facts(resolved_facts, Facter::HoconFactFormatter.new)
+    fact_formatter = Facter::FormatterFactory.build(options)
+    fact_formatter.format(resolved_facts)
   end
 
   def self.value(*args)
@@ -23,7 +23,7 @@ module Facter
   class Base
     def resolve_facts(user_query)
       os = OsDetector.detect_family
-      legacy_flag = false
+      legacy_flag = true
       loaded_facts_hash = if user_query.any? || legacy_flag
                             Facter::FactLoader.load_with_legacy(os)
                           else
