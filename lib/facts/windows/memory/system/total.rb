@@ -8,7 +8,7 @@ module Facter
       def call_the_resolver
         fact_value = MemoryResolver.resolve(:total_bytes)
         fact_value = BytesToHumanReadable.convert(fact_value)
-        Fact.new(FACT_NAME, fact_value)
+        ResolvedFact.new(FACT_NAME, fact_value)
       end
     end
   end

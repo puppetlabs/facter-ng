@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Osversioninfoex < FFI::Struct
+class OsVersionInfoEx < FFI::Struct
   layout(
     :dwOSVersionInfoSize, :win32_ulong,
     :dwMajorVersion, :win32_ulong,

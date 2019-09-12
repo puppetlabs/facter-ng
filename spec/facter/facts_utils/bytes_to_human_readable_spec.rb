@@ -5,6 +5,9 @@ describe 'BytesToHumanReadable' do
     it 'returns nil if bytes variable is nil' do
       expect(Facter::BytesToHumanReadable.convert(nil)).to eql(nil)
     end
+    it 'returns nil if bytes variable is nil' do
+      expect(Facter::BytesToHumanReadable.convert(1048575.7)).to eql('1.0 MiB')
+    end
     it 'returns bytes if bytes variable is less than 1024' do
       expect(Facter::BytesToHumanReadable.convert(1023)).to eql('1023 bytes')
     end
