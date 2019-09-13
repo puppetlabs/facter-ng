@@ -40,4 +40,3 @@ require "#{ROOT_DIR}/lib/framework/formatters/yaml_fact_formatter"
 
 require "#{ROOT_DIR}/lib/framework/core/fact_augmenter"
 require "#{ROOT_DIR}/lib/framework/parsers/query_parser"
-require "#{ROOT_DIR}/lib/framework/utils/odm_query"
