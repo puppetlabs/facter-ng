@@ -7,7 +7,7 @@ require "#{ROOT_DIR}/lib/framework/core/file_loader"
 
 module Facter
   def self.to_hash
-    resolved_facts = Facter::Base.new.resolve_facts({}, [])
+    resolved_facts = Facter::Base.new.resolve_facts
     FactCollection.new.build_fact_collection!(resolved_facts)
   end
 
@@ -24,7 +24,7 @@ module Facter
   end
 
   class Base
-    def resolve_facts(options, user_query)
+    def resolve_facts(options = {}, user_query = [])
       os = CurrentOs.instance.identifier
       loaded_facts_hash = if user_query.any? || options[:show_legacy]
                             Facter::FactLoader.load_with_legacy(os)

@@ -57,7 +57,7 @@ describe 'facter' do
       double(Facter::ResolvedFact, name: 'os.hardware', value: 'x86_64', user_query: '', filter_tokens: [])
 
     resolved_fact_list = [resolved_fact1, resolved_fact2]
-    allow(fact_base).to receive(:resolve_facts).with({}, []).and_return(resolved_fact_list)
+    allow(fact_base).to receive(:resolve_facts).and_return(resolved_fact_list)
 
     fact_collection = double(Facter::FactCollection)
     allow(Facter::FactCollection).to receive(:new).and_return(fact_collection)
