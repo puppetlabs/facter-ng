@@ -8,7 +8,7 @@ module Facter
       def call_the_resolver
         fact_value = ProductReleaseResolver.resolve(:product_name)
 
-        Fact.new(FACT_NAME, fact_value)
+        ResolvedFact.new(FACT_NAME, fact_value)
       end
     end
   end

@@ -3,10 +3,10 @@
 describe 'Windows KernelResolver' do
   before do
     ver_ptr = double('FFI::MemoryPointer')
-    ver = double('Osversioninfoex', size: nil)
+    ver = double('OsVersionInfoEx', size: nil)
 
-    allow(FFI::MemoryPointer).to receive(:new).with(Osversioninfoex.size).and_return(ver_ptr)
-    allow(Osversioninfoex).to receive(:new).with(ver_ptr).and_return(ver)
+    allow(FFI::MemoryPointer).to receive(:new).with(OsVersionInfoEx.size).and_return(ver_ptr)
+    allow(OsVersionInfoEx).to receive(:new).with(ver_ptr).and_return(ver)
 
     allow(ver).to receive(:[]=).with(:dwOSVersionInfoSize, ver.size)
     allow(KernelFFI).to receive(:RtlGetVersion).with(ver_ptr).and_return(status)

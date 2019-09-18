@@ -10,6 +10,7 @@ describe 'Windows ProductReleaseResolver' do
     allow(reg).to receive(:[]).with('InstallationType').and_return(install)
     allow(reg).to receive(:[]).with('ProductName').and_return(prod)
     allow(reg).to receive(:[]).with('ReleaseId').and_return(release)
+    allow(reg).to receive(:close)
   end
   after do
     ProductReleaseResolver.invalidate_cache

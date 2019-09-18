@@ -25,6 +25,7 @@ class ProductReleaseResolver < BaseResolver
     def read_fact_from_registry(fact_name)
       reg = ::Win32::Registry::HKEY_LOCAL_MACHINE.open('SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion')
       build_fact_list(reg)
+      reg.close
 
       @@fact_list[fact_name]
     end

@@ -15,7 +15,7 @@ class PathResolver < BaseResolver
     private
 
     def read_path_from_env
-      @@fact_list[:path] = ENV['PATH']
+      @@fact_list[:path] = ENV['PATH'].strip
     end
   end
 end

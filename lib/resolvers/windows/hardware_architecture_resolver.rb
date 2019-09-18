@@ -30,9 +30,9 @@ class HardwareArchitectureResolver < BaseResolver
     end
 
     def determine_hardware(sys_info)
-      dummyunionname = sys_info[:dummyunionname]
-      dummystructname = dummyunionname[:dummystructname]
-      case dummystructname[:wProcessorArchitecture]
+      union = sys_info[:dummyunionname]
+      struct = union[:dummystructname]
+      case struct[:wProcessorArchitecture]
       when HardwareFFI::PROCESSOR_ARCHITECTURE_AMD64
         'x86_64'
       when HardwareFFI::PROCESSOR_ARCHITECTURE_ARM
