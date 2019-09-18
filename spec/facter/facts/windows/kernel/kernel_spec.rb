@@ -3,9 +3,9 @@
 describe 'Windows Kernel' do
   context '#call_the_resolver' do
     it 'returns a fact' do
-      expected_fact = double(Facter::Fact, name: 'kernel', value: 'value')
+      expected_fact = double(Facter::ResolvedFact, name: 'kernel', value: 'value')
       allow(KernelResolver).to receive(:resolve).with(:kernel).and_return('value')
-      allow(Facter::Fact).to receive(:new).with('kernel', 'value').and_return(expected_fact)
+      allow(Facter::ResolvedFact).to receive(:new).with('kernel', 'value').and_return(expected_fact)
 
       fact = Facter::Windows::Kernel.new
       expect(fact.call_the_resolver).to eq(expected_fact)

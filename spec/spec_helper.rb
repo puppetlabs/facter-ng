@@ -10,17 +10,18 @@ require 'thor'
 require 'fileutils'
 
 require_relative '../lib/resolvers/base_resolver'
-require_relative '../spec/helpers/kernel_mock'
-require_relative '../spec/helpers/ffi_mock'
-require_relative '../spec/helpers/win32_mock'
+require_relative '../spec/mocks/kernel_mock'
+require_relative '../spec/mocks/ffi_mock'
+require_relative '../spec/mocks/win32_mock'
 
 require 'pathname'
 
 ROOT_DIR = Pathname.new(File.expand_path('..', __dir__)) unless defined?(ROOT_DIR)
 
-require "#{ROOT_DIR}/lib/utils/file_loader"
+require "#{ROOT_DIR}/lib/framework/core/file_loader"
 
-Dir.glob(File.join('./lib', '/**/*/', '*.rb'), &method(:require))
+Dir.glob(File.join('./lib/facts', '/**/*/', '*.rb'), &method(:require))
+Dir.glob(File.join('./lib/resolvers', '/**/*/', '*.rb'), &method(:require))
 
 # Configure SimpleCov
 SimpleCov.start do

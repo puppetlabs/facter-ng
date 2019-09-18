@@ -3,9 +3,9 @@
 describe 'Windows KernelRelease' do
   context '#call_the_resolver' do
     it 'returns a fact' do
-      expected_fact = double(Facter::Fact, name: 'kernelrelease', value: 'value')
+      expected_fact = double(Facter::ResolvedFact, name: 'kernelrelease', value: 'value')
       allow(KernelResolver).to receive(:resolve).with(:kernelversion).and_return('value')
-      allow(Facter::Fact).to receive(:new).with('kernelrelease', 'value').and_return(expected_fact)
+      allow(Facter::ResolvedFact).to receive(:new).with('kernelrelease', 'value').and_return(expected_fact)
 
       fact = Facter::Windows::KernelRelease.new
       expect(fact.call_the_resolver).to eq(expected_fact)

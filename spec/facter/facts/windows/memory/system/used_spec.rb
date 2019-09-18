@@ -3,9 +3,9 @@
 describe 'Windows MemorySystemUsed' do
   context '#call_the_resolver' do
     it 'returns a fact' do
-      expected_fact = double(Facter::Fact, name: 'memory.system.used', value: '1.0 KiB')
+      expected_fact = double(Facter::ResolvedFact, name: 'memory.system.used', value: '1.0 KiB')
       allow(MemoryResolver).to receive(:resolve).with(:used_bytes).and_return(1024)
-      allow(Facter::Fact).to receive(:new).with('memory.system.used', '1.0 KiB').and_return(expected_fact)
+      allow(Facter::ResolvedFact).to receive(:new).with('memory.system.used', '1.0 KiB').and_return(expected_fact)
 
       fact = Facter::Windows::MemorySystemUsed.new
       expect(Facter::BytesToHumanReadable.convert(1024)).to eq('1.0 KiB')

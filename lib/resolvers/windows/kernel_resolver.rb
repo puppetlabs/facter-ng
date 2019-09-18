@@ -20,9 +20,9 @@ class KernelResolver < BaseResolver
     private
 
     def read_os_version_information(fact_name)
-      ver_ptr = FFI::MemoryPointer.new(Osversioninfoex.size)
-      ver = Osversioninfoex.new(ver_ptr)
-      ver[:dwOSVersionInfoSize] = Osversioninfoex.size
+      ver_ptr = FFI::MemoryPointer.new(OsVersionInfoEx.size)
+      ver = OsVersionInfoEx.new(ver_ptr)
+      ver[:dwOSVersionInfoSize] = OsVersionInfoEx.size
 
       if KernelFFI::RtlGetVersion(ver_ptr) != KernelFFI::STATUS_SUCCESS
         @log.debug 'Calling Windows RtlGetVersion failed'

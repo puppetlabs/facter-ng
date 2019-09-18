@@ -3,9 +3,9 @@
 describe 'Windows IdentityPrivileged' do
   context '#call_the_resolver' do
     it 'returns a fact' do
-      expected_fact = double(Facter::Fact, name: 'identity.privileged', value: 'value')
+      expected_fact = double(Facter::ResolvedFact, name: 'identity.privileged', value: 'value')
       allow(IdentityResolver).to receive(:resolve).with(:privileged).and_return('value')
-      allow(Facter::Fact).to receive(:new).with('identity.privileged', 'value').and_return(expected_fact)
+      allow(Facter::ResolvedFact).to receive(:new).with('identity.privileged', 'value').and_return(expected_fact)
 
       fact = Facter::Windows::IdentityPrivileged.new
       expect(fact.call_the_resolver).to eq(expected_fact)
