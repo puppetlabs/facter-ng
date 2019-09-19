@@ -12,11 +12,17 @@ class OsResolver < BaseResolver
       end
     end
 
+    def invalidate_cache
+      @@fact_list = {}
+    end
+
     private
 
     def determine_name
       result = UnameResolver.resolve(:kernelname)
       return 'Solaris' if result == 'SunOS'
+
+      result
     end
 
     def build_list(fact_name)
