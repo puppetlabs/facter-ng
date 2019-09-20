@@ -8,17 +8,20 @@ require "#{ROOT_DIR}/lib/framework/core/file_loader"
 module Facter
   def self.to_hash
     resolved_facts = Facter::Base.new.resolve_facts
+    ResolverManager.invalidate_all_caches
     FactCollection.new.build_fact_collection!(resolved_facts)
   end
 
   def self.to_user_output(options, *args)
     resolved_facts = Facter::Base.new.resolve_facts(options, args)
+    ResolverManager.invalidate_all_caches
     fact_formatter = Facter::FormatterFactory.build(options)
     fact_formatter.format(resolved_facts)
   end
 
   def self.value(user_query)
     resolved_facts = Facter::Base.new.resolve_facts({}, [user_query])
+    ResolverManager.invalidate_all_caches
     fact_collection = FactCollection.new.build_fact_collection!(resolved_facts)
     fact_collection.dig(*user_query.split('.'))
   end
@@ -60,13 +63,21 @@ module Facter
 
     def create_fact(searched_fact)
       fact_class = searched_fact.fact_class
-      if searched_fact.name.end_with?('.*')
-        fact_without_wildcard = searched_fact.name[0..-3]
-        filter_criteria = searched_fact.user_query.split(fact_without_wildcard).last
+      if searched_fact.name.include?('.*')
+        filter_criteria = extract_filter_criteria(searched_fact)
+
         fact_class.new.call_the_resolver(filter_criteria)
       else
         fact_class.new.call_the_resolver
       end
+    end
+
+    Trimmer = Struct.new(:start, :end)
+    def extract_filter_criteria(searched_fact)
+      name_tokens = searched_fact.name.split('.*')
+      trimmer = Trimmer.new(name_tokens[0].length, -(name_tokens[1] || '').length - 1)
+
+      searched_fact.user_query[trimmer.start..trimmer.end]
     end
 
     def join_threads(threads, searched_facts)
