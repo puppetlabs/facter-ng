@@ -6,11 +6,14 @@ module Facter
       FACT_NAME = 'networking.fqdn'
 
       def call_the_resolver
-        fact_value = FqdnResolver.resolve(:fqdn)
+        domain = Resolvers::Domain.resolve(:domain)
+        hostname = Resolvers::Hostname.resolve(:hostname)
+        return ResolvedFact.new(FACT_NAME, nil) if !hostname || hostname.empty?
 
-        ResolvedFact.new(FACT_NAME, fact_value)
+        fact_value = [hostname, domain].join('.') if domain && !domain.empty?
+
+        ResolvedFact.new(FACT_NAME, fact_value || hostname)
       end
     end
   end
 end
-
