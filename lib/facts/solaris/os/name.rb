@@ -6,7 +6,8 @@ module Facter
       FACT_NAME = 'os.name'
 
       def call_the_resolver
-        fact_value = OsResolver.resolve(:name)
+        value = Resolvers::UnameResolver.resolve(:kernelname)
+        fact_value = value == 'SunOS' ? 'Solaris' : value
         ResolvedFact.new(FACT_NAME, fact_value)
       end
     end
