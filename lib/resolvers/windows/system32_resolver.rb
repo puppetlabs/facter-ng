@@ -1,47 +1,47 @@
 # frozen_string_literal: true
 
-class System32Resolver < BaseResolver
-  @log = Facter::Log.new
-  class << self
-    @@semaphore = Mutex.new
-    @@fact_list ||= {}
+module Facter
+  module Resolvers
+    class System32Resolver < BaseResolver
+      @log = Facter::Log.new
+      @semaphore = Mutex.new
+      @fact_list ||= {}
+      class << self
+        def resolve(fact_name)
+          @semaphore.synchronize do
+            result ||= @fact_list[fact_name]
+            subscribe_to_manager
+            result || retrieve_windows_binaries_path
+          end
+        end
 
-    def resolve(fact_name)
-      @@semaphore.synchronize do
-        result ||= @@fact_list[fact_name]
-        result || retrieve_windows_binaries_path
-      end
-    end
+        private
 
-    def invalidate_cache
-      @@fact_list = {}
-    end
+        def retrieve_windows_binaries_path
+          path_ptr = FFI::MemoryPointer.new(:wchar, MAX_PATH + 1)
+          if System32FFI::SHGetFolderPathW(0, System32FFI::CSIDL_WINDOWS, 0, 0, path_ptr) != System32FFI::H_OK
+            @log.debug 'SHGetFolderPath failed'
+            return
+          end
 
-    private
+          windows = path_ptr.read_wide_string(MAX_PATH).strip
 
-    def retrieve_windows_binaries_path
-      path_ptr = FFI::MemoryPointer.new(:wchar, MAX_PATH + 1)
-      if System32FFI::SHGetFolderPathW(0, System32FFI::CSIDL_WINDOWS, 0, 0, path_ptr) != System32FFI::H_OK
-        @log.debug 'SHGetFolderPath failed'
-        return
-      end
+          bool_ptr = FFI::MemoryPointer.new(:win32_bool, 1)
+          if System32FFI::IsWow64Process(System32FFI::GetCurrentProcess(), bool_ptr) == FFI::WIN32_FALSE
+            @log.debug 'IsWow64Process failed'
+            return
+          end
 
-      windows = path_ptr.read_wide_string(MAX_PATH).strip
+          @fact_list[:system32] = construct_path(bool_ptr, windows)
+        end
 
-      bool_ptr = FFI::MemoryPointer.new(:win32_bool, 1)
-      if System32FFI::IsWow64Process(System32FFI::GetCurrentProcess(), bool_ptr) == FFI::WIN32_FALSE
-        @log.debug 'IsWow64Process failed'
-        return
-      end
-
-      @@fact_list[:system32] = construct_path(bool_ptr, windows)
-    end
-
-    def construct_path(bool_ptr, windows)
-      if bool_ptr.read_win32_bool
-        "#{windows}\\sysnative"
-      else
-        "#{windows}\\system32"
+        def construct_path(bool_ptr, windows)
+          if bool_ptr.read_win32_bool
+            "#{windows}\\sysnative"
+          else
+            "#{windows}\\system32"
+          end
+        end
       end
     end
   end

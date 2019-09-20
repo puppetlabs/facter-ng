@@ -10,9 +10,10 @@ require 'thor'
 require 'fileutils'
 
 require_relative '../lib/resolvers/base_resolver'
-require_relative '../spec/mocks/kernel_mock'
-require_relative '../spec/mocks/ffi_mock'
-require_relative '../spec/mocks/win32_mock'
+require_relative 'mocks/kernel_mock'
+require_relative 'mocks/ffi_mock'
+require_relative 'mocks/win32_mock'
+require_relative 'mocks/util'
 
 require 'pathname'
 
@@ -44,8 +45,4 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
-end
-
-def load_fixture(filename)
-  File.open(File.join('spec', 'fixtures', filename))
 end
