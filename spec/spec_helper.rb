@@ -47,7 +47,3 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 end
-
-def load_fixture(filename)
-  File.open(File.join('spec', 'fixtures', filename))
-end
