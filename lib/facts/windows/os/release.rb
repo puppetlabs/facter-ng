@@ -6,8 +6,14 @@ module Facter
       FACT_NAME = 'os.release'
 
       def call_the_resolver
-        fact_value = Resolvers::WinOsRelease.resolve(:full)
+        input = {
+          consumerrel: Resolvers::WinOsDescription.resolve(:consumerrel),
+          description: Resolvers::WinOsDescription.resolve(:description),
+          version: Resolvers::Kernel.resolve(:kernelmajorversion),
+          kernel_version: Resolvers::Kernel.resolve(:kernelversion)
+        }
 
+        fact_value = WindowsReleaseFinder.find_release(input)
         ResolvedFact.new(FACT_NAME, full: fact_value, major: fact_value)
       end
     end
