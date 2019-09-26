@@ -13,24 +13,24 @@ describe Facter::Core::Logging do
   describe "emitting debug messages" do
     it "doesn't log a message when debugging is disabled" do
       subject.debugging(false)
-      subject.expects(:puts).never
+      expect(subject).to receive(:puts).never
       subject.debug("foo")
     end
 
     describe "and debugging is enabled" do
       before { subject.debugging(true) }
       it "emits a warning when called with nil" do
-        subject.expects(:warn).with { |msg| expect(msg).to match /invalid message nil:NilClass/ }
+        expect(subject).to receive(:warn).with (/invalid message nil:NilClass/)
         subject.debug(nil)
       end
 
       it "emits a warning when called with an empty string" do
-        subject.expects(:warn).with { |msg| expect(msg).to match /invalid message "":String/ }
+        expect(subject).to receive(:warn).with(/invalid message "":String/)
         subject.debug("")
       end
 
       it "prints the message when logging is enabled" do
-        subject.expects(:puts).with { |msg| expect(msg).to match /foo/ }
+        expect(subject).to receive(:puts).with(/foo/)
         subject.debug("foo")
       end
     end
@@ -39,30 +39,30 @@ describe Facter::Core::Logging do
   describe "when warning" do
     it "emits a warning when given a string" do
       subject.debugging(true)
-      Kernel.expects(:warn).with('foo')
+      expect(Kernel).to receive(:warn).with('foo')
       subject.warn('foo')
     end
 
     it "emits a warning regardless of log level" do
       subject.debugging(false)
-      Kernel.expects(:warn).with "foo"
+      expect(Kernel).to receive(:warn).with("foo")
       subject.warn "foo"
     end
 
     it "emits a warning if nil is passed" do
-      Kernel.expects(:warn).with { |msg| expect(msg).to match /invalid message nil:NilClass/ }
+      expect(Kernel).to receive(:warn).with(/invalid message nil:NilClass/)
       subject.warn(nil)
     end
 
     it "emits a warning if an empty string is passed" do
-      Kernel.expects(:warn).with { |msg| expect(msg).to match /invalid message "":String/ }
+      expect(Kernel).to receive(:warn).with(/invalid message "":String/)
       subject.warn('')
     end
   end
 
   describe "when warning once" do
     it "only logs a given warning string once" do
-      subject.expects(:warn).with('foo').once
+      expect(subject).to receive(:warn).with('foo').once
       subject.warnonce('foo')
       subject.warnonce('foo')
     end
@@ -110,29 +110,29 @@ describe Facter::Core::Logging do
     end
 
     it 'calls puts for debug' do
-      subject.expects(:puts).with(subject::GREEN + 'foo' + subject::RESET).once
+      expect(subject).to receive(:puts).with(subject::GREEN + 'foo' + subject::RESET).once
       subject.debug('foo')
     end
 
     it 'calls puts for debugonce' do
-      subject.expects(:puts).with(subject::GREEN + 'foo' + subject::RESET).once
+      expect(subject).to receive(:puts).with(subject::GREEN + 'foo' + subject::RESET).once
       subject.debugonce('foo')
       subject.debugonce('foo')
     end
 
     it 'calls Kernel.warn for warn' do
-      Kernel.expects(:warn).with('foo').once
+      expect(Kernel).to receive(:warn).with('foo').once
       subject.warn('foo')
     end
 
     it 'calls Kernel.warn for warnonce' do
-      Kernel.expects(:warn).with('foo').once
+      expect(Kernel).to receive(:warn).with('foo').once
       subject.warnonce('foo')
       subject.warnonce('foo')
     end
 
     it 'calls $stderr.puts for timing' do
-      $stderr.expects(:puts).with(subject::GREEN + 'foo' + subject::RESET).once
+      expect($stderr).to receive(:puts).with(subject::GREEN + 'foo' + subject::RESET).once
       subject.show_time('foo')
     end
   end
@@ -188,7 +188,7 @@ describe Facter::Core::Logging do
 
     it 'does not call puts for debug or debugonce' do
       subject.on_message {}
-      subject.expects(:puts).never
+      expect(subject).to receive(:puts).never
       subject.debug('debug message')
       subject.debugonce('debug once message')
     end
@@ -200,7 +200,7 @@ describe Facter::Core::Logging do
 
     it 'does not call Kernel.warn for warn or warnonce' do
       subject.on_message {}
-      Kernel.expects(:warn).never
+      expect(Kernel).to receive(:warn).never
       subject.warn('warn message')
       subject.warnonce('warn once message')
     end
@@ -212,7 +212,7 @@ describe Facter::Core::Logging do
 
     it 'does not call $stderr.puts for show_time' do
       subject.on_message {}
-      $stderr.expects(:puts).never
+      expect($stderr).to receive(:puts).never
       subject.show_time('debug message')
     end
 
