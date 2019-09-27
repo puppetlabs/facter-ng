@@ -22,7 +22,7 @@ describe Facter::Util::Config do
     it "should detect windows if Ruby RbConfig::CONFIG['host_os'] returns a windows OS" do
       host_os = ["mswin","win32","dos","mingw","cygwin"]
       host_os.each do |h|
-        RbConfig::CONFIG.stubs(:[]).with('host_os').returns(h)
+        allow(RbConfig::CONFIG).to receive(:[]).with('host_os').and_return(h)
         expect(Facter::Util::Config.is_windows?).to be_truthy
       end
     end
@@ -30,7 +30,7 @@ describe Facter::Util::Config do
     it "should not detect windows if Ruby RbConfig::CONFIG['host_os'] returns a non-windows OS" do
       host_os = ["darwin","linux"]
       host_os.each do |h|
-        RbConfig::CONFIG.stubs(:[]).with('host_os').returns(h)
+        allow(RbConfig::CONFIG).to receive(:[]).with('host_os').and_return(h)
         expect(Facter::Util::Config.is_windows?).to be_falsey
       end
     end
@@ -40,7 +40,7 @@ describe Facter::Util::Config do
     it "should detect mac if Ruby RbConfig::CONFIG['host_os'] returns darwin" do
       host_os = ["darwin"]
       host_os.each do |h|
-        RbConfig::CONFIG.stubs(:[]).with('host_os').returns(h)
+        allow(RbConfig::CONFIG).to receive(:[]).with('host_os').and_return(h)
         expect(Facter::Util::Config.is_mac?).to be_truthy
       end
     end
@@ -48,32 +48,32 @@ describe Facter::Util::Config do
 
   describe "external_facts_dirs" do
     before :each do
-      Facter::Util::Root.stubs(:root?).returns(true)
+      allow(Facter::Util::Root).to receive(:root?).and_return(true)
     end
 
     it "should return the default value for linux" do
-      Facter::Util::Config.stubs(:is_windows?).returns(false)
-      Facter::Util::Config.stubs(:windows_data_dir).returns(nil)
+      allow(Facter::Util::Config).to receive(:is_windows?).and_return(false)
+      allow(Facter::Util::Config).to receive(:windows_data_dir).and_return(nil)
       Facter::Util::Config.setup_default_ext_facts_dirs
       expect(Facter::Util::Config.external_facts_dirs).to eq ["/opt/puppetlabs/custom_facts/facts.d", "/etc/custom_facts/facts.d", "/etc/puppetlabs/custom_facts/facts.d"]
     end
 
     it "should return the default value for windows 2008" do
-      Facter::Util::Config.stubs(:is_windows?).returns(true)
-      Facter::Util::Config.stubs(:windows_data_dir).returns("C:\\ProgramData")
+      allow(Facter::Util::Config).to receive(:is_windows?).and_return(true)
+      allow(Facter::Util::Config).to receive(:windows_data_dir).and_return("C:\\ProgramData")
       Facter::Util::Config.setup_default_ext_facts_dirs
       expect(Facter::Util::Config.external_facts_dirs).to eq [File.join("C:\\ProgramData", 'PuppetLabs', 'custom_facts', 'facts.d')]
     end
 
     it "should return the default value for windows 2003R2" do
-      Facter::Util::Config.stubs(:is_windows?).returns(true)
-      Facter::Util::Config.stubs(:windows_data_dir).returns("C:\\Documents")
+      allow(Facter::Util::Config).to receive(:is_windows?).and_return(true)
+      allow(Facter::Util::Config).to receive(:windows_data_dir).and_return("C:\\Documents")
       Facter::Util::Config.setup_default_ext_facts_dirs
       expect(Facter::Util::Config.external_facts_dirs).to eq [File.join("C:\\Documents", 'PuppetLabs', 'custom_facts', 'facts.d')]
     end
 
     it "returns the old and new (AIO) paths under user's home directory when not root" do
-      Facter::Util::Root.stubs(:root?).returns(false)
+      allow(Facter::Util::Root).to receive(:root?).and_return(false)
       Facter::Util::Config.setup_default_ext_facts_dirs
       expect(Facter::Util::Config.external_facts_dirs)
         .to eq [File.expand_path(File.join("~", ".puppetlabs", "opt", "custom_facts", "facts.d")),
@@ -99,13 +99,13 @@ describe Facter::Util::Config do
 
   describe "override_binary_dir" do
     it "should return the default value for linux" do
-      Facter::Util::Config.stubs(:is_windows?).returns(false)
+      allow(Facter::Util::Config).to receive(:is_windows?).and_return(false)
       Facter::Util::Config.setup_default_override_binary_dir
       expect(Facter::Util::Config.override_binary_dir).to eq "/opt/puppetlabs/puppet/bin"
     end
 
     it "should return nil for windows" do
-      Facter::Util::Config.stubs(:is_windows?).returns(true)
+      allow(Facter::Util::Config).to receive(:is_windows?).and_return(true)
       Facter::Util::Config.setup_default_override_binary_dir
       expect(Facter::Util::Config.override_binary_dir).to eq nil
     end
