@@ -4,28 +4,30 @@ describe Facter::Core::Execution::Windows, :as_platform => :windows do
 
   describe "#search_paths" do
     it "should use the PATH environment variable to determine locations" do
-      ENV.expects(:[]).with('PATH').returns 'C:\Windows;C:\Windows\System32'
+      allow(ENV).to receive(:[]).with('PATH').and_return 'C:\Windows;C:\Windows\System32'
       expect(subject.search_paths).to eq %w{C:\Windows C:\Windows\System32}
     end
   end
 
   describe "#which" do
     before :each do
-      subject.stubs(:search_paths).returns ['C:\Windows\system32', 'C:\Windows', 'C:\Windows\System32\Wbem' ]
-      ENV.stubs(:[]).with('PATHEXT').returns nil
+      allow(subject).to receive(:search_paths).and_return ['C:\Windows\system32', 'C:\Windows', 'C:\Windows\System32\Wbem' ]
+      allow(ENV).to receive(:[]).with('PATHEXT').and_return nil
     end
 
     context "and provided with an absolute path" do
       it "should return the binary if executable" do
-        File.expects(:executable?).with('C:\Tools\foo.exe').returns true
-        File.expects(:executable?).with('\\\\remote\dir\foo.exe').returns true
+        expect(File).to receive(:executable?).with('C:\Tools\foo.exe').and_return true
+        expect(File).to receive(:executable?).with('\\\\remote\dir\foo.exe').and_return true
+
         expect(subject.which('C:\Tools\foo.exe')).to eq 'C:\Tools\foo.exe'
         expect(subject.which('\\\\remote\dir\foo.exe')).to eq '\\\\remote\dir\foo.exe'
       end
 
       it "should return nil if the binary is not executable" do
-        File.expects(:executable?).with('C:\Tools\foo.exe').returns false
-        File.expects(:executable?).with('\\\\remote\dir\foo.exe').returns false
+        expect(File).to receive(:executable?).with('C:\Tools\foo.exe').and_return false
+        expect(File).to receive(:executable?).with('\\\\remote\dir\foo.exe').and_return false
+
         expect(subject.which('C:\Tools\foo.exe')).to be nil
         expect(subject.which('\\\\remote\dir\foo.exe')).to be nil
       end
@@ -33,29 +35,31 @@ describe Facter::Core::Execution::Windows, :as_platform => :windows do
 
     context "and not provided with an absolute path" do
       it "should return the absolute path if found" do
-        File.expects(:executable?).with('C:\Windows\system32\foo.exe').returns false
-        File.expects(:executable?).with('C:\Windows\foo.exe').returns true
-        File.expects(:executable?).with('C:\Windows\System32\Wbem\foo.exe').never
+        expect(File).to receive(:executable?).with('C:\Windows\system32\foo.exe').and_return false
+        expect(File).to receive(:executable?).with('C:\Windows\foo.exe').and_return true
+        expect(File).to receive(:executable?).with('C:\Windows\System32\Wbem\foo.exe').never
+
         expect(subject.which('foo.exe')).to eq 'C:\Windows\foo.exe'
       end
 
       it "should return the absolute path with file extension if found" do
         ['.COM', '.EXE', '.BAT', '.CMD', '' ].each do |ext|
-          File.stubs(:executable?).with('C:\Windows\system32\foo'+ext).returns false
-          File.stubs(:executable?).with('C:\Windows\System32\Wbem\foo'+ext).returns false
+          allow(File).to receive(:executable?).with('C:\Windows\system32\foo'+ext).and_return false
+          allow(File).to receive(:executable?).with('C:\Windows\System32\Wbem\foo'+ext).and_return false
         end
         ['.COM', '.BAT', '.CMD', '' ].each do |ext|
-          File.stubs(:executable?).with('C:\Windows\foo'+ext).returns false
+          allow(File).to receive(:executable?).with('C:\Windows\foo'+ext).and_return false
         end
-        File.stubs(:executable?).with('C:\Windows\foo.EXE').returns true
+        allow(File).to receive(:executable?).with('C:\Windows\foo.EXE').and_return true
 
         expect(subject.which('foo')).to eq 'C:\Windows\foo.EXE'
       end
 
       it "should return nil if not found" do
-        File.expects(:executable?).with('C:\Windows\system32\foo.exe').returns false
-        File.expects(:executable?).with('C:\Windows\foo.exe').returns false
-        File.expects(:executable?).with('C:\Windows\System32\Wbem\foo.exe').returns false
+        allow(File).to receive(:executable?).with('C:\Windows\system32\foo.exe').and_return false
+        allow(File).to receive(:executable?).with('C:\Windows\foo.exe').and_return false
+        allow(File).to receive(:executable?).with('C:\Windows\System32\Wbem\foo.exe').and_return false
+
         expect(subject.which('foo.exe')).to be nil
       end
     end
@@ -63,29 +67,30 @@ describe Facter::Core::Execution::Windows, :as_platform => :windows do
 
   describe "#expand_command" do
     it "should expand binary" do
-      subject.expects(:which).with('cmd').returns 'C:\Windows\System32\cmd'
+      expect(subject).to receive(:which).with('cmd').and_return 'C:\Windows\System32\cmd'
+
       expect(subject.expand_command(
         'cmd /c echo foo > C:\bar'
       )).to eq 'C:\Windows\System32\cmd /c echo foo > C:\bar'
     end
 
     it "should expand double quoted binary" do
-      subject.expects(:which).with('my foo').returns 'C:\My Tools\my foo.exe'
+      expect(subject).to receive(:which).with('my foo').and_return 'C:\My Tools\my foo.exe'
       expect(subject.expand_command('"my foo" /a /b')).to eq '"C:\My Tools\my foo.exe" /a /b'
     end
 
     it "should not expand single quoted binary" do
-      subject.expects(:which).with('\'C:\My').returns nil
+      expect(subject).to receive(:which).with('\'C:\My').and_return nil
       expect(subject.expand_command('\'C:\My Tools\foo.exe\' /a /b')).to be nil
     end
 
     it "should quote expanded binary if found in path with spaces" do
-      subject.expects(:which).with('foo').returns 'C:\My Tools\foo.exe'
+      expect(subject).to receive(:which).with('foo').and_return 'C:\My Tools\foo.exe'
       expect(subject.expand_command('foo /a /b')).to eq '"C:\My Tools\foo.exe" /a /b'
     end
 
     it "should return nil if not found" do
-      subject.expects(:which).with('foo').returns nil
+      expect(subject).to receive(:which).with('foo').and_return nil
       expect(subject.expand_command('foo /a | stuff >> NUL')).to be nil
     end
   end

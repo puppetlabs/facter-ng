@@ -7,10 +7,8 @@
 #
 shared_context "windows", :as_platform => :windows do
   before :each do
-    Facter.stubs(:value).returns('Windows')
-    Facter::Util::Config.stubs(:is_windows?).returns true
-    # allow(Facter).to receive(:value).with(:operatingsystem).and_return('Windows')
-    # allow(Facter::Util::Config).to receive(:is_windows?).and_return(true)
+    allow(Facter).to receive(:value).and_return('Windows')
+    allow(Facter::Util::Config).to receive(:is_windows?).and_return true
   end
 
   around do |example|
