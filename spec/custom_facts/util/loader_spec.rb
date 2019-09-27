@@ -3,15 +3,11 @@
 require_relative '../../spec_helper_legacy'
 
 describe Facter::Util::Loader do
-  before :each do
-    Facter::Util::Loader.any_instance.unstub(:load_all)
-  end
-
   def loader_from(places)
     env = places[:env] || {}
     search_path = places[:search_path] || []
     loader = Facter::Util::Loader.new(env)
-    loader.stubs(:search_path).returns search_path
+    allow(loader).to receive(:search_path).and_return(search_path)
     loader
   end
 
@@ -75,8 +71,8 @@ describe Facter::Util::Loader do
 
     it "should include the facter subdirectory of all paths in ruby LOAD_PATH" do
       dirs = $LOAD_PATH.collect { |d| File.expand_path('custom_facts', d) }
-      loader.stubs(:valid_search_path?).returns(true)
-      File.stubs(:directory?).returns true
+      allow(loader).to receive(:valid_search_path?).and_return(true)
+      allow(File).to receive(:directory?).and_return true
 
       paths = loader.search_path
 
@@ -87,7 +83,7 @@ describe Facter::Util::Loader do
 
     it "should exclude invalid search paths" do
       dirs = $LOAD_PATH.collect { |d| File.join(d, "custom_facts") }
-      loader.stubs(:valid_search_path?).returns(false)
+      allow(loader).to receive(:valid_search_path?).and_return(false)
       paths = loader.search_path
       dirs.each do |dir|
         expect(paths).not_to include(dir)
@@ -95,12 +91,12 @@ describe Facter::Util::Loader do
     end
 
     it "should include all search paths registered with Facter" do
-      Facter.expects(:search_path).returns %w{/one /two}
-      loader.stubs(:valid_search_path?).returns true
+      allow(Facter).to receive(:search_path).and_return %w{/one /two}
+      allow(loader).to receive(:valid_search_path?).and_return true
 
-      File.stubs(:directory?).returns false
-      File.stubs(:directory?).with('/one').returns true
-      File.stubs(:directory?).with('/two').returns true
+      allow(File).to receive(:directory?).and_return false
+      allow(File).to receive(:directory?).with('/one').and_return true
+      allow(File).to receive(:directory?).with('/two').and_return true
 
       paths = loader.search_path
       expect(paths).to include("/one")
@@ -108,14 +104,14 @@ describe Facter::Util::Loader do
     end
 
     it "should warn on invalid search paths registered with Facter" do
-      Facter.expects(:search_path).returns %w{/one two/three}
-      loader.stubs(:valid_search_path?).returns false
-      loader.stubs(:valid_search_path?).with('/one').returns true
-      loader.stubs(:valid_search_path?).with('two/three').returns false
-      Facter.expects(:warn).with('Excluding two/three from search path. Fact file paths must be an absolute directory').once
+      expect(Facter).to receive(:search_path).and_return %w{/one two/three}
+      allow(loader).to receive(:valid_search_path?).and_return false
+      allow(loader).to receive(:valid_search_path?).with('/one').and_return true
+      allow(loader).to receive(:valid_search_path?).with('two/three').and_return false
+      expect(Facter).to receive(:warn).with('Excluding two/three from search path. Fact file paths must be an absolute directory').once
 
-      File.stubs(:directory?).returns false
-      File.stubs(:directory?).with('/one').returns true
+      allow(File).to receive(:directory?).and_return false
+      allow(File).to receive(:directory?).with('/one').and_return true
 
       paths = loader.search_path
       expect(paths).to include("/one")
@@ -123,14 +119,14 @@ describe Facter::Util::Loader do
     end
 
     it "should strip paths that are valid paths but not are not present" do
-      Facter.expects(:search_path).returns %w{/one /two}
-      loader.stubs(:valid_search_path?).returns false
-      loader.stubs(:valid_search_path?).with('/one').returns true
-      loader.stubs(:valid_search_path?).with('/two').returns true
+      expect(Facter).to receive(:search_path).and_return %w{/one /two}
+      allow(loader).to receive(:valid_search_path?).and_return false
+      allow(loader).to receive(:valid_search_path?).with('/one').and_return true
+      allow(loader).to receive(:valid_search_path?).with('/two').and_return true
 
-      File.stubs(:directory?).returns false
-      File.stubs(:directory?).with('/one').returns true
-      File.stubs(:directory?).with('/two').returns false
+      allow(File).to receive(:directory?).and_return false
+      allow(File).to receive(:directory?).with('/one').and_return true
+      allow(File).to receive(:directory?).with('/two').and_return false
 
       paths = loader.search_path
       expect(paths).to include("/one")
@@ -141,11 +137,11 @@ describe Facter::Util::Loader do
       it "should include all paths in FACTERLIB" do
         loader = Facter::Util::Loader.new("FACTERLIB" => "/one/path#{File::PATH_SEPARATOR}/two/path")
 
-      File.stubs(:directory?).returns false
-      File.stubs(:directory?).with('/one/path').returns true
-      File.stubs(:directory?).with('/two/path').returns true
+        allow(File).to receive(:directory?).and_return false
+        allow(File).to receive(:directory?).with('/one/path').and_return true
+        allow(File).to receive(:directory?).with('/two/path').and_return true
 
-        loader.stubs(:valid_search_path?).returns true
+        allow(loader).to receive(:valid_search_path?).and_return true
         paths = loader.search_path
         %w{/one/path /two/path}.each do |dir|
           expect(paths).to include(dir)
@@ -158,7 +154,7 @@ describe Facter::Util::Loader do
     it "should load values from the matching environment variable if one is present" do
       loader = loader_from(:env => { "facter_testing" => "yayness" })
 
-      Facter.expects(:add).with("testing")
+      expect(Facter).to receive(:add).with("testing")
 
       loader.load(:testing)
     end
@@ -166,28 +162,28 @@ describe Facter::Util::Loader do
     it "should load any files in the search path with names matching the fact name" do
       loader = loader_from(:search_path => %w{/one/dir /two/dir})
 
-      loader.expects(:search_path).returns %w{/one/dir /two/dir}
-      File.stubs(:file?).returns false
-      File.expects(:file?).with("/one/dir/testing.rb").returns true
+      expect(loader).to receive(:search_path).and_return %w{/one/dir /two/dir}
+      allow(File).to receive(:file?).and_return false
+      allow(File).to receive(:file?).with("/one/dir/testing.rb").and_return true
 
-      Kernel.expects(:load).with("/one/dir/testing.rb")
+      expect(Kernel).to receive(:load).with("/one/dir/testing.rb")
 
       loader.load(:testing)
     end
 
     it 'should not load any ruby files from subdirectories matching the fact name in the search path' do
       loader = Facter::Util::Loader.new
-      File.stubs(:file?).returns false
-      File.expects(:file?).with("/one/dir/testing.rb").returns true
-      Kernel.expects(:load).with("/one/dir/testing.rb")
+      allow(File).to receive(:file?).and_return false
+      expect(File).to receive(:file?).with("/one/dir/testing.rb").and_return true
+      expect(Kernel).to receive(:load).with("/one/dir/testing.rb")
 
-      File.stubs(:directory?).with("/one/dir/testing").returns true
-      loader.stubs(:search_path).returns %w{/one/dir}
+      allow(File).to receive(:directory?).with("/one/dir/testing").and_return true
+      allow(loader).to receive(:search_path).and_return %w{/one/dir}
 
-      Dir.stubs(:entries).with("/one/dir/testing").returns %w{foo.rb bar.rb}
+      allow(Dir).to receive(:entries).with("/one/dir/testing").and_return %w{foo.rb bar.rb}
       %w{/one/dir/testing/foo.rb /one/dir/testing/bar.rb}.each do |f|
-        File.stubs(:directory?).with(f).returns false
-        Kernel.stubs(:load).with(f)
+        allow(File).to receive(:directory?).with(f).and_return false
+        allow(Kernel).to receive(:load).with(f)
       end
 
       loader.load(:testing)
@@ -195,11 +191,11 @@ describe Facter::Util::Loader do
 
     it "should not load files that don't end in '.rb'" do
       loader = Facter::Util::Loader.new
-      loader.expects(:search_path).returns %w{/one/dir}
-      File.stubs(:file?).returns false
-      File.expects(:file?).with("/one/dir/testing.rb").returns false
-      File.expects(:exist?).with("/one/dir/testing").never
-      Kernel.expects(:load).never
+      expect(loader).to receive(:search_path).and_return %w{/one/dir}
+      allow(File).to receive(:file?).and_return false
+      expect(File).to receive(:file?).with("/one/dir/testing.rb").and_return false
+      expect(File).to receive(:exist?).with("/one/dir/testing").never
+      expect(Kernel).to receive(:load).never
 
       loader.load(:testing)
     end
@@ -209,53 +205,53 @@ describe Facter::Util::Loader do
     let(:loader) { Facter::Util::Loader.new }
 
     before :each do
-      loader.stubs(:search_path).returns []
+      allow(loader).to receive(:search_path).and_return([])
 
-      File.stubs(:directory?).returns true
+      allow(File).to receive(:directory?).and_return true
     end
 
     it "should load all files in all search paths" do
       loader = loader_from(:search_path => %w{/one/dir /two/dir})
 
-      Dir.expects(:glob).with('/one/dir/*.rb').returns %w{/one/dir/a.rb /one/dir/b.rb}
-      Dir.expects(:glob).with('/two/dir/*.rb').returns %w{/two/dir/c.rb /two/dir/d.rb}
+      allow(Dir).to receive(:glob).with('/one/dir/*.rb').and_return %w{/one/dir/a.rb /one/dir/b.rb}
+      allow(Dir).to receive(:glob).with('/two/dir/*.rb').and_return %w{/two/dir/c.rb /two/dir/d.rb}
 
       %w{/one/dir/a.rb /one/dir/b.rb /two/dir/c.rb /two/dir/d.rb}.each do |f|
-        File.expects(:file?).with(f).returns true
-        Kernel.expects(:load).with(f)
+        expect(File).to receive(:file?).with(f).and_return true
+        expect(Kernel).to receive(:load).with(f)
       end
 
       loader.load_all
     end
 
     it "should not try to load subdirectories of search paths" do
-      loader.expects(:search_path).returns %w{/one/dir /two/dir}
+      expect(loader).to receive(:search_path).and_return %w{/one/dir /two/dir}
 
       # a.rb is a directory
-      Dir.expects(:glob).with('/one/dir/*.rb').returns %w{/one/dir/a.rb /one/dir/b.rb}
-      File.expects(:file?).with('/one/dir/a.rb').returns false
-      File.expects(:file?).with('/one/dir/b.rb').returns true
-      Kernel.expects(:load).with('/one/dir/b.rb')
+      expect(Dir).to receive(:glob).with('/one/dir/*.rb').and_return %w{/one/dir/a.rb /one/dir/b.rb}
+      expect(File).to receive(:file?).with('/one/dir/a.rb').and_return false
+      expect(File).to receive(:file?).with('/one/dir/b.rb').and_return true
+      expect(Kernel).to receive(:load).with('/one/dir/b.rb')
 
       # c.rb is a directory
-      Dir.expects(:glob).with('/two/dir/*.rb').returns %w{/two/dir/c.rb /two/dir/d.rb}
-      File.expects(:file?).with('/two/dir/c.rb').returns false
-      File.expects(:file?).with('/two/dir/d.rb').returns true
-      Kernel.expects(:load).with('/two/dir/d.rb')
+      expect(Dir).to receive(:glob).with('/two/dir/*.rb').and_return %w{/two/dir/c.rb /two/dir/d.rb}
+      expect(File).to receive(:file?).with('/two/dir/c.rb').and_return false
+      expect(File).to receive(:file?).with('/two/dir/d.rb').and_return true
+      expect(Kernel).to receive(:load).with('/two/dir/d.rb')
 
       loader.load_all
     end
 
     it "should not raise an exception when a file is unloadable" do
-      loader.expects(:search_path).returns %w{/one/dir}
+      expect(loader).to receive(:search_path).and_return %w{/one/dir}
 
-      Dir.expects(:glob).with('/one/dir/*.rb').returns %w{/one/dir/a.rb}
-      File.expects(:file?).with('/one/dir/a.rb').returns true
+      expect(Dir).to receive(:glob).with('/one/dir/*.rb').and_return %w{/one/dir/a.rb}
+      expect(File).to receive(:file?).with('/one/dir/a.rb').and_return true
 
-      Kernel.expects(:load).with("/one/dir/a.rb").raises(LoadError)
-      Facter.expects(:warn)
+      expect(Kernel).to receive(:load).with("/one/dir/a.rb").and_raise(LoadError)
+      expect(Facter).to receive(:warn)
 
-      expect { loader.load_all }.to_not raise_error
+      expect { loader.load_all }.not_to raise_error
     end
 
     it "should load all facts from the environment" do
@@ -268,7 +264,7 @@ describe Facter::Util::Loader do
 
     it "should only load all facts one time" do
       loader = loader_from(:env => {})
-      loader.expects(:load_env).once
+      expect(loader).to receive(:load_env).once
 
       loader.load_all
       loader.load_all
@@ -279,7 +275,7 @@ describe Facter::Util::Loader do
     loader = loader_from(:env => {})
     loader.load_all
 
-    loader.expects(:kernel_load).with(regexp_matches(/ec2/)).never
+    expect(loader).to receive(:kernel_load).with(/ec2/).never
     loader.load(:ec2)
   end
 end
