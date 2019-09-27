@@ -2,7 +2,7 @@ require_relative '../../spec_helper_legacy'
 
 describe Facter::Core::Aggregate do
 
-  let(:fact) { stub('stub_fact', :name => 'stub_fact') }
+  let(:fact) { double('stub_fact', :name => 'stub_fact') }
 
   subject { obj = described_class.new('aggregated', fact) }
 
@@ -65,9 +65,7 @@ describe Facter::Core::Aggregate do
       subject.chunk(:first, :require => [:second]) { }
       subject.chunk(:second, :require => [:first]) { }
 
-      Facter.expects(:warn) do |msg|
-        expect(msg).to match /dependency cycles: .*[:first, :second]/
-      end
+      expect(Facter).to receive(:warn).with(/dependency cycles: .*[:first, :second]/)
 
       subject.value
     end
@@ -117,7 +115,7 @@ describe Facter::Core::Aggregate do
 
   describe "evaluating" do
     it "evaluates the block in the context of the aggregate" do
-      subject.expects(:has_weight).with(5)
+      expect(subject).to receive(:has_weight).with(5)
       subject.evaluate { has_weight(5) }
     end
   end
