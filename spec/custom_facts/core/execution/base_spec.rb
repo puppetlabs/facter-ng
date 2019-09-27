@@ -64,32 +64,32 @@ describe Facter::Core::Execution::Base do
   describe "#execute" do
 
     it "switches LANG and LC_ALL to C when executing the command" do
-      subject.expects(:with_env).with('LC_ALL' => 'C', 'LANG' => 'C')
+      expect(subject).to receive(:with_env).with('LC_ALL' => 'C', 'LANG' => 'C')
       subject.execute('foo')
     end
 
     it "expands the command before running it" do
-      subject.stubs(:`).returns ''
-      subject.expects(:expand_command).with('foo').returns '/bin/foo'
+      allow(subject).to receive(:`).and_return ''
+      expect(subject).to receive(:expand_command).with('foo').and_return '/bin/foo'
       subject.execute('foo')
     end
 
     describe "and the command is not present" do
       it "raises an error when the :on_fail behavior is :raise" do
-        subject.expects(:expand_command).with('foo').returns nil
+        expect(subject).to receive(:expand_command).with('foo').and_return(nil)
         expect { subject.execute('foo') }.to raise_error(Facter::Core::Execution::ExecutionFailure)
       end
 
       it "returns the given value when :on_fail is set to a value" do
-        subject.expects(:expand_command).with('foo').returns nil
+        expect(subject).to receive(:expand_command).with('foo').and_return(nil)
         expect(subject.execute('foo', :on_fail => nil)).to be_nil
       end
     end
 
     describe "when command execution fails" do
       before do
-        subject.expects(:`).with("/bin/foo").raises "kaboom!"
-        subject.expects(:expand_command).with('foo').returns '/bin/foo'
+        expect(subject).to receive(:`).with("/bin/foo").and_raise("kaboom!")
+        expect(subject).to receive(:expand_command).with('foo').and_return('/bin/foo')
       end
 
       it "raises an error when the :on_fail behavior is :raise" do
@@ -102,26 +102,26 @@ describe Facter::Core::Execution::Base do
     end
 
     it "launches a thread to wait on children if the command was interrupted" do
-      subject.expects(:`).with("/bin/foo").raises "kaboom!"
-      subject.expects(:expand_command).with('foo').returns '/bin/foo'
+      expect(subject).to receive(:`).with("/bin/foo").and_raise "kaboom!"
+      expect(subject).to receive(:expand_command).with('foo').and_return '/bin/foo'
 
-      Facter.stubs(:warn)
-      Thread.expects(:new).yields
-      Process.expects(:waitall).once
+      allow(Facter).to receive(:warn)
+      expect(Thread).to receive(:new).and_yield
+      expect(Process).to receive(:waitall).once
 
       subject.execute("foo", :on_fail => nil)
     end
 
     it "returns the output of the command" do
-      subject.expects(:`).with("/bin/foo").returns 'hi'
-      subject.expects(:expand_command).with('foo').returns '/bin/foo'
+      expect(subject).to receive(:`).with("/bin/foo").and_return('hi')
+      expect(subject).to receive(:expand_command).with('foo').and_return '/bin/foo'
 
       expect(subject.execute("foo")).to eq 'hi'
     end
 
     it "strips off trailing newlines" do
-      subject.expects(:`).with("/bin/foo").returns "hi\n"
-      subject.expects(:expand_command).with('foo').returns '/bin/foo'
+      expect(subject).to receive(:`).with("/bin/foo").and_return "hi\n"
+      expect(subject).to receive(:expand_command).with('foo').and_return '/bin/foo'
 
       expect(subject.execute("foo")).to eq 'hi'
     end
