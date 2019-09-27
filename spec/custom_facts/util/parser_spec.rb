@@ -38,14 +38,14 @@ describe Facter::Util::Parser do
     let(:data_file) { "/tmp/foo.yaml" }
 
     it "should return a hash of whatever is stored on disk" do
-      File.stubs(:read).with(data_file).returns(data_in_yaml)
+      allow(File).to receive(:read).with(data_file).and_return(data_in_yaml)
       expect(described_class.parser_for(data_file).results).to eq data
     end
 
     it "should handle exceptions and warn" do
       # YAML data with an error
-      File.stubs(:read).with(data_file).returns(data_in_yaml + "}")
-      Facter.expects(:warn).at_least_once
+      allow(File).to receive(:read).with(data_file).and_return(data_in_yaml + "}")
+      allow(Facter).to receive(:warn).at_least(:one)
       expect(lambda { Facter::Util::Parser.parser_for(data_file).results }).not_to raise_error
     end
   end
@@ -56,7 +56,7 @@ describe Facter::Util::Parser do
 
     it "should return a hash of whatever is stored on disk" do
       pending("this test requires the json library") unless Facter.json?
-      File.stubs(:read).with(data_file).returns(data_in_json)
+      allow(File).to receive(:read).with(data_file).and_return(data_in_json)
       expect(Facter::Util::Parser.parser_for(data_file).results).to eq data
     end
   end
@@ -66,7 +66,7 @@ describe Facter::Util::Parser do
 
     shared_examples_for "txt parser" do
       it "should return a hash of whatever is stored on disk" do
-        File.stubs(:read).with(data_file).returns(data_in_txt)
+        allow(File).to receive(:read).with(data_file).and_return(data_in_txt)
         expect(Facter::Util::Parser.parser_for(data_file).results).to eq data
       end
     end
@@ -94,15 +94,15 @@ describe Facter::Util::Parser do
     let(:data_in_txt) { "one=two\nthree=four\n" }
 
     def expects_script_to_return(path, content, result)
-      Facter::Core::Execution.stubs(:exec).with(path).returns(content)
-      File.stubs(:executable?).with(path).returns(true)
-      File.stubs(:file?).with(path).returns(true)
+      allow(Facter::Core::Execution).to receive(:exec).with(path).and_return(content)
+      allow(File).to receive(:executable?).with(path).and_return(true)
+      allow(File).to receive(:file?).with(path).and_return(true)
 
       expect(Facter::Util::Parser.parser_for(path).results).to eq result
     end
 
     def expects_parser_to_return_nil_for_directory(path)
-      File.stubs(:file?).with(path).returns(false)
+      allow(File).to receive(:file?).with(path).and_return(false)
 
       expect(Facter::Util::Parser.parser_for(path).results).to be nil
     end
@@ -122,7 +122,7 @@ describe Facter::Util::Parser do
     it "quotes scripts with spaces" do
       path = "/h a s s p a c e s#{ext}"
 
-      Facter::Core::Execution.expects(:exec).with("\"#{path}\"").returns(data_in_txt)
+      expect(Facter::Core::Execution).to receive(:exec).with("\"#{path}\"").and_return(data_in_txt)
 
       expects_script_to_return(path, data_in_txt, data)
     end
@@ -132,18 +132,18 @@ describe Facter::Util::Parser do
 
       before :each do
         cmds.each {|cmd|
-          File.stubs(:executable?).with(cmd).returns(true)
-          File.stubs(:file?).with(cmd).returns(true)
+          allow(File).to receive(:executable?).with(cmd).and_return(true)
+          allow(File).to receive(:file?).with(cmd).and_return(true)
         }
       end
 
       it "should return nothing parser if not on windows" do
-        Facter::Util::Config.stubs(:is_windows?).returns(false)
+        allow(Facter::Util::Config).to receive(:is_windows?).and_return(false)
         cmds.each {|cmd| expect(Facter::Util::Parser.parser_for(cmd)).to be_an_instance_of(Facter::Util::Parser::NothingParser) }
       end
 
       it "should return script parser if on windows" do
-        Facter::Util::Config.stubs(:is_windows?).returns(true)
+        expect(Facter::Util::Config).to receive(:is_windows?).and_return(true).at_least(:once)
         cmds.each {|cmd| expect(Facter::Util::Parser.parser_for(cmd)).to be_an_instance_of(Facter::Util::Parser::ScriptParser) }
       end
     end
@@ -153,18 +153,18 @@ describe Facter::Util::Parser do
 
       before :each do
         cmds.each {|cmd|
-          File.stubs(:executable?).with(cmd).returns(true)
-          File.stubs(:file?).with(cmd).returns(true)
+          allow(File).to receive(:executable?).with(cmd).and_return(true)
+          allow(File).to receive(:file?).with(cmd).and_return(true)
         }
       end
 
       it "should return nothing parser if not on windows" do
-        Facter::Util::Config.stubs(:is_windows?).returns(false)
+        allow(Facter::Util::Config).to receive(:is_windows?).and_return(false)
         cmds.each {|cmd| expect(Facter::Util::Parser.parser_for(cmd)).to be_an_instance_of(Facter::Util::Parser::NothingParser) }
       end
 
       it "should return script  parser if on windows" do
-        Facter::Util::Config.stubs(:is_windows?).returns(true)
+        allow(Facter::Util::Config).to receive(:is_windows?).and_return(true)
         cmds.each {|cmd| expect(Facter::Util::Parser.parser_for(cmd)).to be_an_instance_of(Facter::Util::Parser::ScriptParser) }
       end
 
@@ -174,9 +174,8 @@ describe Facter::Util::Parser do
       let(:ps1) { "/tmp/foo.ps1" }
 
       def expects_to_parse_powershell(cmd, result)
-        Facter::Util::Config.stubs(:is_windows?).returns(true)
-
-        File.stubs(:file?).with(ps1).returns(true)
+        allow(Facter::Util::Config).to receive(:is_windows?).and_return(true)
+        allow(File).to receive(:file?).with(ps1).and_return(true)
 
         expect(Facter::Util::Parser.parser_for(cmd).results).to eq result
       end
@@ -186,7 +185,7 @@ describe Facter::Util::Parser do
       end
 
       it "should parse output from powershell" do
-        Facter::Core::Execution.stubs(:exec).returns(data_in_txt)
+        allow(Facter::Core::Execution).to receive(:exec).and_return(data_in_txt)
         expects_to_parse_powershell(ps1, data)
       end
 
