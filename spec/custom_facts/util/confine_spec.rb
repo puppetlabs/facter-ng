@@ -31,25 +31,25 @@ describe Facter::Util::Confine do
 
   describe "when evaluating" do
     def confined(fact_value, *confines)
-      @fact.stubs(:value).returns fact_value
+      allow(@fact).to receive(:value).and_return fact_value
       Facter::Util::Confine.new("yay", *confines).true?
     end
 
     before do
-      @fact = mock 'fact'
-      Facter.stubs(:[]).returns @fact
+      @fact = double 'fact'
+      allow(Facter).to receive(:[]).and_return @fact
     end
 
     it "should return false if the fact does not exist" do
-      Facter.expects(:[]).with("yay").returns nil
+      expect(Facter).to receive(:[]).with("yay").and_return nil
 
       expect(Facter::Util::Confine.new("yay", "test").true?).to be false
     end
 
     it "should use the returned fact to get the value" do
-      Facter.expects(:[]).with("yay").returns @fact
+      expect(Facter).to receive(:[]).with("yay").and_return @fact
 
-      @fact.expects(:value).returns nil
+      expect(@fact).to receive(:value).and_return nil
 
       Facter::Util::Confine.new("yay", "test").true?
     end
@@ -123,13 +123,13 @@ describe Facter::Util::Confine do
     end
 
     it "should accept and evaluate a block argument against the fact" do
-      @fact.expects(:value).returns 'foo'
+      expect(@fact).to receive(:value).and_return 'foo'
       confine = Facter::Util::Confine.new :yay do |f| f === 'foo' end
       expect(confine.true?).to be true
     end
 
     it "should return false if the block raises a StandardError when checking a fact" do
-      @fact.stubs(:value).returns 'foo'
+      allow(@fact).to receive(:value).and_return 'foo'
       confine = Facter::Util::Confine.new :yay do |f| raise StandardError end
       expect(confine.true?).to be false
     end
