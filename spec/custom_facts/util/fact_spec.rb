@@ -17,13 +17,13 @@ describe Facter::Util::Fact do
   end
 
   it "issues a deprecation warning for use of ldapname" do
-    Facter.expects(:warnonce).with("ldapname is deprecated and will be removed in a future version")
+    expect(Facter).to receive(:warnonce).with("ldapname is deprecated and will be removed in a future version")
     Facter::Util::Fact.new("YayNess", :ldapname => "fooness")
   end
 
   describe "when adding resolution mechanisms using #add" do
     it "delegates to #define_resolution with an anonymous resolution" do
-      subject.expects(:define_resolution).with(nil, {})
+      expect(subject).to receive(:define_resolution).with(nil, {})
       subject.add
     end
   end
@@ -45,14 +45,14 @@ describe Facter::Util::Fact do
   describe "adding resolution mechanisms by name" do
 
     let(:res) do
-      stub 'resolution',
+      double 'resolution',
         :name => 'named',
         :set_options => nil,
         :resolution_type => :simple
     end
 
     it "creates a new resolution if no such resolution exists" do
-      Facter::Util::Resolution.expects(:new).once.with('named', fact).returns(res)
+      expect(Facter::Util::Resolution).to receive(:new).once.with('named', fact).and_return(res)
 
       fact.define_resolution('named')
 
@@ -81,7 +81,7 @@ describe Facter::Util::Fact do
     # end
 
     it "returns existing resolutions by name" do
-      Facter::Util::Resolution.expects(:new).once.with('named', fact).returns(res)
+      expect(Facter::Util::Resolution).to receive(:new).once.with('named', fact).and_return(res)
 
       fact.define_resolution('named')
       fact.define_resolution('named')
@@ -128,10 +128,10 @@ describe Facter::Util::Fact do
 
     it "invokes #flush on all resolutions" do
       simple = subject.add(:type => :simple)
-      simple.expects(:flush)
+      expect(simple).to receive(:flush)
 
       aggregate = subject.add(:type => :aggregate)
-      aggregate.expects(:flush)
+      expect(aggregate).to receive(:flush)
 
       subject.flush
     end
