@@ -7,7 +7,7 @@ describe Facter::Util::DirectoryLoader do
   include FacterSpec::ConfigHelper
 
   subject { Facter::Util::DirectoryLoader.new(tmpdir('directory_loader')) }
-  let(:collection) { Facter::Util::Collection.new(mock("internal loader"), subject) }
+  let(:collection) { Facter::Util::Collection.new(double("internal loader"), subject) }
 
   it "should make the directory available" do
     expect(subject.directory).to be_instance_of(String)
@@ -19,7 +19,7 @@ describe Facter::Util::DirectoryLoader do
 
   it "raises an error when the directory does not exist" do
     missing_dir = "missing"
-    File.stubs(:directory?).with(missing_dir).returns(false)
+    allow(File).to receive(:directory?).with(missing_dir).and_return(false)
     expect { Facter::Util::DirectoryLoader.loader_for(missing_dir) }.to raise_error Facter::Util::DirectoryLoader::NoSuchDirectoryError
   end
 
@@ -42,8 +42,8 @@ describe Facter::Util::DirectoryLoader do
     end
 
     it "should ignore files that begin with '.'" do
-      not_to_be_used_collection = mock("collection should not be used")
-      not_to_be_used_collection.expects(:add).never
+      not_to_be_used_collection = double("collection should not be used")
+      expect(not_to_be_used_collection).to receive(:add).never
 
       data = {"f1" => "one", "f2" => "two"}
       write_to_file(".data.yaml", YAML.dump(data))
@@ -53,7 +53,7 @@ describe Facter::Util::DirectoryLoader do
 
     %w{bak orig}.each do |ext|
       it "should ignore files with an extension of '#{ext}'" do
-        Facter.expects(:warn).with(regexp_matches(/#{ext}/))
+        expect(Facter).to receive(:warn).with(/#{ext}/)
         write_to_file("data" + ".#{ext}", "foo=bar")
 
         subject.load(collection)
@@ -62,8 +62,7 @@ describe Facter::Util::DirectoryLoader do
 
     it "should warn when trying to parse unknown file types" do
       write_to_file("file.unknownfiletype", "stuff=bar")
-
-      Facter.expects(:warn).with(regexp_matches(/file.unknownfiletype/))
+      expect(Facter).to receive(:warn).with(/file.unknownfiletype/)
 
       subject.load(collection)
     end
