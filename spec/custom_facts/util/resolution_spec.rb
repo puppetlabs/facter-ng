@@ -3,7 +3,6 @@
 require_relative '../../spec_helper_legacy'
 
 describe LegacyFacter::Util::Resolution do
-  include FacterSpec::ConfigHelper
 
   subject(:resolution) { described_class.new(:foo, stub_fact) }
 

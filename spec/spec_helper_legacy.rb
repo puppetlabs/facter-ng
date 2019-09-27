@@ -47,12 +47,3 @@ RSpec.configure do |config|
     to_remove.each {|key| ENV.delete key }
   end
 end
-
-module FacterSpec
-  module ConfigHelper
-    def given_a_configuration_of(config)
-      LegacyFacter::Util::Config.stubs(:is_windows?).returns(config[:is_windows])
-      LegacyFacter::Util::Config.stubs(:external_facts_dir).returns(config[:external_facts_dir] || "data_dir")
-    end
-  end
-end

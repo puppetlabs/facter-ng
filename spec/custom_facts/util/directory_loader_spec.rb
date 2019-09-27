@@ -4,7 +4,6 @@ require_relative '../../spec_helper_legacy'
 
 describe LegacyFacter::Util::DirectoryLoader do
   include PuppetlabsSpec::Files
-  include FacterSpec::ConfigHelper
 
   subject { LegacyFacter::Util::DirectoryLoader.new(tmpdir('directory_loader')) }
   let(:collection) { LegacyFacter::Util::Collection.new(double("internal loader"), subject) }
