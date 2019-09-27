@@ -7,7 +7,7 @@ describe Facter::Util::Resolution do
 
   subject(:resolution) { described_class.new(:foo, stub_fact) }
 
-  let(:stub_fact) { stub('fact', :name => :stubfact) }
+  let(:stub_fact) { double('fact', :name => :stubfact) }
 
   it "requires a name" do
     expect { Facter::Util::Resolution.new }.to raise_error(ArgumentError)
@@ -32,7 +32,7 @@ describe Facter::Util::Resolution do
 
   describe "when setting the code" do
     before do
-      Facter.stubs(:warnonce)
+      allow(Facter).to receive(:warnonce)
     end
 
     it "creates a block when given a command" do
@@ -73,7 +73,7 @@ describe Facter::Util::Resolution do
     describe "and the code is a string" do
       it "returns the result of executing the code" do
         resolution.setcode "/bin/foo"
-        Facter::Core::Execution.expects(:execute).once.with("/bin/foo", anything).returns "yup"
+        expect(Facter::Core::Execution).to receive(:execute).once.with("/bin/foo", anything).and_return("yup")
 
         expect(resolution.value).to eq "yup"
       end
@@ -112,14 +112,12 @@ describe Facter::Util::Resolution do
 
   describe "evaluating" do
     it "evaluates the block in the context of the given resolution" do
-      subject.expects(:has_weight).with(5)
+      expect(subject).to receive(:has_weight).with(5)
       subject.evaluate { has_weight(5) }
     end
 
     it "raises a warning if the resolution is evaluated twice" do
-      Facter.expects(:warn).with do |msg|
-        expect(msg).to match /Already evaluated foo at.*reevaluating anyways/
-      end
+      expect(Facter).to receive(:warn).with(/Already evaluated foo at.*reevaluating anyways/)
 
       subject.evaluate { }
       subject.evaluate { }
