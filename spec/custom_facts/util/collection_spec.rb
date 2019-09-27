@@ -1,21 +1,19 @@
 #! /usr/bin/env ruby
 
 require_relative '../../spec_helper_legacy'
-# require 'facter/util/collection'
-# require 'facter/util/nothing_loader'
 
 describe Facter::Util::Collection do
   let(:external_loader) { Facter::Util::NothingLoader.new }
   let(:internal_loader) do
     load = Facter::Util::Loader.new
-    load.stubs(:load).returns nil
-    load.stubs(:load_all).returns nil
+    allow(load).to receive(:load).and_return nil
+    allow(load).to receive(:load_all).and_return nil
     load
   end
   let(:collection) { Facter::Util::Collection.new(internal_loader, external_loader) }
 
   it "should delegate its load_all method to its loader" do
-    internal_loader.expects(:load_all)
+    expect(internal_loader).to receive(:load_all)
 
     collection.load_all
   end
@@ -32,31 +30,31 @@ describe Facter::Util::Collection do
 
     it "passes resolution specific options to the fact" do
       fact = Facter::Util::Fact.new(:myname)
-      Facter::Util::Fact.expects(:new).with(:myname, {:timeout => 'myval'}).returns fact
+      expect(Facter::Util::Fact).to receive(:new).with(:myname, {:timeout => 'myval'}).and_return(fact)
 
-      fact.expects(:add).with({:timeout => 'myval'})
+      expect(fact).to receive(:add).with({:timeout => 'myval'})
 
       collection.add(:myname, :timeout => "myval") {}
     end
 
     describe "and a block is provided" do
       it "should use the block to add a resolution to the fact" do
-        fact = mock 'fact'
-        fact.stubs(:extract_ldapname_option!)
-        Facter::Util::Fact.expects(:new).returns fact
+        fact = double 'fact'
+        # allow(fact).to receive(:extract_ldapname_option!)
+        expect(Facter::Util::Fact).to receive(:new).and_return(fact)
 
-        fact.expects(:add)
+        expect(fact).to receive(:add)
 
         collection.add(:myname) {}
       end
 
       it "should discard resolutions that throw an exception when added" do
-        Facter.expects(:warn).with(regexp_matches(/Unable to add resolve .* kaboom!/))
+        expect(Facter).to receive(:warn).with(/Unable to add resolve .* kaboom!/)
         expect {
           collection.add('yay') do
             raise "kaboom!"
           end
-        }.to_not raise_error
+        }.not_to raise_error
         expect(collection.value('yay')).to be_nil
       end
     end
@@ -65,7 +63,7 @@ describe Facter::Util::Collection do
   describe "when only defining facts" do
     it "creates a new fact if no such fact exists" do
       fact = Facter::Util::Fact.new(:newfact)
-      Facter::Util::Fact.expects(:new).with(:newfact, {}).returns fact
+      expect(Facter::Util::Fact).to receive(:new).with(:newfact, {}).and_return fact
       expect(collection.define_fact(:newfact)).to equal fact
     end
 
@@ -75,13 +73,13 @@ describe Facter::Util::Collection do
     end
 
     it "passes options to newly generated facts" do
-      Facter.stubs(:warnonce)
+      allow(Facter).to receive(:warnonce)
       fact = collection.define_fact(:newfact, :ldapname => 'NewFact')
       expect(fact.ldapname).to eq 'NewFact'
     end
 
     it "logs a warning if the fact could not be defined" do
-      Facter.expects(:warn).with("Unable to add fact newfact: kaboom!")
+      expect(Facter).to receive(:warn).with("Unable to add fact newfact: kaboom!")
 
       collection.define_fact(:newfact) do
         raise "kaboom!"
@@ -107,12 +105,12 @@ describe Facter::Util::Collection do
     end
 
     it "should use its loader to try to load the fact if no fact can be found" do
-      collection.internal_loader.expects(:load).with(:testing)
+      expect(collection.internal_loader).to receive(:load).with(:testing)
       collection.fact("testing")
     end
 
     it "should return nil if it cannot find or load the fact" do
-      collection.internal_loader.expects(:load).with(:testing)
+      expect(collection.internal_loader).to receive(:load).with(:testing)
       expect(collection.fact("testing")).to be nil
     end
   end
@@ -144,7 +142,7 @@ describe Facter::Util::Collection do
   it "should have a method for flushing all facts" do
     fact = collection.add("YayNess")
 
-    fact.expects(:flush)
+    expect(fact).to receive(:flush)
 
     collection.flush
   end
@@ -204,7 +202,7 @@ describe Facter::Util::Collection do
 
   describe "when no facts are loaded" do
     it "should warn when no facts were loaded" do
-      Facter.expects(:warnonce).with("No facts loaded from #{internal_loader.search_path.join(File::PATH_SEPARATOR)}").once
+      expect(Facter).to receive(:warnonce).with("No facts loaded from #{internal_loader.search_path.join(File::PATH_SEPARATOR)}").once
 
       collection.fact("one")
     end
@@ -230,14 +228,14 @@ describe Facter::Util::Collection do
     end
 
     it "are loaded only once" do
-      external_loader.expects(:load).with(collection)
+      expect(external_loader).to receive(:load).with(collection)
 
       collection.load_all
       collection.load_all
     end
 
     it "are reloaded after flushing" do
-      external_loader.expects(:load).with(collection).twice
+      expect(external_loader).to receive(:load).with(collection).twice
 
       collection.load_all
       collection.flush
