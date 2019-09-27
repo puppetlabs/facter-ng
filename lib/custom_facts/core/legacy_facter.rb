@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Facter - Host Fact Detection and Reporting
 #
 # Copyright 2011 Puppet Labs Inc
@@ -46,10 +48,11 @@ module LegacyFacter
   #
   # @api private
   def self.collection
-    unless defined?(@collection) and @collection
+    unless defined?(@collection) && @collection
       @collection = LegacyFacter::Util::Collection.new(
         LegacyFacter::Util::Loader.new,
-        LegacyFacter::Util::Config.ext_fact_loader)
+        LegacyFacter::Util::Config.ext_fact_loader
+      )
     end
     @collection
   end
@@ -58,12 +61,10 @@ module LegacyFacter
   #
   # @api private
   def self.json?
-    begin
-      require 'json'
-      true
-    rescue LoadError
-      false
-    end
+    require 'json'
+    true
+  rescue LoadError
+    false
   end
 
   # Returns a fact object by name.  If you use this, you still have to

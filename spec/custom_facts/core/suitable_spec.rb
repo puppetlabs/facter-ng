@@ -61,13 +61,13 @@ describe LegacyFacter::Core::Suitable do
     end
 
     it "can be explicitly set" do
-      subject.has_weight 10
+      subject.weight? 10
       expect(subject.weight).to eq 10
     end
 
     it "prefers an explicit weight over the number of confines" do
       subject.confine :kernel => 'Linux'
-      subject.has_weight 11
+      subject.weight? 11
       expect(subject.weight).to eq 11
     end
   end

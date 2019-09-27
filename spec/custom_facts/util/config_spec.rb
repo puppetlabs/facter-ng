@@ -23,7 +23,7 @@ describe LegacyFacter::Util::Config do
       host_os = ["mswin","win32","dos","mingw","cygwin"]
       host_os.each do |h|
         allow(RbConfig::CONFIG).to receive(:[]).with('host_os').and_return(h)
-        expect(LegacyFacter::Util::Config.is_windows?).to be_truthy
+        expect(LegacyFacter::Util::Config.windows?).to be_truthy
       end
     end
 
@@ -31,7 +31,7 @@ describe LegacyFacter::Util::Config do
       host_os = ["darwin","linux"]
       host_os.each do |h|
         allow(RbConfig::CONFIG).to receive(:[]).with('host_os').and_return(h)
-        expect(LegacyFacter::Util::Config.is_windows?).to be_falsey
+        expect(LegacyFacter::Util::Config.windows?).to be_falsey
       end
     end
   end
@@ -41,7 +41,7 @@ describe LegacyFacter::Util::Config do
       host_os = ["darwin"]
       host_os.each do |h|
         allow(RbConfig::CONFIG).to receive(:[]).with('host_os').and_return(h)
-        expect(LegacyFacter::Util::Config.is_mac?).to be_truthy
+        expect(LegacyFacter::Util::Config.mac?).to be_truthy
       end
     end
   end
@@ -52,21 +52,21 @@ describe LegacyFacter::Util::Config do
     end
 
     it "should return the default value for linux" do
-      allow(LegacyFacter::Util::Config).to receive(:is_windows?).and_return(false)
+      allow(LegacyFacter::Util::Config).to receive(:windows?).and_return(false)
       allow(LegacyFacter::Util::Config).to receive(:windows_data_dir).and_return(nil)
       LegacyFacter::Util::Config.setup_default_ext_facts_dirs
       expect(LegacyFacter::Util::Config.external_facts_dirs).to eq ["/opt/puppetlabs/custom_facts/facts.d", "/etc/custom_facts/facts.d", "/etc/puppetlabs/custom_facts/facts.d"]
     end
 
     it "should return the default value for windows 2008" do
-      allow(LegacyFacter::Util::Config).to receive(:is_windows?).and_return(true)
+      allow(LegacyFacter::Util::Config).to receive(:windows?).and_return(true)
       allow(LegacyFacter::Util::Config).to receive(:windows_data_dir).and_return("C:\\ProgramData")
       LegacyFacter::Util::Config.setup_default_ext_facts_dirs
       expect(LegacyFacter::Util::Config.external_facts_dirs).to eq [File.join("C:\\ProgramData", 'PuppetLabs', 'custom_facts', 'facts.d')]
     end
 
     it "should return the default value for windows 2003R2" do
-      allow(LegacyFacter::Util::Config).to receive(:is_windows?).and_return(true)
+      allow(LegacyFacter::Util::Config).to receive(:windows?).and_return(true)
       allow(LegacyFacter::Util::Config).to receive(:windows_data_dir).and_return("C:\\Documents")
       LegacyFacter::Util::Config.setup_default_ext_facts_dirs
       expect(LegacyFacter::Util::Config.external_facts_dirs).to eq [File.join("C:\\Documents", 'PuppetLabs', 'custom_facts', 'facts.d')]
@@ -99,13 +99,13 @@ describe LegacyFacter::Util::Config do
 
   describe "override_binary_dir" do
     it "should return the default value for linux" do
-      allow(LegacyFacter::Util::Config).to receive(:is_windows?).and_return(false)
+      allow(LegacyFacter::Util::Config).to receive(:windows?).and_return(false)
       LegacyFacter::Util::Config.setup_default_override_binary_dir
       expect(LegacyFacter::Util::Config.override_binary_dir).to eq "/opt/puppetlabs/puppet/bin"
     end
 
     it "should return nil for windows" do
-      allow(LegacyFacter::Util::Config).to receive(:is_windows?).and_return(true)
+      allow(LegacyFacter::Util::Config).to receive(:windows?).and_return(true)
       LegacyFacter::Util::Config.setup_default_override_binary_dir
       expect(LegacyFacter::Util::Config.override_binary_dir).to eq nil
     end

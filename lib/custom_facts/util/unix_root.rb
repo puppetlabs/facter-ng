@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module LegacyFacter
   module Util
     module Root
       def self.root?
-        Process.uid == 0
+        Process.uid.zero?
       end
     end
   end

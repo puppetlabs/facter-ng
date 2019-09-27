@@ -47,7 +47,7 @@ describe LegacyFacter::Util::Fact do
     let(:res) do
       double 'resolution',
         :name => 'named',
-        :set_options => nil,
+        :options => nil,
         :resolution_type => :simple
     end
 
@@ -96,24 +96,24 @@ describe LegacyFacter::Util::Fact do
     end
 
     it "prefers the highest weight resolution" do
-      fact.add { has_weight 1; setcode { "1" } }
-      fact.add { has_weight 2; setcode { "2" } }
-      fact.add { has_weight 0; setcode { "0" } }
+      fact.add { weight? 1; setcode { "1" } }
+      fact.add { weight? 2; setcode { "2" } }
+      fact.add { weight? 0; setcode { "0" } }
       expect(fact.value).to eq "2"
     end
 
     it "returns the first value returned by a resolution" do
-      fact.add { has_weight 1; setcode { "1" } }
-      fact.add { has_weight 2; setcode { nil } }
-      fact.add { has_weight 0; setcode { "0" } }
+      fact.add { weight? 1; setcode { "1" } }
+      fact.add { weight? 2; setcode { nil } }
+      fact.add { weight? 0; setcode { "0" } }
       expect(fact.value).to eq "1"
     end
 
     it "skips unsuitable resolutions" do
-      fact.add { has_weight 1; setcode { "1" } }
+      fact.add { weight? 1; setcode { "1" } }
       fact.add do
         def suitable?; false; end
-        has_weight 2
+        weight? 2
         setcode { 2 }
       end
 

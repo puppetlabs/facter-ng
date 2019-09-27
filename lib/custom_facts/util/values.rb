@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 module LegacyFacter
   module Util
@@ -23,9 +24,8 @@ module LegacyFacter
             deep_freeze(entry)
           end.freeze
         when Hash
-          value.inject({}) do |hash, (key, value)|
-            hash[deep_freeze(key)] = deep_freeze(value)
-            hash
+          value.each_with_object({}) do |(key, val), hash|
+            hash[deep_freeze(key)] = deep_freeze(val)
           end.freeze
         else
           raise DeepFreezeError, "Cannot deep freeze #{value}:#{value.class}"
@@ -41,28 +41,28 @@ module LegacyFacter
       # @param path [Array<String>] The traversal path followed when merging nested hashes
       #
       # @return [Object] The merged data structure.
-      def deep_merge(left, right, path = [], &block)
+      def deep_merge(left, right, path = [])
         ret = nil
 
-        if left.is_a? Hash and right.is_a? Hash
+        if left.is_a?(Hash) && right.is_a?(Hash)
           ret = left.merge(right) do |key, left_val, right_val|
             path.push(key)
             merged = deep_merge(left_val, right_val, path)
             path.pop
             merged
           end
-        elsif left.is_a? Array and right.is_a? Array
+        elsif left.is_a?(Array) && right.is_a?(Array)
           ret = left.dup.concat(right)
         elsif right.nil?
           ret = left
         elsif left.nil?
           ret = right
-        elsif left.nil? and right.nil?
+        elsif left.nil? && right.nil?
           ret = nil
         else
           msg = "Cannot merge #{left.inspect}:#{left.class} and #{right.inspect}:#{right.class}"
-          if not path.empty?
-            msg << " at root"
+          unless path.empty?
+            msg << ' at root'
             msg << path.map { |part| "[#{part.inspect}]" }.join
           end
           raise DeepMergeError, msg
@@ -90,7 +90,7 @@ module LegacyFacter
 
         if structure.is_a? Hash
           structure.each_pair do |name, value|
-            new_path = "#{path}_#{name}".gsub(/\-|\//, '_')
+            new_path = "#{path}_#{name}".gsub(%r{\-|/}, '_')
             results.merge! flatten_structure(new_path, value)
           end
         elsif structure.is_a? Array

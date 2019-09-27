@@ -1,13 +1,14 @@
+# frozen_string_literal: true
+
 module LegacyFacter
   module Core
     module Execution
       class Base
-
         def with_env(values)
           old = {}
           values.each do |var, value|
             # save the old value if it exists
-            if old_val = ENV[var]
+            if (old_val = ENV[var])
               old[var] = old_val
             end
             # set the new (temporary) value for the environment variable
@@ -15,10 +16,10 @@ module LegacyFacter
           end
           # execute the caller's block, capture the return value
           rv = yield
-            # use an ensure block to make absolutely sure we restore the variables
+        # use an ensure block to make absolutely sure we restore the variables
         ensure
           # restore the old values
-          values.each do |var, value|
+          values.each do |var, _value|
             if old.include?(var)
               ENV[var] = old[var]
             else
@@ -31,35 +32,34 @@ module LegacyFacter
         end
 
         def execute(command, options = {})
-
           on_fail = options.fetch(:on_fail, :raise)
 
-          # Set LC_ALL and LANG to force i18n to C for the duration of this exec; this ensures that any code that parses the
+          # Set LC_ALL and LANG to force i18n to C for the duration of this exec;
+          # this ensures that any code that parses the
           # output of the command can expect it to be in a consistent / predictable format / locale
           with_env 'LC_ALL' => 'C', 'LANG' => 'C' do
-
             expanded_command = expand_command(command)
 
             if expanded_command.nil?
               if on_fail == :raise
-                raise LegacyFacter::Core::Execution::ExecutionFailure.new, "Could not execute '#{command}': command not found"
-              else
-                return on_fail
+                raise LegacyFacter::Core::Execution::ExecutionFailure.new,
+                      "Could not execute '#{command}': command not found"
               end
+
+              return on_fail
             end
 
             out = ''
 
             begin
               wait_for_child = true
-              out = %x{#{expanded_command}}.chomp
+              out = `#{expanded_command}`.chomp
               wait_for_child = false
-            rescue => detail
-              if on_fail == :raise
-                raise LegacyFacter::Core::Execution::ExecutionFailure.new, "Failed while executing '#{expanded_command}': #{detail.message}"
-              else
-                return on_fail
-              end
+            rescue StandardError => e
+              return on_fail unless on_fail == :raise
+
+              raise LegacyFacter::Core::Execution::ExecutionFailure.new,
+                    "Failed while executing '#{expanded_command}': #{e.message}"
             ensure
               if wait_for_child
                 # We need to ensure that if this command exits early then any spawned

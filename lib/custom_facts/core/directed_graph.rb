@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'set'
 require 'tsort'
 
@@ -27,14 +29,13 @@ module LegacyFacter
       end
 
       def tsort
-        missing = Set.new(self.values.flatten) - Set.new(self.keys)
+        missing = Set.new(values.flatten) - Set.new(keys)
 
-        if not missing.empty?
+        unless missing.empty?
           raise MissingVertex, "Cannot sort elements; cannot depend on missing elements #{missing.to_a}"
         end
 
         super
-
       rescue TSort::Cyclic
         raise CycleError, "Cannot sort elements; found the following cycles: #{cycles.inspect}"
       end

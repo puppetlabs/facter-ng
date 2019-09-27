@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Manage which facts exist and how we access them.  Largely just a wrapper
 # around a hash of facts.
 #
@@ -5,9 +7,8 @@
 module LegacyFacter
   module Util
     class Collection
-
       def initialize(internal_loader, external_loader)
-        @facts = Hash.new
+        @facts = {}
         @internal_loader = internal_loader
         @external_loader = external_loader
       end
@@ -26,12 +27,10 @@ module LegacyFacter
       def define_fact(name, options = {}, &block)
         fact = create_or_return_fact(name, options)
 
-        if block_given?
-          fact.instance_eval(&block)
-        end
+        fact.instance_eval(&block) if block_given?
 
         fact
-      rescue => e
+      rescue StandardError => e
         LegacyFacter.log_exception(e, "Unable to add fact #{name}: #{e}")
       end
 
@@ -47,7 +46,7 @@ module LegacyFacter
 
         fact.add(options, &block)
 
-        return fact
+        fact
       end
 
       include Enumerable
@@ -57,9 +56,7 @@ module LegacyFacter
         load_all
         @facts.each do |name, fact|
           value = fact.value
-          unless value.nil?
-            yield name.to_s, value
-          end
+          yield name.to_s, value unless value.nil?
         end
       end
 
@@ -82,14 +79,14 @@ module LegacyFacter
 
       # Flush all cached values.
       def flush
-        @facts.each { |name, fact| fact.flush }
+        @facts.each { |_name, fact| fact.flush }
         @external_facts_loaded = nil
       end
 
       # Return a list of all of the facts.
       def list
         load_all
-        return @facts.keys
+        @facts.keys
       end
 
       def load(name)
@@ -103,30 +100,24 @@ module LegacyFacter
         load_external_facts
       end
 
-      def internal_loader
-        @internal_loader
-      end
+      attr_reader :internal_loader
 
-      def external_loader
-        @external_loader
-      end
+      attr_reader :external_loader
 
       # Return a hash of all of our facts.
       def to_hash
-        @facts.inject({}) do |h, ary|
+        @facts.each_with_object({}) do |ary, h|
           value = ary[1].value
-          if ! value.nil?
+          unless value.nil?
             # For backwards compatibility, convert the fact name to a string.
             h[ary[0].to_s] = value
           end
-          h
         end
       end
 
       def value(name)
-        if fact = fact(name)
-          fact.value
-        end
+        fact = fact(name)
+        fact&.value
       end
 
       private
@@ -151,10 +142,10 @@ module LegacyFacter
       end
 
       def load_external_facts
-        if ! @external_facts_loaded
-          @external_facts_loaded = true
-          external_loader.load(self)
-        end
+        return if @external_facts_loaded
+
+        @external_facts_loaded = true
+        external_loader.load(self)
       end
     end
   end

@@ -2,12 +2,11 @@ module LegacyFacter
   module Core
     module Execution
       class Windows < LegacyFacter::Core::Execution::Base
-
         def search_paths
           ENV['PATH'].split(File::PATH_SEPARATOR)
         end
 
-        DEFAULT_COMMAND_EXTENSIONS = %w[.COM .EXE .BAT .CMD]
+        DEFAULT_COMMAND_EXTENSIONS = %w[.COM .EXE .BAT .CMD].freeze
 
         def which(bin)
           if absolute_path?(bin)
@@ -32,13 +31,14 @@ module LegacyFacter
 
         slash = '[\\\\/]'
         name = '[^\\\\/]+'
-        ABSOLUTE_PATH_REGEX = %r!^(([A-Z]:#{slash})|(#{slash}#{slash}#{name}#{slash}#{name})|(#{slash}#{slash}\?#{slash}#{name}))!i
+        ABSOLUTE_PATH_REGEX =
+          /^(([A-Z]:#{slash})|(#{slash}#{slash}#{name}#{slash}#{name})|(#{slash}#{slash}\?#{slash}#{name}))/i.freeze
 
         def absolute_path?(path)
-          !! (path =~ ABSOLUTE_PATH_REGEX)
+          !!(path =~ ABSOLUTE_PATH_REGEX)
         end
 
-        DOUBLE_QUOTED_COMMAND = /^"(.+?)"(?:\s+(.*))?/
+        DOUBLE_QUOTED_COMMAND = /^"(.+?)"(?:\s+(.*))?/.freeze
 
         def expand_command(command)
           exe = nil
@@ -47,15 +47,15 @@ module LegacyFacter
           if (match = command.match(DOUBLE_QUOTED_COMMAND))
             exe, args = match.captures
           else
-            exe, args = command.split(/ /,2)
+            exe, args = command.split(/ /, 2)
           end
 
-          if exe and (expanded = which(exe))
-            expanded = "\"#{expanded}\"" if expanded.match(/\s+/)
-            expanded << " #{args}" if args
+          return unless exe && (expanded = which(exe))
 
-            return expanded
-          end
+          expanded = "\"#{expanded}\"" if expanded.match(/\s+/)
+          expanded << " #{args}" if args
+
+          expanded
         end
       end
     end

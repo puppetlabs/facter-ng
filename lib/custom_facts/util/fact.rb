@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This class represents a fact. Each fact has a name and multiple
 # {Facter::Util::Resolution resolutions}.
 #
@@ -57,17 +59,17 @@ module LegacyFacter
       #
       # @api public
       def define_resolution(resolution_name, options = {}, &block)
-
         resolution_type = options.delete(:type) || :simple
 
         resolve = create_or_return_resolution(resolution_name, resolution_type)
 
-        resolve.set_options(options) unless options.empty?
+        resolve.options(options) unless options.empty?
         resolve.evaluate(&block) if block
 
         resolve
-      rescue => e
-        LegacyFacter.log_exception(e, "Unable to add resolve #{resolution_name.inspect} for fact #{@name}: #{e.message}")
+      rescue StandardError => e
+        LegacyFacter
+          .log_exception(e, "Unable to add resolve #{resolution_name.inspect} for fact #{@name}: #{e.message}")
       end
 
       # Retrieve an existing resolution by name
@@ -88,7 +90,7 @@ module LegacyFacter
       #
       # @api private
       def flush
-        @resolves.each { |r| r.flush }
+        @resolves.each(&:flush)
         @value = nil
       end
 
@@ -101,12 +103,11 @@ module LegacyFacter
         return @value if @value
 
         if @resolves.empty?
-          LegacyFacter.debug "No resolves for %s" % @name
+          LegacyFacter.debug format('No resolves for %<name>s', name: @name)
           return nil
         end
 
         searching do
-
           suitable_resolutions = sort_by_weight(find_suitable_resolutions(@resolves))
           @value = find_first_real_value(suitable_resolutions)
 
@@ -120,10 +121,10 @@ module LegacyFacter
       # @api private
       # @deprecated
       def extract_ldapname_option!(options)
-        if options[:ldapname]
-          LegacyFacter.warnonce("ldapname is deprecated and will be removed in a future version")
-          self.ldapname = options.delete(:ldapname)
-        end
+        return unless options[:ldapname]
+
+        LegacyFacter.warnonce('ldapname is deprecated and will be removed in a future version')
+        self.ldapname = options.delete(:ldapname)
       end
 
       private
@@ -135,7 +136,7 @@ module LegacyFacter
 
       # Lock our searching process, so we never ge stuck in recursion.
       def searching
-        raise RuntimeError, "Caught recursion on #{@name}" if searching?
+        raise "Caught recursion on #{@name}" if searching?
 
         # If we've gotten this far, we're not already searching, so go ahead and do so.
         @searching = true
@@ -147,7 +148,7 @@ module LegacyFacter
       end
 
       def find_suitable_resolutions(resolutions)
-        resolutions.find_all{ |resolve| resolve.suitable? }
+        resolutions.find_all(&:suitable?)
       end
 
       def sort_by_weight(resolutions)
@@ -157,32 +158,29 @@ module LegacyFacter
       def find_first_real_value(resolutions)
         resolutions.each do |resolve|
           value = resolve.value
-          if not value.nil?
-            return value
-          end
+          return value unless value.nil?
         end
         nil
       end
 
       def announce_when_no_suitable_resolution(resolutions)
-        if resolutions.empty?
-          LegacyFacter.debug "Found no suitable resolves of %s for %s" % [@resolves.length, @name]
-        end
+        return unless resolutions.empty?
+
+        LegacyFacter.debug format('Found no suitable resolves of %<resolver_lengths for %<name>s',
+                                  resolver_length: @resolves.length, name: @name)
       end
 
       def announce_when_no_value_found(value)
-        if value.nil?
-          LegacyFacter.debug("value for %s is still nil" % @name)
-        end
+        LegacyFacter.debug(format('value for %<name>s is still nil', name: @name)) if value.nil?
       end
 
       def create_or_return_resolution(resolution_name, resolution_type)
-        resolve = self.resolution(resolution_name)
+        resolve = resolution(resolution_name)
 
         if resolve
           if resolution_type != resolve.resolution_type
-            raise ArgumentError, "Cannot return resolution #{resolution_name} with type" +
-              " #{resolution_type}; already defined as #{resolve.resolution_type}"
+            raise ArgumentError, "Cannot return resolution #{resolution_name} with type" \
+                                 " #{resolution_type}; already defined as #{resolve.resolution_type}"
           end
         else
           case resolution_type
@@ -191,7 +189,8 @@ module LegacyFacter
           when :aggregate
             resolve = LegacyFacter::Core::Aggregate.new(resolution_name, self)
           else
-            raise ArgumentError, "Expected resolution type to be one of (:simple, :aggregate) but was #{resolution_type}"
+            raise ArgumentError,
+                  "Expected resolution type to be one of (:simple, :aggregate) but was #{resolution_type}"
           end
 
           @resolves << resolve

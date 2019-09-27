@@ -69,7 +69,7 @@ module LegacyFacter
         if @last_evaluated
           msg = "Already evaluated #{@name}"
           msg << " at #{@last_evaluated}" if msg.is_a? String
-          msg << ", reevaluating anyways"
+          msg << ', reevaluating anyways'
           LegacyFacter.warn msg
         end
 
@@ -78,33 +78,23 @@ module LegacyFacter
         # Ruby 1.9+ provides the source location of procs which can provide useful
         # debugging information if a resolution is being evaluated twice. Since 1.8
         # doesn't support this we opportunistically provide this information.
-        if block.respond_to? :source_location
-          @last_evaluated = block.source_location.join(':')
-        else
-          @last_evaluated = true
-        end
+        @last_evaluated = if block.respond_to? :source_location
+                            block.source_location.join(':')
+                          else
+                            true
+                          end
       end
 
-      def set_options(options)
-        if options[:name]
-          @name = options.delete(:name)
-        end
+      def options(options)
+        @name = options.delete(:name) if options[:name]
 
-        if options.has_key?(:value)
-          @value = options.delete(:value)
-        end
+        @value = options.delete(:value) if options.key?(:value)
 
-        if options.has_key?(:timeout)
-          @timeout = options.delete(:timeout)
-        end
+        @timeout = options.delete(:timeout) if options.key?(:timeout)
 
-        if options.has_key?(:weight)
-          @weight = options.delete(:weight)
-        end
+        @weight = options.delete(:weight) if options.key?(:weight)
 
-        if not options.keys.empty?
-          raise ArgumentError, "Invalid resolution options #{options.keys.inspect}"
-        end
+        raise ArgumentError, "Invalid resolution options #{options.keys.inspect}" unless options.keys.empty?
       end
 
       # Sets the code block or external program that will be evaluated to
@@ -126,9 +116,9 @@ module LegacyFacter
       # @api public
       def setcode(string = nil, &block)
         if string
-          @code = Proc.new do
-            output = LegacyFacter::Core::Execution.execute(string, :on_fail => nil)
-            if output.nil? or output.empty?
+          @code = proc do
+            output = LegacyFacter::Core::Execution.execute(string, on_fail: nil)
+            if output.nil? || output.empty?
               nil
             else
               output
@@ -137,7 +127,7 @@ module LegacyFacter
         elsif block_given?
           @code = block
         else
-          raise ArgumentError, "You must pass either code or a block"
+          raise ArgumentError, 'You must pass either code or a block'
         end
       end
 
@@ -149,7 +139,7 @@ module LegacyFacter
         elsif @code.nil?
           nil
         elsif @code
-          @code.call()
+          @code.call
         end
       end
     end

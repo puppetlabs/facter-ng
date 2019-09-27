@@ -1,9 +1,9 @@
+# frozen_string_literal: true
 
 # Load facts on demand.
 module LegacyFacter
   module Util
     class Loader
-
       def initialize(environment_vars = ENV)
         @loaded = []
         @environment_vars = environment_vars
@@ -18,16 +18,14 @@ module LegacyFacter
         shortname = fact.to_s.downcase
         load_env(shortname)
 
-        filename = shortname + ".rb"
+        filename = shortname + '.rb'
 
         paths = search_path
-        unless paths.nil?
-          paths.each do |dir|
-            # Load individual files
-            file = File.join(dir, filename)
+        paths&.each do |dir|
+          # Load individual files
+          file = File.join(dir, filename)
 
-            load_file(file) if File.file?(file)
-          end
+          load_file(file) if File.file?(file)
         end
       end
 
@@ -40,13 +38,11 @@ module LegacyFacter
         load_env
 
         paths = search_path
-        unless paths.nil?
-          paths.each do |dir|
-            # dir is already an absolute path
-            Dir.glob(File.join(dir, '*.rb')).each do |path|
-              # exclude dirs that end with .rb
-              load_file(path) if File.file?(path)
-            end
+        paths&.each do |dir|
+          # dir is already an absolute path
+          Dir.glob(File.join(dir, '*.rb')).each do |path|
+            # exclude dirs that end with .rb
+            load_file(path) if File.file?(path)
           end
         end
 
@@ -70,11 +66,11 @@ module LegacyFacter
         search_paths = []
         search_paths += $LOAD_PATH.map { |path| File.expand_path('custom_facts', path) }
 
-        if @environment_vars.include?("FACTERLIB")
-          search_paths += @environment_vars["FACTERLIB"].split(File::PATH_SEPARATOR)
+        if @environment_vars.include?('FACTERLIB')
+          search_paths += @environment_vars['FACTERLIB'].split(File::PATH_SEPARATOR)
         end
 
-        search_paths.delete_if { |path| ! valid_search_path?(path) }
+        search_paths.delete_if { |path| !valid_search_path?(path) }
 
         LegacyFacter.search_path.each do |path|
           if valid_search_path?(path)
@@ -84,13 +80,13 @@ module LegacyFacter
           end
         end
 
-        search_paths.delete_if { |path| ! File.directory?(path) }
+        search_paths.delete_if { |path| !File.directory?(path) }
 
         search_paths.uniq
       end
 
-
       private
+
       # Validate that the given path is valid, ie it is an absolute path.
       #
       # @api private
@@ -99,8 +95,6 @@ module LegacyFacter
       def valid_search_path?(path)
         Pathname.new(path).absolute?
       end
-
-
 
       # Load a file and record is paths to prevent duplicate loads.
       #
@@ -114,11 +108,11 @@ module LegacyFacter
           # Store the file path so we don't try to reload it
           @loaded << file
           kernel_load(file)
-        rescue ScriptError => detail
+        rescue ScriptError => e
           # Don't store the path if the file can't be loaded
           # in case it's loadable later on.
           @loaded.delete(file)
-          LegacyFacter.log_exception(detail, "Error loading fact #{file}: #{detail.message}")
+          LegacyFacter.log_exception(e, "Error loading fact #{file}: #{e.message}")
         end
       end
 
@@ -138,14 +132,15 @@ module LegacyFacter
         @environment_vars.each do |name, value|
           # Skip anything that doesn't match our regex.
           next unless name =~ /^facter_?(\w+)$/i
-          env_name = $1
+
+          env_name = Regexp.last_match(1)
 
           # If a fact name was specified, skip anything that doesn't
           # match it.
-          next if fact and env_name != fact
+          next if fact && (env_name != fact)
 
-          LegacyFacter.add($1) do
-            has_weight 1_000_000
+          LegacyFacter.add(Regexp.last_match(1)) do
+            weight? 1_000_000
             setcode { value }
           end
 

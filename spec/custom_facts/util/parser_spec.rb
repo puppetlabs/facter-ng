@@ -89,7 +89,7 @@ describe LegacyFacter::Util::Parser do
   end
 
   describe "scripts" do
-    let(:ext) { LegacyFacter::Util::Config.is_windows? ? '.bat' : '.sh' }
+    let(:ext) { LegacyFacter::Util::Config.windows? ? '.bat' : '.sh' }
     let(:cmd) { "/tmp/foo#{ext}" }
     let(:data_in_txt) { "one=two\nthree=four\n" }
 
@@ -138,12 +138,12 @@ describe LegacyFacter::Util::Parser do
       end
 
       it "should return nothing parser if not on windows" do
-        allow(LegacyFacter::Util::Config).to receive(:is_windows?).and_return(false)
+        allow(LegacyFacter::Util::Config).to receive(:windows?).and_return(false)
         cmds.each {|cmd| expect(LegacyFacter::Util::Parser.parser_for(cmd)).to be_an_instance_of(LegacyFacter::Util::Parser::NothingParser) }
       end
 
       it "should return script parser if on windows" do
-        expect(LegacyFacter::Util::Config).to receive(:is_windows?).and_return(true).at_least(:once)
+        expect(LegacyFacter::Util::Config).to receive(:windows?).and_return(true).at_least(:once)
         cmds.each {|cmd| expect(LegacyFacter::Util::Parser.parser_for(cmd)).to be_an_instance_of(LegacyFacter::Util::Parser::ScriptParser) }
       end
     end
@@ -159,12 +159,12 @@ describe LegacyFacter::Util::Parser do
       end
 
       it "should return nothing parser if not on windows" do
-        allow(LegacyFacter::Util::Config).to receive(:is_windows?).and_return(false)
+        allow(LegacyFacter::Util::Config).to receive(:windows?).and_return(false)
         cmds.each {|cmd| expect(LegacyFacter::Util::Parser.parser_for(cmd)).to be_an_instance_of(LegacyFacter::Util::Parser::NothingParser) }
       end
 
       it "should return script  parser if on windows" do
-        allow(LegacyFacter::Util::Config).to receive(:is_windows?).and_return(true)
+        allow(LegacyFacter::Util::Config).to receive(:windows?).and_return(true)
         cmds.each {|cmd| expect(LegacyFacter::Util::Parser.parser_for(cmd)).to be_an_instance_of(LegacyFacter::Util::Parser::ScriptParser) }
       end
 
@@ -174,7 +174,7 @@ describe LegacyFacter::Util::Parser do
       let(:ps1) { "/tmp/foo.ps1" }
 
       def expects_to_parse_powershell(cmd, result)
-        allow(LegacyFacter::Util::Config).to receive(:is_windows?).and_return(true)
+        allow(LegacyFacter::Util::Config).to receive(:windows?).and_return(true)
         allow(File).to receive(:file?).with(ps1).and_return(true)
 
         expect(LegacyFacter::Util::Parser.parser_for(cmd).results).to eq result
@@ -189,7 +189,7 @@ describe LegacyFacter::Util::Parser do
         expects_to_parse_powershell(ps1, data)
       end
 
-      describe "when executing powershell", :if => LegacyFacter::Util::Config.is_windows? do
+      describe "when executing powershell", :if => LegacyFacter::Util::Config.windows? do
         let(:sysnative_powershell) { "#{ENV['SYSTEMROOT']}\\sysnative\\WindowsPowershell\\v1.0\\powershell.exe" }
         let(:system32_powershell)  { "#{ENV['SYSTEMROOT']}\\system32\\WindowsPowershell\\v1.0\\powershell.exe" }
 

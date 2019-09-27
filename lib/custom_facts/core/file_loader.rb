@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "#{ROOT_DIR}/lib/custom_facts/version"
 require "#{ROOT_DIR}/lib/custom_facts/core/logging"
 require "#{ROOT_DIR}/lib/custom_facts/core/legacy_facter"

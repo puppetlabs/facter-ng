@@ -8,7 +8,7 @@
 shared_context "windows", :as_platform => :windows do
   before :each do
     allow(LegacyFacter).to receive(:value).and_return('Windows')
-    allow(LegacyFacter::Util::Config).to receive(:is_windows?).and_return true
+    allow(LegacyFacter::Util::Config).to receive(:windows?).and_return true
   end
 
   around do |example|
@@ -32,7 +32,7 @@ end
 
 shared_context "posix", :as_platform => :posix do
   before :each do
-    LegacyFacter::Util::Config.stubs(:is_windows?).returns false
+    LegacyFacter::Util::Config.stubs(:windows?).returns false
   end
 
   around do |example|

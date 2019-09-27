@@ -88,31 +88,31 @@ describe LegacyFacter::Util::Resolution do
 
   describe "setting options" do
     it "can set the value" do
-      resolution.set_options(:value => 'something')
+      resolution.options(:value => 'something')
       expect(resolution.value).to eq 'something'
     end
 
     it "can set the timeout" do
-      resolution.set_options(:timeout => 314)
+      resolution.options(:timeout => 314)
       expect(resolution.limit).to eq 314
     end
 
     it "can set the weight" do
-      resolution.set_options(:weight => 27)
+      resolution.options(:weight => 27)
       expect(resolution.weight).to eq 27
     end
 
     it "fails on unhandled options" do
       expect do
-        resolution.set_options(:foo => 'bar')
+        resolution.options(:foo => 'bar')
       end.to raise_error(ArgumentError, /Invalid resolution options.*foo/)
     end
   end
 
   describe "evaluating" do
     it "evaluates the block in the context of the given resolution" do
-      expect(subject).to receive(:has_weight).with(5)
-      subject.evaluate { has_weight(5) }
+      expect(subject).to receive(:weight?).with(5)
+      subject.evaluate { weight?(5) }
     end
 
     it "raises a warning if the resolution is evaluated twice" do

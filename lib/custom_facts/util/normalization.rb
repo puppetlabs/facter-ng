@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module LegacyFacter
   module Util
     module Normalization
       class NormalizationError < StandardError; end
 
-      VALID_TYPES = [Integer, Float, TrueClass, FalseClass, NilClass, String, Array, Hash]
+      VALID_TYPES = [Integer, Float, TrueClass, FalseClass, NilClass, String, Array, Hash].freeze
 
       module_function
 
@@ -49,9 +51,8 @@ module LegacyFacter
 
         def normalize_string(value)
           converted = Iconv.conv('UTF-8//IGNORE', 'UTF-8', value)
-          if converted != value
-            raise NormalizationError, "String #{value.inspect} is not valid UTF-8"
-          end
+          raise NormalizationError, "String #{value.inspect} is not valid UTF-8" if converted != value
+
           value
         end
       else
@@ -87,7 +88,7 @@ module LegacyFacter
       # @param value [Hash]
       # @return [void]
       def normalize_hash(value)
-        Hash[value.collect { |k, v| [ normalize(k), normalize(v) ] } ]
+        Hash[value.collect { |k, v| [normalize(k), normalize(v)] }]
       end
     end
   end

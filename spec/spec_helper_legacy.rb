@@ -1,4 +1,6 @@
-require "bundler/setup"
+# frozen_string_literal: true
+
+require 'bundler/setup'
 require 'rspec'
 require 'pathname'
 
@@ -18,7 +20,7 @@ RSpec.configure do |config|
   # config.mock_with :mocha
 
   # Enable flags like --only-failures and --next-failure
-  config.example_status_persistence_file_path = ".rspec_status"
+  config.example_status_persistence_file_path = '.rspec_status'
 
   # Disable RSpec exposing methods globally on `Module` and `main`
   config.disable_monkey_patching!
@@ -37,13 +39,13 @@ RSpec.configure do |config|
 
     # Store any environment variables away to be restored later
     @old_env = {}
-    ENV.each_key {|k| @old_env[k] = ENV[k]}
+    ENV.each_key { |k| @old_env[k] = ENV[k] }
   end
 
   config.after :each do
     # Restore environment variables after execution of each test
-    @old_env.each_pair {|k, v| ENV[k] = v}
-    to_remove = ENV.keys.reject {|key| @old_env.include? key }
-    to_remove.each {|key| ENV.delete key }
+    @old_env.each_pair { |k, v| ENV[k] = v }
+    to_remove = ENV.keys.reject { |key| @old_env.include? key }
+    to_remove.each { |key| ENV.delete key }
   end
 end

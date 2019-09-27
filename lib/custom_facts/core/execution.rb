@@ -1,12 +1,13 @@
+# frozen_string_literal: true
+
 module LegacyFacter
   module Core
     module Execution
-
       # require_relative 'execution/base'
       # require_relative 'execution/windows'
       # require_relative 'execution/posix'
 
-      @@impl = if LegacyFacter::Util::Config.is_windows?
+      @@impl = if LegacyFacter::Util::Config.windows?
                  LegacyFacter::Core::Execution::Windows.new
                else
                  LegacyFacter::Core::Execution::Posix.new
@@ -91,7 +92,7 @@ module LegacyFacter
       # @deprecated Use #{execute} instead
       # @api public
       def exec(command)
-        @@impl.execute(command, :on_fail => nil)
+        @@impl.execute(command, on_fail: nil)
       end
 
       # Execute a command and return the output of that program.

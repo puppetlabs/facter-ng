@@ -17,23 +17,23 @@ describe LegacyFacter::Core::Aggregate do
   describe "setting options" do
 
     it "can set the timeout" do
-      subject.set_options(:timeout => 314)
+      subject.options(:timeout => 314)
       expect(subject.limit).to eq 314
     end
 
     it "can set the weight" do
-      subject.set_options(:weight => 27)
+      subject.options(:weight => 27)
       expect(subject.weight).to eq 27
     end
 
     it "can set the name" do
-      subject.set_options(:name => 'something')
+      subject.options(:name => 'something')
       expect(subject.name).to eq 'something'
     end
 
     it "fails on unhandled options" do
       expect do
-        subject.set_options(:foo => 'bar')
+        subject.options(:foo => 'bar')
       end.to raise_error(ArgumentError, /Invalid aggregate options .*foo/)
     end
   end
@@ -115,8 +115,8 @@ describe LegacyFacter::Core::Aggregate do
 
   describe "evaluating" do
     it "evaluates the block in the context of the aggregate" do
-      expect(subject).to receive(:has_weight).with(5)
-      subject.evaluate { has_weight(5) }
+      expect(subject).to receive(:weight?).with(5)
+      subject.evaluate { weight?(5) }
     end
   end
 end

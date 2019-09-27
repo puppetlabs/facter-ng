@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'timeout'
 
 # The resolvable mixin defines behavior for evaluating and returning fact
@@ -9,7 +11,6 @@ require 'timeout'
 module LegacyFacter
   module Core
     module Resolvable
-
       # The timeout, in seconds, for evaluating this resolution.
       # @return [Integer]
       # @api public
@@ -54,7 +55,7 @@ module LegacyFacter
       #
       # @api private
       def flush
-        @on_flush_block.call if @on_flush_block
+        @on_flush_block&.call
       end
 
       def value
@@ -67,15 +68,15 @@ module LegacyFacter
         end
 
         LegacyFacter::Util::Normalization.normalize(result)
-      rescue Timeout::Error => detail
-        LegacyFacter.log_exception(detail, "Timed out after #{limit} seconds while resolving #{qualified_name}")
-        return nil
-      rescue LegacyFacter::Util::Normalization::NormalizationError => detail
-        LegacyFacter.log_exception(detail, "Fact resolution #{qualified_name} resolved to an invalid value: #{detail.message}")
-        return nil
-      rescue => detail
-        LegacyFacter.log_exception(detail, "Could not retrieve #{qualified_name}: #{detail.message}")
-        return nil
+      rescue Timeout::Error => e
+        LegacyFacter.log_exception(e, "Timed out after #{limit} seconds while resolving #{qualified_name}")
+        nil
+      rescue LegacyFacter::Util::Normalization::NormalizationError => e
+        LegacyFacter.log_exception(e, "Fact resolution #{qualified_name} resolved to an invalid value: #{e.message}")
+        nil
+      rescue StandardError => e
+        LegacyFacter.log_exception(e, "Could not retrieve #{qualified_name}: #{e.message}")
+        nil
       end
 
       private
@@ -87,11 +88,11 @@ module LegacyFacter
 
         finishtime = Time.now.to_f
         ms = (finishtime - starttime) * 1000
-        LegacyFacter.show_time "#{qualified_name}: #{"%.2f" % ms}ms"
+        LegacyFacter.show_time format('%<qn>s: %<ms>.2fms', qn: qualified_name, ms: ms)
       end
 
       def qualified_name
-        "fact='#{@fact.name.to_s}', resolution='#{@name || '<anonymous>'}'"
+        "fact='#{@fact.name}', resolution='#{@name || '<anonymous>'}'"
       end
     end
   end

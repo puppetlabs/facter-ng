@@ -1,7 +1,7 @@
+# frozen_string_literal: true
+
 module LegacyFacter
-  if not defined? FACTERVERSION then
-    FACTERVERSION = '2.5.5'
-  end
+  FACTERVERSION = '2.5.5' unless defined? FACTERVERSION
 
   # Returns the running version of Facter.
   #
@@ -54,11 +54,12 @@ module LegacyFacter
   # @return [String] containing the custom_facts version, e.g. "1.6.14"
   def self.version
     version_file = File.join(File.dirname(__FILE__), 'VERSION')
-    return @facter_version if @facter_version
-    if version = read_version_file(version_file)
-      @facter_version = version
+    return @version if @version
+
+    if (version = read_version_file(version_file))
+      @version = version
     end
-    @facter_version ||= FACTERVERSION
+    @version ||= FACTERVERSION
   end
 
   # Sets the Facter version
@@ -67,7 +68,7 @@ module LegacyFacter
   #
   # @api private
   def self.version=(version)
-    @facter_version = version
+    @version = version
   end
 
   # This reads the content of the "VERSION" file that lives in the
@@ -78,9 +79,7 @@ module LegacyFacter
   # @return [String] the version -- for example: "1.6.14-6-gea42046" or nil if the VERSION
   #   file does not exist.
   def self.read_version_file(path)
-    if File.exists?(path)
-      File.read(path).chomp
-    end
+    File.read(path).chomp if File.exist?(path)
   end
   private_class_method :read_version_file
 end

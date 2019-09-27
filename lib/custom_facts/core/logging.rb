@@ -1,12 +1,14 @@
+# frozen_string_literal: true
+
 module LegacyFacter
   module Core
     module Logging
       extend self
 
       # @api private
-      GREEN = "[0;32m"
+      GREEN = "\e[0;32m"
       # @api private
-      RESET = "[0m"
+      RESET = "\e[0m"
 
       # @api private
       @@debug = false
@@ -41,15 +43,15 @@ module LegacyFacter
       # @param msg [String] the debug message
       # @return [void]
       def debug(msg)
-        if self.debugging?
-          if msg.nil? or msg.empty?
-            invoker = caller[0].slice(/.*:\d+/)
-            self.warn "#{self.class}#debug invoked with invalid message #{msg.inspect}:#{msg.class} at #{invoker}"
-          elsif @@message_callback
-            @@message_callback.call(:debug, msg)
-          else
-            puts GREEN + msg + RESET
-          end
+        return unless debugging?
+
+        if msg.nil? || msg.empty?
+          invoker = caller[0].slice(/.*:\d+/)
+          self.warn "#{self.class}#debug invoked with invalid message #{msg.inspect}:#{msg.class} at #{invoker}"
+        elsif @@message_callback
+          @@message_callback.call(:debug, msg)
+        else
+          puts GREEN + msg + RESET
         end
       end
 
@@ -61,10 +63,10 @@ module LegacyFacter
       # @param msg [String] the debug message
       # @return [void]
       def debugonce(msg)
-        if msg and not msg.empty? and @@debug_messages[msg].nil?
-          @@debug_messages[msg] = true
-          debug(msg)
-        end
+        return unless msg && !msg.empty? && @@debug_messages[msg].nil?
+
+        @@debug_messages[msg] = true
+        debug(msg)
       end
 
       # Prints a warning message. The message is only printed if debugging
@@ -74,7 +76,7 @@ module LegacyFacter
       #
       # @return [void]
       def warn(msg)
-        if msg.nil? or msg.empty?
+        if msg.nil? || msg.empty?
           invoker = caller[0].slice(/.*:\d+/)
           msg = "#{self.class}#debug invoked with invalid message #{msg.inspect}:#{msg.class} at #{invoker}"
         end
@@ -96,10 +98,10 @@ module LegacyFacter
       #
       # @return [void]
       def warnonce(msg)
-        if @@warn_messages[msg].nil?
-          self.warn(msg)
-          @@warn_messages[msg] = true
-        end
+        return unless @@warn_messages[msg].nil?
+
+        self.warn(msg)
+        @@warn_messages[msg] = true
       end
 
       def log_exception(exception, message = :default)
@@ -115,9 +117,7 @@ module LegacyFacter
           arr << message
         end
 
-        if trace
-          arr.concat(exception.backtrace)
-        end
+        arr.concat(exception.backtrace) if trace
 
         arr.flatten.join("\n")
       end
@@ -131,7 +131,7 @@ module LegacyFacter
       #
       # @api private
       def show_time(string)
-        return unless string && self.timing?
+        return unless string && timing?
 
         if @@message_callback
           @@message_callback.call(:info, string)
