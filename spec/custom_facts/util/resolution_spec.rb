@@ -2,7 +2,7 @@
 
 require_relative '../../spec_helper_legacy'
 
-describe Facter::Util::Resolution do
+describe LegacyFacter::Util::Resolution do
   include FacterSpec::ConfigHelper
 
   subject(:resolution) { described_class.new(:foo, stub_fact) }
@@ -10,11 +10,11 @@ describe Facter::Util::Resolution do
   let(:stub_fact) { double('fact', :name => :stubfact) }
 
   it "requires a name" do
-    expect { Facter::Util::Resolution.new }.to raise_error(ArgumentError)
+    expect { LegacyFacter::Util::Resolution.new }.to raise_error(ArgumentError)
   end
 
   it "requires a fact" do
-    expect { Facter::Util::Resolution.new('yay') }.to raise_error(ArgumentError)
+    expect { LegacyFacter::Util::Resolution.new('yay') }.to raise_error(ArgumentError)
   end
 
   it "can return its name" do
@@ -32,7 +32,7 @@ describe Facter::Util::Resolution do
 
   describe "when setting the code" do
     before do
-      allow(Facter).to receive(:warnonce)
+      allow(LegacyFacter).to receive(:warnonce)
     end
 
     it "creates a block when given a command" do
@@ -73,7 +73,7 @@ describe Facter::Util::Resolution do
     describe "and the code is a string" do
       it "returns the result of executing the code" do
         resolution.setcode "/bin/foo"
-        expect(Facter::Core::Execution).to receive(:execute).once.with("/bin/foo", anything).and_return("yup")
+        expect(LegacyFacter::Core::Execution).to receive(:execute).once.with("/bin/foo", anything).and_return("yup")
 
         expect(resolution.value).to eq "yup"
       end
@@ -117,7 +117,7 @@ describe Facter::Util::Resolution do
     end
 
     it "raises a warning if the resolution is evaluated twice" do
-      expect(Facter).to receive(:warn).with(/Already evaluated foo at.*reevaluating anyways/)
+      expect(LegacyFacter).to receive(:warn).with(/Already evaluated foo at.*reevaluating anyways/)
 
       subject.evaluate { }
       subject.evaluate { }

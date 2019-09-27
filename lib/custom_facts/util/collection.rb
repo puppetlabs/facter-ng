@@ -2,7 +2,7 @@
 # around a hash of facts.
 #
 # @api private
-module Facter
+module LegacyFacter
   module Util
     class Collection
 
@@ -22,7 +22,7 @@ module Facter
       # @param name [Symbol] The name of the fact to define
       # @param options [Hash] A hash of options to set on the fact
       #
-      # @return [Facter::Util::Fact] The fact that was defined
+      # @return [LegacyFacter::Util::Fact] The fact that was defined
       def define_fact(name, options = {}, &block)
         fact = create_or_return_fact(name, options)
 
@@ -32,7 +32,7 @@ module Facter
 
         fact
       rescue => e
-        Facter.log_exception(e, "Unable to add fact #{name}: #{e}")
+        LegacyFacter.log_exception(e, "Unable to add fact #{name}: #{e}")
       end
 
       # Add a resolution mechanism for a named fact.  This does not distinguish
@@ -41,7 +41,7 @@ module Facter
       # @param name [Symbol] The name of the fact to define
       # @param options [Hash] A hash of options to set on the fact and resolution
       #
-      # @return [Facter::Util::Fact] The fact that was defined
+      # @return [LegacyFacter::Util::Fact] The fact that was defined
       def add(name, options = {}, &block)
         fact = create_or_return_fact(name, options)
 
@@ -74,7 +74,7 @@ module Facter
         internal_loader.load_all unless @facts[name]
 
         if @facts.empty?
-          Facter.warnonce("No facts loaded from #{internal_loader.search_path.join(File::PATH_SEPARATOR)}")
+          LegacyFacter.warnonce("No facts loaded from #{internal_loader.search_path.join(File::PATH_SEPARATOR)}")
         end
 
         @facts[name]
@@ -137,7 +137,7 @@ module Facter
         fact = @facts[name]
 
         if fact.nil?
-          fact = Facter::Util::Fact.new(name, options)
+          fact = LegacyFacter::Util::Fact.new(name, options)
           @facts[name] = fact
         else
           fact.extract_ldapname_option!(options)

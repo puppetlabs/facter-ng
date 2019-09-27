@@ -17,7 +17,7 @@
 
 require 'yaml'
 
-class Facter::Util::DirectoryLoader
+class LegacyFacter::Util::DirectoryLoader
 
   class NoSuchDirectoryError < Exception
   end
@@ -36,17 +36,17 @@ class Facter::Util::DirectoryLoader
 
   def self.loader_for(dir)
     if File.directory?(dir)
-      Facter::Util::DirectoryLoader.new(dir)
+      LegacyFacter::Util::DirectoryLoader.new(dir)
     else
       raise NoSuchDirectoryError
     end
   end
 
   def self.default_loader
-    loaders = Facter::Util::Config.external_facts_dirs.collect do |dir|
-      Facter::Util::DirectoryLoader.new(dir)
+    loaders = LegacyFacter::Util::Config.external_facts_dirs.collect do |dir|
+      LegacyFacter::Util::DirectoryLoader.new(dir)
     end
-    Facter::Util::CompositeLoader.new(loaders)
+    LegacyFacter::Util::CompositeLoader.new(loaders)
   end
 
   # Load facts from files in fact directory using the relevant parser classes to
@@ -54,16 +54,16 @@ class Facter::Util::DirectoryLoader
   def load(collection)
     weight = @weight
     entries.each do |file|
-      parser = Facter::Util::Parser.parser_for(file)
+      parser = LegacyFacter::Util::Parser.parser_for(file)
       if parser == nil
         next
       end
 
       data = parser.results
       if data == false
-        Facter.warn "Could not interpret fact file #{file}"
+        LegacyFacter.warn "Could not interpret fact file #{file}"
       elsif data == {} or data == nil
-        Facter.warn "Fact file #{file} was parsed but returned an empty data set"
+        LegacyFacter.warn "Fact file #{file} was parsed but returned an empty data set"
       else
         data.each { |p,v| collection.add(p, :value => v) { has_weight(weight) } }
       end

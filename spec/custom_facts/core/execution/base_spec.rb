@@ -1,6 +1,6 @@
 require_relative '../../../spec_helper_legacy'
 
-describe Facter::Core::Execution::Base do
+describe LegacyFacter::Core::Execution::Base do
 
   describe "#with_env" do
     it "should execute the caller's block with the specified env vars" do
@@ -77,7 +77,7 @@ describe Facter::Core::Execution::Base do
     describe "and the command is not present" do
       it "raises an error when the :on_fail behavior is :raise" do
         expect(subject).to receive(:expand_command).with('foo').and_return(nil)
-        expect { subject.execute('foo') }.to raise_error(Facter::Core::Execution::ExecutionFailure)
+        expect { subject.execute('foo') }.to raise_error(LegacyFacter::Core::Execution::ExecutionFailure)
       end
 
       it "returns the given value when :on_fail is set to a value" do
@@ -93,7 +93,7 @@ describe Facter::Core::Execution::Base do
       end
 
       it "raises an error when the :on_fail behavior is :raise" do
-        expect { subject.execute('foo') }.to raise_error(Facter::Core::Execution::ExecutionFailure)
+        expect { subject.execute('foo') }.to raise_error(LegacyFacter::Core::Execution::ExecutionFailure)
       end
 
       it "returns the given value when :on_fail is set to a value" do
@@ -105,7 +105,7 @@ describe Facter::Core::Execution::Base do
       expect(subject).to receive(:`).with("/bin/foo").and_raise "kaboom!"
       expect(subject).to receive(:expand_command).with('foo').and_return '/bin/foo'
 
-      allow(Facter).to receive(:warn)
+      allow(LegacyFacter).to receive(:warn)
       expect(Thread).to receive(:new).and_yield
       expect(Process).to receive(:waitall).once
 

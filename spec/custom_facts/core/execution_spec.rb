@@ -1,6 +1,6 @@
 require_relative '../../spec_helper_legacy'
 
-describe Facter::Core::Execution do
+describe LegacyFacter::Core::Execution do
   subject { described_class}
   let(:impl) { described_class.impl }
 

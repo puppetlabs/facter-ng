@@ -4,7 +4,7 @@
 # Create facts using {Facter.add}
 #
 # @api public
-module Facter
+module LegacyFacter
   module Util
     class Fact
       # The name of the fact
@@ -41,7 +41,7 @@ module Facter
       #
       # @param options [Hash] A hash of options to set on the resolution
       #
-      # @return [Facter::Util::Resolution]
+      # @return [LegacyFacter::Util::Resolution]
       #
       # @api private
       def add(options = {}, &block)
@@ -53,7 +53,7 @@ module Facter
       #
       # @param resolution_name [String] The name of the resolve to define or look up
       # @param options [Hash] A hash of options to set on the resolution
-      # @return [Facter::Util::Resolution]
+      # @return [LegacyFacter::Util::Resolution]
       #
       # @api public
       def define_resolution(resolution_name, options = {}, &block)
@@ -67,14 +67,14 @@ module Facter
 
         resolve
       rescue => e
-        Facter.log_exception(e, "Unable to add resolve #{resolution_name.inspect} for fact #{@name}: #{e.message}")
+        LegacyFacter.log_exception(e, "Unable to add resolve #{resolution_name.inspect} for fact #{@name}: #{e.message}")
       end
 
       # Retrieve an existing resolution by name
       #
       # @param name [String]
       #
-      # @return [Facter::Util::Resolution, nil] The resolution if exists, nil if
+      # @return [LegacyFacter::Util::Resolution, nil] The resolution if exists, nil if
       #   it doesn't exist or name is nil
       def resolution(name)
         return nil if name.nil?
@@ -101,7 +101,7 @@ module Facter
         return @value if @value
 
         if @resolves.empty?
-          Facter.debug "No resolves for %s" % @name
+          LegacyFacter.debug "No resolves for %s" % @name
           return nil
         end
 
@@ -121,7 +121,7 @@ module Facter
       # @deprecated
       def extract_ldapname_option!(options)
         if options[:ldapname]
-          Facter.warnonce("ldapname is deprecated and will be removed in a future version")
+          LegacyFacter.warnonce("ldapname is deprecated and will be removed in a future version")
           self.ldapname = options.delete(:ldapname)
         end
       end
@@ -166,13 +166,13 @@ module Facter
 
       def announce_when_no_suitable_resolution(resolutions)
         if resolutions.empty?
-          Facter.debug "Found no suitable resolves of %s for %s" % [@resolves.length, @name]
+          LegacyFacter.debug "Found no suitable resolves of %s for %s" % [@resolves.length, @name]
         end
       end
 
       def announce_when_no_value_found(value)
         if value.nil?
-          Facter.debug("value for %s is still nil" % @name)
+          LegacyFacter.debug("value for %s is still nil" % @name)
         end
       end
 
@@ -187,9 +187,9 @@ module Facter
         else
           case resolution_type
           when :simple
-            resolve = Facter::Util::Resolution.new(resolution_name, self)
+            resolve = LegacyFacter::Util::Resolution.new(resolution_name, self)
           when :aggregate
-            resolve = Facter::Core::Aggregate.new(resolution_name, self)
+            resolve = LegacyFacter::Core::Aggregate.new(resolution_name, self)
           else
             raise ArgumentError, "Expected resolution type to be one of (:simple, :aggregate) but was #{resolution_type}"
           end

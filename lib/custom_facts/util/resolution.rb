@@ -9,14 +9,14 @@
 # satisfied for a fact to be considered _suitable_.
 #
 # @api public
-module Facter
+module LegacyFacter
   module Util
     class Resolution
       # @api private
       attr_accessor :code
       attr_writer :value
 
-      extend Facter::Core::Execution
+      extend LegacyFacter::Core::Execution
 
       class << self
         # Expose command execution methods that were extracted into
@@ -27,8 +27,8 @@ module Facter
         public :search_paths, :which, :absolute_path?, :expand_command, :with_env, :exec
       end
 
-      include Facter::Core::Resolvable
-      include Facter::Core::Suitable
+      include LegacyFacter::Core::Resolvable
+      include LegacyFacter::Core::Suitable
 
       # @!attribute [rw] name
       # The name of this resolution. The resolution name should be unique with
@@ -38,7 +38,7 @@ module Facter
       attr_accessor :name
 
       # @!attribute [r] fact
-      # @return [Facter::Util::Fact]
+      # @return [LegacyFacter::Util::Fact]
       # @api private
       attr_reader :fact
 
@@ -70,7 +70,7 @@ module Facter
           msg = "Already evaluated #{@name}"
           msg << " at #{@last_evaluated}" if msg.is_a? String
           msg << ", reevaluating anyways"
-          Facter.warn msg
+          LegacyFacter.warn msg
         end
 
         instance_eval(&block)
@@ -127,7 +127,7 @@ module Facter
       def setcode(string = nil, &block)
         if string
           @code = Proc.new do
-            output = Facter::Core::Execution.execute(string, :on_fail => nil)
+            output = LegacyFacter::Core::Execution.execute(string, :on_fail => nil)
             if output.nil? or output.empty?
               nil
             else

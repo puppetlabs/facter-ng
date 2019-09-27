@@ -2,19 +2,19 @@
 
 require_relative '../../spec_helper_legacy'
 
-describe Facter::Util::Config do
+describe LegacyFacter::Util::Config do
   include PuppetlabsSpec::Files
 
-  describe "ENV['HOME'] is unset", :unless => Facter::Util::Root.root? do
+  describe "ENV['HOME'] is unset", :unless => LegacyFacter::Util::Root.root? do
     around do |example|
-      Facter::Core::Execution.with_env('HOME' => nil) do
+      LegacyFacter::Core::Execution.with_env('HOME' => nil) do
         example.run
       end
     end
 
     it "should not set @external_facts_dirs" do
-      Facter::Util::Config.setup_default_ext_facts_dirs
-      expect(Facter::Util::Config.external_facts_dirs).to be_empty
+      LegacyFacter::Util::Config.setup_default_ext_facts_dirs
+      expect(LegacyFacter::Util::Config.external_facts_dirs).to be_empty
     end
   end
 
@@ -23,7 +23,7 @@ describe Facter::Util::Config do
       host_os = ["mswin","win32","dos","mingw","cygwin"]
       host_os.each do |h|
         allow(RbConfig::CONFIG).to receive(:[]).with('host_os').and_return(h)
-        expect(Facter::Util::Config.is_windows?).to be_truthy
+        expect(LegacyFacter::Util::Config.is_windows?).to be_truthy
       end
     end
 
@@ -31,7 +31,7 @@ describe Facter::Util::Config do
       host_os = ["darwin","linux"]
       host_os.each do |h|
         allow(RbConfig::CONFIG).to receive(:[]).with('host_os').and_return(h)
-        expect(Facter::Util::Config.is_windows?).to be_falsey
+        expect(LegacyFacter::Util::Config.is_windows?).to be_falsey
       end
     end
   end
@@ -41,80 +41,80 @@ describe Facter::Util::Config do
       host_os = ["darwin"]
       host_os.each do |h|
         allow(RbConfig::CONFIG).to receive(:[]).with('host_os').and_return(h)
-        expect(Facter::Util::Config.is_mac?).to be_truthy
+        expect(LegacyFacter::Util::Config.is_mac?).to be_truthy
       end
     end
   end
 
   describe "external_facts_dirs" do
     before :each do
-      allow(Facter::Util::Root).to receive(:root?).and_return(true)
+      allow(LegacyFacter::Util::Root).to receive(:root?).and_return(true)
     end
 
     it "should return the default value for linux" do
-      allow(Facter::Util::Config).to receive(:is_windows?).and_return(false)
-      allow(Facter::Util::Config).to receive(:windows_data_dir).and_return(nil)
-      Facter::Util::Config.setup_default_ext_facts_dirs
-      expect(Facter::Util::Config.external_facts_dirs).to eq ["/opt/puppetlabs/custom_facts/facts.d", "/etc/custom_facts/facts.d", "/etc/puppetlabs/custom_facts/facts.d"]
+      allow(LegacyFacter::Util::Config).to receive(:is_windows?).and_return(false)
+      allow(LegacyFacter::Util::Config).to receive(:windows_data_dir).and_return(nil)
+      LegacyFacter::Util::Config.setup_default_ext_facts_dirs
+      expect(LegacyFacter::Util::Config.external_facts_dirs).to eq ["/opt/puppetlabs/custom_facts/facts.d", "/etc/custom_facts/facts.d", "/etc/puppetlabs/custom_facts/facts.d"]
     end
 
     it "should return the default value for windows 2008" do
-      allow(Facter::Util::Config).to receive(:is_windows?).and_return(true)
-      allow(Facter::Util::Config).to receive(:windows_data_dir).and_return("C:\\ProgramData")
-      Facter::Util::Config.setup_default_ext_facts_dirs
-      expect(Facter::Util::Config.external_facts_dirs).to eq [File.join("C:\\ProgramData", 'PuppetLabs', 'custom_facts', 'facts.d')]
+      allow(LegacyFacter::Util::Config).to receive(:is_windows?).and_return(true)
+      allow(LegacyFacter::Util::Config).to receive(:windows_data_dir).and_return("C:\\ProgramData")
+      LegacyFacter::Util::Config.setup_default_ext_facts_dirs
+      expect(LegacyFacter::Util::Config.external_facts_dirs).to eq [File.join("C:\\ProgramData", 'PuppetLabs', 'custom_facts', 'facts.d')]
     end
 
     it "should return the default value for windows 2003R2" do
-      allow(Facter::Util::Config).to receive(:is_windows?).and_return(true)
-      allow(Facter::Util::Config).to receive(:windows_data_dir).and_return("C:\\Documents")
-      Facter::Util::Config.setup_default_ext_facts_dirs
-      expect(Facter::Util::Config.external_facts_dirs).to eq [File.join("C:\\Documents", 'PuppetLabs', 'custom_facts', 'facts.d')]
+      allow(LegacyFacter::Util::Config).to receive(:is_windows?).and_return(true)
+      allow(LegacyFacter::Util::Config).to receive(:windows_data_dir).and_return("C:\\Documents")
+      LegacyFacter::Util::Config.setup_default_ext_facts_dirs
+      expect(LegacyFacter::Util::Config.external_facts_dirs).to eq [File.join("C:\\Documents", 'PuppetLabs', 'custom_facts', 'facts.d')]
     end
 
     it "returns the old and new (AIO) paths under user's home directory when not root" do
-      allow(Facter::Util::Root).to receive(:root?).and_return(false)
-      Facter::Util::Config.setup_default_ext_facts_dirs
-      expect(Facter::Util::Config.external_facts_dirs)
+      allow(LegacyFacter::Util::Root).to receive(:root?).and_return(false)
+      LegacyFacter::Util::Config.setup_default_ext_facts_dirs
+      expect(LegacyFacter::Util::Config.external_facts_dirs)
         .to eq [File.expand_path(File.join("~", ".puppetlabs", "opt", "custom_facts", "facts.d")),
             File.expand_path(File.join("~", ".custom_facts", "facts.d"))]
     end
 
     it "includes additional values when user appends to the list" do
-      Facter::Util::Config.setup_default_ext_facts_dirs
-      original_values = Facter::Util::Config.external_facts_dirs.dup
+      LegacyFacter::Util::Config.setup_default_ext_facts_dirs
+      original_values = LegacyFacter::Util::Config.external_facts_dirs.dup
       new_value = '/usr/share/newdir'
-      Facter::Util::Config.external_facts_dirs << new_value
-      expect(Facter::Util::Config.external_facts_dirs).to eq original_values + [new_value]
+      LegacyFacter::Util::Config.external_facts_dirs << new_value
+      expect(LegacyFacter::Util::Config.external_facts_dirs).to eq original_values + [new_value]
     end
 
     it "should only output new values when explicitly set" do
-      Facter::Util::Config.setup_default_ext_facts_dirs
+      LegacyFacter::Util::Config.setup_default_ext_facts_dirs
       new_value = ['/usr/share/newdir']
-      Facter::Util::Config.external_facts_dirs = new_value
-      expect(Facter::Util::Config.external_facts_dirs).to eq new_value
+      LegacyFacter::Util::Config.external_facts_dirs = new_value
+      expect(LegacyFacter::Util::Config.external_facts_dirs).to eq new_value
     end
 
   end
 
   describe "override_binary_dir" do
     it "should return the default value for linux" do
-      allow(Facter::Util::Config).to receive(:is_windows?).and_return(false)
-      Facter::Util::Config.setup_default_override_binary_dir
-      expect(Facter::Util::Config.override_binary_dir).to eq "/opt/puppetlabs/puppet/bin"
+      allow(LegacyFacter::Util::Config).to receive(:is_windows?).and_return(false)
+      LegacyFacter::Util::Config.setup_default_override_binary_dir
+      expect(LegacyFacter::Util::Config.override_binary_dir).to eq "/opt/puppetlabs/puppet/bin"
     end
 
     it "should return nil for windows" do
-      allow(Facter::Util::Config).to receive(:is_windows?).and_return(true)
-      Facter::Util::Config.setup_default_override_binary_dir
-      expect(Facter::Util::Config.override_binary_dir).to eq nil
+      allow(LegacyFacter::Util::Config).to receive(:is_windows?).and_return(true)
+      LegacyFacter::Util::Config.setup_default_override_binary_dir
+      expect(LegacyFacter::Util::Config.override_binary_dir).to eq nil
     end
 
     it "should output new values when explicitly set" do
-      Facter::Util::Config.setup_default_override_binary_dir
+      LegacyFacter::Util::Config.setup_default_override_binary_dir
       new_value = '/usr/share/newdir'
-      Facter::Util::Config.override_binary_dir = new_value
-      expect(Facter::Util::Config.override_binary_dir).to eq new_value
+      LegacyFacter::Util::Config.override_binary_dir = new_value
+      expect(LegacyFacter::Util::Config.override_binary_dir).to eq new_value
     end
   end
 

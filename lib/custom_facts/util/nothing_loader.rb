@@ -1,4 +1,4 @@
-module Facter
+module LegacyFacter
   module Util
 
     # An external fact loader that doesn't load anything

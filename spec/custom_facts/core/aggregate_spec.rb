@@ -1,17 +1,17 @@
 require_relative '../../spec_helper_legacy'
 
-describe Facter::Core::Aggregate do
+describe LegacyFacter::Core::Aggregate do
 
   let(:fact) { double('stub_fact', :name => 'stub_fact') }
 
   subject { obj = described_class.new('aggregated', fact) }
 
   it "can be resolved" do
-    expect(subject).to be_a_kind_of Facter::Core::Resolvable
+    expect(subject).to be_a_kind_of LegacyFacter::Core::Resolvable
   end
 
   it "can be confined and weighted" do
-    expect(subject).to be_a_kind_of Facter::Core::Suitable
+    expect(subject).to be_a_kind_of LegacyFacter::Core::Suitable
   end
 
   describe "setting options" do
@@ -65,7 +65,7 @@ describe Facter::Core::Aggregate do
       subject.chunk(:first, :require => [:second]) { }
       subject.chunk(:second, :require => [:first]) { }
 
-      expect(Facter).to receive(:warn).with(/dependency cycles: .*[:first, :second]/)
+      expect(LegacyFacter).to receive(:warn).with(/dependency cycles: .*[:first, :second]/)
 
       subject.value
     end

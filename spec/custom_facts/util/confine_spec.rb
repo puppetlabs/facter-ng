@@ -2,56 +2,56 @@
 
 require_relative '../../spec_helper_legacy'
 
-include Facter::Util::Values
+include LegacyFacter::Util::Values
 
-describe Facter::Util::Confine do
+describe LegacyFacter::Util::Confine do
   it "should require a fact name" do
-    expect(Facter::Util::Confine.new("yay", true).fact).to eq "yay"
+    expect(LegacyFacter::Util::Confine.new("yay", true).fact).to eq "yay"
   end
 
   it "should accept a value specified individually" do
-    expect(Facter::Util::Confine.new("yay", "test").values).to eq ["test"]
+    expect(LegacyFacter::Util::Confine.new("yay", "test").values).to eq ["test"]
   end
 
   it "should accept multiple values specified at once" do
-    expect(Facter::Util::Confine.new("yay", "test", "other").values).to eq ["test", "other"]
+    expect(LegacyFacter::Util::Confine.new("yay", "test", "other").values).to eq ["test", "other"]
   end
 
   it "should fail if no fact name is provided" do
-    expect(lambda { Facter::Util::Confine.new(nil, :test) }).to raise_error(ArgumentError)
+    expect(lambda { LegacyFacter::Util::Confine.new(nil, :test) }).to raise_error(ArgumentError)
   end
 
   it "should fail if no values were provided" do
-    expect(lambda { Facter::Util::Confine.new("yay") }).to raise_error(ArgumentError)
+    expect(lambda { LegacyFacter::Util::Confine.new("yay") }).to raise_error(ArgumentError)
   end
 
   it "should have a method for testing whether it matches" do
-    expect(Facter::Util::Confine.new("yay", :test)).to respond_to(:true?)
+    expect(LegacyFacter::Util::Confine.new("yay", :test)).to respond_to(:true?)
   end
 
   describe "when evaluating" do
     def confined(fact_value, *confines)
       allow(@fact).to receive(:value).and_return fact_value
-      Facter::Util::Confine.new("yay", *confines).true?
+      LegacyFacter::Util::Confine.new("yay", *confines).true?
     end
 
     before do
       @fact = double 'fact'
-      allow(Facter).to receive(:[]).and_return @fact
+      allow(LegacyFacter).to receive(:[]).and_return @fact
     end
 
     it "should return false if the fact does not exist" do
-      expect(Facter).to receive(:[]).with("yay").and_return nil
+      expect(LegacyFacter).to receive(:[]).with("yay").and_return nil
 
-      expect(Facter::Util::Confine.new("yay", "test").true?).to be false
+      expect(LegacyFacter::Util::Confine.new("yay", "test").true?).to be false
     end
 
     it "should use the returned fact to get the value" do
-      expect(Facter).to receive(:[]).with("yay").and_return @fact
+      expect(LegacyFacter).to receive(:[]).with("yay").and_return @fact
 
       expect(@fact).to receive(:value).and_return nil
 
-      Facter::Util::Confine.new("yay", "test").true?
+      LegacyFacter::Util::Confine.new("yay", "test").true?
     end
 
     it "should return false if the fact has no value" do
@@ -124,23 +124,23 @@ describe Facter::Util::Confine do
 
     it "should accept and evaluate a block argument against the fact" do
       expect(@fact).to receive(:value).and_return 'foo'
-      confine = Facter::Util::Confine.new :yay do |f| f === 'foo' end
+      confine = LegacyFacter::Util::Confine.new :yay do |f| f === 'foo' end
       expect(confine.true?).to be true
     end
 
     it "should return false if the block raises a StandardError when checking a fact" do
       allow(@fact).to receive(:value).and_return 'foo'
-      confine = Facter::Util::Confine.new :yay do |f| raise StandardError end
+      confine = LegacyFacter::Util::Confine.new :yay do |f| raise StandardError end
       expect(confine.true?).to be false
     end
 
     it "should accept and evaluate only a block argument" do
-      expect(Facter::Util::Confine.new { true }.true?).to be true
-      expect(Facter::Util::Confine.new { false }.true?).to be false
+      expect(LegacyFacter::Util::Confine.new { true }.true?).to be true
+      expect(LegacyFacter::Util::Confine.new { false }.true?).to be false
     end
 
     it "should return false if the block raises a StandardError" do
-      expect(Facter::Util::Confine.new { raise StandardError }.true?).to be false
+      expect(LegacyFacter::Util::Confine.new { raise StandardError }.true?).to be false
     end
   end
 end

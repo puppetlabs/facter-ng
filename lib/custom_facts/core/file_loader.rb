@@ -1,6 +1,6 @@
 require "#{ROOT_DIR}/lib/custom_facts/version"
 require "#{ROOT_DIR}/lib/custom_facts/core/logging"
-require "#{ROOT_DIR}/lib/custom_facts/core/facter"
+require "#{ROOT_DIR}/lib/custom_facts/core/legacy_facter"
 require "#{ROOT_DIR}/lib/custom_facts/util/fact"
 require "#{ROOT_DIR}/lib/custom_facts/util/collection"
 require "#{ROOT_DIR}/lib/custom_facts/util/fact"

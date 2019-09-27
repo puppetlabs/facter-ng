@@ -1,15 +1,15 @@
 require_relative '../../spec_helper_legacy'
 
-describe Facter::Core::Resolvable do
+describe LegacyFacter::Core::Resolvable do
 
   class ResolvableClass
     def initialize(name)
       @name = name
-      @fact = Facter::Util::Fact.new("stub fact")
+      @fact = LegacyFacter::Util::Fact.new("stub fact")
     end
     attr_accessor :name, :resolve_value
     attr_reader :fact
-    include Facter::Core::Resolvable
+    include LegacyFacter::Core::Resolvable
   end
 
   subject { ResolvableClass.new('resolvable') }
@@ -31,14 +31,14 @@ describe Facter::Core::Resolvable do
 
     it "normalizes the resolved value" do
       # Facter::Util::Normalization.expects(:normalize).returns 'stuff'
-      expect(Facter::Util::Normalization).to receive(:normalize).and_return('stuff')
+      expect(LegacyFacter::Util::Normalization).to receive(:normalize).and_return('stuff')
       subject.resolve_value = 'stuff'
       expect(subject.value).to eq('stuff')
     end
 
     it "logs a warning if an exception was raised" do
       expect(subject).to receive(:resolve_value).and_raise RuntimeError, "kaboom!"
-      expect(Facter).to receive(:warn).with(/Could not retrieve .*: kaboom!/)
+      expect(LegacyFacter).to receive(:warn).with(/Could not retrieve .*: kaboom!/)
       expect(subject.value).to eq nil
     end
   end
@@ -53,7 +53,7 @@ describe Facter::Core::Resolvable do
     end
 
     it "returns nil if the timeout was reached" do
-      expect(Facter).to receive(:warn).with(/Timed out after 0\.1 seconds while resolving/)
+      expect(LegacyFacter).to receive(:warn).with(/Timed out after 0\.1 seconds while resolving/)
       expect(Timeout).to receive(:timeout).and_raise Timeout::Error
 
       subject.timeout = 0.1

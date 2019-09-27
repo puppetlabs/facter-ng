@@ -1,7 +1,7 @@
-module Facter
+module LegacyFacter
   module Core
     module Execution
-      class Posix < Facter::Core::Execution::Base
+      class Posix < LegacyFacter::Core::Execution::Base
 
         DEFAULT_SEARCH_PATHS = ['/sbin', '/usr/sbin']
 

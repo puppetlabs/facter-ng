@@ -1,4 +1,4 @@
-module Facter
+module LegacyFacter
   module Core
     module Logging
       extend self

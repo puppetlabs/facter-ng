@@ -1,6 +1,6 @@
 require_relative '../../spec_helper_legacy'
 
-describe Facter::Core::Logging do
+describe LegacyFacter::Core::Logging do
 
   subject { described_class }
 
@@ -153,11 +153,11 @@ describe Facter::Core::Logging do
       end
       case level
       when :debug
-        Facter.debug(message)
+        LegacyFacter.debug(message)
       when :warn
-        Facter.warn(message)
+        LegacyFacter.warn(message)
       when :info
-        Facter.show_time(message)
+        LegacyFacter.show_time(message)
       else
         raise 'unexpected logging level'
       end
@@ -175,11 +175,11 @@ describe Facter::Core::Logging do
       end
       case level
       when :debug
-        Facter.debugonce(message)
-        Facter.debugonce(message)
+        LegacyFacter.debugonce(message)
+        LegacyFacter.debugonce(message)
       when :warn
-        Facter.warnonce(message)
-        Facter.warnonce(message)
+        LegacyFacter.warnonce(message)
+        LegacyFacter.warnonce(message)
       else
         raise 'unexpected logging level'
       end

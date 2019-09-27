@@ -30,26 +30,26 @@ require "#{ROOT_DIR}/lib/custom_facts/core/file_loader"
 #    => { "kernel"=>"Linux", "uptime_days"=>0, "ipaddress"=>"10.0.0.1" }
 #
 # @api public
-module Facter
+module LegacyFacter
   # Most core functionality of custom_facts is implemented in `Facter::Util`.
   # @api public
 
   include Comparable
   include Enumerable
 
-  extend Facter::Core::Logging
+  extend LegacyFacter::Core::Logging
 
   # module methods
 
   # Accessor for the collection object which holds all the facts
-  # @return [Facter::Util::Collection] the collection of facts
+  # @return [LegacyFacter::Util::Collection] the collection of facts
   #
   # @api private
   def self.collection
     unless defined?(@collection) and @collection
-      @collection = Facter::Util::Collection.new(
-        Facter::Util::Loader.new,
-        Facter::Util::Config.ext_fact_loader)
+      @collection = LegacyFacter::Util::Collection.new(
+        LegacyFacter::Util::Loader.new,
+        LegacyFacter::Util::Config.ext_fact_loader)
     end
     @collection
   end
@@ -72,7 +72,7 @@ module Facter
   #
   # @param name [String] the name of the fact
   #
-  # @return [Facter::Util::Fact, nil] The fact object, or nil if no fact
+  # @return [LegacyFacter::Util::Fact, nil] The fact object, or nil if no fact
   #   is found.
   #
   # @api public
@@ -130,7 +130,7 @@ module Facter
   # @param name [Symbol] The name of the fact to define
   # @param options [Hash] A hash of options to set on the fact
   #
-  # @return [Facter::Util::Fact] The fact that was defined
+  # @return [LegacyFacter::Util::Fact] The fact that was defined
   #
   # @api public
   # @see {Facter::Util::Collection#define_fact}
@@ -151,7 +151,7 @@ module Facter
   #   {Facter::Util::Resolution#timeout timeout} for this resolution
   # @param block [Proc] a block defining a fact resolution
   #
-  # @return [Facter::Util::Fact] the fact object, which includes any previously
+  # @return [LegacyFacter::Util::Fact] the fact object, which includes any previously
   #   defined resolutions
   #
   # @api public
@@ -182,8 +182,8 @@ module Facter
   #
   # @api public
   def self.clear
-    Facter.flush
-    Facter.reset
+    LegacyFacter.flush
+    LegacyFacter.reset
   end
 
   # Removes all facts from memory. Use this when the fact code has
@@ -245,7 +245,7 @@ module Facter
   #
   # @api public
   def self.search_external(dirs)
-    Facter::Util::Config.external_facts_dirs += dirs
+    LegacyFacter::Util::Config.external_facts_dirs += dirs
   end
 
   # Returns the registered search directories.
@@ -254,6 +254,6 @@ module Facter
   #
   # @api public
   def self.search_external_path
-    Facter::Util::Config.external_facts_dirs.dup
+    LegacyFacter::Util::Config.external_facts_dirs.dup
   end
 end

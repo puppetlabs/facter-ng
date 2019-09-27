@@ -2,12 +2,12 @@
 
 require_relative '../../spec_helper_legacy'
 
-describe Facter::Util::DirectoryLoader do
+describe LegacyFacter::Util::DirectoryLoader do
   include PuppetlabsSpec::Files
   include FacterSpec::ConfigHelper
 
-  subject { Facter::Util::DirectoryLoader.new(tmpdir('directory_loader')) }
-  let(:collection) { Facter::Util::Collection.new(double("internal loader"), subject) }
+  subject { LegacyFacter::Util::DirectoryLoader.new(tmpdir('directory_loader')) }
+  let(:collection) { LegacyFacter::Util::Collection.new(double("internal loader"), subject) }
 
   it "should make the directory available" do
     expect(subject.directory).to be_instance_of(String)
@@ -20,12 +20,12 @@ describe Facter::Util::DirectoryLoader do
   it "raises an error when the directory does not exist" do
     missing_dir = "missing"
     allow(File).to receive(:directory?).with(missing_dir).and_return(false)
-    expect { Facter::Util::DirectoryLoader.loader_for(missing_dir) }.to raise_error Facter::Util::DirectoryLoader::NoSuchDirectoryError
+    expect { LegacyFacter::Util::DirectoryLoader.loader_for(missing_dir) }.to raise_error LegacyFacter::Util::DirectoryLoader::NoSuchDirectoryError
   end
 
   it "should do nothing bad when dir doesn't exist" do
     fakepath = "/foobar/path"
-    my_loader = Facter::Util::DirectoryLoader.new(fakepath)
+    my_loader = LegacyFacter::Util::DirectoryLoader.new(fakepath)
     expect(FileTest.exists?(my_loader.directory)).to be false
     expect { my_loader.load(collection) }.to_not raise_error
    end
@@ -53,7 +53,7 @@ describe Facter::Util::DirectoryLoader do
 
     %w{bak orig}.each do |ext|
       it "should ignore files with an extension of '#{ext}'" do
-        expect(Facter).to receive(:warn).with(/#{ext}/)
+        expect(LegacyFacter).to receive(:warn).with(/#{ext}/)
         write_to_file("data" + ".#{ext}", "foo=bar")
 
         subject.load(collection)
@@ -62,13 +62,13 @@ describe Facter::Util::DirectoryLoader do
 
     it "should warn when trying to parse unknown file types" do
       write_to_file("file.unknownfiletype", "stuff=bar")
-      expect(Facter).to receive(:warn).with(/file.unknownfiletype/)
+      expect(LegacyFacter).to receive(:warn).with(/file.unknownfiletype/)
 
       subject.load(collection)
     end
 
     it "external facts should almost always precedence over all other facts" do
-      collection.add("f1", :value => "lower_weight_fact") { has_weight(Facter::Util::DirectoryLoader::EXTERNAL_FACT_WEIGHT - 1) }
+      collection.add("f1", :value => "lower_weight_fact") { has_weight(LegacyFacter::Util::DirectoryLoader::EXTERNAL_FACT_WEIGHT - 1) }
       data = {"f1" => "external_fact"}
       write_to_file("data.yaml", YAML.dump(data))
 
@@ -78,7 +78,7 @@ describe Facter::Util::DirectoryLoader do
     end
 
     describe "given a custom weight" do
-      subject { Facter::Util::DirectoryLoader.new(tmpdir('directory_loader'), 10) }
+      subject { LegacyFacter::Util::DirectoryLoader.new(tmpdir('directory_loader'), 10) }
 
       it "should set that weight for loaded external facts" do
         collection.add("f1", :value => "higher_weight_fact") { has_weight(11) }

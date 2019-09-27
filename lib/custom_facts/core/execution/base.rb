@@ -1,4 +1,4 @@
-module Facter
+module LegacyFacter
   module Core
     module Execution
       class Base
@@ -42,7 +42,7 @@ module Facter
 
             if expanded_command.nil?
               if on_fail == :raise
-                raise Facter::Core::Execution::ExecutionFailure.new, "Could not execute '#{command}': command not found"
+                raise LegacyFacter::Core::Execution::ExecutionFailure.new, "Could not execute '#{command}': command not found"
               else
                 return on_fail
               end
@@ -56,7 +56,7 @@ module Facter
               wait_for_child = false
             rescue => detail
               if on_fail == :raise
-                raise Facter::Core::Execution::ExecutionFailure.new, "Failed while executing '#{expanded_command}': #{detail.message}"
+                raise LegacyFacter::Core::Execution::ExecutionFailure.new, "Failed while executing '#{expanded_command}': #{detail.message}"
               else
                 return on_fail
               end

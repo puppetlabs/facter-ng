@@ -6,7 +6,7 @@ require 'timeout'
 # Classes including this mixin should implement at #name method describing
 # the value being resolved and a #resolve_value that actually executes the code
 # to resolve the value.
-module Facter
+module LegacyFacter
   module Core
     module Resolvable
 
@@ -66,15 +66,15 @@ module Facter
           end
         end
 
-        Facter::Util::Normalization.normalize(result)
+        LegacyFacter::Util::Normalization.normalize(result)
       rescue Timeout::Error => detail
-        Facter.log_exception(detail, "Timed out after #{limit} seconds while resolving #{qualified_name}")
+        LegacyFacter.log_exception(detail, "Timed out after #{limit} seconds while resolving #{qualified_name}")
         return nil
-      rescue Facter::Util::Normalization::NormalizationError => detail
-        Facter.log_exception(detail, "Fact resolution #{qualified_name} resolved to an invalid value: #{detail.message}")
+      rescue LegacyFacter::Util::Normalization::NormalizationError => detail
+        LegacyFacter.log_exception(detail, "Fact resolution #{qualified_name} resolved to an invalid value: #{detail.message}")
         return nil
       rescue => detail
-        Facter.log_exception(detail, "Could not retrieve #{qualified_name}: #{detail.message}")
+        LegacyFacter.log_exception(detail, "Could not retrieve #{qualified_name}: #{detail.message}")
         return nil
       end
 
@@ -87,7 +87,7 @@ module Facter
 
         finishtime = Time.now.to_f
         ms = (finishtime - starttime) * 1000
-        Facter.show_time "#{qualified_name}: #{"%.2f" % ms}ms"
+        LegacyFacter.show_time "#{qualified_name}: #{"%.2f" % ms}ms"
       end
 
       def qualified_name

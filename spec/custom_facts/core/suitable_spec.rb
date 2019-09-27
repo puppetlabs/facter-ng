@@ -1,13 +1,13 @@
 require_relative '../../spec_helper_legacy'
 
-describe Facter::Core::Suitable do
+describe LegacyFacter::Core::Suitable do
 
   class SuitableClass
     def initialize
       @confines = []
     end
     attr_reader :confines
-    include Facter::Core::Suitable
+    include LegacyFacter::Core::Suitable
   end
 
   subject { SuitableClass.new }
@@ -20,7 +20,7 @@ describe Facter::Core::Suitable do
     it "creates a Facter::Util::Confine object for the confine call" do
       subject.confine :kernel => 'Linux'
       conf = subject.confines.first
-      expect(conf).to be_a_kind_of Facter::Util::Confine
+      expect(conf).to be_a_kind_of LegacyFacter::Util::Confine
       expect(conf.fact).to eq :kernel
       expect(conf.values).to eq ['Linux']
     end
@@ -34,7 +34,7 @@ describe Facter::Core::Suitable do
     it "creates a Util::Confine instance for the provided fact with block parameter" do
       block = lambda { true }
       # Facter::Util::Confine.expects(:new).with("one")
-      expect(Facter::Util::Confine).to receive(:new).with('one')
+      expect(LegacyFacter::Util::Confine).to receive(:new).with('one')
       subject.confine("one", &block)
     end
 
@@ -44,7 +44,7 @@ describe Facter::Core::Suitable do
 
     it "should create a Util::Confine instance for the provided block parameter" do
       block = lambda { true }
-      expect(Facter::Util::Confine).to receive (:new)
+      expect(LegacyFacter::Util::Confine).to receive (:new)
 
       subject.confine(&block)
     end

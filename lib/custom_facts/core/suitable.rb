@@ -3,7 +3,7 @@
 #
 # Classes that include the Suitable mixin should define a `#confines` method
 # that returns an Array of zero or more Facter::Util::Confine objects.
-module Facter::Core::Suitable
+module LegacyFacter::Core::Suitable
 
   attr_writer :weight
 
@@ -73,14 +73,14 @@ module Facter::Core::Suitable
     case confines
     when Hash
       confines.each do |fact, values|
-        @confines.push Facter::Util::Confine.new(fact, *values)
+        @confines.push LegacyFacter::Util::Confine.new(fact, *values)
       end
     else
       if block
         if confines
-          @confines.push Facter::Util::Confine.new(confines, &block)
+          @confines.push LegacyFacter::Util::Confine.new(confines, &block)
         else
-          @confines.push Facter::Util::Confine.new(&block)
+          @confines.push LegacyFacter::Util::Confine.new(&block)
         end
       else
       end

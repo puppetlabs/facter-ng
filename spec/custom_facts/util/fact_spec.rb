@@ -2,23 +2,23 @@
 
 require_relative '../../spec_helper_legacy'
 
-describe Facter::Util::Fact do
+describe LegacyFacter::Util::Fact do
 
-  subject(:fact) { Facter::Util::Fact.new("yay") }
+  subject(:fact) { LegacyFacter::Util::Fact.new("yay") }
 
-  let(:resolution) { Facter::Util::Resolution.new("yay", fact) }
+  let(:resolution) { LegacyFacter::Util::Resolution.new("yay", fact) }
 
   it "requires a name" do
-    expect { Facter::Util::Fact.new }.to raise_error(ArgumentError)
+    expect { LegacyFacter::Util::Fact.new }.to raise_error(ArgumentError)
   end
 
   it "downcases and converts the name to a symbol" do
-    expect(Facter::Util::Fact.new("YayNess").name).to eq :yayness
+    expect(LegacyFacter::Util::Fact.new("YayNess").name).to eq :yayness
   end
 
   it "issues a deprecation warning for use of ldapname" do
-    expect(Facter).to receive(:warnonce).with("ldapname is deprecated and will be removed in a future version")
-    Facter::Util::Fact.new("YayNess", :ldapname => "fooness")
+    expect(LegacyFacter).to receive(:warnonce).with("ldapname is deprecated and will be removed in a future version")
+    LegacyFacter::Util::Fact.new("YayNess", :ldapname => "fooness")
   end
 
   describe "when adding resolution mechanisms using #add" do
@@ -52,7 +52,7 @@ describe Facter::Util::Fact do
     end
 
     it "creates a new resolution if no such resolution exists" do
-      expect(Facter::Util::Resolution).to receive(:new).once.with('named', fact).and_return(res)
+      expect(LegacyFacter::Util::Resolution).to receive(:new).once.with('named', fact).and_return(res)
 
       fact.define_resolution('named')
 
@@ -61,17 +61,17 @@ describe Facter::Util::Fact do
 
     it "creates a simple resolution when the type is nil" do
       fact.define_resolution('named')
-      expect(fact.resolution('named')).to be_a_kind_of Facter::Util::Resolution
+      expect(fact.resolution('named')).to be_a_kind_of LegacyFacter::Util::Resolution
     end
 
     it "creates a simple resolution when the type is :simple" do
       fact.define_resolution('named', :type => :simple)
-      expect(fact.resolution('named')).to be_a_kind_of Facter::Util::Resolution
+      expect(fact.resolution('named')).to be_a_kind_of LegacyFacter::Util::Resolution
     end
 
     it "creates an aggregate resolution when the type is :aggregate" do
       fact.define_resolution('named', :type => :aggregate)
-      expect(fact.resolution('named')).to be_a_kind_of Facter::Core::Aggregate
+      expect(fact.resolution('named')).to be_a_kind_of LegacyFacter::Core::Aggregate
     end
 
     # it "raises an error if there is an existing resolution with a different type" do
@@ -81,7 +81,7 @@ describe Facter::Util::Fact do
     # end
 
     it "returns existing resolutions by name" do
-      expect(Facter::Util::Resolution).to receive(:new).once.with('named', fact).and_return(res)
+      expect(LegacyFacter::Util::Resolution).to receive(:new).once.with('named', fact).and_return(res)
 
       fact.define_resolution('named')
       fact.define_resolution('named')
@@ -92,7 +92,7 @@ describe Facter::Util::Fact do
 
   describe "when returning a value" do
     it "returns nil if there are no resolutions" do
-      expect(Facter::Util::Fact.new("yay").value).to be nil
+      expect(LegacyFacter::Util::Fact.new("yay").value).to be nil
     end
 
     it "prefers the highest weight resolution" do
@@ -123,7 +123,7 @@ describe Facter::Util::Fact do
 
   describe '#flush' do
     subject do
-      Facter::Util::Fact.new(:foo)
+      LegacyFacter::Util::Fact.new(:foo)
     end
 
     it "invokes #flush on all resolutions" do

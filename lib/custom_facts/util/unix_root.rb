@@ -1,4 +1,4 @@
-module Facter
+module LegacyFacter
   module Util
     module Root
       def self.root?

@@ -2,11 +2,11 @@ require 'rbconfig'
 
 # A module to return config related data
 #
-module Facter
+module LegacyFacter
   module Util
     module Config
       def self.ext_fact_loader
-        @ext_fact_loader || Facter::Util::DirectoryLoader.default_loader
+        @ext_fact_loader || LegacyFacter::Util::DirectoryLoader.default_loader
       end
 
       def self.ext_fact_loader=(loader)
@@ -23,8 +23,8 @@ module Facter
       end
 
       def self.windows_data_dir
-        if Facter::Util::Config.is_windows?
-          Facter::Util::Windows::Dir.get_common_appdata()
+        if LegacyFacter::Util::Config.is_windows?
+          LegacyFacter::Util::Windows::Dir.get_common_appdata()
         else
           nil
         end
@@ -39,7 +39,7 @@ module Facter
       end
 
       def self.setup_default_ext_facts_dirs
-        if Facter::Util::Root.root?
+        if LegacyFacter::Util::Root.root?
           windows_dir = windows_data_dir
           if windows_dir.nil? then
             # Note: Beginning with Facter 3, /opt/puppetlabs/custom_facts/facts.d will be the only
@@ -60,7 +60,7 @@ module Facter
         end
       end
 
-      if Facter::Util::Config.is_windows?
+      if LegacyFacter::Util::Config.is_windows?
         require_relative 'custom_facts/util/windows/dir'
         require_relative 'custom_facts/util/windows_root'
       else
@@ -78,7 +78,7 @@ module Facter
       end
 
       def self.setup_default_override_binary_dir
-        if Facter::Util::Config.is_windows?
+        if LegacyFacter::Util::Config.is_windows?
           @override_binary_dir = nil
         else
           @override_binary_dir = "/opt/puppetlabs/puppet/bin"

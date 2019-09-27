@@ -1,5 +1,5 @@
 
-module Facter
+module LegacyFacter
   module Util
     # A util module for custom_facts containing helper methods
     module Values

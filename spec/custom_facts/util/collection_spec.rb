@@ -2,15 +2,15 @@
 
 require_relative '../../spec_helper_legacy'
 
-describe Facter::Util::Collection do
-  let(:external_loader) { Facter::Util::NothingLoader.new }
+describe LegacyFacter::Util::Collection do
+  let(:external_loader) { LegacyFacter::Util::NothingLoader.new }
   let(:internal_loader) do
-    load = Facter::Util::Loader.new
+    load = LegacyFacter::Util::Loader.new
     allow(load).to receive(:load).and_return nil
     allow(load).to receive(:load_all).and_return nil
     load
   end
-  let(:collection) { Facter::Util::Collection.new(internal_loader, external_loader) }
+  let(:collection) { LegacyFacter::Util::Collection.new(internal_loader, external_loader) }
 
   it "should delegate its load_all method to its loader" do
     expect(internal_loader).to receive(:load_all)
@@ -29,8 +29,8 @@ describe Facter::Util::Collection do
     end
 
     it "passes resolution specific options to the fact" do
-      fact = Facter::Util::Fact.new(:myname)
-      expect(Facter::Util::Fact).to receive(:new).with(:myname, {:timeout => 'myval'}).and_return(fact)
+      fact = LegacyFacter::Util::Fact.new(:myname)
+      expect(LegacyFacter::Util::Fact).to receive(:new).with(:myname, {:timeout => 'myval'}).and_return(fact)
 
       expect(fact).to receive(:add).with({:timeout => 'myval'})
 
@@ -41,7 +41,7 @@ describe Facter::Util::Collection do
       it "should use the block to add a resolution to the fact" do
         fact = double 'fact'
         # allow(fact).to receive(:extract_ldapname_option!)
-        expect(Facter::Util::Fact).to receive(:new).and_return(fact)
+        expect(LegacyFacter::Util::Fact).to receive(:new).and_return(fact)
 
         expect(fact).to receive(:add)
 
@@ -49,7 +49,7 @@ describe Facter::Util::Collection do
       end
 
       it "should discard resolutions that throw an exception when added" do
-        expect(Facter).to receive(:warn).with(/Unable to add resolve .* kaboom!/)
+        expect(LegacyFacter).to receive(:warn).with(/Unable to add resolve .* kaboom!/)
         expect {
           collection.add('yay') do
             raise "kaboom!"
@@ -62,8 +62,8 @@ describe Facter::Util::Collection do
 
   describe "when only defining facts" do
     it "creates a new fact if no such fact exists" do
-      fact = Facter::Util::Fact.new(:newfact)
-      expect(Facter::Util::Fact).to receive(:new).with(:newfact, {}).and_return fact
+      fact = LegacyFacter::Util::Fact.new(:newfact)
+      expect(LegacyFacter::Util::Fact).to receive(:new).with(:newfact, {}).and_return fact
       expect(collection.define_fact(:newfact)).to equal fact
     end
 
@@ -73,13 +73,13 @@ describe Facter::Util::Collection do
     end
 
     it "passes options to newly generated facts" do
-      allow(Facter).to receive(:warnonce)
+      allow(LegacyFacter).to receive(:warnonce)
       fact = collection.define_fact(:newfact, :ldapname => 'NewFact')
       expect(fact.ldapname).to eq 'NewFact'
     end
 
     it "logs a warning if the fact could not be defined" do
-      expect(Facter).to receive(:warn).with("Unable to add fact newfact: kaboom!")
+      expect(LegacyFacter).to receive(:warn).with("Unable to add fact newfact: kaboom!")
 
       collection.define_fact(:newfact) do
         raise "kaboom!"
@@ -202,7 +202,7 @@ describe Facter::Util::Collection do
 
   describe "when no facts are loaded" do
     it "should warn when no facts were loaded" do
-      expect(Facter).to receive(:warnonce).with("No facts loaded from #{internal_loader.search_path.join(File::PATH_SEPARATOR)}").once
+      expect(LegacyFacter).to receive(:warnonce).with("No facts loaded from #{internal_loader.search_path.join(File::PATH_SEPARATOR)}").once
 
       collection.fact("one")
     end
@@ -210,7 +210,7 @@ describe Facter::Util::Collection do
 
   describe "external facts" do
     let(:external_loader) { SingleFactLoader.new(:test_fact, "fact value") }
-    let(:collection) { Facter::Util::Collection.new(internal_loader, external_loader) }
+    let(:collection) { LegacyFacter::Util::Collection.new(internal_loader, external_loader) }
 
     it "loads when a specific fact is requested" do
       expect(collection.fact(:test_fact).value).to eq "fact value"

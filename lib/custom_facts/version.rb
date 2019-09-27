@@ -1,4 +1,4 @@
-module Facter
+module LegacyFacter
   if not defined? FACTERVERSION then
     FACTERVERSION = '2.5.5'
   end

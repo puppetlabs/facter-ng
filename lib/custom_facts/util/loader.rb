@@ -1,6 +1,6 @@
 
 # Load facts on demand.
-module Facter
+module LegacyFacter
   module Util
     class Loader
 
@@ -76,11 +76,11 @@ module Facter
 
         search_paths.delete_if { |path| ! valid_search_path?(path) }
 
-        Facter.search_path.each do |path|
+        LegacyFacter.search_path.each do |path|
           if valid_search_path?(path)
             search_paths << path
           else
-            Facter.warn "Excluding #{path} from search path. Fact file paths must be an absolute directory"
+            LegacyFacter.warn "Excluding #{path} from search path. Fact file paths must be an absolute directory"
           end
         end
 
@@ -118,7 +118,7 @@ module Facter
           # Don't store the path if the file can't be loaded
           # in case it's loadable later on.
           @loaded.delete(file)
-          Facter.log_exception(detail, "Error loading fact #{file}: #{detail.message}")
+          LegacyFacter.log_exception(detail, "Error loading fact #{file}: #{detail.message}")
         end
       end
 
@@ -144,7 +144,7 @@ module Facter
           # match it.
           next if fact and env_name != fact
 
-          Facter.add($1) do
+          LegacyFacter.add($1) do
             has_weight 1_000_000
             setcode { value }
           end

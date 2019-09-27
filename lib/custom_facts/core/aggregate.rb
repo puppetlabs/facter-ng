@@ -9,10 +9,10 @@
 #
 # @api public
 # @since 2.0.0
-class Facter::Core::Aggregate
+class LegacyFacter::Core::Aggregate
 
-  include Facter::Core::Suitable
-  include Facter::Core::Resolvable
+  include LegacyFacter::Core::Suitable
+  include LegacyFacter::Core::Resolvable
 
   # @!attribute [r] name
   #   @return [Symbol] The name of the aggregate resolution
@@ -20,17 +20,17 @@ class Facter::Core::Aggregate
 
   # @!attribute [r] deps
   #   @api private
-  #   @return [Facter::Core::DirectedGraph]
+  #   @return [LegacyFacter::Core::DirectedGraph]
   attr_reader :deps
 
   # @!attribute [r] confines
-  #   @return [Array<Facter::Core::Confine>] An array of confines restricting
+  #   @return [Array<LegacyFacter::Core::Confine>] An array of confines restricting
   #     this to a specific platform
   #   @see Facter::Core::Suitable
   attr_reader :confines
 
   # @!attribute [r] fact
-  # @return [Facter::Util::Fact]
+  # @return [LegacyFacter::Util::Fact]
   # @api private
   attr_reader :fact
 
@@ -42,7 +42,7 @@ class Facter::Core::Aggregate
     @chunks = {}
 
     @aggregate = nil
-    @deps = Facter::Core::DirectedGraph.new
+    @deps = LegacyFacter::Core::DirectedGraph.new
   end
 
   def set_options(options)
@@ -164,7 +164,7 @@ class Facter::Core::Aggregate
       input = @deps[name].map { |dep_name| results[dep_name] }
 
       output = block.call(*input)
-      results[name] = Facter::Util::Values.deep_freeze(output)
+      results[name] = LegacyFacter::Util::Values.deep_freeze(output)
     end
 
     results
@@ -187,9 +187,9 @@ class Facter::Core::Aggregate
 
   def default_aggregate(results)
     results.values.inject do |result, current|
-      Facter::Util::Values.deep_merge(result, current)
+      LegacyFacter::Util::Values.deep_merge(result, current)
     end
-  rescue Facter::Util::Values::DeepMergeError => e
+  rescue LegacyFacter::Util::Values::DeepMergeError => e
     raise ArgumentError, "Could not deep merge all chunks (Original error: " +
       "#{e.message}), ensure that chunks return either an Array or Hash or " +
       "override the aggregate block", e.backtrace

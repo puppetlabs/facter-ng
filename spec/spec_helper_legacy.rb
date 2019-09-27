@@ -31,9 +31,9 @@ RSpec.configure do |config|
   config.before :each do
     # Ensure that we don't accidentally cache facts and environment
     # between test cases.
-    allow(Facter::Util::Loader).to receive(:load_all)
-    Facter.clear
-    Facter.clear_messages
+    allow(LegacyFacter::Util::Loader).to receive(:load_all)
+    LegacyFacter.clear
+    LegacyFacter.clear_messages
 
     # Store any environment variables away to be restored later
     @old_env = {}
@@ -51,8 +51,8 @@ end
 module FacterSpec
   module ConfigHelper
     def given_a_configuration_of(config)
-      Facter::Util::Config.stubs(:is_windows?).returns(config[:is_windows])
-      Facter::Util::Config.stubs(:external_facts_dir).returns(config[:external_facts_dir] || "data_dir")
+      LegacyFacter::Util::Config.stubs(:is_windows?).returns(config[:is_windows])
+      LegacyFacter::Util::Config.stubs(:external_facts_dir).returns(config[:external_facts_dir] || "data_dir")
     end
   end
 end

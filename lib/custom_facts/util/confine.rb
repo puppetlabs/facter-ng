@@ -1,10 +1,10 @@
 # A restricting tag for fact resolution mechanisms.  The tag must be true
 # for the resolution mechanism to be suitable.
 
-class Facter::Util::Confine
+class LegacyFacter::Util::Confine
   attr_accessor :fact, :values
 
-  include Facter::Util::Values
+  include LegacyFacter::Util::Values
 
   # Add the restriction.  Requires the fact name, an operator, and the value
   # we're comparing to.
@@ -37,13 +37,13 @@ class Facter::Util::Confine
       begin
         return !! @block.call
       rescue StandardError => error
-        Facter.debug "Confine raised #{error.class} #{error}"
+        LegacyFacter.debug "Confine raised #{error.class} #{error}"
         return false
       end
     end
 
-    unless fact = Facter[@fact]
-      Facter.debug "No fact for %s" % @fact
+    unless fact = LegacyFacter[@fact]
+      LegacyFacter.debug "No fact for %s" % @fact
       return false
     end
     value = convert(fact.value)
@@ -54,7 +54,7 @@ class Facter::Util::Confine
       begin
         return !! @block.call(value)
       rescue StandardError => error
-        Facter.debug "Confine raised #{error.class} #{error}"
+        LegacyFacter.debug "Confine raised #{error.class} #{error}"
         return false
       end
     end

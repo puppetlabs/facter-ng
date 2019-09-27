@@ -2,29 +2,29 @@
 
 require_relative '../../spec_helper_legacy'
 
-describe Facter::Util::Loader do
+describe LegacyFacter::Util::Loader do
   def loader_from(places)
     env = places[:env] || {}
     search_path = places[:search_path] || []
-    loader = Facter::Util::Loader.new(env)
+    loader = LegacyFacter::Util::Loader.new(env)
     allow(loader).to receive(:search_path).and_return(search_path)
     loader
   end
 
   it "should have a method for loading individual facts by name" do
-    expect(Facter::Util::Loader.new).to respond_to(:load)
+    expect(LegacyFacter::Util::Loader.new).to respond_to(:load)
   end
 
   it "should have a method for loading all facts" do
-    expect(Facter::Util::Loader.new).to respond_to(:load_all)
+    expect(LegacyFacter::Util::Loader.new).to respond_to(:load_all)
   end
 
   it "should have a method for returning directories containing facts" do
-    expect(Facter::Util::Loader.new).to respond_to(:search_path)
+    expect(LegacyFacter::Util::Loader.new).to respond_to(:search_path)
   end
 
   describe "#valid_seach_path?" do
-    let(:loader) { Facter::Util::Loader.new }
+    let(:loader) { LegacyFacter::Util::Loader.new }
 
     # Used to have test for " " as a directory since that should
     # be a relative directory, but on Windows in both 1.8.7 and
@@ -67,7 +67,7 @@ describe Facter::Util::Loader do
   end
 
   describe "when determining the search path" do
-    let(:loader) { Facter::Util::Loader.new }
+    let(:loader) { LegacyFacter::Util::Loader.new }
 
     it "should include the facter subdirectory of all paths in ruby LOAD_PATH" do
       dirs = $LOAD_PATH.collect { |d| File.expand_path('custom_facts', d) }
@@ -91,7 +91,7 @@ describe Facter::Util::Loader do
     end
 
     it "should include all search paths registered with Facter" do
-      allow(Facter).to receive(:search_path).and_return %w{/one /two}
+      allow(LegacyFacter).to receive(:search_path).and_return %w{/one /two}
       allow(loader).to receive(:valid_search_path?).and_return true
 
       allow(File).to receive(:directory?).and_return false
@@ -104,11 +104,11 @@ describe Facter::Util::Loader do
     end
 
     it "should warn on invalid search paths registered with Facter" do
-      expect(Facter).to receive(:search_path).and_return %w{/one two/three}
+      expect(LegacyFacter).to receive(:search_path).and_return %w{/one two/three}
       allow(loader).to receive(:valid_search_path?).and_return false
       allow(loader).to receive(:valid_search_path?).with('/one').and_return true
       allow(loader).to receive(:valid_search_path?).with('two/three').and_return false
-      expect(Facter).to receive(:warn).with('Excluding two/three from search path. Fact file paths must be an absolute directory').once
+      expect(LegacyFacter).to receive(:warn).with('Excluding two/three from search path. Fact file paths must be an absolute directory').once
 
       allow(File).to receive(:directory?).and_return false
       allow(File).to receive(:directory?).with('/one').and_return true
@@ -119,7 +119,7 @@ describe Facter::Util::Loader do
     end
 
     it "should strip paths that are valid paths but not are not present" do
-      expect(Facter).to receive(:search_path).and_return %w{/one /two}
+      expect(LegacyFacter).to receive(:search_path).and_return %w{/one /two}
       allow(loader).to receive(:valid_search_path?).and_return false
       allow(loader).to receive(:valid_search_path?).with('/one').and_return true
       allow(loader).to receive(:valid_search_path?).with('/two').and_return true
@@ -135,7 +135,7 @@ describe Facter::Util::Loader do
 
     describe "and the FACTERLIB environment variable is set" do
       it "should include all paths in FACTERLIB" do
-        loader = Facter::Util::Loader.new("FACTERLIB" => "/one/path#{File::PATH_SEPARATOR}/two/path")
+        loader = LegacyFacter::Util::Loader.new("FACTERLIB" => "/one/path#{File::PATH_SEPARATOR}/two/path")
 
         allow(File).to receive(:directory?).and_return false
         allow(File).to receive(:directory?).with('/one/path').and_return true
@@ -154,7 +154,7 @@ describe Facter::Util::Loader do
     it "should load values from the matching environment variable if one is present" do
       loader = loader_from(:env => { "facter_testing" => "yayness" })
 
-      expect(Facter).to receive(:add).with("testing")
+      expect(LegacyFacter).to receive(:add).with("testing")
 
       loader.load(:testing)
     end
@@ -172,7 +172,7 @@ describe Facter::Util::Loader do
     end
 
     it 'should not load any ruby files from subdirectories matching the fact name in the search path' do
-      loader = Facter::Util::Loader.new
+      loader = LegacyFacter::Util::Loader.new
       allow(File).to receive(:file?).and_return false
       expect(File).to receive(:file?).with("/one/dir/testing.rb").and_return true
       expect(Kernel).to receive(:load).with("/one/dir/testing.rb")
@@ -190,7 +190,7 @@ describe Facter::Util::Loader do
     end
 
     it "should not load files that don't end in '.rb'" do
-      loader = Facter::Util::Loader.new
+      loader = LegacyFacter::Util::Loader.new
       expect(loader).to receive(:search_path).and_return %w{/one/dir}
       allow(File).to receive(:file?).and_return false
       expect(File).to receive(:file?).with("/one/dir/testing.rb").and_return false
@@ -202,7 +202,7 @@ describe Facter::Util::Loader do
   end
 
   describe "when loading all facts" do
-    let(:loader) { Facter::Util::Loader.new }
+    let(:loader) { LegacyFacter::Util::Loader.new }
 
     before :each do
       allow(loader).to receive(:search_path).and_return([])
@@ -249,17 +249,17 @@ describe Facter::Util::Loader do
       expect(File).to receive(:file?).with('/one/dir/a.rb').and_return true
 
       expect(Kernel).to receive(:load).with("/one/dir/a.rb").and_raise(LoadError)
-      expect(Facter).to receive(:warn)
+      expect(LegacyFacter).to receive(:warn)
 
       expect { loader.load_all }.not_to raise_error
     end
 
     it "should load all facts from the environment" do
-      Facter::Util::Resolution.with_env "facter_one" => "yayness", "facter_two" => "boo" do
+      LegacyFacter::Util::Resolution.with_env "facter_one" => "yayness", "facter_two" => "boo" do
         loader.load_all
       end
-      expect(Facter.value(:one)).to eq 'yayness'
-      expect(Facter.value(:two)).to eq 'boo'
+      expect(LegacyFacter.value(:one)).to eq 'yayness'
+      expect(LegacyFacter.value(:two)).to eq 'boo'
     end
 
     it "should only load all facts one time" do

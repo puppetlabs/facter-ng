@@ -1,6 +1,6 @@
 require_relative '../../spec_helper_legacy'
 
-describe Facter::Core::DirectedGraph do
+describe LegacyFacter::Core::DirectedGraph do
   subject(:graph) { described_class.new }
 
   describe "detecting cycles" do
@@ -64,7 +64,7 @@ describe Facter::Core::DirectedGraph do
 
       expect {
         graph.tsort
-      }.to raise_error(Facter::Core::DirectedGraph::CycleError, /found the following cycles:/)
+      }.to raise_error(LegacyFacter::Core::DirectedGraph::CycleError, /found the following cycles:/)
     end
 
     it "raises an error if there is an edge to a non-existent vertex" do
@@ -72,7 +72,7 @@ describe Facter::Core::DirectedGraph do
       graph[:two] = [:three]
       expect {
         graph.tsort
-      }.to raise_error(Facter::Core::DirectedGraph::MissingVertex, /missing elements.*three/)
+      }.to raise_error(LegacyFacter::Core::DirectedGraph::MissingVertex, /missing elements.*three/)
     end
   end
 end

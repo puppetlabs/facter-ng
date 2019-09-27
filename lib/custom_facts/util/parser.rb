@@ -4,7 +4,7 @@
 # Parsers must subclass this class and provide their own #results method.
 require 'yaml'
 
-module Facter::Util::Parser
+module LegacyFacter::Util::Parser
   @parsers = []
 
   # For support mutliple extensions you can pass an array of extensions as
@@ -54,7 +54,7 @@ module Facter::Util::Parser
     def results
       parse_results
     rescue Exception => detail
-      Facter.log_exception(detail, "Failed to handle #{filename} as #{self.class} facts: #{detail.message}")
+      LegacyFacter.log_exception(detail, "Failed to handle #{filename} as #{self.class} facts: #{detail.message}")
       nil
     end
 
@@ -100,11 +100,11 @@ module Facter::Util::Parser
 
   class JsonParser < Base
     def parse_results
-      if Facter.json?
+      if LegacyFacter.json?
         JSON.load(content)
       else
-        Facter.warnonce "Cannot parse JSON data file #{filename} without the json library."
-        Facter.warnonce "Suggested next step is `gem install json` to install the json library."
+        LegacyFacter.warnonce "Cannot parse JSON data file #{filename} without the json library."
+        LegacyFacter.warnonce "Suggested next step is `gem install json` to install the json library."
         nil
       end
     end
@@ -116,7 +116,7 @@ module Facter::Util::Parser
 
   class ScriptParser < Base
     def parse_results
-      KeyValuePairOutputFormat.parse Facter::Core::Execution.exec(quote(filename))
+      KeyValuePairOutputFormat.parse LegacyFacter::Core::Execution.exec(quote(filename))
     end
 
     private
@@ -127,7 +127,7 @@ module Facter::Util::Parser
   end
 
   register(ScriptParser) do |filename|
-    if Facter::Util::Config.is_windows?
+    if LegacyFacter::Util::Config.is_windows?
       extension_matches?(filename, %w{bat cmd com exe}) && File.file?(filename)
     else
       File.executable?(filename) && File.file?(filename) && ! extension_matches?(filename, %w{bat cmd com exe})
@@ -148,13 +148,13 @@ module Facter::Util::Parser
         end
 
       shell_command = "\"#{powershell}\" -NoProfile -NonInteractive -NoLogo -ExecutionPolicy Bypass -File \"#{filename}\""
-      output = Facter::Core::Execution.exec(shell_command)
+      output = LegacyFacter::Core::Execution.exec(shell_command)
       KeyValuePairOutputFormat.parse(output)
     end
   end
 
   register(PowershellParser) do |filename|
-    Facter::Util::Config.is_windows? && extension_matches?(filename, "ps1") && File.file?(filename)
+    LegacyFacter::Util::Config.is_windows? && extension_matches?(filename, "ps1") && File.file?(filename)
   end
 
   # A parser that is used when there is no other parser that can handle the file

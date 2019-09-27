@@ -1,6 +1,6 @@
 require_relative '../../../spec_helper_legacy'
 
-describe Facter::Core::Execution::Windows, :as_platform => :windows do
+describe LegacyFacter::Core::Execution::Windows, :as_platform => :windows do
 
   describe "#search_paths" do
     it "should use the PATH environment variable to determine locations" do
