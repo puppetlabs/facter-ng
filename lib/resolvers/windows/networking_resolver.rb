@@ -23,11 +23,10 @@ module Facter
           size_ptr = FFI::MemoryPointer.new(NetworkingFFI::BUFFER_LENGTH)
           adapter_addresses = FFI::MemoryPointer.new(IpAdapterAddressesLh.size, NetworkingFFI::BUFFER_LENGTH)
           flags = NetworkingFFI::GAA_FLAG_SKIP_ANYCAST |
-                  NetworkingFFI::GAA_FLAG_SKIP_MULTICAST | NetworkingFFI::GAA_FLAG_SKIP_DNS_SERVER
+              NetworkingFFI::GAA_FLAG_SKIP_MULTICAST | NetworkingFFI::GAA_FLAG_SKIP_DNS_SERVER
 
-          return nil unless (adapter_addresses = get_adapter_addresses(size_ptr, adapter_addresses, flags))
+          return unless (adapter_addresses = get_adapter_addresses(size_ptr, adapter_addresses, flags))
 
-          adapter_addresses = IpAdapterAddressesLh.new(adapter_addresses)
           iterate_list(adapter_addresses)
           set_interfaces_other_facts
           @fact_list[fact_name]
@@ -52,102 +51,107 @@ module Facter
           adapter_addresses
         end
 
-        def adapter_is_not_up(adapter)
+        def adapter_down?(adapter)
           adapter[:OperStatus] != NetworkingFFI::IF_OPER_STATUS_UP ||
-            (adapter[:IfType] != NetworkingFFI::IF_TYPE_ETHERNET_CSMACD &&
-                adapter[:IfType] != NetworkingFFI::IF_TYPE_IEEE80211)
+              ![NetworkingFFI::IF_TYPE_ETHERNET_CSMACD, NetworkingFFI::IF_TYPE_IEEE80211].include?(adapter[:IfType])
         end
 
         def retrieve_dhcp_server(adapter)
           if adapter[:Flags] & NetworkingFFI::IP_ADAPTER_DHCP_ENABLED &&
-             adapter[:Union][:Struct][:Length] >= IpAdapterAddressesLh.size
+              adapter[:Union][:Struct][:Length] >= IpAdapterAddressesLh.size
             NetworkUtils.address_to_string(adapter[:Dhcpv4Server])
           end
         end
 
         def iterate_list(adapter_addresses)
           net_interface = {}
-          while adapter_addresses.to_ptr != FFI::Pointer::NULL
-            if adapter_is_not_up(adapter_addresses)
-              adapter_addresses = IpAdapterAddressesLh.new(adapter_addresses[:Next])
+          IpAdapterAddressesLh.read_list(adapter_addresses) do |adapter_address|
+            if adapter_down?(adapter_address)
+              adapter_address = IpAdapterAddressesLh.new(adapter_address[:Next])
               next
             end
-            @fact_list[:domain] ||= adapter_addresses[:DnsSuffix].read_wide_string
-            name = adapter_addresses[:FriendlyName].read_wide_string.to_sym
-            net_interface[name] = {}
-            dhcp = retrieve_dhcp_server(adapter_addresses)
-            net_interface[name][:dhcp] = dhcp if dhcp
-            net_interface[name][:mtu] = adapter_addresses[:Mtu]
-
-            bindings = find_ip_addresses(adapter_addresses[:FirstUnicastAddress], name)
-            net_interface[name][:bindings] = bindings[:ipv4] unless bindings[:ipv4].empty?
-            net_interface[name][:bindings6] = bindings[:ipv6] unless bindings[:ipv6].empty?
-            net_interface[name][:mac] = NetworkUtils.find_mac_address(adapter_addresses)
-            adapter_addresses = IpAdapterAddressesLh.new(adapter_addresses[:Next])
+            @fact_list[:domain] ||= adapter_address[:DnsSuffix].read_wide_string
+            name = adapter_address[:FriendlyName].read_wide_string.to_sym
+            net_interface[name] = build_interface_info(adapter_address, name)
           end
+
           @fact_list[:interfaces] = net_interface
+        end
+
+        def build_interface_info(adapter_address, name)
+          hash = {}
+
+          hash[:dhcp] = retrieve_dhcp_server(adapter_address)
+          hash[:mtu] = adapter_address[:Mtu]
+
+          bindings = find_ip_addresses(adapter_address[:FirstUnicastAddress], name)
+          hash[:bindings] = bindings[:ipv4] unless bindings[:ipv4].empty?
+          hash[:bindings6] = bindings[:ipv6] unless bindings[:ipv6].empty?
+          hash[:mac] = NetworkUtils.find_mac_address(adapter_address)
+          hash
         end
 
         def find_ip_addresses(unicast_addresses, name)
           bindings = {}
-          bindings[:ipv6] = bindings[:ipv4] = []
-          unicast = IpAdapterUnicastAddressLH.new(unicast_addresses)
-          while unicast.to_ptr != FFI::Pointer::NULL
+          bindings[:ipv6] = []
+          bindings[:ipv4] = []
+
+          IpAdapterUnicastAddressLH.read_list(unicast_addresses) do |unicast|
             addr = NetworkUtils.address_to_string(unicast[:Address])
             unless addr
               unicast = IpAdapterUnicastAddressLH.new(unicast[:Next])
               next
             end
 
-            addr = addr.split('%').first
             sock_addr = SockAddr.new(unicast[:Address][:lpSockaddr])
-            b = find_bindings(sock_addr, unicast, addr)
-            bindings[:ipv6] << b if b && !b.empty? && b[:network].ipv4?
-            bindings[:ipv4] << b if b && !b.empty? && b[:network].ipv6?
+            add_ip_data(addr, unicast, sock_addr, bindings)
             find_primary_interface(sock_addr, name, addr)
-            unicast = IpAdapterUnicastAddressLH.new(unicast[:Next])
           end
           bindings
         end
 
+        def add_ip_data(addr, unicast, sock_addr, bindings)
+          result = find_bindings(sock_addr, unicast, addr)
+          return unless result
+
+          bindings[:ipv6] << result if result[:network].ipv6?
+          bindings[:ipv4] << result if result[:network].ipv4?
+        end
+
         def find_bindings(sock_addr, unicast, addr)
-          return if sock_addr[:sa_family] != NetworkingFFI::AF_INET && sock_addr[:sa_family] != NetworkingFFI::AF_INET6
+          return unless [NetworkingFFI::AF_INET, NetworkingFFI::AF_INET6].include?(sock_addr[:sa_family])
 
           NetworkUtils.build_binding(addr, unicast[:OnLinkPrefixLength])
         end
 
         def find_primary_interface(sock_addr, name, addr)
           if !@fact_list[:primary_interface] &&
-             (sock_addr[:sa_family] == NetworkingFFI::AF_INET && !NetworkUtils.ignored_ipv4_address(addr)) ||
-             (sock_addr[:sa_family] == NetworkingFFI::AF_INET6 && !NetworkUtils.ignored_ipv6_address(addr))
+              ([NetworkingFFI::AF_INET, NetworkingFFI::AF_INET6].include?(sock_addr[:sa_family]) &&
+                  !NetworkUtils.ignored_ip_address(addr))
             @fact_list[:primary] = name
           end
         end
 
         def set_interfaces_other_facts
-          bind = {}
           @fact_list[:interfaces].each do |interface_name, value|
-            value[:bindings].each do |binding|
-              unless NetworkUtils.ignored_ipv4_address(binding[:address])
-                bind = binding
-                break
-              end
-            end
-            populate_interface(bind, value)
+            binding = find_valid_binding(value[:bindings])
+            populate_interface(binding, value)
 
-            value[:bindings6].each do |binding|
-              unless NetworkUtils.ignored_ipv4_address(binding[:address])
-                bind = binding
-                break
-              end
-            end
-            populate_interface(bind, value)
-            build_mtu_mac_facts(value, interface_name)
+            binding = find_valid_binding(value[:bindings6])
+            populate_interface(binding, value)
+            set_networking_other_facts(value, interface_name)
           end
         end
 
+        def find_valid_binding(bindings)
+          bindings.each do |binding|
+            return binding unless NetworkUtils.ignored_ip_address(binding[:address])
+          end
+          nil
+        end
+
         def populate_interface(bind, interface)
-          return if bind.empty?
+          return if !bind || bind.empty?
 
           if bind[:network].ipv6?
             interface[:ip6] = bind[:address]
@@ -160,11 +164,12 @@ module Facter
           end
         end
 
-        def build_mtu_mac_facts(value, interface_name)
+        def set_networking_other_facts(value, interface_name)
           return unless @fact_list[:primary] == interface_name
 
-          @fact_list[:mtu] ||= value[:mtu]
-          @fact_list[:mac] ||= value[:mac]
+          %i[mtu dhcp mac ip ip6 netmask netmask6 network network6].each do |key|
+            @fact_list[key] = value[key]
+          end
         end
       end
     end

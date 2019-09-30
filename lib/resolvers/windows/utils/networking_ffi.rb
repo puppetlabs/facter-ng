@@ -7,6 +7,7 @@ module NetworkingFFI
   ffi_lib :iphlpapi
   attach_function :GetAdaptersAddresses, %i[uint32 uint32 pointer pointer pointer], :dword
 
+
   ffi_convention :stdcall
   ffi_lib :ws2_32
   attach_function :WSAAddressToStringW, %i[pointer dword pointer pointer pointer], :int32
@@ -15,6 +16,7 @@ module NetworkingFFI
   GAA_FLAG_SKIP_ANYCAST = 2
   GAA_FLAG_SKIP_MULTICAST = 4
   GAA_FLAG_SKIP_DNS_SERVER = 8
+
   BUFFER_LENGTH = 15_000
   ERROR_SUCCES = 0
   ERROR_BUFFER_OVERFLOW = 111
@@ -26,3 +28,4 @@ module NetworkingFFI
   AF_INET = 2
   AF_INET6 = 23
 end
+
