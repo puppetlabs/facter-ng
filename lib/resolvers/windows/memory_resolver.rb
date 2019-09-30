@@ -53,7 +53,7 @@ module Facter
           @fact_list[:total_bytes] = result[:total_bytes]
           @fact_list[:available_bytes] = result[:available_bytes]
           @fact_list[:used_bytes] = result[:used_bytes]
-          @fact_list[:capacity] = format('%.2f', (result[:used_bytes] / result[:total_bytes].to_f * 100)) + '%'
+          @fact_list[:capacity] = BytesToHumanReadable.convert_to_percentage(result[:used_bytes], result[:total_bytes])
         end
       end
     end

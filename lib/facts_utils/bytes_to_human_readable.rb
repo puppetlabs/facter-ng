@@ -14,6 +14,12 @@ module Facter
         result[:converted_number].to_s + " #{units[result[:exp] - 1]}iB"
       end
 
+      def convert_to_percentage(used_bytes, total_bytes)
+        return '100%' if total_bytes == 0 || used_bytes >= total_bytes
+        return '0%' if used_bytes == 0
+        return ((10_000.0 * (used_bytes.to_f / total_bytes)).round / 100.0).to_s + '%'
+      end
+
       private
 
       def determine_exponent(bytes)
