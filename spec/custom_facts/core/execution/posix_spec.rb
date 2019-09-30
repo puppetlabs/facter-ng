@@ -1,39 +1,39 @@
 require_relative '../../../spec_helper_legacy'
 
-describe LegacyFacter::Core::Execution::Posix, :unless => LegacyFacter::Util::Config.windows? do
-  describe "#search_paths" do
-    it "should use the PATH environment variable plus /sbin and /usr/sbin on unix" do
-      expect(ENV).to receive(:[]).with('PATH').and_return "/bin:/usr/bin"
-      expect(subject.search_paths). to eq %w{/bin /usr/bin /sbin /usr/sbin}
+describe LegacyFacter::Core::Execution::Posix, unless: LegacyFacter::Util::Config.windows? do
+  describe '#search_paths' do
+    it 'should use the PATH environment variable plus /sbin and /usr/sbin on unix' do
+      expect(ENV).to receive(:[]).with('PATH').and_return '/bin:/usr/bin'
+      expect(subject.search_paths). to eq %w[/bin /usr/bin /sbin /usr/sbin]
     end
   end
 
-  describe "#which" do
+  describe '#which' do
     before :each do
-      allow(subject).to receive(:search_paths).and_return [ '/bin', '/sbin', '/usr/sbin']
+      allow(subject).to receive(:search_paths).and_return ['/bin', '/sbin', '/usr/sbin']
     end
 
-    context "and provided with an absolute path" do
-      it "should return the binary if executable" do
+    context 'and provided with an absolute path' do
+      it 'should return the binary if executable' do
         expect(File).to receive(:file?).with('/opt/foo').and_return true
         expect(File).to receive(:executable?).with('/opt/foo').and_return true
         expect(subject.which('/opt/foo')).to eq '/opt/foo'
       end
 
-      it "should return nil if the binary is not executable" do
+      it 'should return nil if the binary is not executable' do
         expect(File).to receive(:executable?).with('/opt/foo').and_return false
         expect(subject.which('/opt/foo')).to be nil
       end
 
-      it "should return nil if the binary is not a file" do
+      it 'should return nil if the binary is not a file' do
         expect(File).to receive(:file?).with('/opt/foo').and_return false
         expect(File).to receive(:executable?).with('/opt/foo').and_return true
         expect(subject.which('/opt/foo')).to be nil
       end
     end
 
-    context "and not provided with an absolute path" do
-      it "should return the absolute path if found" do
+    context 'and not provided with an absolute path' do
+      it 'should return the absolute path if found' do
         expect(File).to receive(:file?).with('/bin/foo').never
         expect(File).to receive(:executable?).with('/bin/foo').and_return false
         expect(File).to receive(:file?).with('/sbin/foo').and_return true
@@ -43,7 +43,7 @@ describe LegacyFacter::Core::Execution::Posix, :unless => LegacyFacter::Util::Co
         expect(subject.which('foo')).to eq '/sbin/foo'
       end
 
-      it "should return nil if not found" do
+      it 'should return nil if not found' do
         expect(File).to receive(:executable?).with('/bin/foo').and_return false
         expect(File).to receive(:executable?).with('/sbin/foo').and_return false
         expect(File).to receive(:executable?).with('/usr/sbin/foo').and_return false
@@ -52,34 +52,34 @@ describe LegacyFacter::Core::Execution::Posix, :unless => LegacyFacter::Util::Co
     end
   end
 
-  describe "#expand_command" do
-    it "should expand binary" do
+  describe '#expand_command' do
+    it 'should expand binary' do
       expect(subject).to receive(:which).with('foo').and_return '/bin/foo'
       expect(subject.expand_command('foo -a | stuff >> /dev/null')).to eq '/bin/foo -a | stuff >> /dev/null'
     end
 
-    it "should expand double quoted binary" do
+    it 'should expand double quoted binary' do
       expect(subject).to receive(:which).with('/tmp/my foo').and_return '/tmp/my foo'
-      expect(subject.expand_command(%q{"/tmp/my foo" bar})).to eq %q{'/tmp/my foo' bar}
+      expect(subject.expand_command('"/tmp/my foo" bar')).to eq "'/tmp/my foo' bar"
     end
 
-    it "should expand single quoted binary" do
+    it 'should expand single quoted binary' do
       expect(subject).to receive(:which).with('my foo').and_return '/home/bob/my path/my foo'
-      expect(subject.expand_command(%q{'my foo' -a})).to eq %q{'/home/bob/my path/my foo' -a}
+      expect(subject.expand_command("'my foo' -a")).to eq "'/home/bob/my path/my foo' -a"
     end
 
-    it "should quote expanded binary if found in path with spaces" do
+    it 'should quote expanded binary if found in path with spaces' do
       expect(subject).to receive(:which).with('foo.sh').and_return '/home/bob/my tools/foo.sh'
-      expect(subject.expand_command('foo.sh /a /b')).to eq %q{'/home/bob/my tools/foo.sh' /a /b}
+      expect(subject.expand_command('foo.sh /a /b')).to eq "'/home/bob/my tools/foo.sh' /a /b"
     end
 
-    it "should return nil if not found" do
+    it 'should return nil if not found' do
       expect(subject).to receive(:which).with('foo').and_return nil
       expect(subject.expand_command('foo -a | stuff >> /dev/null')).to be nil
     end
   end
 
-  describe "#absolute_path?" do
+  describe '#absolute_path?' do
     %w[/ /foo /foo/../bar //foo //Server/Foo/Bar //?/C:/foo/bar /\Server/Foo /foo//bar/baz].each do |path|
       it "should return true for #{path}" do
         expect(subject).to be_absolute_path(path)

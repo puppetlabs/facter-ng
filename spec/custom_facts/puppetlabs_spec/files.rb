@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'fileutils'
 require 'tempfile'
 require 'pathname'
@@ -18,12 +20,12 @@ module PuppetlabsSpec
     end
 
     def self.cleanup
-      $global_tempfiles ||= []
-      while path = $global_tempfiles.pop do
-        fail "Not deleting tmpfile #{path} outside regular tmpdir" unless in_tmp(path)
+      global_tempfiles ||= []
+      while (path = global_tempfiles.pop)
+        raise "Not deleting tmpfile #{path} outside regular tmpdir" unless in_tmp(path)
 
         begin
-          FileUtils.rm_r path, :secure => true
+          FileUtils.rm_r path, secure: true
         rescue Errno::ENOENT
           # nothing to do
         end
@@ -43,8 +45,8 @@ module PuppetlabsSpec
       source.close!
 
       # ...record it for cleanup,
-      $global_tempfiles ||= []
-      $global_tempfiles << File.expand_path(path)
+      global_tempfiles ||= []
+      global_tempfiles << File.expand_path(path)
 
       # ...and bam.
       path

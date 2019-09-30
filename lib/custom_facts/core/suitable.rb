@@ -20,7 +20,7 @@ module LegacyFacter
       # @return [void]
       #
       # @api public
-      def weight?(weight)
+      def set_weight(weight)
         @weight = weight
       end
 

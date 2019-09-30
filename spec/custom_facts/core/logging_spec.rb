@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require_relative '../../spec_helper_legacy'
 
 describe LegacyFacter::Core::Logging do
-
   subject { described_class }
 
   after(:each) do
@@ -10,93 +11,93 @@ describe LegacyFacter::Core::Logging do
     subject.on_message
   end
 
-  describe "emitting debug messages" do
+  describe 'emitting debug messages' do
     it "doesn't log a message when debugging is disabled" do
       subject.debugging(false)
       expect(subject).to receive(:puts).never
-      subject.debug("foo")
+      subject.debug('foo')
     end
 
-    describe "and debugging is enabled" do
+    describe 'and debugging is enabled' do
       before { subject.debugging(true) }
-      it "emits a warning when called with nil" do
-        expect(subject).to receive(:warn).with (/invalid message nil:NilClass/)
+      it 'emits a warning when called with nil' do
+        expect(subject).to receive(:warn).with(/invalid message nil:NilClass/)
         subject.debug(nil)
       end
 
-      it "emits a warning when called with an empty string" do
+      it 'emits a warning when called with an empty string' do
         expect(subject).to receive(:warn).with(/invalid message "":String/)
-        subject.debug("")
+        subject.debug('')
       end
 
-      it "prints the message when logging is enabled" do
+      it 'prints the message when logging is enabled' do
         expect(subject).to receive(:puts).with(/foo/)
-        subject.debug("foo")
+        subject.debug('foo')
       end
     end
   end
 
-  describe "when warning" do
-    it "emits a warning when given a string" do
+  describe 'when warning' do
+    it 'emits a warning when given a string' do
       subject.debugging(true)
       expect(Kernel).to receive(:warn).with('foo')
       subject.warn('foo')
     end
 
-    it "emits a warning regardless of log level" do
+    it 'emits a warning regardless of log level' do
       subject.debugging(false)
-      expect(Kernel).to receive(:warn).with("foo")
-      subject.warn "foo"
+      expect(Kernel).to receive(:warn).with('foo')
+      subject.warn 'foo'
     end
 
-    it "emits a warning if nil is passed" do
+    it 'emits a warning if nil is passed' do
       expect(Kernel).to receive(:warn).with(/invalid message nil:NilClass/)
       subject.warn(nil)
     end
 
-    it "emits a warning if an empty string is passed" do
+    it 'emits a warning if an empty string is passed' do
       expect(Kernel).to receive(:warn).with(/invalid message "":String/)
       subject.warn('')
     end
   end
 
-  describe "when warning once" do
-    it "only logs a given warning string once" do
+  describe 'when warning once' do
+    it 'only logs a given warning string once' do
       expect(subject).to receive(:warn).with('foo').once
       subject.warnonce('foo')
       subject.warnonce('foo')
     end
   end
 
-  describe "when setting the debugging mode" do
-    it "is enabled when the given value is true" do
+  describe 'when setting the debugging mode' do
+    it 'is enabled when the given value is true' do
       subject.debugging(true)
       expect(subject.debugging?).to be true
     end
 
-    it "is disabled when the given value is false" do
+    it 'is disabled when the given value is false' do
       subject.debugging(false)
       expect(subject.debugging?).to be false
     end
 
-    it "is disabled when the given value is nil" do
+    it 'is disabled when the given value is nil' do
       subject.debugging(nil)
       expect(subject.debugging?).to be nil
     end
   end
 
-  describe "when setting the timing mode" do
-    it "is enabled when the given value is true" do
+  describe 'when setting the timing mode' do
+    it 'is enabled when the given value is true' do
       subject.timing(true)
       expect(subject.timing?).to be true
     end
 
-    it "is disabled when the given value is false" do
+    it 'is disabled when the given value is false' do
       subject.timing(false)
       expect(subject.timing?).to be false
     end
 
-    it "is disabled when the given value is nil" do
+    it 'is disabled when the given value is nil' do
       subject.timing(nil)
       expect(subject.timing?).to be nil
     end

@@ -1,78 +1,78 @@
+# frozen_string_literal: true
+
 require_relative '../../spec_helper_legacy'
 
 describe LegacyFacter::Core::Aggregate do
+  let(:fact) { double('stub_fact', name: 'stub_fact') }
 
-  let(:fact) { double('stub_fact', :name => 'stub_fact') }
+  subject { described_class.new('aggregated', fact) }
 
-  subject { obj = described_class.new('aggregated', fact) }
-
-  it "can be resolved" do
+  it 'can be resolved' do
     expect(subject).to be_a_kind_of LegacyFacter::Core::Resolvable
   end
 
-  it "can be confined and weighted" do
+  it 'can be confined and weighted' do
     expect(subject).to be_a_kind_of LegacyFacter::Core::Suitable
   end
 
-  describe "setting options" do
-
-    it "can set the timeout" do
-      subject.options(:timeout => 314)
+  describe 'setting options' do
+    it 'can set the timeout' do
+      subject.options(timeout: 314)
       expect(subject.limit).to eq 314
     end
 
-    it "can set the weight" do
-      subject.options(:weight => 27)
+    it 'can set the weight' do
+      subject.options(weight: 27)
       expect(subject.weight).to eq 27
     end
 
-    it "can set the name" do
-      subject.options(:name => 'something')
+    it 'can set the name' do
+      subject.options(name: 'something')
       expect(subject.name).to eq 'something'
     end
 
-    it "fails on unhandled options" do
+    it 'fails on unhandled options' do
       expect do
-        subject.options(:foo => 'bar')
+        subject.options(foo: 'bar')
       end.to raise_error(ArgumentError, /Invalid aggregate options .*foo/)
     end
   end
 
-  describe "declaring chunks" do
-    it "requires that an chunk is given a block" do
+  describe 'declaring chunks' do
+    it 'requires that an chunk is given a block' do
       expect { subject.chunk(:fail) }.to raise_error(ArgumentError, /requires a block/)
     end
 
-    it "allows an chunk to have a list of requirements" do
-      subject.chunk(:data, :require => [:other]) { }
+    it 'allows an chunk to have a list of requirements' do
+      subject.chunk(:data, require: [:other]) {}
       expect(subject.deps[:data]).to eq [:other]
     end
 
-    it "converts a single chunk requirement to an array" do
-      subject.chunk(:data, :require => :other) { }
+    it 'converts a single chunk requirement to an array' do
+      subject.chunk(:data, require: :other) {}
       expect(subject.deps[:data]).to eq [:other]
     end
 
-    it "raises an error when an unhandled option is passed" do
-      expect {
-        subject.chunk(:data, :before => [:other]) { }
-      }.to raise_error(ArgumentError, /Unexpected options.*#chunk: .*before/)
+    it 'raises an error when an unhandled option is passed' do
+      expect do
+        subject.chunk(:data, before: [:other]) {}
+      end.to raise_error(ArgumentError, /Unexpected options.*#chunk: .*before/)
     end
   end
 
-  describe "handling interactions between chunks" do
-    it "generates a warning when there is a dependency cycle in chunks" do
-      subject.chunk(:first, :require => [:second]) { }
-      subject.chunk(:second, :require => [:first]) { }
+  describe 'handling interactions between chunks' do
+    it 'generates a warning when there is a dependency cycle in chunks' do
+      subject.chunk(:first, require: [:second]) {}
+      subject.chunk(:second, require: [:first]) {}
 
       expect(LegacyFacter).to receive(:warn).with(/dependency cycles: .*[:first, :second]/)
 
       subject.value
     end
 
-    it "passes all requested chunk results to the depending chunk" do
+    it 'passes all requested chunk results to the depending chunk' do
       subject.chunk(:first) { ['foo'] }
-      subject.chunk(:second, :require => [:first]) do |first|
+      subject.chunk(:second, require: [:first]) do |first|
         [first[0] + ' bar']
       end
 
@@ -81,9 +81,9 @@ describe LegacyFacter::Core::Aggregate do
       expect(output).to include 'foo bar'
     end
 
-    it "clones and freezes chunk results passed to other chunks" do
+    it 'clones and freezes chunk results passed to other chunks' do
       subject.chunk(:first) { 'foo' }
-      subject.chunk(:second, :require => [:first]) do |first|
+      subject.chunk(:second, require: [:first]) do |first|
         expect(first).to be_frozen
       end
 
@@ -95,28 +95,28 @@ describe LegacyFacter::Core::Aggregate do
     end
   end
 
-  describe "aggregating chunks" do
-    it "passes all chunk results as a hash to the aggregate block" do
+  describe 'aggregating chunks' do
+    it 'passes all chunk results as a hash to the aggregate block' do
       subject.chunk(:data) { 'data chunk' }
       subject.chunk(:datum) { 'datum chunk' }
 
       subject.aggregate do |chunks|
-        expect(chunks).to eq(:data => 'data chunk', :datum => 'datum chunk')
+        expect(chunks).to eq(data: 'data chunk', datum: 'datum chunk')
       end
 
       subject.value
     end
 
-    it "uses the result of the aggregate block as the value" do
-      subject.aggregate { "who needs chunks anyways" }
-      expect(subject.value).to eq "who needs chunks anyways"
+    it 'uses the result of the aggregate block as the value' do
+      subject.aggregate { 'who needs chunks anyways' }
+      expect(subject.value).to eq 'who needs chunks anyways'
     end
   end
 
-  describe "evaluating" do
-    it "evaluates the block in the context of the aggregate" do
-      expect(subject).to receive(:weight?).with(5)
-      subject.evaluate { weight?(5) }
+  describe 'evaluating' do
+    it 'evaluates the block in the context of the aggregate' do
+      expect(subject).to receive(:set_weight).with(5)
+      subject.evaluate { set_weight(5) }
     end
   end
 end
