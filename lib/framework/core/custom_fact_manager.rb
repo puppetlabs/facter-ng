@@ -7,7 +7,9 @@ module Facter
     private
 
     def custom_facts(custom_facts)
-      require "#{ROOT_DIR}/lib/custom_facts/my_custom_fact"
+      LegacyFacter.search("#{ROOT_DIR}/custom_facts")
+      LegacyFacter.search_external(["#{ROOT_DIR}/external_facts"])
+      legacy_facts = LegacyFacter.to_hash
 
       resolved_custom_facts = []
       custom_facts.each do |custom_fact|
