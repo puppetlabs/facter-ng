@@ -8,8 +8,6 @@
 module LegacyFacter
   module Core
     module Suitable
-      attr_writer :weight
-
       # Sets the weight of this resolution. If multiple suitable resolutions
       # are found, the one with the highest weight will be used.  If weight
       # is not given, the number of confines set on a resolution will be
@@ -20,7 +18,7 @@ module LegacyFacter
       # @return [void]
       #
       # @api public
-      def set_weight(weight)
+      def weight(weight)
         @weight = weight
       end
 
@@ -96,7 +94,7 @@ module LegacyFacter
       # @return [Integer] the weight of this resolution
       #
       # @api private
-      def weight
+      def weight?
         @weight || @confines.length
       end
 

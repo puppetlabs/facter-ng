@@ -64,7 +64,7 @@ module LegacyFacter
           elsif (data == {}) || data.nil?
             LegacyFacter.warn "Fact file #{file} was parsed but returned an empty data set"
           else
-            data.each { |p, v| collection.add(p, value: v) { set_weight(weight) } }
+            data.each { |p, v| collection.add(p, value: v) { weight(weight) } }
           end
         end
       end

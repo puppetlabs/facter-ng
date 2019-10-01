@@ -23,7 +23,7 @@ describe LegacyFacter::Core::Aggregate do
 
     it 'can set the weight' do
       subject.options(weight: 27)
-      expect(subject.weight).to eq 27
+      expect(subject.weight?).to eq 27
     end
 
     it 'can set the name' do
@@ -115,8 +115,8 @@ describe LegacyFacter::Core::Aggregate do
 
   describe 'evaluating' do
     it 'evaluates the block in the context of the aggregate' do
-      expect(subject).to receive(:set_weight).with(5)
-      subject.evaluate { set_weight(5) }
+      expect(subject).to receive(:weight).with(5)
+      subject.evaluate { weight(5) }
     end
   end
 end

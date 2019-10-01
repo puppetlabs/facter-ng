@@ -97,17 +97,17 @@ describe LegacyFacter::Util::Fact do
 
     it 'prefers the highest weight resolution' do
       fact.add do
-        set_weight 1
+        weight 1
         setcode { '1' }
       end
 
       fact.add do
-        set_weight 2
+        weight 2
         setcode { '2' }
       end
 
       fact.add do
-        set_weight 0
+        weight 0
         setcode { '0' }
       end
 
@@ -116,17 +116,17 @@ describe LegacyFacter::Util::Fact do
 
     it 'returns the first value returned by a resolution' do
       fact.add do
-        set_weight 1
+        weight 1
         setcode { '1' }
       end
 
       fact.add do
-        set_weight 2
+        weight 2
         setcode { nil }
       end
 
       fact.add do
-        set_weight 0
+        weight 0
         setcode { '0' }
       end
 
@@ -135,7 +135,7 @@ describe LegacyFacter::Util::Fact do
 
     it 'skips unsuitable resolutions' do
       fact.add do
-        set_weight 1
+        weight 1
         setcode { '1' }
       end
 
@@ -143,7 +143,7 @@ describe LegacyFacter::Util::Fact do
         def suitable?
           false
         end
-        set_weight 2
+        weight 2
         setcode { 2 }
       end
 
