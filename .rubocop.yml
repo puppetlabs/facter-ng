@@ -92,3 +92,7 @@ Style/ModuleFunction:
 Naming/MethodName:
   Exclude:
     - 'spec/mocks/**/*'
+
+Naming/PredicateName:
+  Exclude:
+    - 'lib/custom_facts/core/suitable.rb'
