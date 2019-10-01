@@ -70,7 +70,7 @@ describe LegacyFacter::Util::DirectoryLoader do
 
     it 'external facts should almost always precedence over all other facts' do
       collection.add('f1', value: 'lower_weight_fact') do
-        weight(LegacyFacter::Util::DirectoryLoader::EXTERNAL_FACT_WEIGHT - 1)
+        has_weight(LegacyFacter::Util::DirectoryLoader::EXTERNAL_FACT_WEIGHT - 1)
       end
 
       data = { 'f1' => 'external_fact' }
@@ -85,7 +85,7 @@ describe LegacyFacter::Util::DirectoryLoader do
       subject { LegacyFacter::Util::DirectoryLoader.new(tmpdir('directory_loader'), 10) }
 
       it 'should set that weight for loaded external facts' do
-        collection.add('f1', value: 'higher_weight_fact') { weight(11) }
+        collection.add('f1', value: 'higher_weight_fact') { has_weight(11) }
         data = { 'f1' => 'external_fact' }
         write_to_file('data.yaml', YAML.dump(data))
 

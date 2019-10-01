@@ -53,23 +53,23 @@ describe LegacyFacter::Core::Suitable do
 
   describe 'determining weight' do
     it 'is zero if no confines are set' do
-      expect(subject.weight?).to eq 0
+      expect(subject.weight).to eq 0
     end
 
     it 'defaults to the number of confines' do
       subject.confine kernel: 'Linux'
-      expect(subject.weight?).to eq 1
+      expect(subject.weight).to eq 1
     end
 
     it 'can be explicitly set' do
-      subject.weight 10
-      expect(subject.weight?).to eq 10
+      subject.has_weight 10
+      expect(subject.weight).to eq 10
     end
 
     it 'prefers an explicit weight over the number of confines' do
       subject.confine kernel: 'Linux'
-      subject.weight 11
-      expect(subject.weight?).to eq 11
+      subject.has_weight 11
+      expect(subject.weight).to eq 11
     end
   end
 

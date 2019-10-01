@@ -97,8 +97,8 @@ describe LegacyFacter::Util::Resolution do
     end
 
     it 'can set the weight' do
-      resolution.options(weight: 27)
-      expect(resolution.weight?).to eq 27
+      resolution.options(has_weight: 27)
+      expect(resolution.weight).to eq 27
     end
 
     it 'fails on unhandled options' do
@@ -110,8 +110,8 @@ describe LegacyFacter::Util::Resolution do
 
   describe 'evaluating' do
     it 'evaluates the block in the context of the given resolution' do
-      expect(subject).to receive(:weight).with(5)
-      subject.evaluate { weight(5) }
+      expect(subject).to receive(:has_weight).with(5)
+      subject.evaluate { has_weight(5) }
     end
 
     it 'raises a warning if the resolution is evaluated twice' do

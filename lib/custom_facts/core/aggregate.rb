@@ -53,7 +53,7 @@ module LegacyFacter
 
         @timeout = options.delete(:timeout) if options.key?(:timeout)
 
-        @weight = options.delete(:weight) if options.key?(:weight)
+        @weight = options.delete(:has_weight) if options.key?(:has_weight)
 
         raise ArgumentError, "Invalid aggregate options #{options.keys.inspect}" unless options.keys.empty?
       end

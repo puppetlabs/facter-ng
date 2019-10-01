@@ -152,7 +152,7 @@ module LegacyFacter
       end
 
       def sort_by_weight(resolutions)
-        resolutions.sort { |a, b| b.weight? <=> a.weight? }
+        resolutions.sort { |a, b| b.weight <=> a.weight }
       end
 
       def find_first_real_value(resolutions)

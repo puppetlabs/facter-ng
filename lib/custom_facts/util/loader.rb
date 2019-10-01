@@ -140,7 +140,7 @@ module LegacyFacter
           next if fact && (env_name != fact)
 
           LegacyFacter.add(Regexp.last_match(1)) do
-            weight 1_000_000
+            has_weight 1_000_000
             setcode { value }
           end
 
