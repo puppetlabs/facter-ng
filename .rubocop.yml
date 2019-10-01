@@ -88,3 +88,7 @@ Style/StderrPuts:
 Style/ModuleFunction:
   Exclude:
     - 'lib/custom_facts/core/logging.rb'
+
+Naming/MethodName:
+  Exclude:
+    - 'spec/mocks/**/*'
