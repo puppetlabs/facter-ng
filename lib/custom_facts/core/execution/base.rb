@@ -53,7 +53,7 @@ module LegacyFacter
 
             begin
               wait_for_child = true
-              out = `#{expanded_command}`.chomp
+              out = Kernel.exec(expanded_command).chomp
               wait_for_child = false
             rescue StandardError => e
               return on_fail unless on_fail == :raise

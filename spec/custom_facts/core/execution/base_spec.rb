@@ -70,6 +70,7 @@ describe LegacyFacter::Core::Execution::Base do
     it 'expands the command before running it' do
       allow(subject).to receive(:`).and_return ''
       expect(subject).to receive(:expand_command).with('foo').and_return '/bin/foo'
+      expect(Kernel).to receive(:exec).with('/bin/foo').and_return('')
       subject.execute('foo')
     end
 
@@ -87,7 +88,7 @@ describe LegacyFacter::Core::Execution::Base do
 
     describe 'when command execution fails' do
       before do
-        expect(subject).to receive(:`).with('/bin/foo').and_raise('kaboom!')
+        expect(Kernel).to receive(:exec).with('/bin/foo').and_raise('kaboom!')
         expect(subject).to receive(:expand_command).with('foo').and_return('/bin/foo')
       end
 
@@ -101,7 +102,7 @@ describe LegacyFacter::Core::Execution::Base do
     end
 
     it 'launches a thread to wait on children if the command was interrupted' do
-      expect(subject).to receive(:`).with('/bin/foo').and_raise 'kaboom!'
+      expect(Kernel).to receive(:exec).with('/bin/foo').and_raise('kaboom!')
       expect(subject).to receive(:expand_command).with('foo').and_return '/bin/foo'
 
       allow(LegacyFacter).to receive(:warn)
@@ -112,14 +113,14 @@ describe LegacyFacter::Core::Execution::Base do
     end
 
     it 'returns the output of the command' do
-      expect(subject).to receive(:`).with('/bin/foo').and_return('hi')
+      expect(Kernel).to receive(:exec).with('/bin/foo').and_return('hi')
       expect(subject).to receive(:expand_command).with('foo').and_return '/bin/foo'
 
       expect(subject.execute('foo')).to eq 'hi'
     end
 
     it 'strips off trailing newlines' do
-      expect(subject).to receive(:`).with('/bin/foo').and_return "hi\n"
+      expect(Kernel).to receive(:exec).with('/bin/foo').and_return("hi\n")
       expect(subject).to receive(:expand_command).with('foo').and_return '/bin/foo'
 
       expect(subject.execute('foo')).to eq 'hi'
