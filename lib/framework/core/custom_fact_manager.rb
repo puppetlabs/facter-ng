@@ -12,6 +12,14 @@ module Facter
       legacy_facts = LegacyFacter.to_hash
 
       resolved_custom_facts = []
+      # legacy_facts.each do |k, v|
+      #   resolved_fact = ResolvedFact.new(k, v)
+      #   resolved_fact.filter_tokens = []
+      #   resolved_fact.user_query = ''
+      #   resolved_custom_facts << resolved_fact
+      # end
+
+
       custom_facts.each do |custom_fact|
         fact_value = LegacyFacter.value(custom_fact.name)
         resolved_fact = ResolvedFact.new(custom_fact.name, fact_value)

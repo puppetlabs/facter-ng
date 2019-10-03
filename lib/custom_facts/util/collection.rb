@@ -123,6 +123,8 @@ module LegacyFacter
 
       def value(name)
         fact = fact(name)
+        return Facter.core_value(name) if fact.nil?
+
         fact&.value
       end
 
