@@ -14,7 +14,7 @@ module Facter
     end
 
     def resolve_facts(options = {}, user_query = [])
-      loaded_facts_hash = user_query.any? || options[:show_legacy] ? load_all_facts : load_core_facts
+      loaded_facts_hash = user_query.any? || options[:show_legacy] ? load_all_facts : @fact_loader.core_facts
 
       searched_facts = Facter::QueryParser.parse(user_query, loaded_facts_hash)
 
@@ -28,7 +28,7 @@ module Facter
     end
 
     def resolve_core(_options = {}, user_query = [])
-      loaded_facts_hash = load_core_facts
+      loaded_facts_hash = @fact_loader.core_facts
 
       searched_facts = Facter::QueryParser.parse(user_query, loaded_facts_hash)
       resolve_core_facts(searched_facts)
@@ -38,18 +38,8 @@ module Facter
 
     def load_all_facts
       loaded_facts_hash = {}
-      loaded_facts_hash.merge!(load_core_facts)
-      loaded_facts_hash.merge!(load_legacy_facts)
-    end
-
-    def load_core_facts
-      # CoreFactLoader.instance.load(@os)
-      @fact_loader.core_facts
-    end
-
-    def load_legacy_facts
-      # LegacyFactLoader.instance.load(@os)
-      @fact_loader.legacy_facts
+      loaded_facts_hash.merge!(@fact_loader.core_facts)
+      loaded_facts_hash.merge!(@fact_loader.legacy_facts)
     end
 
     def resolve_core_facts(searched_facts)
