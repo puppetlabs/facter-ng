@@ -1,12 +1,11 @@
-
 # frozen_string_literal: true
 
 describe 'NetworkUtils' do
   describe '#address_to_strig' do
-    let(:addr) {double('SocketAddress')}
-    let(:size) {double(FFI::MemoryPointer)}
-    let(:buffer) {double(FFI::MemoryPointer)}
-    let(:length) {32}
+    let(:addr) { double('SocketAddress') }
+    let(:size) { double(FFI::MemoryPointer) }
+    let(:buffer) { double(FFI::MemoryPointer) }
+    let(:length) { 32 }
 
     before do
       allow(addr).to receive(:[]).with(:lpSockaddr).and_return(address)
@@ -15,29 +14,29 @@ describe 'NetworkUtils' do
       allow(addr).to receive(:[]).with(:lpSockaddr).and_return(address)
       allow(addr).to receive(:[]).with(:iSockaddrLength).and_return(length)
       allow(NetworkingFFI).to receive(:WSAAddressToStringW)
-                                  .with(address, length, FFI::Pointer::NULL, buffer, size).and_return(error)
+        .with(address, length, FFI::Pointer::NULL, buffer, size).and_return(error)
       allow(buffer).to receive(:read_wide_string).and_return('10.123.0.2')
     end
 
     context 'when lpSockaddr is null' do
-      let(:address) {FFI::Pointer::NULL}
-      let(:error) {0}
+      let(:address) { FFI::Pointer::NULL }
+      let(:error) { 0 }
       it 'returns nil' do
         expect(NetworkUtils.address_to_string(addr)).to eql(nil)
       end
     end
 
     context 'when error code is zero' do
-      let(:address) {double(FFI::MemoryPointer)}
-      let(:error) {0}
+      let(:address) { double(FFI::MemoryPointer) }
+      let(:error) { 0 }
       it 'returns an address' do
         expect(NetworkUtils.address_to_string(addr)).to eql('10.123.0.2')
       end
     end
 
     context 'when error code is not zero' do
-      let(:address) {double(FFI::MemoryPointer)}
-      let(:error) {1}
+      let(:address) { double(FFI::MemoryPointer) }
+      let(:error) { 1 }
       it 'returns nil and logs debug message' do
         allow_any_instance_of(Facter::Log).to receive(:debug).with('address to string translation failed!')
         expect(NetworkUtils.address_to_string(addr)).to eql(nil)

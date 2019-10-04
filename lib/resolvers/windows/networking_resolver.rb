@@ -23,7 +23,7 @@ module Facter
           size_ptr = FFI::MemoryPointer.new(NetworkingFFI::BUFFER_LENGTH)
           adapter_addresses = FFI::MemoryPointer.new(IpAdapterAddressesLh.size, NetworkingFFI::BUFFER_LENGTH)
           flags = NetworkingFFI::GAA_FLAG_SKIP_ANYCAST |
-              NetworkingFFI::GAA_FLAG_SKIP_MULTICAST | NetworkingFFI::GAA_FLAG_SKIP_DNS_SERVER
+                  NetworkingFFI::GAA_FLAG_SKIP_MULTICAST | NetworkingFFI::GAA_FLAG_SKIP_DNS_SERVER
 
           return unless (adapter_addresses = get_adapter_addresses(size_ptr, adapter_addresses, flags))
 
@@ -53,12 +53,12 @@ module Facter
 
         def adapter_down?(adapter)
           adapter[:OperStatus] != NetworkingFFI::IF_OPER_STATUS_UP ||
-              ![NetworkingFFI::IF_TYPE_ETHERNET_CSMACD, NetworkingFFI::IF_TYPE_IEEE80211].include?(adapter[:IfType])
+            ![NetworkingFFI::IF_TYPE_ETHERNET_CSMACD, NetworkingFFI::IF_TYPE_IEEE80211].include?(adapter[:IfType])
         end
 
         def retrieve_dhcp_server(adapter)
           if adapter[:Flags] & NetworkingFFI::IP_ADAPTER_DHCP_ENABLED &&
-              adapter[:Union][:Struct][:Length] >= IpAdapterAddressesLh.size
+             adapter[:Union][:Struct][:Length] >= IpAdapterAddressesLh.size
             NetworkUtils.address_to_string(adapter[:Dhcpv4Server])
           end
         end
@@ -126,8 +126,8 @@ module Facter
 
         def find_primary_interface(sock_addr, name, addr)
           if !@fact_list[:primary_interface] &&
-              ([NetworkingFFI::AF_INET, NetworkingFFI::AF_INET6].include?(sock_addr[:sa_family]) &&
-                  !NetworkUtils.ignored_ip_address(addr))
+             ([NetworkingFFI::AF_INET, NetworkingFFI::AF_INET6].include?(sock_addr[:sa_family]) &&
+                 !NetworkUtils.ignored_ip_address(addr))
             @fact_list[:primary] = name
           end
         end
