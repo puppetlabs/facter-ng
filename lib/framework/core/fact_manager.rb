@@ -11,10 +11,11 @@ module Facter
       @core_fact_mgr = CoreFactManager.new
       @custom_fact_mgr = CustomFactManager.new
       @fact_loader = FactLoader.new(@os)
+      @custom_fact_loader = CustomFactLoader.new
     end
 
     def resolve_facts(options = {}, user_query = [])
-      loaded_facts_hash = user_query.any? || options[:show_legacy] ? load_all_facts : @fact_loader.core_facts
+      loaded_facts_hash = user_query.any? || options[:show_legacy] ? load_all_facts : load_core_with_custom
 
       searched_facts = Facter::QueryParser.parse(user_query, loaded_facts_hash)
 
@@ -31,7 +32,10 @@ module Facter
       loaded_facts_hash = @fact_loader.core_facts
 
       searched_facts = Facter::QueryParser.parse(user_query, loaded_facts_hash)
-      resolve_core_facts(searched_facts)
+      resolved_facts = resolve_core_facts(searched_facts)
+      FactFilter.new.filter_facts!(resolved_facts)
+
+      resolved_facts
     end
 
     private
@@ -40,6 +44,12 @@ module Facter
       loaded_facts_hash = {}
       loaded_facts_hash.merge!(@fact_loader.core_facts)
       loaded_facts_hash.merge!(@fact_loader.legacy_facts)
+    end
+
+    def load_core_with_custom
+      loaded_facts_hash = {}
+      loaded_facts_hash.merge!(@fact_loader.core_facts)
+      loaded_facts_hash.merge!(@custom_fact_loader.custom_facts)
     end
 
     def resolve_core_facts(searched_facts)

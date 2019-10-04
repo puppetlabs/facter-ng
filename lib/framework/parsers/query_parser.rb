@@ -40,6 +40,7 @@ module Facter
 
     def self.search_for_facts(query, loaded_fact_hash)
       resolvable_fact_list = []
+      query = query.to_s
       query_tokens = query.end_with?('.*') ? [query] : query.split('.')
       size = query_tokens.size
 
