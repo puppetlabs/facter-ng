@@ -13,7 +13,7 @@ end
 
 class SocketAddress < FFI::Struct
   layout(
-      :lpSockaddr, SockAddr,
+      :lpSockaddr, :pointer,
       :iSockaddrLength, :int32
   )
 end
@@ -40,14 +40,57 @@ class IpAdapterMulticastAddressXP < FFI::Struct
   )
 end
 
+module Enums
+  extend FFI::Library
+
+  IP_PREFIX_ORIGIN = enum(
+      :IpPrefixOriginOther, 0,
+      :IpPrefixOriginManual,
+      :IpPrefixOriginWellKnown,
+      :IpPrefixOriginDhcp,
+      :IpPrefixOriginRouterAdvertisement,
+      :IpPrefixOriginUnchanged
+  )
+
+  IP_SUFFIX_ORIGIN = enum(
+      :NlsoOther, 0,
+      :NlsoManual,
+      :NlsoWellKnown,
+      :NlsoDhcp,
+      :NlsoLinkLayerAddress,
+      :NlsoRandom,
+      :IpSuffixOriginOther,
+      :IpSuffixOriginManual,
+      :IpSuffixOriginWellKnown,
+      :IpSuffixOriginDhcp,
+      :IpSuffixOriginLinkLayerAddress,
+      :IpSuffixOriginRandom,
+      :IpSuffixOriginUnchanged
+  )
+
+  IP_DAD_STATE = enum(
+      :NldsInvalid, 0,
+      :NldsTentative,
+      :NldsDuplicate,
+      :NldsDeprecated,
+      :NldsPreferred,
+      :IpDadStateInvalid,
+      :IpDadStateTentative,
+      :IpDadStateDuplicate,
+      :IpDadStateDeprecated,
+      :IpDadStatePreferred
+  )
+
+end
+
 class IpAdapterUnicastAddressLH < FFI::Struct
   layout(
       :Union, IpAdapterMulticastAddressXPUnion,
       :Next, :pointer,
       :Address, SocketAddress,
-      :PrefixOrigin, :uint8,
-      :SuffixOrigin, :uint16,
-      :DadState, :uint16,
+      :PrefixOrigin, Enums::IP_PREFIX_ORIGIN,
+      :SuffixOrigin, Enums::IP_SUFFIX_ORIGIN,
+      :DadState, Enums::IP_DAD_STATE,
       :ValidLifetime, :win32_ulong,
       :PreferredLifetime, :win32_ulong,
       :LeaseLifetime, :win32_ulong,

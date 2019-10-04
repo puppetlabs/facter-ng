@@ -42,7 +42,7 @@ module Facter
           net_interface = {}
           @fact_list[:interfaces] = []
           while adapter_addresses !=  FFI::Pointer::NULL do
-            @fact_list[:interfaces] << adapter_addresses[:FriendlyName].read_pointer().null ? nil : adapter_addresses[:FriendlyName].read_pointer().read_string.force_encoding('UTF-8')
+            @fact_list[:interfaces] << adapter_addresses[:FriendlyName]
             if adapter_addresses[:OperStatus] != NetworkingFFI::IfOperStatusUp ||
                 (adapter_addresses[:Iftype] != NetworkingFFI::IF_TYPE_ETHERNET_CSMACD &&
                     adapter_addresses[:Iftype] != NetworkingFFI::IF_TYPE_IEEE80211)
