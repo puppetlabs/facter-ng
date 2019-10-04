@@ -1,6 +1,7 @@
+# frozen_string_literal: true
+
 module Facter
   class CoreFactManager
-
     def resolve_facts(searched_facts)
       start_threads(searched_facts)
       threads = start_threads(searched_facts)
@@ -14,7 +15,7 @@ module Facter
     def start_threads(searched_facts)
       threads = []
 
-      searched_facts.select {|elem| !elem.fact_class.nil?}.each do |searched_fact|
+      searched_facts.reject { |elem| elem.fact_class.nil? }.each do |searched_fact|
         threads << Thread.new do
           create_fact(searched_fact)
         end

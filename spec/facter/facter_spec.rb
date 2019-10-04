@@ -21,7 +21,7 @@ describe 'facter' do
     allow_any_instance_of(Facter::FactLoader).to receive(:load_with_legacy).with(fact_value).and_return(loaded_facts)
     allow_any_instance_of(Facter::QueryParser).to receive(:parse).with([fact_name], loaded_facts)
 
-    fact_hash = Facter::Base.new.resolve_facts(options, [fact_name])
+    fact_hash = Facter::FactManager.new.resolve_facts(options, [fact_name])
 
     expected_resolved_fact_list = [os_fact]
 
@@ -46,7 +46,7 @@ describe 'facter' do
       regex_resolved_fact = mock_resolved_fact(resolved_fact_name, resolved_fact_value)
       mock_fact(Facter::Ubuntu::NetworkInterface, regex_resolved_fact, fact_name)
 
-      resolved_fact_array = Facter::Base.new.resolve_facts(options, [user_query])
+      resolved_fact_array = Facter::FactManager.new.resolve_facts(options, [user_query])
       expected_resolved_fact_list = [regex_resolved_fact]
 
       expect(resolved_fact_array).to eq(expected_resolved_fact_list)
@@ -57,8 +57,8 @@ describe 'facter' do
     user_query = 'os.name'
     query_result = 'ubuntu'
 
-    fact_base = double(Facter::Base)
-    allow(Facter::Base).to receive(:new).and_return(fact_base)
+    fact_base = double(Facter::FactManager)
+    allow(Facter::FactManager).to receive(:new).and_return(fact_base)
     resolved_fact = double(Facter::ResolvedFact, name: 'os.name', value: 'Darwin', user_query: '', filter_tokens: [])
     resolved_fact_list = [resolved_fact]
     allow(fact_base).to receive(:resolve_facts).with({}, [user_query]).and_return(resolved_fact_list)
@@ -73,8 +73,8 @@ describe 'facter' do
   end
 
   it 'return a hash with all resolved facts do' do
-    fact_base = double(Facter::Base)
-    allow(Facter::Base).to receive(:new).and_return(fact_base)
+    fact_base = double(Facter::FactManager)
+    allow(Facter::FactManager).to receive(:new).and_return(fact_base)
 
     resolved_fact1 =
       double(Facter::ResolvedFact, name: 'os.name', value: 'Darwin', user_query: '', filter_tokens: [])
@@ -96,8 +96,8 @@ describe 'facter' do
     options = {}
     user_query = ['os.name', 'os.hardware']
 
-    fact_base = double(Facter::Base)
-    allow(Facter::Base).to receive(:new).and_return(fact_base)
+    fact_base = double(Facter::FactManager)
+    allow(Facter::FactManager).to receive(:new).and_return(fact_base)
 
     resolved_fact1 =
       double(Facter::ResolvedFact, name: 'os.name', value: 'Darwin', user_query: '', filter_tokens: [])
