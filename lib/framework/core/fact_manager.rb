@@ -19,10 +19,10 @@ module Facter
 
       searched_facts = Facter::QueryParser.parse(user_query, loaded_facts_hash)
 
-      resolved_facts = resolve_core_facts(searched_facts)
-      resolved_facts << resolve_custom_facts(searched_facts)
+      core_facts  = resolve_core_facts(searched_facts)
+      custom_facts =  resolve_custom_facts(searched_facts)
 
-      resolved_facts.flatten!
+      resolved_facts = override_core_facts(core_facts, custom_facts)
       FactFilter.new.filter_facts!(resolved_facts)
 
       resolved_facts
@@ -40,10 +40,24 @@ module Facter
 
     private
 
+    def override_core_facts(core_facts, custom_facts)
+
+      custom_facts.each do |custom_fact|
+        core_facts.delete_if { |core_fact| root_fact_name(core_fact) == custom_fact.name }
+      end
+
+      core_facts + custom_facts
+    end
+
+    def root_fact_name(fact)
+      fact.name.split('.').first
+    end
+
     def load_all_facts
       loaded_facts_hash = {}
       loaded_facts_hash.merge!(@fact_loader.core_facts)
       loaded_facts_hash.merge!(@fact_loader.legacy_facts)
+      loaded_facts_hash.merge!(@custom_fact_loader.custom_facts)
     end
 
     def load_core_with_custom
@@ -57,7 +71,10 @@ module Facter
     end
 
     def resolve_custom_facts(searched_facts)
-      @custom_fact_mgr.resolve_facts(searched_facts.select { |searched_fact| searched_fact.fact_class.nil? })
+      custom_facts = @custom_fact_loader.custom_facts
+      searched_custom_facts = searched_facts.select { |searched_fact| custom_facts.fetch(searched_fact.name, 'no_value') == nil}
+
+      @custom_fact_mgr.resolve_facts(searched_custom_facts)
     end
   end
 end
