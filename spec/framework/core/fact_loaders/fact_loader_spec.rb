@@ -3,8 +3,6 @@
 describe 'FactLoader' do
   describe '#initialize' do
     context 'load facts' do
-      # let (:)
-
       it 'loads one legacy fact' do
         allow_any_instance_of(Facter::ClassDiscoverer)
           .to receive(:discover_classes)
