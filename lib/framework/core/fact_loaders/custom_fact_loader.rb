@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 module Facter
   class CustomFactLoader
@@ -10,7 +11,7 @@ module Facter
       custom_facts_to_load = LegacyFacter.collection.custom_facts
 
       @custom_facts = {}
-      custom_facts_to_load.each { |k, v| @custom_facts.merge!({k.to_s => nil}) }
+      custom_facts_to_load.each { |k, _v| @custom_facts.merge!(k.to_s => nil) }
     end
   end
 end

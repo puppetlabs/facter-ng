@@ -19,8 +19,8 @@ module Facter
 
       searched_facts = Facter::QueryParser.parse(user_query, loaded_facts_hash)
 
-      core_facts  = resolve_core_facts(searched_facts)
-      custom_facts =  resolve_custom_facts(searched_facts)
+      core_facts = resolve_core_facts(searched_facts)
+      custom_facts = resolve_custom_facts(searched_facts)
 
       resolved_facts = override_core_facts(core_facts, custom_facts)
       FactFilter.new.filter_facts!(resolved_facts)
@@ -41,7 +41,6 @@ module Facter
     private
 
     def override_core_facts(core_facts, custom_facts)
-
       custom_facts.each do |custom_fact|
         core_facts.delete_if { |core_fact| root_fact_name(core_fact) == custom_fact.name }
       end
@@ -72,7 +71,8 @@ module Facter
 
     def resolve_custom_facts(searched_facts)
       custom_facts = @custom_fact_loader.custom_facts
-      searched_custom_facts = searched_facts.select { |searched_fact| custom_facts.fetch(searched_fact.name, 'no_value') == nil}
+      searched_custom_facts =
+        searched_facts.select { |searched_fact| custom_facts.fetch(searched_fact.name, 'no_value').nil? }
 
       @custom_fact_mgr.resolve_facts(searched_custom_facts)
     end
