@@ -12,18 +12,9 @@ module Facter
       load(operating_system)
     end
 
-    def refresh(operating_system)
-      @core_facts = {}
-      @legacy_facts = {}
-      @all_facts = {}
-
-      load(operating_system)
-    end
-
     private
 
     def load(operating_system)
-      loaded_facts = {}
       os = operating_system.capitalize
 
       # select only classes
@@ -40,7 +31,9 @@ module Facter
         end
       end
 
-      loaded_facts
+      @all_facts = @legacy_facts.merge(@core_facts)
+
+      @all_facts
     end
 
     def legacy_fact?(klass)
