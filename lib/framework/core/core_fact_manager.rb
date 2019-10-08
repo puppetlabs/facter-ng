@@ -3,7 +3,6 @@
 module Facter
   class CoreFactManager
     def resolve_facts(searched_facts)
-      start_threads(searched_facts)
       threads = start_threads(searched_facts)
       resolved_facts = join_threads(threads, searched_facts)
 
