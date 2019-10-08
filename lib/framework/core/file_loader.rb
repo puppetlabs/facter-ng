@@ -9,7 +9,7 @@ require "#{ROOT_DIR}/lib/framework/logging/logger"
 
 require "#{ROOT_DIR}/lib/resolvers/base_resolver"
 require "#{ROOT_DIR}/lib/framework/detector/current_os"
-require "#{ROOT_DIR}/lib/framework/core/facter"
+require "#{ROOT_DIR}/lib/facter-ng"
 
 def load_dir(*dirs)
   Dir.glob(File.join(ROOT_DIR, dirs, '*.rb'), &method(:require))
