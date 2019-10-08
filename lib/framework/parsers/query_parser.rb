@@ -84,7 +84,7 @@ module Facter
     def self.construct_loaded_fact(query_tokens, query_token_range, fact_name, klass_name)
       filter_tokens = query_tokens - query_tokens[query_token_range]
       user_query = @query_list.any? ? query_tokens.join('.') : ''
-
+      fact_name = fact_name.to_s
       SearchedFact.new(fact_name, klass_name, filter_tokens, user_query)
     end
   end

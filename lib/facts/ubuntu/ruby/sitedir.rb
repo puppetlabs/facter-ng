@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 module Facter
-  module Aix
-    class OsFamily
-      FACT_NAME = 'os.family'
+  module Ubuntu
+    class RubySitedir
+      FACT_NAME = 'ruby.sitedir'
 
       def call_the_resolver
-        fact_value = Resolvers::Uname.resolve(:kernelname)
+        fact_value = Resolvers::Ruby.resolve(:sitedir)
 
         ResolvedFact.new(FACT_NAME, fact_value)
       end
