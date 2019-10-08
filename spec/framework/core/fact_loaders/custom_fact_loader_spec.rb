@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 describe 'CustomFactLoader' do
   describe '#initialize' do
@@ -8,10 +9,10 @@ describe 'CustomFactLoader' do
     end
 
     it 'loads one custom fact' do
-      allow(collection).to receive(:custom_facts).and_return({'os' => nil})
+      allow(collection).to receive(:custom_facts).and_return('os' => nil)
       custom_fact_loader = Facter::CustomFactLoader.new
 
-      expect(custom_fact_loader.custom_facts).to eq({'os' => nil})
+      expect(custom_fact_loader.custom_facts).to eq('os' => nil)
     end
 
     it 'loads no custom facts' do

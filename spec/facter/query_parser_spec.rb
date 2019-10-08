@@ -38,7 +38,7 @@ describe 'QueryParser' do
       matched_facts = Facter::QueryParser.parse(query_list, loaded_facts_hash)
 
       expect(matched_facts.size).to eq(1)
-      expect(matched_facts.first.fact_class).to  be_nil
+      expect(matched_facts.first.fact_class).to be_nil
     end
 
     it 'queries if param is symbol' do
