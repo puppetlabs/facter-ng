@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 describe 'FactManager' do
   describe '#resolve_facts' do
@@ -6,14 +7,15 @@ describe 'FactManager' do
       user_query = []
       options = {}
 
-      core_facts = {'os' => ubuntu_os_name}
-      custom_facts = {'my_custom_fact' => nil}
+      core_facts = { 'os' => ubuntu_os_name }
+      custom_facts = { 'my_custom_fact' => nil }
       loaded_facts = core_facts.merge(custom_facts)
 
       allow_any_instance_of(Facter::FactLoader).to receive(:core_facts).and_return(core_facts)
       allow_any_instance_of(Facter::CustomFactLoader).to receive(:custom_facts).and_return(custom_facts)
 
-      searched_fact1 = double(Facter::SearchedFact, name: 'os', fact_class: ubuntu_os_name, filter_tokens: [], user_query: '')
+      searched_fact1 =
+        double(Facter::SearchedFact, name: 'os', fact_class: ubuntu_os_name, filter_tokens: [], user_query: '')
       searched_fact2 =
         double(Facter::SearchedFact, name: 'my_custom_fact', fact_class: nil, filter_tokens: [], user_query: '')
 
@@ -23,7 +25,6 @@ describe 'FactManager' do
         .to receive(:parse)
         .with(user_query, loaded_facts)
         .and_return([searched_fact1, searched_fact2])
-
 
       allow_any_instance_of(Facter::CoreFactManager)
         .to receive(:resolve_facts)
@@ -41,7 +42,7 @@ describe 'FactManager' do
   describe '#resolve_core' do
     it 'resolves all core facts' do
       ubuntu_os_name = double(Facter::Ubuntu::OsName)
-      core_facts = {'os' => ubuntu_os_name}
+      core_facts = { 'os' => ubuntu_os_name }
       user_query = []
       options = {}
 
