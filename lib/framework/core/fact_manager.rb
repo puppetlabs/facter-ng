@@ -16,8 +16,7 @@ module Facter
 
     def resolve_facts(options = {}, user_query = [])
       loaded_facts_hash = user_query.any? || options[:show_legacy] ? load_all_facts : load_core_with_custom
-
-      searched_facts = Facter::QueryParser.parse(user_query, loaded_facts_hash)
+      searched_facts = QueryParser.parse(user_query, loaded_facts_hash)
 
       core_facts = resolve_core_facts(searched_facts)
       custom_facts = resolve_custom_facts(searched_facts)
@@ -31,7 +30,7 @@ module Facter
     def resolve_core(_options = {}, user_query = [])
       loaded_facts_hash = @fact_loader.core_facts
 
-      searched_facts = Facter::QueryParser.parse(user_query, loaded_facts_hash)
+      searched_facts = QueryParser.parse(user_query, loaded_facts_hash)
       resolved_facts = resolve_core_facts(searched_facts)
       FactFilter.new.filter_facts!(resolved_facts)
 
@@ -41,6 +40,8 @@ module Facter
     private
 
     def override_core_facts(core_facts, custom_facts)
+      return core_facts unless custom_facts
+
       custom_facts.each do |custom_fact|
         core_facts.delete_if { |core_fact| root_fact_name(core_fact) == custom_fact.name }
       end
