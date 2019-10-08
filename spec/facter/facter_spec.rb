@@ -4,7 +4,7 @@ describe 'Facter' do
   let(:fact_name) { 'os.name' }
   let(:fact_value) { 'ubuntu' }
   let(:os_fact) { double(Facter::ResolvedFact, name: fact_name, value: fact_value, user_query: '', filter_tokens: []) }
-  let(:fact_collection) { {'os' => {'name' => 'Ubuntu'}} }
+  let(:fact_collection) { { 'os' => { 'name' => 'Ubuntu' } } }
   let(:empty_fact_collection) { {} }
 
   before do
@@ -104,8 +104,8 @@ describe 'Facter' do
       allow_any_instance_of(Facter::FactManager).to receive(:resolve_core).and_return([os_fact])
       allow_any_instance_of(Facter::FactCollection)
         .to receive(:build_fact_collection!)
-              .with([os_fact])
-              .and_return(fact_collection)
+        .with([os_fact])
+        .and_return(fact_collection)
 
       resolved_facts_hash = Facter.core_value(user_query)
       expect(resolved_facts_hash).to eq('Ubuntu')
@@ -117,8 +117,8 @@ describe 'Facter' do
       allow_any_instance_of(Facter::FactManager).to receive(:resolve_core).and_return([])
       allow_any_instance_of(Facter::FactCollection)
         .to receive(:build_fact_collection!)
-              .with([])
-              .and_return(empty_fact_collection)
+        .with([])
+        .and_return(empty_fact_collection)
 
       resolved_facts_hash = Facter.core_value(user_query)
       expect(resolved_facts_hash).to be nil
