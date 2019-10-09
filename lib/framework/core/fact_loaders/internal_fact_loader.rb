@@ -2,12 +2,12 @@
 
 module Facter
   class InternalFactLoader
-    attr_reader :core_facts, :legacy_facts, :all_facts
+    attr_reader :core_facts, :legacy_facts, :facts
 
     def initialize(operating_system)
       @core_facts = {}
       @legacy_facts = {}
-      @all_facts = {}
+      @facts = {}
 
       load(operating_system)
     end
@@ -31,9 +31,9 @@ module Facter
         end
       end
 
-      @all_facts = @legacy_facts.merge(@core_facts)
+      @facts = @legacy_facts.merge(@core_facts)
 
-      @all_facts
+      @facts
     end
 
     def legacy_fact?(klass)

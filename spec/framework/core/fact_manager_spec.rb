@@ -12,7 +12,7 @@ describe 'FactManager' do
       loaded_facts = core_facts.merge(custom_facts)
 
       allow_any_instance_of(Facter::InternalFactLoader).to receive(:core_facts).and_return(core_facts)
-      allow_any_instance_of(Facter::ExternalFactLoader).to receive(:custom_facts).and_return(custom_facts)
+      allow_any_instance_of(Facter::ExternalFactLoader).to receive(:facts).and_return(custom_facts)
 
       searched_fact1 =
         double(Facter::SearchedFact, name: 'os', fact_class: ubuntu_os_name, filter_tokens: [], user_query: '')

@@ -57,13 +57,13 @@ module Facter
       loaded_facts_hash = {}
       loaded_facts_hash.merge!(@fact_loader.core_facts)
       loaded_facts_hash.merge!(@fact_loader.legacy_facts)
-      loaded_facts_hash.merge!(@custom_fact_loader.custom_facts)
+      loaded_facts_hash.merge!(@custom_fact_loader.facts)
     end
 
     def load_core_with_custom
       loaded_facts_hash = {}
       loaded_facts_hash.merge!(@fact_loader.core_facts)
-      loaded_facts_hash.merge!(@custom_fact_loader.custom_facts)
+      loaded_facts_hash.merge!(@custom_fact_loader.facts)
     end
 
     def resolve_core_facts(searched_facts)
@@ -71,7 +71,7 @@ module Facter
     end
 
     def resolve_custom_facts(searched_facts)
-      custom_facts = @custom_fact_loader.custom_facts
+      custom_facts = @custom_fact_loader.facts
       searched_custom_facts =
         searched_facts.select { |searched_fact| custom_facts.fetch(searched_fact.name, 'no_value').nil? }
 
