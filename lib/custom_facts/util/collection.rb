@@ -91,7 +91,7 @@ module LegacyFacter
 
       # Return a hash of all custom facts.
       def custom_facts
-        internal_loader.load_all
+        load_all
         @facts
       end
 
