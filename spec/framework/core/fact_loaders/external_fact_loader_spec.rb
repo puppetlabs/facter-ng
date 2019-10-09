@@ -10,14 +10,14 @@ describe 'CustomFactLoader' do
 
     it 'loads one custom fact' do
       allow(collection).to receive(:custom_facts).and_return('os' => nil)
-      custom_fact_loader = Facter::CustomFactLoader.new
+      custom_fact_loader = Facter::ExternalFactLoader.new
 
       expect(custom_fact_loader.custom_facts).to eq('os' => nil)
     end
 
     it 'loads no custom facts' do
       allow(collection).to receive(:custom_facts).and_return({})
-      custom_fact_loader = Facter::CustomFactLoader.new
+      custom_fact_loader = Facter::ExternalFactLoader.new
 
       expect(custom_fact_loader.custom_facts).to eq({})
     end

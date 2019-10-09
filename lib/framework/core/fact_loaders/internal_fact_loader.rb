@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Facter
-  class FactLoader
+  class InternalFactLoader
     attr_reader :core_facts, :legacy_facts, :all_facts
 
     def initialize(operating_system)

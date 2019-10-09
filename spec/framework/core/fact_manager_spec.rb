@@ -11,8 +11,8 @@ describe 'FactManager' do
       custom_facts = { 'my_custom_fact' => nil }
       loaded_facts = core_facts.merge(custom_facts)
 
-      allow_any_instance_of(Facter::FactLoader).to receive(:core_facts).and_return(core_facts)
-      allow_any_instance_of(Facter::CustomFactLoader).to receive(:custom_facts).and_return(custom_facts)
+      allow_any_instance_of(Facter::InternalFactLoader).to receive(:core_facts).and_return(core_facts)
+      allow_any_instance_of(Facter::ExternalFactLoader).to receive(:custom_facts).and_return(custom_facts)
 
       searched_fact1 =
         double(Facter::SearchedFact, name: 'os', fact_class: ubuntu_os_name, filter_tokens: [], user_query: '')
@@ -46,7 +46,7 @@ describe 'FactManager' do
       user_query = []
       options = {}
 
-      allow_any_instance_of(Facter::FactLoader).to receive(:core_facts).and_return(core_facts)
+      allow_any_instance_of(Facter::InternalFactLoader).to receive(:core_facts).and_return(core_facts)
 
       searched_fact =
         double(Facter::SearchedFact, name: 'os', fact_class: ubuntu_os_name, filter_tokens: [], user_query: '')

@@ -10,8 +10,8 @@ module Facter
       @os = CurrentOs.instance.identifier
       @core_fact_mgr = CoreFactManager.new
       @custom_fact_mgr = CustomFactManager.new
-      @fact_loader = FactLoader.new(@os)
-      @custom_fact_loader = CustomFactLoader.new
+      @fact_loader = InternalFactLoader.new(@os)
+      @custom_fact_loader = ExternalFactLoader.new
     end
 
     def resolve_facts(options = {}, user_query = [])

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Facter
-  class CustomFactLoader
+  class ExternalFactLoader
     attr_reader :custom_facts
 
     def initialize
