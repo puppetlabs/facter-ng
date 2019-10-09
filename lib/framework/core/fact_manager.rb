@@ -7,10 +7,9 @@ module Facter
     include Singleton
 
     def initialize
-      @os = CurrentOs.instance.identifier
       @core_fact_mgr = CoreFactManager.new
       @custom_fact_mgr = CustomFactManager.new
-      @fact_loader = InternalFactLoader.new(@os)
+      @fact_loader = InternalFactLoader.new
       @custom_fact_loader = ExternalFactLoader.new
     end
 

@@ -4,18 +4,18 @@ module Facter
   class InternalFactLoader
     attr_reader :core_facts, :legacy_facts, :facts
 
-    def initialize(operating_system)
+    def initialize
       @core_facts = {}
       @legacy_facts = {}
       @facts = {}
 
-      load(operating_system)
+      load
     end
 
     private
 
-    def load(operating_system)
-      os = operating_system.capitalize
+    def load
+      os = CurrentOs.instance.identifier.capitalize
 
       # select only classes
       classes = ClassDiscoverer.instance.discover_classes(os)
