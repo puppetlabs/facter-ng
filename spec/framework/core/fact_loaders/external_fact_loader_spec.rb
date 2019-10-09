@@ -6,6 +6,7 @@ describe 'ExternalFactLoader' do
 
     before do
       allow(LegacyFacter).to receive(:collection).and_return(collection)
+      allow(collection).to receive(:external_facts).and_return({})
     end
 
     it 'loads one custom fact' do
