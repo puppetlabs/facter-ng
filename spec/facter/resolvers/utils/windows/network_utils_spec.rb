@@ -14,8 +14,8 @@ describe 'NetworkUtils' do
       allow(addr).to receive(:[]).with(:lpSockaddr).and_return(address)
       allow(addr).to receive(:[]).with(:iSockaddrLength).and_return(length)
       allow(NetworkingFFI).to receive(:WSAAddressToStringW)
-        .with(address, length, FFI::Pointer::NULL, buffer, size).and_return(error)
-      allow(buffer).to receive(:read_wide_string).and_return('10.123.0.2')
+                                  .with(address, length, FFI::Pointer::NULL, buffer, size).and_return(error)
+      allow(NetworkUtils).to receive(:extract_address).with(buffer).and_return('10.123.0.2')
     end
 
     context 'when lpSockaddr is null' do
@@ -29,6 +29,8 @@ describe 'NetworkUtils' do
     context 'when error code is zero' do
       let(:address) { double(FFI::MemoryPointer) }
       let(:error) { 0 }
+      before do
+      end
       it 'returns an address' do
         expect(NetworkUtils.address_to_string(addr)).to eql('10.123.0.2')
       end
@@ -44,57 +46,66 @@ describe 'NetworkUtils' do
     end
   end
 
-  describe '#ignored_ipv4_address' do
+  describe '#ignored_ip_address' do
     context 'when input is empty' do
       it 'returns true' do
-        expect(NetworkUtils.ignored_ipv4_address('')).to eql(true)
+        expect(NetworkUtils.ignored_ip_address('')).to eql(true)
       end
     end
 
     context 'when input starts with 127.' do
       it 'returns true' do
-        expect(NetworkUtils.ignored_ipv4_address('127.255.0.2')).to eql(true)
+        expect(NetworkUtils.ignored_ip_address('127.255.0.2')).to eql(true)
       end
     end
 
     context 'when input is a valid ipv4 address' do
       it 'returns false' do
-        expect(NetworkUtils.ignored_ipv4_address('169.255.0.2')).to eql(false)
-      end
-    end
-  end
-
-  describe '#ignored_ipv6_address' do
-    context 'when input is empty' do
-      it 'returns true' do
-        expect(NetworkUtils.ignored_ipv6_address('')).to eql(true)
+        expect(NetworkUtils.ignored_ip_address('169.255.0.2')).to eql(false)
       end
     end
 
     context 'when input starts with fe80' do
       it 'returns true' do
-        expect(NetworkUtils.ignored_ipv6_address('fe80::')).to eql(true)
+        expect(NetworkUtils.ignored_ip_address('fe80::')).to eql(true)
       end
     end
 
     context 'when input equal with ::1' do
       it 'returns true' do
-        expect(NetworkUtils.ignored_ipv6_address('::1')).to eql(true)
+        expect(NetworkUtils.ignored_ip_address('::1')).to eql(true)
       end
     end
 
     context 'when input is a valid ipv6 address' do
       it 'returns false' do
-        expect(NetworkUtils.ignored_ipv6_address('fe70::7d01:99a1:3900:531b')).to eql(false)
+        expect(NetworkUtils.ignored_ip_address('fe70::7d01:99a1:3900:531b')).to eql(false)
       end
     end
   end
 
   describe '#build_binding' do
     context 'when input is ipv4 address' do
+      let(:netmask) { IPAddr.new('255.255.240.0/255.255.240.0') }
+      let(:network) { IPAddr.new('10.16.112.0/255.255.240.0') }
+      let(:addr) { '10.16.121.248' }
       it 'returns ipv4 binding' do
-        expect(NetworkUtils.build_binding('10.16.121.248')).to eql(false)
+        expect(NetworkUtils.build_binding(addr, 20)).to eql(address: addr, netmask: netmask, network: network)
       end
+    end
+
+    context 'when input is ipv6 address' do
+      let(:network) { IPAddr.new('fe80:0000:0000:0000:0000:0000:0000:0000/ffff:ffff:ffff:ffff:0000:0000:0000:0000') }
+      let(:netmask) { IPAddr.new('ffff:ffff:ffff:ffff:0000:0000:0000:0000/ffff:ffff:ffff:ffff:0000:0000:0000:0000') }
+      let(:addr) { 'fe80::dc20:a2b9:5253:9b46' }
+      it 'returns ipv6 binding' do
+        expect(NetworkUtils.build_binding(addr, 64)).to eql(address: addr, netmask: netmask, network: network)
+      end
+    end
+  end
+
+  describe '#extract_address' do
+    context 'when address is ipv6' do
     end
   end
 end
