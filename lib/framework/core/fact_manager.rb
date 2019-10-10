@@ -54,8 +54,7 @@ module Facter
 
     def load_all_facts
       loaded_facts_hash = {}
-      loaded_facts_hash.merge!(@fact_loader.core_facts)
-      loaded_facts_hash.merge!(@fact_loader.legacy_facts)
+      loaded_facts_hash.merge!(@fact_loader.facts)
       loaded_facts_hash.merge!(@custom_fact_loader.facts)
     end
 
