@@ -24,15 +24,29 @@ MAX_PATH = 32_767
 
 module FFI
   WIN32_FALSE = 0
+  END_OF_WCHAR_STRING = "\0\0".encode('UTF-16LE')
 
   class Pointer
     alias write_dword write_uint32
     alias read_dword read_uint32
 
-    def read_wide_string(char_length)
+    def read_wide_string(char_length = nil)
       # char_length is number of wide chars (typically excluding NULLs), *not* bytes
-      str = get_bytes(0, char_length * 2).force_encoding('UTF-16LE')
-      str.encode('UTF-8', str.encoding, {})
+      if char_length
+        str = get_bytes(0, char_length * 2).force_encoding('UTF-16LE')
+        return str.encode('UTF-8', str.encoding, {})
+      end
+
+      t = get_bytes(0, 2)
+      i = 2
+      str = String.new
+
+      while t.encode('UTF-16LE') != END_OF_WCHAR_STRING
+        str +=  t
+        t = get_bytes(i, 2)
+        i += 2
+      end
+      str.force_encoding('UTF-16LE').encode('UTF-8')
     end
 
     def read_win32_bool
