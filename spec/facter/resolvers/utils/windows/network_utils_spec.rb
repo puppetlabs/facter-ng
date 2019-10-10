@@ -14,7 +14,7 @@ describe 'NetworkUtils' do
       allow(addr).to receive(:[]).with(:lpSockaddr).and_return(address)
       allow(addr).to receive(:[]).with(:iSockaddrLength).and_return(length)
       allow(NetworkingFFI).to receive(:WSAAddressToStringW)
-                                  .with(address, length, FFI::Pointer::NULL, buffer, size).and_return(error)
+        .with(address, length, FFI::Pointer::NULL, buffer, size).and_return(error)
       allow(NetworkUtils).to receive(:extract_address).with(buffer).and_return('10.123.0.2')
     end
 
