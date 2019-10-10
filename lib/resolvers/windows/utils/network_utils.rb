@@ -35,7 +35,6 @@ class NetworkUtils
     end
 
     def build_binding(addr, mask_length)
-      @log.info mask_length
       ip = IPAddr.new(addr)
       mask = if ip.ipv6?
                IPAddr.new('ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff').mask(mask_length)
