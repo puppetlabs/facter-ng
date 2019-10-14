@@ -5,9 +5,9 @@ module Facter
     attr_reader :core_facts, :legacy_facts, :facts
 
     def initialize
-      @core_facts = {}
-      @legacy_facts = {}
-      @facts = {}
+      @core_facts = []
+      @legacy_facts = []
+      @facts = []
 
       load
     end
@@ -24,14 +24,17 @@ module Facter
         klass = Class.const_get("Facter::#{os}::" + class_name.to_s)
         fact_name = klass::FACT_NAME
 
+
         if legacy_fact?(klass)
-          @legacy_facts.merge!(fact_name => klass)
+          loaded_fact = LoadedFact.new(fact_name, klass, :legacy)
+          @legacy_facts << loaded_fact
         else
-          @core_facts.merge!(fact_name => klass)
+          loaded_fact = LoadedFact.new(fact_name, klass, :core)
+          @core_facts << loaded_fact
         end
       end
 
-      @facts = @legacy_facts.merge(@core_facts)
+      @facts = @legacy_facts.concat(@core_facts)
 
       @facts
     end

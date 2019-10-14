@@ -11,14 +11,25 @@ module Facter
       custom_facts_to_load = LegacyFacter.collection.custom_facts
       external_facts_to_load = LegacyFacter.collection.external_facts
 
-      @custom_facts = {}
-      @external_facts = {}
-      @facts = {}
+      @custom_facts = []
+      @external_facts = []
+      @facts = []
 
-      custom_facts_to_load.each { |k, _v| @custom_facts.merge!(k.to_s => nil) }
-      external_facts_to_load.each { |k, _v| @external_facts.merge!(k.to_s => nil) }
+      if custom_facts_to_load
+        custom_facts_to_load.each do |k, _v|
+          loaded_fact = LoadedFact.new(k.to_s, nil, :custom)
+          @custom_facts << loaded_fact
+        end
+      end
 
-      @facts = @custom_facts.merge(@external_facts)
+      if external_facts_to_load
+        external_facts_to_load.each do |k, _v|
+          loaded_fact = LoadedFact.new(k.to_s, nil, :external)
+          @external_facts << loaded_fact
+        end
+      end
+
+      @facts = @custom_facts.concat(@external_facts)
     end
   end
 end
