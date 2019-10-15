@@ -2,7 +2,7 @@
 
 module Facter
   class ExternalFactLoader
-    attr_reader :custom_facts, :external_facts, :facts
+    attr_reader :external_facts, :external_facts, :facts
 
     def initialize
       @custom_facts = []

@@ -3,7 +3,7 @@
 module Facter
   class InternalFactManager
     def resolve_facts(searched_facts)
-      searched_facts = filter_core_facts(searched_facts)
+      searched_facts = filter_internal_facts(searched_facts)
 
       threads = start_threads(searched_facts)
       resolved_facts = join_threads(threads, searched_facts)
@@ -13,7 +13,7 @@ module Facter
 
     private
 
-    def filter_core_facts(searched_facts)
+    def filter_internal_facts(searched_facts)
       searched_facts.select { |searched_fact| searched_fact.type == :core || searched_fact.type == :legacy }
     end
 
