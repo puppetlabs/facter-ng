@@ -18,24 +18,23 @@ class NetworkUtils
         @log.debug 'address to string translation failed!'
         return
       end
-      buffer.read_wide_string
+      extract_address(buffer)
     end
 
-    def ignored_ipv4_address(addr)
-      addr.empty? || addr.start_with?('127.', '169.254.')
+    def extract_address(addr)
+      addr.read_wide_string_without_length.split('%').first
     end
 
-    def ignored_ipv6_address(addr)
-      addr.empty? || addr.start_with?('fe80') || addr.eql?('::1')
+    def ignored_ip_address(addr)
+      addr.empty? || addr.start_with?('127.', '169.254.') || addr.start_with?('fe80') || addr.eql?('::1')
     end
 
     def find_mac_address(adapter)
-      mac = (['%02x'] * adapter[:PhysicalAddressLength]).join(':') % adapter[:PhysicalAddress].map(&:to_i)
-      mac.upcase
+      adapter[:PhysicalAddress].first(adapter[:PhysicalAddressLength]).map { |e| format('%02x', e.to_i) }
+                               .join(':').upcase
     end
 
     def build_binding(addr, mask_length)
-      @log.info mask_length
       ip = IPAddr.new(addr)
       mask = if ip.ipv6?
                IPAddr.new('ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff').mask(mask_length)

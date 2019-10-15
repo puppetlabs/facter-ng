@@ -23,12 +23,12 @@ module Facter
           size_ptr = FFI::MemoryPointer.new(NetworkingFFI::BUFFER_LENGTH)
           adapter_addresses = FFI::MemoryPointer.new(IpAdapterAddressesLh.size, NetworkingFFI::BUFFER_LENGTH)
           flags = NetworkingFFI::GAA_FLAG_SKIP_ANYCAST |
-              NetworkingFFI::GAA_FLAG_SKIP_MULTICAST | NetworkingFFI::GAA_FLAG_SKIP_DNS_SERVER
+                  NetworkingFFI::GAA_FLAG_SKIP_MULTICAST | NetworkingFFI::GAA_FLAG_SKIP_DNS_SERVER
 
           return unless (adapter_addresses = get_adapter_addresses(size_ptr, adapter_addresses, flags))
 
           iterate_list(adapter_addresses)
-          set_interfaces_other_facts
+          set_interfaces_other_facts if @fact_list[:interfaces]
           @fact_list[fact_name]
         end
 
@@ -57,8 +57,8 @@ module Facter
         end
 
         def retrieve_dhcp_server(adapter)
-          if adapter[:Flags] & NetworkingFFI::IP_ADAPTER_DHCP_ENABLED &&
-              adapter[:Union][:Struct][:Length] >= IpAdapterAddressesLh.size
+          if !(adapter[:Flags] & NetworkingFFI::IP_ADAPTER_DHCP_ENABLED).zero? &&
+             adapter[:Union][:Struct][:Length] >= IpAdapterAddressesLh.size
             NetworkUtils.address_to_string(adapter[:Dhcpv4Server])
           end
         end
@@ -70,12 +70,12 @@ module Facter
               adapter_address = IpAdapterAddressesLh.new(adapter_address[:Next])
               next
             end
-            @fact_list[:domain] ||= adapter_address[:DnsSuffix].read_wide_string
-            name = adapter_address[:FriendlyName].read_wide_string.to_sym
+            @fact_list[:domain] ||= adapter_address[:DnsSuffix].read_wide_string_without_length
+            name = adapter_address[:FriendlyName].read_wide_string_without_length.to_sym
             net_interface[name] = build_interface_info(adapter_address, name)
           end
 
-          @fact_list[:interfaces] = net_interface
+          @fact_list[:interfaces] = net_interface unless net_interface.empty?
         end
 
         def build_interface_info(adapter_address, name)
@@ -134,11 +134,14 @@ module Facter
 
         def set_interfaces_other_facts
           @fact_list[:interfaces].each do |interface_name, value|
-            binding = find_valid_binding(value[:bindings])
-            populate_interface(binding, value)
-
-            binding = find_valid_binding(value[:bindings6])
-            populate_interface(binding, value)
+            if value[:bindings]
+              binding = find_valid_binding(value[:bindings])
+              populate_interface(binding, value)
+            end
+            if value[:bindings6]
+              binding = find_valid_binding(value[:bindings6])
+              populate_interface(binding, value)
+            end
             set_networking_other_facts(value, interface_name)
           end
         end

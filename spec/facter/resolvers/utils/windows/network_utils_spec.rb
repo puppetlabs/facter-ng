@@ -106,6 +106,27 @@ describe 'NetworkUtils' do
 
   describe '#extract_address' do
     context 'when address is ipv6' do
+      let(:addr) { 'fe80::38bf:8f11:6227:9e6b%6' }
+      let(:input) { double(FFI::Pointer) }
+      before do
+        allow(input).to receive(:read_wide_string_without_length).and_return(addr)
+      end
+
+      it 'returns address without interface' do
+        expect(NetworkUtils.extract_address(input)).to eql('fe80::38bf:8f11:6227:9e6b')
+      end
+    end
+  end
+
+  describe '#find_mac_address' do
+    context 'from a char array' do
+      let(:adapter) do
+        Ps = Struct.new(:PhysicalAddress, :PhysicalAddressLength)
+        Ps.new([0, 80, 86, 154, 248, 107, 0, 0], 6)
+      end
+      it 'returns mac address' do
+        expect(NetworkUtils.find_mac_address(adapter)).to eql('00:50:56:9A:F8:6B')
+      end
     end
   end
 end
