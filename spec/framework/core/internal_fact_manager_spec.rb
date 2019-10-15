@@ -13,7 +13,7 @@ describe 'CoreFactManager' do
       searched_fact =
         double(Facter::SearchedFact, name: 'os', fact_class: ubuntu_os_name, filter_tokens: [], user_query: '')
 
-      core_fact_manager = Facter::CoreFactManager.new
+      core_fact_manager = Facter::InternalFactManager.new
       resolved_facts = core_fact_manager.resolve_facts([searched_fact])
 
       expect(resolved_facts).to eq([resolved_fact])
@@ -29,7 +29,7 @@ describe 'CoreFactManager' do
       searched_fact = double(Facter::SearchedFact, name: 'ipaddress_.*', fact_class: ubuntu_networking_interface,
                                                    filter_tokens: [], user_query: '')
 
-      core_fact_manager = Facter::CoreFactManager.new
+      core_fact_manager = Facter::InternalFactManager.new
       resolved_facts = core_fact_manager.resolve_facts([searched_fact])
 
       expect(resolved_facts).to eq([resolved_fact])

@@ -9,19 +9,20 @@ module Facter
       @legacy_facts = []
       @facts = []
 
+      @os = CurrentOs.instance.identifier.capitalize
+
       load
     end
 
     private
 
     def load
-      os = CurrentOs.instance.identifier.capitalize
-
       # select only classes
-      classes = ClassDiscoverer.instance.discover_classes(os)
+      classes = ClassDiscoverer.instance.discover_classes(@os)
 
       classes.each do |class_name|
-        fact_name = fact_name(class_name)
+        klass = klass(class_name)
+        fact_name = klass::FACT_NAME
 
         if legacy_fact?(klass)
           load_legacy_fact(fact_name, klass)
@@ -37,9 +38,8 @@ module Facter
       @facts = @legacy_facts.concat(@core_facts)
     end
 
-    def fact_name(class_name)
-      klass = Class.const_get("Facter::#{os}::" + class_name.to_s)
-      klass::FACT_NAME
+    def klass(class_name)
+      Class.const_get("Facter::#{@os}::" + class_name.to_s)
     end
 
     def load_core_facts(fact_name, klass)

@@ -12,7 +12,7 @@ module Facter
       load_custom_facts
       load_external_facts
 
-      all_Facts
+      all_facts
     end
 
     private

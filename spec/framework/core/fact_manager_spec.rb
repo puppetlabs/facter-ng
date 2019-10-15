@@ -26,12 +26,12 @@ describe 'FactManager' do
         .with(user_query, loaded_facts)
         .and_return([searched_fact1, searched_fact2])
 
-      allow_any_instance_of(Facter::CoreFactManager)
+      allow_any_instance_of(Facter::InternalFactManager)
         .to receive(:resolve_facts)
         .with([searched_fact1])
         .and_return([resolved_fact])
 
-      allow_any_instance_of(Facter::CustomFactManager).to receive(:resolve_facts).with([searched_fact2])
+      allow_any_instance_of(Facter::ExternalFactManager).to receive(:resolve_facts).with([searched_fact2])
 
       resolved_facts = Facter::FactManager.instance.resolve_facts(options, user_query)
 
@@ -57,7 +57,7 @@ describe 'FactManager' do
         .with(user_query, core_facts)
         .and_return([searched_fact])
 
-      allow_any_instance_of(Facter::CoreFactManager)
+      allow_any_instance_of(Facter::InternalFactManager)
         .to receive(:resolve_facts)
         .with([searched_fact])
         .and_return([resolved_fact])

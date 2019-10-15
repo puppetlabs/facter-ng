@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Facter
-  class CoreFactManager
+  class InternalFactManager
     def resolve_facts(searched_facts)
       searched_facts = filter_core_facts(searched_facts)
 

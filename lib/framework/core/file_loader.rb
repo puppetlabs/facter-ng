@@ -27,7 +27,8 @@ load_lib_dirs('utils')
 load_lib_dirs('framework', 'core')
 load_lib_dirs('models')
 load_lib_dirs('framework', 'core', 'fact_loaders')
-load_lib_dirs('framework', 'core', 'fact')
+load_lib_dirs('framework', 'core', 'fact', 'internal')
+load_lib_dirs('framework', 'core', 'fact', 'external')
 
 os = ENV['RACK_ENV'] == 'test' ? '' : CurrentOs.instance.identifier
 

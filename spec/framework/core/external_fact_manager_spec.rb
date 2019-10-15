@@ -13,7 +13,7 @@ describe 'CustomFactManager' do
       searched_fact =
         double(Facter::SearchedFact, name: custom_fact_name, fact_class: nil, filter_tokens: [], user_query: '')
 
-      custom_fact_manager = Facter::CustomFactManager.new
+      custom_fact_manager = Facter::ExternalFactManager.new
       resolved_facts = custom_fact_manager.resolve_facts([searched_fact])
 
       expect(resolved_facts.length).to eq(1)

@@ -7,8 +7,8 @@ module Facter
     include Singleton
 
     def initialize
-      @core_fact_mgr = CoreFactManager.new
-      @custom_fact_mgr = CustomFactManager.new
+      @core_fact_mgr = InternalFactManager.new
+      @custom_fact_mgr = ExternalFactManager.new
       @fact_loader = FactLoader.instance
     end
 
@@ -31,7 +31,7 @@ module Facter
       options[:user_query] = true if user_query.any?
 
       @fact_loader.load(options)
-      loaded_facts_hash = fact_loader.internal_facts
+      loaded_facts_hash = @fact_loader.internal_facts
 
       searched_facts = QueryParser.parse(user_query, loaded_facts_hash)
       resolved_facts = @core_fact_mgr.resolve_facts(searched_facts)
