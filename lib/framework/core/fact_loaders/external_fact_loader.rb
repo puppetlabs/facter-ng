@@ -2,13 +2,14 @@
 
 module Facter
   class ExternalFactLoader
-    attr_reader :external_facts, :external_facts, :facts
+    attr_reader :custom_facts, :external_facts, :facts
 
     def initialize
       @custom_facts = []
       @external_facts = []
       @facts = []
 
+      directories_to_search
       load_custom_facts
       load_external_facts
 
@@ -21,8 +22,12 @@ module Facter
       @facts = @custom_facts.concat(@external_facts)
     end
 
-    def load_custom_facts
+    def directories_to_search
       LegacyFacter.search("#{ROOT_DIR}/custom_facts")
+      LegacyFacter.search_external(["#{ROOT_DIR}/external_facts"])
+    end
+
+    def load_custom_facts
       custom_facts_to_load = LegacyFacter.collection.custom_facts
 
       custom_facts_to_load&.each do |k, _v|
@@ -32,7 +37,6 @@ module Facter
     end
 
     def load_external_facts
-      LegacyFacter.search_external(["#{ROOT_DIR}/external_facts"])
       external_facts_to_load = LegacyFacter.collection.external_facts
 
       external_facts_to_load&.each do |k, _v|

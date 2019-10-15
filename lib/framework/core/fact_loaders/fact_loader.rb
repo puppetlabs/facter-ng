@@ -44,12 +44,12 @@ module Facter
       @log.debug('Loading external facts')
       unless options[:no_custom_facts]
         @log.debug('Loading custom facts')
-        @external_facts = @external_fact_loader.custom_facts
+        @external_facts.concat(@external_fact_loader.custom_facts)
       end
 
       unless options[:no_external_facts]
         @log.debug('Loading external facts')
-        @external_facts = @external_fact_loader.external_facts
+        @external_facts.concat(@external_fact_loader.external_facts)
       end
 
       @facts.concat(@external_facts)
