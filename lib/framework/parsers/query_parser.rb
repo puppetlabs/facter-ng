@@ -26,7 +26,7 @@ module Facter
       matched_facts = []
       @log.debug "User query is: #{query_list}"
       @query_list = query_list
-      query_list = loaded_fact.map {|loaded_fact| loaded_fact.name } unless query_list.any?
+      query_list = loaded_fact.map(&:name) unless query_list.any?
 
       query_list.each do |query|
         @log.debug "Query is #{query}"
@@ -67,8 +67,8 @@ module Facter
 
         next unless found_fact?(loaded_fact.name, query_fact)
 
-        searched_Fact = construct_loaded_fact(query_tokens, query_token_range, loaded_fact)
-        resolvable_fact_list << searched_Fact
+        searched_fact = construct_loaded_fact(query_tokens, query_token_range, loaded_fact)
+        resolvable_fact_list << searched_fact
       end
 
       @log.debug "List of resolvable facts: #{resolvable_fact_list.inspect}"

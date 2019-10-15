@@ -10,7 +10,7 @@ module Facter
     private
 
     def filter_custom_facts(searched_facts)
-      searched_facts.select { |searched_fact| searched_fact.type == :custom ||  searched_fact.type == :external }
+      searched_facts.select { |searched_fact| searched_fact.type == :custom || searched_fact.type == :external }
     end
 
     def custom_facts(custom_facts)

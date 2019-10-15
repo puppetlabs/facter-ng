@@ -5,31 +5,40 @@ module Facter
     attr_reader :custom_facts, :external_facts, :facts
 
     def initialize
-      LegacyFacter.search("#{ROOT_DIR}/custom_facts")
-      LegacyFacter.search_external(["#{ROOT_DIR}/external_facts"])
-
-      custom_facts_to_load = LegacyFacter.collection.custom_facts
-      external_facts_to_load = LegacyFacter.collection.external_facts
-
       @custom_facts = []
       @external_facts = []
       @facts = []
 
-      if custom_facts_to_load
-        custom_facts_to_load.each do |k, _v|
-          loaded_fact = LoadedFact.new(k.to_s, nil, :custom)
-          @custom_facts << loaded_fact
-        end
-      end
+      load_custom_facts
+      load_external_facts
 
-      if external_facts_to_load
-        external_facts_to_load.each do |k, _v|
-          loaded_fact = LoadedFact.new(k.to_s, nil, :external)
-          @external_facts << loaded_fact
-        end
-      end
+      all_Facts
+    end
 
+    private
+
+    def all_facts
       @facts = @custom_facts.concat(@external_facts)
+    end
+
+    def load_custom_facts
+      LegacyFacter.search("#{ROOT_DIR}/custom_facts")
+      custom_facts_to_load = LegacyFacter.collection.custom_facts
+
+      custom_facts_to_load&.each do |k, _v|
+        loaded_fact = LoadedFact.new(k.to_s, nil, :custom)
+        @custom_facts << loaded_fact
+      end
+    end
+
+    def load_external_facts
+      LegacyFacter.search_external(["#{ROOT_DIR}/external_facts"])
+      external_facts_to_load = LegacyFacter.collection.external_facts
+
+      external_facts_to_load&.each do |k, _v|
+        loaded_fact = LoadedFact.new(k.to_s, nil, :external)
+        @external_facts << loaded_fact
+      end
     end
   end
 end

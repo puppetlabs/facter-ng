@@ -14,7 +14,7 @@ module Facter
     private
 
     def filter_core_facts(searched_facts)
-        searched_facts.select { |searched_fact| searched_fact.type == :core || searched_fact.type == :legacy}
+      searched_facts.select { |searched_fact| searched_fact.type == :core || searched_fact.type == :legacy }
     end
 
     def start_threads(searched_facts)

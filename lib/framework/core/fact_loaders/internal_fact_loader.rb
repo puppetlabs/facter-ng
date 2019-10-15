@@ -21,22 +21,35 @@ module Facter
       classes = ClassDiscoverer.instance.discover_classes(os)
 
       classes.each do |class_name|
-        klass = Class.const_get("Facter::#{os}::" + class_name.to_s)
-        fact_name = klass::FACT_NAME
-
+        fact_name = fact_name(class_name)
 
         if legacy_fact?(klass)
-          loaded_fact = LoadedFact.new(fact_name, klass, :legacy)
-          @legacy_facts << loaded_fact
+          load_legacy_fact(fact_name, klass)
         else
-          loaded_fact = LoadedFact.new(fact_name, klass, :core)
-          @core_facts << loaded_fact
+          load_core_facts(fact_name, klass)
         end
       end
 
-      @facts = @legacy_facts.concat(@core_facts)
+      all_facts
+    end
 
-      @facts
+    def all_facts
+      @facts = @legacy_facts.concat(@core_facts)
+    end
+
+    def fact_name(class_name)
+      klass = Class.const_get("Facter::#{os}::" + class_name.to_s)
+      klass::FACT_NAME
+    end
+
+    def load_core_facts(fact_name, klass)
+      loaded_fact = LoadedFact.new(fact_name, klass, :core)
+      @core_facts << loaded_fact
+    end
+
+    def load_legacy_fact(fact_name, klass)
+      loaded_fact = LoadedFact.new(fact_name, klass, :legacy)
+      @legacy_facts << loaded_fact
     end
 
     def legacy_fact?(klass)
