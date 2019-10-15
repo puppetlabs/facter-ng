@@ -3,10 +3,15 @@
 module Facter
   class CustomFactManager
     def resolve_facts(searched_facts)
+      searched_facts = filter_custom_facts(searched_facts)
       custom_facts(searched_facts)
     end
 
     private
+
+    def filter_custom_facts(searched_facts)
+      searched_facts.select { |searched_fact| searched_fact.type == :custom ||  searched_fact.type == :external }
+    end
 
     def custom_facts(custom_facts)
       LegacyFacter.search("#{ROOT_DIR}/custom_facts")

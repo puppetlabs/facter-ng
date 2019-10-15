@@ -9,21 +9,17 @@ module Facter
     def initialize
       @core_fact_mgr = CoreFactManager.new
       @custom_fact_mgr = CustomFactManager.new
-      # @internal_loader = InternalFactLoader.new
-      # @external_fact_loader = ExternalFactLoader.new
-
+      @fact_loader = FactLoader.instance
     end
 
     def resolve_facts(options = {}, user_query = [])
       options = options.dup
       options[:user_query] = true if user_query.any?
 
-      fact_loader = FactLoader.instance
-      loaded_facts_hash = fact_loader.load(options)
+      loaded_facts_hash = @fact_loader.load(options)
       searched_facts = QueryParser.parse(user_query, loaded_facts_hash)
-
-      core_facts = resolve_core_facts(searched_facts)
-      custom_facts = resolve_custom_facts(searched_facts)
+      core_facts = @core_fact_mgr.resolve_facts(searched_facts)
+      custom_facts = @custom_fact_mgr.resolve_facts(searched_facts)
 
       resolved_facts = override_core_facts(core_facts, custom_facts)
       FactFilter.new.filter_facts!(resolved_facts)
@@ -34,12 +30,11 @@ module Facter
     def resolve_core(options = {}, user_query = [])
       options[:user_query] = true if user_query.any?
 
-      fact_loader = FactLoader.instance
-      fact_loader.load(options)
+      @fact_loader.load(options)
       loaded_facts_hash = fact_loader.internal_facts
 
       searched_facts = QueryParser.parse(user_query, loaded_facts_hash)
-      resolved_facts = resolve_core_facts(searched_facts)
+      resolved_facts = @core_fact_mgr.resolve_facts(searched_facts)
       FactFilter.new.filter_facts!(resolved_facts)
 
       resolved_facts
@@ -59,18 +54,6 @@ module Facter
 
     def root_fact_name(fact)
       fact.name.split('.').first
-    end
-
-    def resolve_core_facts(searched_facts)
-      @core_fact_mgr.resolve_facts(
-        searched_facts.select { |searched_fact| searched_fact.type == :core || searched_fact.type == :legacy})
-    end
-
-    def resolve_custom_facts(searched_facts)
-      searched_custom_facts =
-        searched_facts.select { |searched_fact| searched_fact.type == :custom ||  searched_fact.type == :external}
-
-      @custom_fact_mgr.resolve_facts(searched_custom_facts)
     end
   end
 end
