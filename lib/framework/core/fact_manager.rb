@@ -7,20 +7,20 @@ module Facter
     include Singleton
 
     def initialize
-      @core_fact_mgr = InternalFactManager.new
-      @custom_fact_mgr = ExternalFactManager.new
+      @internal_fact_mgr = InternalFactManager.new
+      @external_fact_mgr = ExternalFactManager.new
       @fact_loader = FactLoader.instance
     end
 
     def resolve_facts(options = {}, user_query = [])
       options = enhance_options(options, user_query)
 
-      loaded_facts_hash = @fact_loader.load(options)
-      searched_facts = QueryParser.parse(user_query, loaded_facts_hash)
-      core_facts = @core_fact_mgr.resolve_facts(searched_facts)
-      custom_facts = @custom_fact_mgr.resolve_facts(searched_facts)
+      loaded_facts = @fact_loader.load(options)
+      searched_facts = QueryParser.parse(user_query, loaded_facts)
+      internal_facts = @internal_fact_mgr.resolve_facts(searched_facts)
+      external_facts = @external_fact_mgr.resolve_facts(searched_facts)
 
-      resolved_facts = override_core_facts(core_facts, custom_facts)
+      resolved_facts = override_core_facts(internal_facts, external_facts)
       FactFilter.new.filter_facts!(resolved_facts)
 
       resolved_facts
@@ -33,7 +33,7 @@ module Facter
       loaded_facts_hash = @fact_loader.internal_facts
 
       searched_facts = QueryParser.parse(user_query, loaded_facts_hash)
-      resolved_facts = @core_fact_mgr.resolve_facts(searched_facts)
+      resolved_facts = @internal_fact_mgr.resolve_facts(searched_facts)
       FactFilter.new.filter_facts!(resolved_facts)
 
       resolved_facts
