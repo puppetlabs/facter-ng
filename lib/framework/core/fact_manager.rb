@@ -13,8 +13,7 @@ module Facter
     end
 
     def resolve_facts(options = {}, user_query = [])
-      options = options.dup
-      options[:user_query] = true if user_query.any?
+      options = enhance_options(options, user_query)
 
       loaded_facts_hash = @fact_loader.load(options)
       searched_facts = QueryParser.parse(user_query, loaded_facts_hash)
@@ -28,7 +27,7 @@ module Facter
     end
 
     def resolve_core(options = {}, user_query = [])
-      options[:user_query] = true if user_query.any?
+      options = enhance_options(options, user_query)
 
       @fact_loader.load(options)
       loaded_facts_hash = @fact_loader.internal_facts
@@ -41,6 +40,13 @@ module Facter
     end
 
     private
+
+    def enhance_options(options, user_query)
+      options = options.dup
+      options[:user_query] = true if user_query.any?
+
+      options
+    end
 
     def override_core_facts(core_facts, custom_facts)
       return core_facts unless custom_facts
