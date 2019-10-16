@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 describe 'FactLoader' do
   describe '#load' do
@@ -8,7 +9,9 @@ describe 'FactLoader' do
     let(:networking_class) { double(Facter::Ubuntu::NetworkInterface) }
 
     let(:loaded_fact_os_name) { double(Facter::LoadedFact, name: 'os.name', klass: ubuntu_os_name, type: :core) }
-    let(:loaded_fact_networking) { double(Facter::LoadedFact, name: 'ipaddress_.*', klass: networking_class, type: :legacy) }
+    let(:loaded_fact_networking) do
+      double(Facter::LoadedFact, name: 'ipaddress_.*', klass: networking_class, type: :legacy)
+    end
     let(:loaded_fact_custom_fact) { double(Facter::LoadedFact, name: 'custom_fact', klass: nil, type: :custom) }
 
     before(:each) do
@@ -19,7 +22,7 @@ describe 'FactLoader' do
     end
 
     it 'loads all internal facts' do
-      options = { :user_query => true }
+      options = { user_query: true }
 
       facts_to_load = [loaded_fact_os_name, loaded_fact_networking]
 
@@ -32,7 +35,7 @@ describe 'FactLoader' do
     end
 
     it 'loads core facts' do
-      options = { }
+      options = {}
 
       facts_to_load = [loaded_fact_os_name]
 
