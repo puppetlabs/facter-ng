@@ -18,9 +18,8 @@ module Facter
         end
 
         def read_networking_domain(fact_name)
-          output, _status = Open3.capture2('cat /etc/resolv.conf')
-          output.each_line do |line|
-            next unless line.match(/search\s+(\S+)/)
+          File.read('/etc/resolv.conf').lines.each do |line|
+            next unless line.match(/^search\s+(\S+)/)
 
             @fact_list[:networking_domain] = Regexp.last_match(1)
             break
