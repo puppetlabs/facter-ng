@@ -7,8 +7,9 @@ module Facter
 
       def call_the_resolver
         fact_value = Resolvers::Uname.resolve(:kernelrelease)
-        ResolvedFact.new(FACT_NAME, fact_value)
+        ResolvedFact.new(FACT_NAME, major_version(fact_value))
       end
+
       private
 
       def major_version(fact_value)
