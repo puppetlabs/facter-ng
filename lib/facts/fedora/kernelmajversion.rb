@@ -6,7 +6,7 @@ module Facter
       FACT_NAME = 'kernelmajversion'
 
       def call_the_resolver
-        fact_value = Resolvers::Uname.resolve(:kernelversion)
+        fact_value = Resolvers::Uname.resolve(:kernelrelease)
         ResolvedFact.new(FACT_NAME, fact_value)
       end
       private
