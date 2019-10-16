@@ -5,7 +5,7 @@ describe 'Fedora Kernelversion' do
     it 'returns a fact' do
       value = '4.19.2'
       expected_fact = double(Facter::ResolvedFact, name: 'kernelversion', value: value)
-      allow(<resolver_name>).to receive(:resolve).with(<resolver_fact>).and_return(value)
+      allow(Facter::Resolvers::Unamen).to receive(:resolve).with(:kernelversion).and_return(value)
       allow(Facter::ResolvedFact).to receive(:new).with('kernelversion', value).and_return(expected_fact)
 
       fact = Facter::Fedora::Kernelversion.new
