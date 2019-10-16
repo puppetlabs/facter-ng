@@ -24,9 +24,9 @@ describe 'QueryParser' do
       networking_class = Class.const_get('Facter::Ubuntu::NetworkInterface')
       os_family_class = Class.const_get('Facter::Ubuntu::OsFamily')
 
-      loaded_fact_os_name = double(Facter::LoadedFact, name: 'ipaddress_.*', klass: networking_class, type: :legacy)
+      loaded_fact_networking = double(Facter::LoadedFact, name: 'ipaddress_.*', klass: networking_class, type: :legacy)
       loaded_fact_os_family = double(Facter::LoadedFact, name: 'os.family', klass: os_family_class, type: :core)
-      loaded_facts = [loaded_fact_os_name, loaded_fact_os_family]
+      loaded_facts = [loaded_fact_networking, loaded_fact_os_family]
 
       matched_facts = Facter::QueryParser.parse(query_list, loaded_facts)
 
