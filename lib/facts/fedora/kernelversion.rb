@@ -13,8 +13,8 @@ module Facter
       private
 
       def version(fact_value)
-        versions = fact_value.split('-')
-        return versions[0]
+        version_token = fact_value.split('-')
+        version_token[0]
       end
     end
   end
