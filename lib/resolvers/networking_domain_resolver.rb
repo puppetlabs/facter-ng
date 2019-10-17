@@ -23,7 +23,9 @@ module Facter
 
             @fact_list[:networking_domain] = Regexp.last_match(1)
             break
-          end
+       output = File.read('/etc/resolv.conf')
+       output.match(/^search\s+(\S+)/)
+       @fact_list[:networking_domain] = Regexp.last_match(1)
           @fact_list[fact_name]
         end
       end
