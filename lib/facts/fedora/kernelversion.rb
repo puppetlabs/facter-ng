@@ -6,8 +6,16 @@ module Facter
       FACT_NAME = 'kernelversion'
 
       def call_the_resolver
-        fact_value = Resolvers::Uname.resolve(:kernelversion)
-        ResolvedFact.new(FACT_NAME, fact_value)
+        fact_value = Resolvers::Uname.resolve(:kernelrelease)
+        ResolvedFact.new(FACT_NAME, version(fact_value))
+      end
+
+      private
+
+      def version(fact_value)
+        versions = fact_value.split('-')
+        return versions[0]
+
       end
     end
   end
