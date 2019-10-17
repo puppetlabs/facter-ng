@@ -15,7 +15,6 @@ module Facter
       def version(fact_value)
         versions = fact_value.split('-')
         return versions[0]
-
       end
     end
   end
