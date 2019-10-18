@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 
 module Facter
-  module Windows
-    class NetworkingDomain
-      FACT_NAME = 'networking.domain'
+  module Ubuntu
+    class Kernelrelease
+      FACT_NAME = 'kernelrelease'
 
       def call_the_resolver
-        fact_value = Resolvers::Networking.resolve(:domain)
-
+        fact_value = Resolvers::Uname.resolve(:kernelrelease)
         ResolvedFact.new(FACT_NAME, fact_value)
       end
     end
