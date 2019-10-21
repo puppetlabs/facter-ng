@@ -27,7 +27,7 @@ module Facter
   end
 
   def add(name, options = {}, &block)
-    LegacyFacter.add(name, options = {}, &block)
+    LegacyFacter.add(name, options, &block)
   end
 
   def self.core_value(user_query)
