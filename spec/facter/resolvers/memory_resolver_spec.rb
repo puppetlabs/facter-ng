@@ -12,24 +12,24 @@ describe 'MemoryResolver' do
   it 'returns total memory' do
     result = Facter::Resolvers::Linux::Memory.resolve(:total)
 
-    expect(result).to eq('4133560320')
+    expect(result).to eq(4133560320)
   end
 
   it 'returns memfree' do
     result = Facter::Resolvers::Linux::Memory.resolve(:memfree)
 
-    expect(result).to eq('6589915136')
+    expect(result).to eq(6589915136)
   end
 
   it 'returns swap total' do
     result = Facter::Resolvers::Linux::Memory.resolve(:swap_total)
 
-    expect(result).to eq('0')
+    expect(result).to eq(0)
   end
 
   it 'returns swap available' do
     result = Facter::Resolvers::Linux::Memory.resolve(:swap_free)
 
-    expect(result).to eq('0')
+    expect(result).to eq(0)
   end
 end

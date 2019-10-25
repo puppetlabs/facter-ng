@@ -17,20 +17,16 @@ module Facter
           end
 
           def read_meminfo_file(fact_name)
-            output, _status = Open3.capture2('cat /proc/meminfo')
-            output.each_line do |line|
-              result = line.match(/\d+/).to_s.to_i * 1024
-              @fact_list[:total] = result if line.match(/MemTotal:/)
-              @fact_list[:memfree] ||= result if line.match(/MemFree:|Buffers:|Cache:/)
-              @fact_list[:swap_total] = result if line.match(/SwapTotal:/)
-              @fact_list[:swap_free] = result if line.match(/SwapFree:/)
-            end
+            output, _status = File.read('/proc/meminfo')
+            @fact_list[:total] = fact_name if output.match(/MemTotal:\s+(\d+)\s/)[1]
+            @fact_list[:memfree] = fact_name if output.match(/MemFree:\s+(\d+)\s/)[1]
+            @fact_list[:swap_total] = fact_name if output.match(/SwapTotal:\s+(\d+)\s/)[1]
+            @fact_list[:swap_free] = fact_name if output.match(/SwapFree:\s+(\d+)\s/)[1]
             lis(fact_name)
           end
 
           def lis(fact_name)
-            if (@fact_list[:total].zero? || @fact_list[:memfree].zero? ||
-                 @fact_list[:swap_total].zero? || @fact_list[:swap_free]).zero?
+            if (@fact_list[:total].zero? || @fact_list[:memfree].zero? || @fact_list[:swap_total].zero? || @fact_list[:swap_free]).zero?
               @log.debug 'Total or Available memory is equal to zero, could not proceed further!'
             else
               caller_use
