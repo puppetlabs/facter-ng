@@ -10,7 +10,7 @@ module Facter
     private
 
     def filter_external_facts(searched_facts)
-      searched_facts.select { |searched_fact| searched_fact.type == :custom || searched_fact.type == :external }
+      searched_facts.select { |searched_fact| %i[custom external].include?(searched_fact.type) }
     end
 
     def external_facts(custom_facts)
