@@ -29,7 +29,8 @@ module Facter
           end
 
           def lis(fact_name)
-            if (@fact_list[:total].zero? || @fact_list[:memfree].zero? || @fact_list[:swap_total].zero? || @fact_list[:swap_free]).zero?
+            if (@fact_list[:total].zero? || @fact_list[:memfree].zero? ||
+                 @fact_list[:swap_total].zero? || @fact_list[:swap_free]).zero?
               @log.debug 'Total or Available memory is equal to zero, could not proceed further!'
             else
               caller_use

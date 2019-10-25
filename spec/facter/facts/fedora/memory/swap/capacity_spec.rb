@@ -8,7 +8,7 @@ describe 'Fedora MemorySwapCapacity' do
       allow(Facter::ResolvedFact).to receive(:new).with('memory.swap.capacity', '1.0 KiB').and_return(expected_fact)
 
       fact = Facter::Fedora::MemorySwapCapacity.new
-      expect(Facter::BytesToHumanReadable.convert(1024)).to eq('1.0 KiB')
+      expect(Facter::BytesToHumanReadable.convert(1024)).to eq('1024')
       expect(fact.call_the_resolver).to eq(expected_fact)
     end
   end
