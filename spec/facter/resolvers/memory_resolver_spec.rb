@@ -3,8 +3,8 @@
 describe 'MemoryResolver' do
   before do
     allow(File).to receive(:read)
-                 .with('/proc/meminfo')
-                   .and_return('MemTotal 4133560320 kB
+      .with('/proc/meminfo')
+      .and_return('MemTotal 4133560320 kB
                     MemFree 6589915136 kB
                     SwapTotal 0 kB
                     SwapFree 0 kB')
@@ -12,13 +12,13 @@ describe 'MemoryResolver' do
   it 'returns total memory' do
     result = Facter::Resolvers::Linux::Memory.resolve(:total)
 
-    expect(result).to eq(4133560320)
+    expect(result).to eq(4_133_560_320)
   end
 
   it 'returns memfree' do
     result = Facter::Resolvers::Linux::Memory.resolve(:memfree)
 
-    expect(result).to eq(6589915136)
+    expect(result).to eq(6_589_915_136)
   end
 
   it 'returns swap total' do
