@@ -12,13 +12,13 @@ describe 'MemoryResolver' do
   it 'returns total memory' do
     result = Facter::Resolvers::Linux::Memory.resolve(:total)
 
-    expect(result).to eq(4_133_560_320)
+    expect(result).to eq(4_133_560_320 * 1024)
   end
 
   it 'returns memfree' do
     result = Facter::Resolvers::Linux::Memory.resolve(:memfree)
 
-    expect(result).to eq(6_589_915_136)
+    expect(result).to eq(6_589_915_136 * 1024)
   end
 
   it 'returns swap total' do
