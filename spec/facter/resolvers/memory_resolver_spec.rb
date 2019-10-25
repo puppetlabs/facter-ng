@@ -4,10 +4,10 @@ describe 'MemoryResolver' do
   before do
     allow(File).to receive(:read)
       .with('/proc/meminfo')
-      .and_return('MemTotal 4133560320 kB
-                    MemFree 6589915136 kB
-                    SwapTotal 0 kB
-                    SwapFree 0 kB')
+      .and_return('MemTotal: 4133560320 kB
+                    MemFree: 6589915136 kB
+                    SwapTotal: 0 kB
+                    SwapFree: 0 kB')
   end
   it 'returns total memory' do
     result = Facter::Resolvers::Linux::Memory.resolve(:total)

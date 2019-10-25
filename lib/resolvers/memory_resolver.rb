@@ -18,16 +18,16 @@ module Facter
 
           def read_meminfo_file(fact_name)
             output = File.read('/proc/meminfo')
-            @fact_list[:total] = output.match(/MemTotal:\s+(\d+)\s/)[1].to_i
-            @fact_list[:memfree] = output.match(/MemFree:\s+(\d+)\s/)[1].to_i
-            @fact_list[:swap_total] = output.match(/SwapTotal:\s+(\d+)\s/)[1].to_i
-            @fact_list[:swap_free] = output.match(/SwapFree:\s+(\d+)\s/)[1].to_i
+            @fact_list[:total] = output.match(/MemTotal:\s+(\d+)\s/)[1].to_i * 1024
+            @fact_list[:memfree] = output.match(/MemFree:\s+(\d+)\s/)[1].to_i * 1024
+            @fact_list[:swap_total] = output.match(/SwapTotal:\s+(\d+)\s/)[1].to_i * 1024
+            @fact_list[:swap_free] = output.match(/SwapFree:\s+(\d+)\s/)[1].to_i * 1024
             lis(fact_name)
           end
 
           def lis(fact_name)
-            if (@fact_list[:total].zero? || @fact_list[:memfree].zero? || @fact_list[:swap_total].zero? ||
-                @fact_list[:swap_free]).zero?
+            if @fact_list[:total].zero? || @fact_list[:memfree].zero? || @fact_list[:swap_total].zero? ||
+                @fact_list[:swap_free].zero?
               @log.debug 'Total or Available memory is equal to zero, could not proceed further!'
             else
               caller_use
