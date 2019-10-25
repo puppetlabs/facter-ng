@@ -7,7 +7,6 @@ module Facter
 
       def call_the_resolver
         fact_value = Resolvers::Linux::Memory.resolve(:scapacity)
-        fact_value = BytesToHumanReadable.convert(fact_value)
         ResolvedFact.new(FACT_NAME, fact_value)
       end
     end

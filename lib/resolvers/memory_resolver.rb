@@ -6,7 +6,7 @@ module Facter
       class Memory < BaseResolver
         @semaphore = Mutex.new
         @fact_list ||= {}
-
+        @log = Facter::Log.new
         class << self
           def resolve(fact_name)
             @semaphore.synchronize do
@@ -25,11 +25,27 @@ module Facter
               @fact_list[:swap_total] = result if line.match(/SwapTotal:/)
               @fact_list[:swap_free] = result if line.match(/SwapFree:/)
             end
+            lis(fact_name)
+          end
+
+          def lis(fact_name)
+            if (@fact_list[:total].zero? || @fact_list[:memfree].zero? || @fact_list[:swap_total].zero? || @fact_list[:swap_free]).zero?
+              @log.debug 'Total or Available memory is equal to zero, could not proceed further!'
+            else
+              caller_use
+              caller_cap
+              @fact_list[fact_name]
+            end
+          end
+
+          def caller_cap
+            @fact_list[:capacity] = format('%.2f',(@fact_list[:used_bytes] / @fact_list[:total].to_f * 100)) + '%'
+            @fact_list[:scapacity] = format('%.2f',(@fact_list[:sused_bytes] / @fact_list[:swap_total].to_f * 100)) + '%'
+          end
+
+          def caller_use
             @fact_list[:used_bytes] = (@fact_list[:total] - @fact_list[:memfree])
             @fact_list[:sused_bytes] = (@fact_list[:swap_total] - @fact_list[:swap_free])
-            @fact_list[:capacity] = ((@fact_list[:used_bytes] / @fact_list[:total]) * (100 / 100))
-            @fact_list[:scapacity] = ((@fact_list[:sused_bytes] / @fact_list[:swap_total]) * (100 / 100))
-            @fact_list[fact_name]
           end
         end
       end

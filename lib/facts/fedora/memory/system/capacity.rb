@@ -6,8 +6,7 @@ module Facter
       FACT_NAME = 'memory.system.capacity'
 
       def call_the_resolver
-        fact_value = Resolvers::Linux::Memory.resolve(:memfree)
-        fact_value = BytesToHumanReadable.convert(fact_value)
+        fact_value = Resolvers::Linux::Memory.resolve(:capacity)
         ResolvedFact.new(FACT_NAME, fact_value)
       end
     end

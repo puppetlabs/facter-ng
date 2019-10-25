@@ -3,9 +3,9 @@
 describe 'Fedora MemorySwapAvailable' do
   context '#call_the_resolver' do
     it 'returns a fact' do
-      expected_fact = double(Facter::ResolvedFact, name: 'memory.swap.available', value: 'value')
-      allow(Facter::Resolvers::Linux::Memory).to receive(:resolve).with(:swap_free).and_return('value')
-      allow(Facter::ResolvedFact).to receive(:new).with('memory.swap.available', 'value').and_return(expected_fact)
+      expected_fact = double(Facter::ResolvedFact, name: 'memory.swap.available', value: '1.0 KiB')
+      allow(Facter::Resolvers::Linux::Memory).to receive(:resolve).with(:swap_free).and_return(1024)
+      allow(Facter::ResolvedFact).to receive(:new).with('memory.swap.available', '1.0 KiB').and_return(expected_fact)
 
       fact = Facter::Fedora::MemorySwapAvailable.new
       expect(Facter::BytesToHumanReadable.convert(1024)).to eq('1.0 KiB')
