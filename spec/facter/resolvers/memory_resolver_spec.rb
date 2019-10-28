@@ -38,14 +38,14 @@ describe 'MemoryResolver' do
   end
 
   it 'returns swap capacity' do
-    result = Facter::Resolvers::Linux::Memory.resolve(:scapacity)
+    result = Facter::Resolvers::Linux::Memory.resolve(:swap_capacity)
     swap_capacity = format('%.2f', (swap_used / swap_total.to_f * 100)) + '%'
 
     expect(result).to eq(swap_capacity)
   end
 
   it 'returns swap usage' do
-    result = Facter::Resolvers::Linux::Memory.resolve(:sused_bytes)
+    result = Facter::Resolvers::Linux::Memory.resolve(:swap_used_bytes)
 
     expect(result).to eq(swap_total - swap_free)
   end
