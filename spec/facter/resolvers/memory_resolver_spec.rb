@@ -16,25 +16,25 @@ describe 'MemoryResolver' do
   it 'returns total memory' do
     result = Facter::Resolvers::Linux::Memory.resolve(:total)
 
-    expect(result).to eq(4_036_680 * 1024)
+    expect(result).to eq(total)
   end
 
   it 'returns memfree' do
     result = Facter::Resolvers::Linux::Memory.resolve(:memfree)
 
-    expect(result).to eq(3_547_792 * 1024)
+    expect(result).to eq(free)
   end
 
   it 'returns swap total' do
     result = Facter::Resolvers::Linux::Memory.resolve(:swap_total)
 
-    expect(result).to eq(2_097_148 * 1024)
+    expect(result).to eq(swap_total)
   end
 
   it 'returns swap available' do
     result = Facter::Resolvers::Linux::Memory.resolve(:swap_free)
 
-    expect(result).to eq(2_097_148 * 1024)
+    expect(result).to eq(swap_free)
   end
 
   it 'returns swap capacity' do
@@ -47,7 +47,7 @@ describe 'MemoryResolver' do
   it 'returns swap usage' do
     result = Facter::Resolvers::Linux::Memory.resolve(:swap_used_bytes)
 
-    expect(result).to eq(swap_total - swap_free)
+    expect(result).to eq(swap_used)
   end
 
   it 'returns system capacity' do
