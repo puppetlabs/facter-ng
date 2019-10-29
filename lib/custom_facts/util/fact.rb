@@ -17,7 +17,7 @@ module LegacyFacter
       # @deprecated
       attr_accessor :ldapname
 
-      attr_accessor :resolution_weight
+      attr_accessor :used_resolution_weight
 
       # Creates a new fact, with no resolution mechanisms. See {Facter.add}
       # for the public API for creating facts.
@@ -160,7 +160,7 @@ module LegacyFacter
       def find_first_real_value(resolutions)
         resolutions.each do |resolve|
           value = resolve.value
-          @resolution_weight = resolve.weight
+          @used_resolution_weight = resolve.weight
           return value unless value.nil?
         end
         nil
