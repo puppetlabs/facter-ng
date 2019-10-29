@@ -31,6 +31,7 @@ module Facter
   end
 
   def self.core_value(user_query)
+    user_query = user_query.to_s
     resolved_facts = Facter::FactManager.instance.resolve_core({}, [user_query])
     fact_collection = FactCollection.new.build_fact_collection!(resolved_facts)
     fact_collection.dig(*user_query.split('.'))
