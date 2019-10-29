@@ -26,7 +26,7 @@ module Facter
     fact_collection.dig(*user_query.split('.'))
   end
 
-  def add(name, options = {}, &block)
+  def self.add(name, options = {}, &block)
     LegacyFacter.add(name, options, &block)
   end
 
