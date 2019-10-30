@@ -2,26 +2,43 @@
 
 module Facter
   class InternalFactLoader
-    attr_reader :core_facts, :legacy_facts, :facts
+    def core_facts
+      @core_facts.values
+    end
+
+    def legacy_facts
+      @legacy_facts.values
+    end
+
+    def facts
+      @facts.values
+    end
 
     def initialize
-      @core_facts = []
-      @legacy_facts = []
-      @facts = []
+      @core_facts = {}
+      @legacy_facts = {}
+      @facts = {}
 
-      @os = CurrentOs.instance.identifier.capitalize
-
-      load
+      os_descendents = CurrentOs.instance.hierarchy
+      load_all_oses(os_descendents)
     end
 
     private
 
-    def load
+    def load_all_oses(os_descendents)
+      os_descendents.each do |os|
+        load_for_os(os)
+      end
+
+      all_facts
+    end
+
+    def load_for_os(operating_system)
       # select only classes
-      classes = ClassDiscoverer.instance.discover_classes(@os)
+      classes = ClassDiscoverer.instance.discover_classes(operating_system)
 
       classes.each do |class_name|
-        klass = klass(class_name)
+        klass = klass(operating_system, class_name)
         fact_name = klass::FACT_NAME
 
         if legacy_fact?(klass)
@@ -30,26 +47,24 @@ module Facter
           load_core_facts(fact_name, klass)
         end
       end
-
-      all_facts
     end
 
     def all_facts
-      @facts = @legacy_facts.concat(@core_facts)
+      @facts = @legacy_facts.merge(@core_facts)
     end
 
-    def klass(class_name)
-      Class.const_get("Facter::#{@os}::" + class_name.to_s)
+    def klass(operating_system, class_name)
+      Class.const_get("Facter::#{operating_system}::" + class_name.to_s)
     end
 
     def load_core_facts(fact_name, klass)
       loaded_fact = LoadedFact.new(fact_name, klass, :core)
-      @core_facts << loaded_fact
+      @core_facts[fact_name] = loaded_fact
     end
 
     def load_legacy_fact(fact_name, klass)
       loaded_fact = LoadedFact.new(fact_name, klass, :legacy)
-      @legacy_facts << loaded_fact
+      @legacy_facts[fact_name] = loaded_fact
     end
 
     def legacy_fact?(klass)
