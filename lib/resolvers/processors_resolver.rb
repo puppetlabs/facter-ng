@@ -31,11 +31,11 @@ module Facter
 
           def read_processors(cpuinfo_output)
             count_processors = 0
-            models = ''
+            models = []
             cpuinfo_output.each_line do |line|
               tokens = line.split(':')
               count_processors += 1 if tokens.first.strip == 'processor'
-              models += tokens.last if tokens.first.strip == 'model name'
+              models << tokens.last.strip if tokens.first.strip == 'model name'
             end
             @fact_list[:processors] = count_processors
             @fact_list[:models] = models
