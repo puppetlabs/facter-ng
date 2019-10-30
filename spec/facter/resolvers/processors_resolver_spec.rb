@@ -3,10 +3,8 @@
 describe 'ProcessorResolver' do
   let(:processors) { 4 }
   let(:models) do
-    'Intel(R) Xeon(R) CPU E5-2697 v4 @ 2.30GHz
-Intel(R) Xeon(R) CPU E5-2697 v4 @ 2.30GHz
-Intel(R) Xeon(R) CPU E5-2697 v4 @ 2.30GHz
-Intel(R) Xeon(R) CPU E5-2697 v4 @ 2.30GHz'
+    ['Intel(R) Xeon(R) CPU E5-2697 v4 @ 2.30GHz', 'Intel(R) Xeon(R) CPU E5-2697 v4 @ 2.30GHz',
+     'Intel(R) Xeon(R) CPU E5-2697 v4 @ 2.30GHz', 'Intel(R) Xeon(R) CPU E5-2697 v4 @ 2.30GHz']
   end
   let(:physical_processors) { 1 }
 
