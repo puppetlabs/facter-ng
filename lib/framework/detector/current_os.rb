@@ -53,6 +53,8 @@ class CurrentOs
       ['Ubuntu']
     when :debian
       ['Ubuntu']
+    else
+      []
     end
   end
 end
