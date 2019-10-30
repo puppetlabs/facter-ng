@@ -47,14 +47,14 @@ class CurrentOs
 
   def create_hierarchy(operating_system)
     case operating_system
-    when :macosx
-      ['Macosx']
     when :ubuntu
       ['Ubuntu']
     when :debian
       ['Ubuntu']
+    when :fedora
+      ['Fedora']
     else
-      []
+      [operating_system.to_s.capitalize]
     end
   end
 end
