@@ -5,8 +5,8 @@ describe 'QueryParser' do
     it 'creates one core searched fact' do
       query_list = ['os.name']
 
-      os_name_class = Class.const_get('Facter::Ubuntu::OsName')
-      os_family_class = Class.const_get('Facter::Ubuntu::OsFamily')
+      os_name_class = Class.const_get('Facter::Linux::OsName')
+      os_family_class = Class.const_get('Facter::Linux::OsFamily')
 
       loaded_fact_os_name = double(Facter::LoadedFact, name: 'os.name', klass: os_name_class, type: :core)
       loaded_fact_os_family = double(Facter::LoadedFact, name: 'os.family', klass: os_family_class, type: :core)
@@ -22,7 +22,7 @@ describe 'QueryParser' do
       query_list = ['ipaddress_ens160']
 
       networking_class = Class.const_get('Facter::Ubuntu::NetworkInterface')
-      os_family_class = Class.const_get('Facter::Ubuntu::OsFamily')
+      os_family_class = Class.const_get('Facter::Linux::OsFamily')
 
       loaded_fact_networking = double(Facter::LoadedFact, name: 'ipaddress_.*', klass: networking_class, type: :legacy)
       loaded_fact_os_family = double(Facter::LoadedFact, name: 'os.family', klass: os_family_class, type: :core)
@@ -36,7 +36,7 @@ describe 'QueryParser' do
 
     it 'creates one custom searched fact' do
       query_list = ['custom_fact']
-      os_name_class = Class.const_get('Facter::Ubuntu::OsName')
+      os_name_class = Class.const_get('Facter::Linux::OsName')
 
       loaded_fact_os_name = double(Facter::LoadedFact, name: 'os.name', klass: os_name_class, type: :core)
       loaded_fact_custom_fact = double(Facter::LoadedFact, name: 'custom_fact', klass: nil, type: :custom)
@@ -51,7 +51,7 @@ describe 'QueryParser' do
 
     it 'queries if param is symbol' do
       query_list = [:path]
-      path_class = Class.const_get('Facter::Ubuntu::Path')
+      path_class = Class.const_get('Facter::Linux::Path')
       loaded_fact_path = double(Facter::LoadedFact, name: 'path', klass: path_class, type: :core)
       loaded_facts = [loaded_fact_path]
 

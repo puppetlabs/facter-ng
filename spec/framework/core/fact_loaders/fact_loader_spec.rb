@@ -5,7 +5,7 @@ describe 'FactLoader' do
     let(:internal_fact_loader_double) { double(Facter::InternalFactLoader) }
     let(:external_fact_loader_double) { double(Facter::ExternalFactLoader) }
 
-    let(:ubuntu_os_name) { double(Facter::Ubuntu::OsName) }
+    let(:ubuntu_os_name) { double(Facter::Linux::OsName) }
     let(:networking_class) { double(Facter::Ubuntu::NetworkInterface) }
 
     let(:loaded_fact_os_name) { double(Facter::LoadedFact, name: 'os.name', klass: ubuntu_os_name, type: :core) }

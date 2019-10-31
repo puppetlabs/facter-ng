@@ -3,7 +3,7 @@
 describe 'CoreFactManager' do
   describe '#resolve_facts' do
     it 'resolved one core fact' do
-      ubuntu_os_name = double(Facter::Ubuntu::OsName)
+      ubuntu_os_name = double(Facter::Linux::OsName)
 
       resolved_fact = mock_resolved_fact('os', 'Ubuntu', '', [])
 
