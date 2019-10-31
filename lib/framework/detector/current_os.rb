@@ -46,7 +46,7 @@ class CurrentOs
   end
 
   def create_hierarchy(operating_system)
-    case operating_system
+    case operating_system.to_sym
     when :ubuntu
       ['Ubuntu']
     when :debian
