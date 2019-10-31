@@ -7,7 +7,7 @@ describe 'Fedora MemorySystemTotalBytes' do
       allow(Facter::Resolvers::Linux::Memory).to receive(:resolve).with(:total).and_return('value')
       allow(Facter::ResolvedFact).to receive(:new).with('memory.system.total_bytes', 'value').and_return(expected_fact)
 
-      fact = Facter::Fedora::MemorySystemTotalBytes.new
+      fact = Facter::Linux::MemorySystemTotalBytes.new
       expect(fact.call_the_resolver).to eq(expected_fact)
     end
   end

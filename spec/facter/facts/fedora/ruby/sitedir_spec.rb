@@ -9,7 +9,7 @@ describe 'Fedora RubySitedir' do
       allow(Facter::Resolvers::Ruby).to receive(:resolve).with(:sitedir).and_return(value)
       allow(Facter::ResolvedFact).to receive(:new).with('ruby.sitedir', value).and_return(expected_fact)
 
-      fact = Facter::Fedora::RubySitedir.new
+      fact = Facter::Linux::RubySitedir.new
       expect(fact.call_the_resolver).to eq(expected_fact)
     end
   end

@@ -8,7 +8,7 @@ describe 'Fedora OsSelinux' do
       allow(Facter::ResolvedFact).to receive(:new).with('os.selinux', enabled: 'value')
                                                   .and_return(expected_fact)
 
-      fact = Facter::Fedora::OsSelinux.new
+      fact = Facter::Linux::OsSelinux.new
       expect(fact.call_the_resolver).to eq(expected_fact)
     end
   end

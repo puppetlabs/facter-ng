@@ -8,7 +8,7 @@ describe 'Fedora MemorySwapAvailableBytes' do
       allow(Facter::ResolvedFact).to receive(:new).with('memory.swap.available_bytes', 'value')
                                                   .and_return(expected_fact)
 
-      fact = Facter::Fedora::MemorySwapAvailableBytes.new
+      fact = Facter::Linux::MemorySwapAvailableBytes.new
       expect(fact.call_the_resolver).to eq(expected_fact)
     end
   end

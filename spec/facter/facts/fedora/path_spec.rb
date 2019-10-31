@@ -9,7 +9,7 @@ describe 'Fedora Path' do
       allow(Facter::Resolvers::Path).to receive(:resolve).with(:path).and_return(value)
       allow(Facter::ResolvedFact).to receive(:new).with('path', value).and_return(expected_fact)
 
-      fact = Facter::Fedora::Path.new
+      fact = Facter::Linux::Path.new
       expect(fact.call_the_resolver).to eq(expected_fact)
     end
   end

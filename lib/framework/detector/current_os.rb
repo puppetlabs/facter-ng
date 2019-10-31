@@ -52,7 +52,7 @@ class CurrentOs
     when :debian
       ['Ubuntu']
     when :fedora
-      ['Fedora']
+      %w[Linux Fedora]
     else
       [operating_system.to_s.capitalize]
     end

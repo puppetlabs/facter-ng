@@ -7,7 +7,7 @@ describe 'Fedora Facterversion' do
       allow(Facter::Resolvers::Facterversion).to receive(:resolve).with(:facterversion).and_return('0.0.10')
       allow(Facter::ResolvedFact).to receive(:new).with('facterversion', '0.0.10').and_return(expected_fact)
 
-      fact = Facter::Fedora::Facterversion.new
+      fact = Facter::Linux::Facterversion.new
       expect(fact.call_the_resolver).to eq(expected_fact)
     end
   end

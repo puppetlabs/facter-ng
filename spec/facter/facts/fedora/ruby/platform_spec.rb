@@ -9,7 +9,7 @@ describe 'Fedora RubyPlatform' do
       allow(Facter::Resolvers::Ruby).to receive(:resolve).with(:platform).and_return(value)
       allow(Facter::ResolvedFact).to receive(:new).with('ruby.platform', value).and_return(expected_fact)
 
-      fact = Facter::Fedora::RubyPlatform.new
+      fact = Facter::Linux::RubyPlatform.new
       expect(fact.call_the_resolver).to eq(expected_fact)
     end
   end

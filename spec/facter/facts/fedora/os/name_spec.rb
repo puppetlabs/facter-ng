@@ -7,7 +7,7 @@ describe 'Fedora OsName' do
       allow(Facter::Resolvers::OsRelease).to receive(:resolve).with(:name).and_return('value')
       allow(Facter::ResolvedFact).to receive(:new).with('os.name', 'value').and_return(expected_fact)
 
-      fact = Facter::Fedora::OsName.new
+      fact = Facter::Linux::OsName.new
       expect(fact.call_the_resolver).to eq(expected_fact)
     end
   end

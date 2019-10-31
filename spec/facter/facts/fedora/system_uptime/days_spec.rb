@@ -9,7 +9,7 @@ describe 'Fedora SystemUptimeDays' do
       allow(Facter::Resolvers::Uptime).to receive(:resolve).with(:days).and_return(value)
       allow(Facter::ResolvedFact).to receive(:new).with('system_uptime.days', value).and_return(expected_fact)
 
-      fact = Facter::Fedora::SystemUptimeDays.new
+      fact = Facter::Linux::SystemUptimeDays.new
       expect(fact.call_the_resolver).to eq(expected_fact)
     end
   end

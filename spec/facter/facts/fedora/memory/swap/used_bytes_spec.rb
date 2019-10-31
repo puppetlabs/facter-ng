@@ -7,7 +7,7 @@ describe 'Fedora MemorySwapUsedBytes' do
       allow(Facter::Resolvers::Linux::Memory).to receive(:resolve).with(:swap_used_bytes).and_return('value')
       allow(Facter::ResolvedFact).to receive(:new).with('memory.swap.used_bytes', 'value').and_return(expected_fact)
 
-      fact = Facter::Fedora::MemorySwapUsedBytes.new
+      fact = Facter::Linux::MemorySwapUsedBytes.new
       expect(fact.call_the_resolver).to eq(expected_fact)
     end
   end

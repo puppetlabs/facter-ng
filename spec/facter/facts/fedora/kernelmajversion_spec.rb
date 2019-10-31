@@ -7,7 +7,7 @@ describe 'Fedora Kernelmajversion' do
       allow(Facter::Resolvers::Uname).to receive(:resolve).with(:kernelrelease).and_return(value)
       allow(Facter::ResolvedFact).to receive(:new).with('kernelmajversion', value).and_return(expected_fact)
 
-      fact = Facter::Fedora::Kernelmajversion.new
+      fact = Facter::Linux::Kernelmajversion.new
       expect(fact.call_the_resolver).to eq(expected_fact)
     end
   end

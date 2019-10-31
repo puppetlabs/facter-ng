@@ -7,7 +7,7 @@ describe 'Fedora MemorySystemUsedBytes' do
       allow(Facter::Resolvers::Linux::Memory).to receive(:resolve).with(:used_bytes).and_return('value')
       allow(Facter::ResolvedFact).to receive(:new).with('memory.system.used_bytes', 'value').and_return(expected_fact)
 
-      fact = Facter::Fedora::MemorySystemUsedBytes.new
+      fact = Facter::Linux::MemorySystemUsedBytes.new
       expect(fact.call_the_resolver).to eq(expected_fact)
     end
   end
