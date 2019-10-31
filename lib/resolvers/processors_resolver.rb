@@ -23,32 +23,64 @@ module Facter
 
           def read_cpuinfo(fact_name)
             cpuinfo_output = File.read('/proc/cpuinfo')
-            read_processors(cpuinfo_output) # + model names
-            read_physical_processors(cpuinfo_output)
+            processors = create_processors(cpuinfo_output)
+
+            processors_count = processor_count(processors)
+            models = processor_models(processors)
+            physical_ids = physical_processors(processors)
+
+            crete_cache(processors_count, models, physical_ids)
 
             @fact_list[fact_name]
           end
 
-          def read_processors(cpuinfo_output)
-            count_processors = 0
-            models = []
-            cpuinfo_output.each_line do |line|
-              tokens = line.split(':')
-              count_processors += 1 if tokens.first.strip == 'processor'
-              models << tokens.last.strip if tokens.first.strip == 'model name'
+          def create_processors(cpuinfo_output)
+            processors = []
+
+            cpuinfo_output.split(/^\n/).each do |processor_string|
+              processor =  Hash.new { |h,k| h[k] = [] }
+
+              processor_string.each_line do |line|
+                tokens = line.split(':')
+                processor[tokens.first.strip] = tokens.last.strip
+              end
+
+              processors << processor
             end
-            @fact_list[:processors] = count_processors
-            @fact_list[:models] = models
+
+            processors
           end
 
-          def read_physical_processors(cpuinfo_output)
-            counter_physical_processors = []
-            cpuinfo_output.each_line do |line|
-              tokens = line.split(':')
-              counter_physical_processors.unshift(tokens.last.strip.to_i) if tokens.first.strip == 'physical id'
-            end
-            @fact_list[:physical_processors] = counter_physical_processors.uniq.length
+          def processor_count(processors)
+            processors.size
           end
+
+          def processor_models(processors)
+            models = []
+
+            processors.each do |processor|
+              models << processor['model name']
+            end
+
+            models
+          end
+
+          def physical_processors(processors)
+            physical_ids = []
+
+            processors.each do |processor|
+              physical_ids << processor['physical id']
+            end
+
+            physical_ids.uniq.size
+          end
+
+          def crete_cache(count_processors, models, counter_physical_processors)
+            @fact_list[:processors] = count_processors
+            @fact_list[:models] = models
+            @fact_list[:physical_processors] = counter_physical_processors
+          end
+
         end
       end
     end
