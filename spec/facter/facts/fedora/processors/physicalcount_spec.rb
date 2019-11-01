@@ -6,7 +6,7 @@ describe 'Fedora ProcessorsPhysicalcount' do
       value = '1'
 
       expected_fact = double(Facter::ResolvedFact, name: 'processors.physicalcount', value: value)
-      allow(Facter::Resolvers::Linux::Processors).to receive(:resolve).with(:physical_processors).and_return(value)
+      allow(Facter::Resolvers::Linux::Processors).to receive(:resolve).with(:physical_count).and_return(value)
       allow(Facter::ResolvedFact).to receive(:new).with('processors.physicalcount', value).and_return(expected_fact)
 
       fact = Facter::Fedora::ProcessorsPhysicalcount.new

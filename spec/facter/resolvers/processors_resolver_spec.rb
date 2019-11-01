@@ -26,7 +26,7 @@ describe 'ProcessorResolver' do
   end
 
   it 'returns number of physical processors' do
-    result = Facter::Resolvers::Linux::Processors.resolve(:physical_processors)
+    result = Facter::Resolvers::Linux::Processors.resolve(:physical_count)
 
     expect(result).to eq(physical_processors)
   end
