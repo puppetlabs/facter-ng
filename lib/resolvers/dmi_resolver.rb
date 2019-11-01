@@ -40,7 +40,7 @@ module Facter
           def build_board
             @fact_list[:board_manufacturer] = File.read('/sys/class/dmi/board_vendor')
             @fact_list[:board_product] = File.read('/sys/class/dmi/board_name')
-            @fact_list[:board_serialnumber] = File.read('/sys/class/dmi/board_serial')
+            @fact_list[:board_serial_number] = File.read('/sys/class/dmi/board_serial')
           end
 
           def build_chassis
@@ -50,7 +50,7 @@ module Facter
 
           def build_product
             @fact_list[:product_name] = File.read('/sys/class/dmi/product_name')
-            @fact_list[:product_serialnumber] = File.read('/sys/class/dmi/product_serial')
+            @fact_list[:product_serial_number] = File.read('/sys/class/dmi/product_serial')
             @fact_list[:product_uuid] = File.read('/sys/class/dmi/product_uuid')
           end
         end
