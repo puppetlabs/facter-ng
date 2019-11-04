@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'MemoryResolver' do
+describe 'DmiResolver' do
   let(:bios_release_date) { '12/12/2018' }
   let(:bios_vendor) { 'Phoenix Technologies LTD' }
   let(:bios_version) { '6.00' }
