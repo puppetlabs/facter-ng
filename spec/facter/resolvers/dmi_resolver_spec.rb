@@ -19,53 +19,75 @@ describe 'DmiResolver' do
                        .with('/proc/meminfo')
                        .and_return(load_fixture('meminfo').read)
   end
-  it 'returns total memory' do
-    result = Facter::Resolvers::Linux::Memory.resolve(:total)
+  it 'returns bios_release_date' do
+    result = Facter::Resolvers::Linux::DMIBios.resolve(:bios_release_date)
 
-    expect(result).to eq(total)
+    expect(result).to eq(bios_release_date)
   end
 
-  it 'returns memfree' do
-    result = Facter::Resolvers::Linux::Memory.resolve(:memfree)
+  it 'returns bios_vendor' do
+    result = Facter::Resolvers::Linux::DMIBios.resolve(:bios_vendor)
 
-    expect(result).to eq(free)
+    expect(result).to eq(bios_vendor)
   end
 
-  it 'returns swap total' do
-    result = Facter::Resolvers::Linux::Memory.resolve(:swap_total)
+  it 'returns bios_version' do
+    result = Facter::Resolvers::Linux::DMIBios.resolve(:bios_version)
 
-    expect(result).to eq(swap_total)
+    expect(result).to eq(bios_version)
   end
 
-  it 'returns swap available' do
-    result = Facter::Resolvers::Linux::Memory.resolve(:swap_free)
+  it 'returns board_manufacturer' do
+    result = Facter::Resolvers::Linux::DMIBios.resolve(:board_manufacturer)
 
-    expect(result).to eq(swap_free)
+    expect(result).to eq(board_manufacturer)
   end
 
-  it 'returns swap capacity' do
-    result = Facter::Resolvers::Linux::Memory.resolve(:swap_capacity)
-    swap_capacity = format('%.2f', (swap_used / swap_total.to_f * 100)) + '%'
+  it 'returns board_product' do
+    result = Facter::Resolvers::Linux::DMIBios.resolve(:board_product)
 
-    expect(result).to eq(swap_capacity)
+    expect(result).to eq(board_product)
   end
 
-  it 'returns swap usage' do
-    result = Facter::Resolvers::Linux::Memory.resolve(:swap_used_bytes)
+  it 'returns board_serial_number' do
+    result = Facter::Resolvers::Linux::DMIBios.resolve(:board_serial_number)
 
-    expect(result).to eq(swap_used)
+    expect(result).to eq(board_serial_number)
   end
 
-  it 'returns system capacity' do
-    result = Facter::Resolvers::Linux::Memory.resolve(:capacity)
-    system_capacity = format('%.2f', (used / total.to_f * 100)) + '%'
+  it 'returns chassis_asset_tag' do
+    result = Facter::Resolvers::Linux::DMIBios.resolve(:chassis_asset_tag)
 
-    expect(result).to eq(system_capacity)
+    expect(result).to eq(chassis_asset_tag)
   end
 
-  it 'returns system usage' do
-    result = Facter::Resolvers::Linux::Memory.resolve(:used_bytes)
+  it 'returns chassis_type' do
+    result = Facter::Resolvers::Linux::DMIBios.resolve(:chassis_type)
 
-    expect(result).to eq(used)
+    expect(result).to eq(chassis_type)
+  end
+
+  it ' returns manufacturer' do
+    result = Facter::Resolvers::Linux::DMIBios.resolve(:manufacturer)
+
+    expect(result).to eq(manufacturer)
+  end
+
+  it 'returns product_name' do
+    result = Facter::Resolvers::Linux::DMIBios.resolve(:product_name)
+
+    expect(result).to eq(product_name)
+  end
+
+  it 'returns product_serial_number' do
+    result = Facter::Resolvers::Linux::DMIBios.resolve(:product_serial_number)
+
+    expect(result).to eq(product_serial_number)
+  end
+
+  it 'returns product_uuid' do
+    result = Facter::Resolvers::Linux::DMIBios.resolve(:product_uuid)
+
+    expect(result).to eq(product_uuid)
   end
 end
