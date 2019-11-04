@@ -20,40 +20,21 @@ module Facter
             end
           end
 
-          private
+            private
 
           def read_facts(fact_name)
-            build_bios
-            build_board
-            build_chassis
-            @fact_list[:manufacturer] = File.read('/sys/class/dmi/sys_vendor') # wanted to copy the example cuz I can
-            build_product
+            files = %w[bios_date bios_vendor bios_version board_vendor board_name board_serial chassis_asset_tag
+                       chassis_type sys_vendor product_name product_serial product_uuid]
+            files.each do |element|
+              unless File.exist?("/sys/class/dmi/#{element}")
+                @log.debug "File /sys/class/dmi/#{element} does not exist!"
+                next
+              end
+              @fact_list[element.to_sym] = File.read("/sys/class/dmi/#{element}")
+            end
             @fact_list[fact_name]
           end
-
-          def build_bios
-            @fact_list[:bios_release_date] = File.read('/sys/class/dmi/bios_date')
-            @fact_list[:bios_vendor] = File.read('/sys/class/dmi/bios_vendor')
-            @fact_list[:bios_version] = File.read('/sys/class/dmi/bios_version')
           end
-
-          def build_board
-            @fact_list[:board_manufacturer] = File.read('/sys/class/dmi/board_vendor')
-            @fact_list[:board_product] = File.read('/sys/class/dmi/board_name')
-            @fact_list[:board_serial_number] = File.read('/sys/class/dmi/board_serial')
-          end
-
-          def build_chassis
-            @fact_list[:chassis_asset_tag] = File.read('/sys/class/dmi/chassis_asset_tag')
-            @fact_list[:chassis_type] = File.read('/sys/class/dmi/chassis_type')
-          end
-
-          def build_product
-            @fact_list[:product_name] = File.read('/sys/class/dmi/product_name')
-            @fact_list[:product_serial_number] = File.read('/sys/class/dmi/product_serial')
-            @fact_list[:product_uuid] = File.read('/sys/class/dmi/product_uuid')
-          end
-        end
       end
     end
   end

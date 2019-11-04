@@ -15,11 +15,34 @@ describe 'DmiResolver' do
   let(:product_uuid) { 'ea021a42-27e6-b876-a123-a78ad312eecf' }
 
   before do
-    allow(File).to receive(:read)
-                       .with('/sys/class/dmi/bios_date')
+    allow(File).to receive(:exist?).with('/sys/class/dmi/bios_date').and_return(true)
+    allow(File).to receive(:read).with('/sys/class/dmi/bios_date').and_return(bios_release_date)
+    allow(File).to receive(:exist?).with('/sys/class/dmi/bios_vendor').and_return(true)
+    allow(File).to receive(:read).with('/sys/class/dmi/bios_vendor').and_return(bios_vendor)
+    allow(File).to receive(:exist?).with('/sys/class/dmi/bios_version').and_return(true)
+    allow(File).to receive(:read).with('/sys/class/dmi/bios_version').and_return(bios_version)
+    allow(File).to receive(:exist?).with('/sys/class/dmi/board_vendor').and_return(true)
+    allow(File).to receive(:read).with('/sys/class/dmi/board_vendor').and_return(board_manufacturer)
+    allow(File).to receive(:exist?).with('/sys/class/dmi/board_name').and_return(true)
+    allow(File).to receive(:read).with('/sys/class/dmi/board_name').and_return(board_product)
+    allow(File).to receive(:exist?).with('/sys/class/dmi/board_serial').and_return(true)
+    allow(File).to receive(:read).with('/sys/class/dmi/board_serial').and_return(board_serial_number)
+    allow(File).to receive(:exist?).with('/sys/class/dmi/chassis_asset_tag').and_return(true)
+    allow(File).to receive(:read).with('/sys/class/dmi/chassis_asset_tag').and_return(chassis_asset_tag)
+    allow(File).to receive(:exist?).with('/sys/class/dmi/chassis_type').and_return(true)
+    allow(File).to receive(:read).with('/sys/class/dmi/chassis_type').and_return(chassis_type)
+    allow(File).to receive(:exist?).with('/sys/class/dmi/sys_vendor').and_return(true)
+    allow(File).to receive(:read).with('/sys/class/dmi/sys_vendor').and_return(manufacturer)
+    allow(File).to receive(:exist?).with('/sys/class/dmi/product_name').and_return(true)
+    allow(File).to receive(:read).with('/sys/class/dmi/product_name').and_return(product_name)
+    allow(File).to receive(:exist?).with('/sys/class/dmi/product_serial').and_return(true)
+    allow(File).to receive(:read).with('/sys/class/dmi/product_serial').and_return(product_serial_number)
+    allow(File).to receive(:exist?).with('/sys/class/dmi/product_uuid').and_return(true)
+    allow(File).to receive(:read).with('/sys/class/dmi/product_uuid').and_return(product_uuid)
   end
+
   it 'returns bios_release_date' do
-    result = Facter::Resolvers::Linux::DMIBios.resolve(:bios_release_date)
+    result = Facter::Resolvers::Linux::DMIBios.resolve(:bios_date)
 
     expect(result).to eq(bios_release_date)
   end
@@ -37,19 +60,19 @@ describe 'DmiResolver' do
   end
 
   it 'returns board_manufacturer' do
-    result = Facter::Resolvers::Linux::DMIBios.resolve(:board_manufacturer)
+    result = Facter::Resolvers::Linux::DMIBios.resolve(:board_vendor)
 
     expect(result).to eq(board_manufacturer)
   end
 
   it 'returns board_product' do
-    result = Facter::Resolvers::Linux::DMIBios.resolve(:board_product)
+    result = Facter::Resolvers::Linux::DMIBios.resolve(:board_name)
 
     expect(result).to eq(board_product)
   end
 
   it 'returns board_serial_number' do
-    result = Facter::Resolvers::Linux::DMIBios.resolve(:board_serial_number)
+    result = Facter::Resolvers::Linux::DMIBios.resolve(:board_serial)
 
     expect(result).to eq(board_serial_number)
   end
@@ -67,7 +90,7 @@ describe 'DmiResolver' do
   end
 
   it ' returns manufacturer' do
-    result = Facter::Resolvers::Linux::DMIBios.resolve(:manufacturer)
+    result = Facter::Resolvers::Linux::DMIBios.resolve(:sys_vendor)
 
     expect(result).to eq(manufacturer)
   end
@@ -79,7 +102,7 @@ describe 'DmiResolver' do
   end
 
   it 'returns product_serial_number' do
-    result = Facter::Resolvers::Linux::DMIBios.resolve(:product_serial_number)
+    result = Facter::Resolvers::Linux::DMIBios.resolve(:product_serial)
 
     expect(result).to eq(product_serial_number)
   end
