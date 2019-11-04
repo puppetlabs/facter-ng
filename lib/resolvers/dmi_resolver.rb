@@ -9,8 +9,10 @@ module Facter
         @fact_list ||= {}
 
         class << self
-          # Manufacturer
+          # Manufacturer / Vendor
           # SerialNumber
+          # ReleaseDate
+          # Version
 
           def resolve(fact_name)
             @semaphore.synchronize do
@@ -26,11 +28,11 @@ module Facter
             files = %w[bios_date bios_vendor bios_version board_vendor board_name board_serial chassis_asset_tag
                        chassis_type sys_vendor product_name product_serial product_uuid]
             files.each do |element|
-              unless File.exist?("/sys/class/dmi/#{element}")
-                @log.debug "File /sys/class/dmi/#{element} does not exist!"
+              unless File.exist?("/sys/class/dmi/id/#{element}")
+                @log.debug "File /sys/class/dmi/id/#{element} does not exist!"
                 next
               end
-              @fact_list[element.to_sym] = File.read("/sys/class/dmi/#{element}")
+              @fact_list[element.to_sym] = File.read("/sys/class/dmi/id/#{element}")
             end
             @fact_list[fact_name]
           end
