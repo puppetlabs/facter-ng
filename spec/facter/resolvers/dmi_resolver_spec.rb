@@ -17,7 +17,6 @@ describe 'DmiResolver' do
   before do
     allow(File).to receive(:read)
                        .with('/sys/class/dmi/bios_date')
-                       .and_return(load_fixture('bios_date').read)
   end
   it 'returns bios_release_date' do
     result = Facter::Resolvers::Linux::DMIBios.resolve(:bios_release_date)
