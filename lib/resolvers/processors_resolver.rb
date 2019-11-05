@@ -50,7 +50,7 @@ module Facter
           end
 
           def count_physical_processors(tokens)
-            @fact_list[:physical_processors].unshift(tokens.last.strip.to_i) if tokens.first.strip == 'physical id'
+            @fact_list[:physical_processors] << tokens.last.strip.to_i if tokens.first.strip == 'physical id'
           end
         end
       end
