@@ -11,10 +11,15 @@ module Facter
     def augment_options(options, user_query)
       options = options.dup
 
-      augment_with_query_options!(options, user_query)
-      augment_with_facts_options!(options)
-      augment_with_cli_options!(options)
-      augment_with_global_options!(options)
+      options = OptionsForQuery.new(options, user_query)
+      options = OptionsForFacts.new(options)
+      options = OptionsForCli.new(options)
+      options = OptionsForGlobal.new(options)
+
+      # augment_with_query_options!(options, user_query)
+      # augment_with_facts_options!(options)
+      # augment_with_cli_options!(options)
+      # augment_with_global_options!(options)
 
       options
     end

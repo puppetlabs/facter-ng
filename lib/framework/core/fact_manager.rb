@@ -16,6 +16,7 @@ module Facter
       # options = enhance_options(options, user_query)
       options = OptionsAugmenter.instance.augment_options(options, user_query)
 
+      t = options['log_level']
       loaded_facts = @fact_loader.load(options)
       searched_facts = QueryParser.parse(user_query, loaded_facts)
       internal_facts = @internal_fact_mgr.resolve_facts(searched_facts)
