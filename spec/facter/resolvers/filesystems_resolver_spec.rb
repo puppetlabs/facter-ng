@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'FilesystemsResolver' do
-  let(:systems) { "ext3,ext2,ext4,xfs" }
+  let(:systems) { 'ext3,ext2,ext4,xfs' }
 
   before do
     allow(File).to receive(:read)

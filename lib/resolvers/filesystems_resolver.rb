@@ -23,7 +23,7 @@ module Facter
               tokens = line.split(' ')
               array1 << tokens if tokens.size == 1
             end
-            @fact_list[:systems] = array1.join(",")
+            @fact_list[:systems] = array1.join(',')
             @fact_list[fact_name]
           end
         end
