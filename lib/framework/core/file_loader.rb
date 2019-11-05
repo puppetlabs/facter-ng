@@ -3,12 +3,15 @@
 require 'open3'
 require 'json'
 require 'yaml'
+require 'hocon'
 
 require "#{ROOT_DIR}/lib/framework/logging/multilogger"
 require "#{ROOT_DIR}/lib/framework/logging/logger"
 
 require "#{ROOT_DIR}/lib/resolvers/base_resolver"
 require "#{ROOT_DIR}/lib/framework/detector/current_os"
+require "#{ROOT_DIR}/lib/framework/config/config_reader"
+require "#{ROOT_DIR}/lib/framework/config/block_list"
 require "#{ROOT_DIR}/lib/facter-ng"
 
 def load_dir(*dirs)

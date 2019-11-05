@@ -13,7 +13,8 @@ module Facter
     end
 
     def resolve_facts(options = {}, user_query = [])
-      options = enhance_options(options, user_query)
+      # options = enhance_options(options, user_query)
+      options = OptionsAugmenter.augment_options(options, user_query)
 
       loaded_facts = @fact_loader.load(options)
       searched_facts = QueryParser.parse(user_query, loaded_facts)
@@ -44,6 +45,7 @@ module Facter
     def enhance_options(options, user_query)
       options = options.dup
       options[:user_query] = true if user_query.any?
+      options[:block_facts] = Facter::BlockList.instance.block_groups_to_facts
 
       options
     end
