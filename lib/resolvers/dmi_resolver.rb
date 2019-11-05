@@ -30,7 +30,7 @@ module Facter
             end
           end
 
-            private
+          private
 
           def read_facts(_fact_name)
             files = %w[bios_date bios_vendor bios_version board_vendor board_name board_serial chassis_asset_tag
@@ -48,14 +48,13 @@ module Facter
               end
               if element == 'chassis_type'
                 token = File.read("/sys/class/dmi/id/#{element}") - 1
-                token -= 1
                 @fact_list[element.to_sym] = types[token]
               end
               @fact_list[element.to_sym] = File.read("/sys/class/dmi/id/#{element}")
             end
+            @fact_list[fact_name]
           end
-          @fact_list[fact_name]
-          end
+        end
       end
     end
   end
