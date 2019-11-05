@@ -15,30 +15,14 @@ describe 'DmiResolver' do
   let(:product_uuid) { 'ea021a42-27e6-b876-a123-a78ad312eecf' }
 
   before do
-    allow(File).to receive(:exist?).with('/sys/class/dmi/id/bios_date').and_return(true)
-    allow(File).to receive(:read).with('/sys/class/dmi/id/bios_date').and_return(bios_release_date)
-    allow(File).to receive(:exist?).with('/sys/class/dmi/id/bios_vendor').and_return(true)
-    allow(File).to receive(:read).with('/sys/class/dmi/id/bios_vendor').and_return(bios_vendor)
-    allow(File).to receive(:exist?).with('/sys/class/dmi/id/bios_version').and_return(true)
-    allow(File).to receive(:read).with('/sys/class/dmi/id/bios_version').and_return(bios_version)
-    allow(File).to receive(:exist?).with('/sys/class/dmi/id/board_vendor').and_return(true)
-    allow(File).to receive(:read).with('/sys/class/dmi/id/board_vendor').and_return(board_manufacturer)
-    allow(File).to receive(:exist?).with('/sys/class/dmi/id/board_name').and_return(true)
-    allow(File).to receive(:read).with('/sys/class/dmi/id/board_name').and_return(board_product)
-    allow(File).to receive(:exist?).with('/sys/class/dmi/id/board_serial').and_return(true)
-    allow(File).to receive(:read).with('/sys/class/dmi/id/board_serial').and_return(board_serial_number)
-    allow(File).to receive(:exist?).with('/sys/class/dmi/id/chassis_asset_tag').and_return(true)
-    allow(File).to receive(:read).with('/sys/class/dmi/id/chassis_asset_tag').and_return(chassis_asset_tag)
-    allow(File).to receive(:exist?).with('/sys/class/dmi/id/chassis_type').and_return(true)
-    allow(File).to receive(:read).with('/sys/class/dmi/id/chassis_type').and_return(chassis_type)
-    allow(File).to receive(:exist?).with('/sys/class/dmi/id/sys_vendor').and_return(true)
-    allow(File).to receive(:read).with('/sys/class/dmi/id/sys_vendor').and_return(manufacturer)
-    allow(File).to receive(:exist?).with('/sys/class/dmi/id/product_name').and_return(true)
-    allow(File).to receive(:read).with('/sys/class/dmi/id/product_name').and_return(product_name)
-    allow(File).to receive(:exist?).with('/sys/class/dmi/id/product_serial').and_return(true)
-    allow(File).to receive(:read).with('/sys/class/dmi/id/product_serial').and_return(product_serial_number)
-    allow(File).to receive(:exist?).with('/sys/class/dmi/id/product_uuid').and_return(true)
-    allow(File).to receive(:read).with('/sys/class/dmi/id/product_uuid').and_return(product_uuid)
+    files = ['/sys/class/dmi/id/bios_date', '/sys/class/dmi/id/bios_vendor', '/sys/class/dmi/id/bios_version',
+             '/sys/class/dmi/id/board_vendor', '/sys/class/dmi/id/board_name', '/sys/class/dmi/id/board_serial',
+             '/sys/class/dmi/id/chassis_asset_tag', '/sys/class/dmi/id/chassis_tag', '/sys/class/dmi/id/sys_vendor',
+             '/sys/class/dmi/id/product_name', '/sys/class/dmi/id/product_serial', '/sys/class/dmi/id/product_uuid']
+    files.each do |file|
+      allow(File).to receive(:exist?).with(file).and_return(true)
+      allow(File).to receive(:read).with(file).and_return(bios_release_date)
+    end
   end
 
   it 'returns bios_release_date' do
