@@ -14,7 +14,7 @@ module Facter
 
     def resolve_facts(options = {}, user_query = [])
       # options = enhance_options(options, user_query)
-      options = OptionsAugmenter.augment_options(options, user_query)
+      options = OptionsAugmenter.instance.augment_options(options, user_query)
 
       loaded_facts = @fact_loader.load(options)
       searched_facts = QueryParser.parse(user_query, loaded_facts)
