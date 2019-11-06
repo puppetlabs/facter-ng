@@ -11,6 +11,7 @@ module Facter
 
     def initialize(options)
       @options = options.dup
+      @conf_reade = Facter::ConfigReader.new
     end
   end
 end

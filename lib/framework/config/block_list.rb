@@ -19,7 +19,7 @@ module Facter
       @block_list.each do |group_name|
         facts_for_block = @block_groups[group_name]
 
-        fact_list += facts_for_block ? facts_for_block : [group_name]
+        fact_list += facts_for_block || [group_name]
       end
 
       fact_list
@@ -29,7 +29,7 @@ module Facter
 
     def load_block_groups
       @block_groups = Hocon.load(@block_groups_file_path)
-      @block_list = ConfigReader.instance.block_list
+      @block_list = ConfigReader.new.block_list
     end
   end
 end

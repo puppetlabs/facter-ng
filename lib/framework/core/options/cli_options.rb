@@ -3,7 +3,7 @@
 module Facter
   module CliOptions
     def augment_with_cli_options!
-      cli_conf = Facter::ConfigReader.instance.cli
+      cli_conf = @conf_reade.cli
 
       @options[:debug] = cli_conf['debug'] unless @options[:debug]
       @options[:trace] = cli_conf['trace'] unless @options[:trace]
