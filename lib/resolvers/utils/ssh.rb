@@ -1,8 +1,13 @@
-class Ssh
-    attr_accessor :digest, :type, :key
-    def initialise(digest,type,key)
-        @digest = digest
-        @type = type
-        @key = key
+# frozen_string_literal: true
+
+module Facter
+  class Ssh
+    attr_accessor :fingerprint, :type, :key, :name
+    def initialize(fingerprint, type, key, name)
+      @fingerprint = fingerprint
+      @type = type
+      @key = key
+      @name = name
     end
+  end
 end
