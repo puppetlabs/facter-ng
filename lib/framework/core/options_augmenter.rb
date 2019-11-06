@@ -11,17 +11,30 @@ module Facter
     def augment_options(options, user_query)
       options = options.dup
 
-      options = OptionsForQuery.new(options, user_query)
-      options = OptionsForFacts.new(options)
-      options = OptionsForCli.new(options)
-      options = OptionsForGlobal.new(options)
+      options_aug = OptionsAug.new(options)
+
+      options_aug.augment_with_cli_options!
+      options_aug.augment_with_global_options!
+      options_aug.augment_with_facts_options!
+      options_aug.augment_with_query_options!(user_query)
+
+
+      # OptionsQueryAugmenter.new(user_query).augment!(options)
+      # OptionsFactAugmenter.new.augment!(options)
+      # OptionsCliAugmenter.new.augment!(options)
+      # OptionsGlobalAugmenter.new.augment!(options)
+
+      # options = OptionsForQuery.new(options, user_query)
+      # options. = OptionsForFacts.new(options)
+      # options = OptionsForCli.new(options)
+      # options = OptionsForGlobal.new(options)
 
       # augment_with_query_options!(options, user_query)
       # augment_with_facts_options!(options)
       # augment_with_cli_options!(options)
       # augment_with_global_options!(options)
 
-      options
+      options_aug.options
     end
 
     def augment_with_query_options!(options, user_query)
