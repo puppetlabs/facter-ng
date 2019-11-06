@@ -18,23 +18,18 @@ require "#{ROOT_DIR}/lib/framework/logging/logger"
 require "#{ROOT_DIR}/lib/resolvers/base_resolver"
 require "#{ROOT_DIR}/lib/framework/detector/current_os"
 
-load_lib_dirs('framework', 'core', 'options', 'module')
+load_lib_dirs('framework', 'core', 'options')
 require "#{ROOT_DIR}/lib/framework/config/config_reader"
 require "#{ROOT_DIR}/lib/framework/config/block_list"
 require "#{ROOT_DIR}/lib/facter-ng"
 
-
-
 load_dir(['config'])
-
-
 
 load_lib_dirs('resolvers')
 load_lib_dirs('facts_utils')
 load_lib_dirs('utils')
 load_lib_dirs('framework', 'core')
 load_lib_dirs('models')
-load_lib_dirs('framework', 'core', 'options')
 load_lib_dirs('framework', 'core', 'fact_loaders')
 load_lib_dirs('framework', 'core', 'fact', 'internal')
 load_lib_dirs('framework', 'core', 'fact', 'external')

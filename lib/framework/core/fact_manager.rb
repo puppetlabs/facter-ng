@@ -13,10 +13,8 @@ module Facter
     end
 
     def resolve_facts(options = {}, user_query = [])
-      # options = enhance_options(options, user_query)
-      options = OptionsAugmenter.instance.augment_options(options, user_query)
+      options = enhance_options(options, user_query)
 
-      t = options['log_level']
       loaded_facts = @fact_loader.load(options)
       searched_facts = QueryParser.parse(user_query, loaded_facts)
       internal_facts = @internal_fact_mgr.resolve_facts(searched_facts)
@@ -44,11 +42,14 @@ module Facter
     private
 
     def enhance_options(options, user_query)
-      options = options.dup
-      options[:user_query] = true if user_query.any?
-      options[:block_facts] = Facter::BlockList.instance.block_groups_to_facts
+      options_augmenter = OptionsAugmenter.new(options)
 
-      options
+      options_augmenter.augment_with_query_options!(user_query)
+      options_augmenter.augment_with_facts_options!
+      options_augmenter.augment_with_global_options!
+      options_augmenter.augment_with_cli_options!
+
+      options_augmenter.options
     end
 
     def override_core_facts(core_facts, custom_facts)
