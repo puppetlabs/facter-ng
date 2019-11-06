@@ -19,11 +19,7 @@ module Facter
       @block_list.each do |group_name|
         facts_for_block = @block_groups[group_name]
 
-        if facts_for_block
-          fact_list += facts_for_block
-        else
-          fact_list << group_name
-        end
+        fact_list += facts_for_block ? facts_for_block : [group_name]
       end
 
       fact_list
