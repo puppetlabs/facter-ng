@@ -47,8 +47,8 @@ module Facter
                 next
               end
               if element == 'chassis_type'
-                token = File.read("/sys/class/dmi/id/#{element}") - 1
-                @fact_list[element.to_sym] = types[token]
+                token = File.read("/sys/class/dmi/id/chassis_type")
+                @fact_list[:chassis_type] = types[token - 1]
               end
               @fact_list[element.to_sym] = File.read("/sys/class/dmi/id/#{element}")
             end
