@@ -2,22 +2,18 @@
 
 module Facter
   class InternalFactLoader
+    attr_reader :facts
+
     def core_facts
-      @core_facts.values
+      @facts.select { |fact| fact.type == :core }
     end
 
     def legacy_facts
-      @legacy_facts.values
-    end
-
-    def facts
-      @facts.values
+      @facts.select { |fact| fact.type == :legacy }
     end
 
     def initialize
-      @core_facts = {}
-      @legacy_facts = {}
-      @facts = {}
+      @facts = []
 
       os_descendents = CurrentOs.instance.hierarchy
       load_all_oses(os_descendents)
@@ -29,8 +25,6 @@ module Facter
       os_descendents.each do |os|
         load_for_os(os)
       end
-
-      all_facts
     end
 
     def load_for_os(operating_system)
@@ -41,34 +35,23 @@ module Facter
         klass = klass(operating_system, class_name)
         fact_name = klass::FACT_NAME
 
-        if legacy_fact?(klass)
-          load_legacy_fact(fact_name, klass)
-        else
-          load_core_facts(fact_name, klass)
-        end
+        load_fact(fact_name, klass)
       end
-    end
-
-    def all_facts
-      @facts = @legacy_facts.merge(@core_facts)
     end
 
     def klass(operating_system, class_name)
       Class.const_get("Facter::#{operating_system}::" + class_name.to_s)
     end
 
-    def load_core_facts(fact_name, klass)
-      loaded_fact = LoadedFact.new(fact_name, klass, :core)
-      @core_facts[fact_name] = loaded_fact
+    def load_fact(fact_name, klass)
+      loaded_fact = LoadedFact.new(fact_name, klass, fact_type(klass))
+      @facts << loaded_fact
     end
 
-    def load_legacy_fact(fact_name, klass)
-      loaded_fact = LoadedFact.new(fact_name, klass, :legacy)
-      @legacy_facts[fact_name] = loaded_fact
-    end
+    def fact_type(klass)
+      return nil unless klass.const_defined?('FACT_TYPE')
 
-    def legacy_fact?(klass)
-      klass.const_defined?('FACT_TYPE') && klass::FACT_TYPE.equal?(:legacy)
+      klass::FACT_TYPE
     end
   end
 end
