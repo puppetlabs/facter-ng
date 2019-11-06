@@ -44,8 +44,8 @@ module Facter
                      'Tablet', 'Convertible', 'Detachable']
             return unless File.directory?('/sys/class/dmi')
 
-            files.each do |element|
-              @fact_list[element.to_sym] = File.read("/sys/class/dmi/id/#{element}")
+            files.each do |file|
+              @fact_list[file.to_sym] = File.read("/sys/class/dmi/id/#{file}")
             end
             @fact_list[:chassis_type] = types[@fact_list[:chassis_type].to_i]
             @fact_list[fact_name]

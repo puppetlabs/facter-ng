@@ -11,6 +11,9 @@ describe 'DmiResolver' do
     before do
       allow(File).to receive(:directory?).with(test_dir).and_return(true)
     end
+    after do
+      Facter::Resolvers::Linux::DmiBios.invalidate_cache
+    end
 
     context 'when directory does not exist' do
       it 'when directory does not exist' do
@@ -124,7 +127,7 @@ describe 'DmiResolver' do
     end
     context 'when chassis_type file exists' do
       let(:test_file) { test_dir + 'id/chassis_type' }
-      let(:chassis_type) { 'Other' }
+      let(:chassis_type) { '4' }
 
       it 'returns chassis_type' do
         allow(File).to receive(:read).with('/sys/class/dmi/id/chassis_type').and_return(chassis_type)
@@ -133,7 +136,7 @@ describe 'DmiResolver' do
         end
         result = Facter::Resolvers::Linux::DmiBios.resolve(:chassis_type)
 
-        expect(result).to eq(chassis_type)
+        expect(result).to eq('Pizza Box')
       end
     end
     context 'when sys_vendor file exists' do
