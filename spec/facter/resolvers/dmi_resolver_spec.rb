@@ -29,7 +29,7 @@ describe 'DmiResolver' do
         allow(File).to receive(:read).with('/sys/class/dmi/id/bios_date').and_return(bios_release_date)
         files.each do |file|
           allow(File).to receive(:read).with("/sys/class/dmi/id/#{file}") unless test_file
-                                                                                 .match?(file)
+                                                                                 .match(file)
         end
         result = Facter::Resolvers::Linux::DmiBios.resolve(:bios_date)
 
@@ -45,7 +45,7 @@ describe 'DmiResolver' do
         allow(File).to receive(:read).with('/sys/class/dmi/id/bios_vendor').and_return(bios_vendor)
         files.each do |file|
           allow(File).to receive(:read).with("/sys/class/dmi/id/#{file}") unless test_file
-                                                                                 .match?(file)
+                                                                                 .match(file)
         end
         result = Facter::Resolvers::Linux::DmiBios.resolve(:bios_vendor)
 
@@ -60,7 +60,7 @@ describe 'DmiResolver' do
         allow(File).to receive(:read).with('/sys/class/dmi/id/bios_version').and_return(bios_version)
         files.each do |file|
           allow(File).to receive(:read).with("/sys/class/dmi/id/#{file}") unless test_file
-                                                                                 .match?(file)
+                                                                                 .match(file)
         end
         result = Facter::Resolvers::Linux::DmiBios.resolve(:bios_version)
 
@@ -75,7 +75,7 @@ describe 'DmiResolver' do
         allow(File).to receive(:read).with('/sys/class/dmi/id/board_vendor').and_return(board_manufacturer)
         files.each do |file|
           allow(File).to receive(:read).with("/sys/class/dmi/id/#{file}") unless test_file
-                                                                                 .match?(file)
+                                                                                 .match(file)
         end
         result = Facter::Resolvers::Linux::DmiBios.resolve(:board_vendor)
 
@@ -90,7 +90,7 @@ describe 'DmiResolver' do
         allow(File).to receive(:read).with('/sys/class/dmi/id/board_name').and_return(board_name)
         files.each do |file|
           allow(File).to receive(:read).with("/sys/class/dmi/id/#{file}") unless test_file
-                                                                                 .match?(file)
+                                                                                 .match(file)
         end
         result = Facter::Resolvers::Linux::DmiBios.resolve(:board_name)
 
@@ -104,7 +104,7 @@ describe 'DmiResolver' do
       it 'returns board_serial_number' do
         allow(File).to receive(:read).with('/sys/class/dmi/id/board_serial').and_return(board_serial_number)
         files.each do |file|
-          allow(File).to receive(:read).with("/sys/class/dmi/id/#{file}") unless test_file.match?(file)
+          allow(File).to receive(:read).with("/sys/class/dmi/id/#{file}") unless test_file.match(file)
         end
         result = Facter::Resolvers::Linux::DmiBios.resolve(:board_serial)
 
@@ -118,7 +118,7 @@ describe 'DmiResolver' do
       it 'returns chassis_asset_tag' do
         allow(File).to receive(:read).with('/sys/class/dmi/id/chassis_asset_tag').and_return(chassis_asset_tag)
         files.each do |file|
-          allow(File).to receive(:read).with("/sys/class/dmi/id/#{file}") unless test_file.match?(file)
+          allow(File).to receive(:read).with("/sys/class/dmi/id/#{file}") unless test_file.match(file)
         end
         result = Facter::Resolvers::Linux::DmiBios.resolve(:chassis_asset_tag)
 
@@ -132,7 +132,7 @@ describe 'DmiResolver' do
       it 'returns chassis_type' do
         allow(File).to receive(:read).with('/sys/class/dmi/id/chassis_type').and_return(chassis_type)
         files.each do |file|
-          allow(File).to receive(:read).with("/sys/class/dmi/id/#{file}") unless test_file.match?(file)
+          allow(File).to receive(:read).with("/sys/class/dmi/id/#{file}") unless test_file.match(file)
         end
         result = Facter::Resolvers::Linux::DmiBios.resolve(:chassis_type)
 
@@ -146,7 +146,7 @@ describe 'DmiResolver' do
       it ' returns manufacturer' do
         allow(File).to receive(:read).with('/sys/class/dmi/id/sys_vendor').and_return(manufacturer)
         files.each do |file|
-          allow(File).to receive(:read).with("/sys/class/dmi/id/#{file}") unless test_file.match?(file)
+          allow(File).to receive(:read).with("/sys/class/dmi/id/#{file}") unless test_file.match(file)
         end
         result = Facter::Resolvers::Linux::DmiBios.resolve(:sys_vendor)
 
@@ -160,7 +160,7 @@ describe 'DmiResolver' do
       it 'returns product_name' do
         allow(File).to receive(:read).with('/sys/class/dmi/id/product_name').and_return(product_name)
         files.each do |file|
-          allow(File).to receive(:read).with("/sys/class/dmi/id/#{file}") unless test_file.match?(file)
+          allow(File).to receive(:read).with("/sys/class/dmi/id/#{file}") unless test_file.match(file)
         end
         result = Facter::Resolvers::Linux::DmiBios.resolve(:product_name)
 
@@ -174,7 +174,7 @@ describe 'DmiResolver' do
       it 'returns product_serial_number' do
         allow(File).to receive(:read).with('/sys/class/dmi/id/product_serial').and_return(product_serial_number)
         files.each do |file|
-          allow(File).to receive(:read).with("/sys/class/dmi/id/#{file}") unless test_file.match?(file)
+          allow(File).to receive(:read).with("/sys/class/dmi/id/#{file}") unless test_file.match(file)
         end
         result = Facter::Resolvers::Linux::DmiBios.resolve(:product_serial)
 
@@ -188,7 +188,7 @@ describe 'DmiResolver' do
       it 'returns product_uuid' do
         allow(File).to receive(:read).with('/sys/class/dmi/id/product_uuid').and_return(product_uuid)
         files.each do |file|
-          allow(File).to receive(:read).with("/sys/class/dmi/id/#{file}") unless test_file.match?(file)
+          allow(File).to receive(:read).with("/sys/class/dmi/id/#{file}") unless test_file.match(file)
         end
         result = Facter::Resolvers::Linux::DmiBios.resolve(:product_uuid)
 
