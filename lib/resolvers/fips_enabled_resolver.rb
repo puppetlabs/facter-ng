@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Facter
   module Resolvers
     module Linux
@@ -16,7 +18,7 @@ module Facter
           end
 
           def read_fips_file(fact_name)
-            file_output = File.read('/proc/meminfo')
+            file_output = File.read('/proc/sys/crypto/fips_enabled')
             @fact_list[:fips_enabled] = 'false'
             @fact_list[:fips_enabled] = 'true' if file_output.to_i == 1
             @fact_list[fact_name]

@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-describe 'MemoryResolver' do
-  let(:fips_enabled) { 0 }
+describe 'FipsEnabledResolver' do
+  let(:fips_enabled) { 'false' }
 
   before do
     allow(File).to receive(:read)
-                       .with('/proc/sys/crypto/fips_enabled')
-                       .and_return(load_fixture('fips_enabled').read)
+      .with('/proc/sys/crypto/fips_enabled')
+      .and_return(load_fixture('fips_enabled').read)
   end
   it 'returns fips_enabled' do
     result = Facter::Resolvers::Linux::FipsEnabled.resolve(:fips_enabled)
