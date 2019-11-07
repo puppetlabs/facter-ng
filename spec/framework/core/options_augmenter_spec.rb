@@ -10,7 +10,6 @@ describe 'OptionsAugmenter' do
 
   describe '#augment_with_cli_options' do
     context 'defined flags to true' do
-
       let(:cli_config) { { 'debug' => true, 'trace' => true, 'verbose' => true, 'log-level' => 'info' } }
 
       before do
@@ -62,14 +61,15 @@ describe 'OptionsAugmenter' do
       it 'sets log-level to warn' do
         expect(augmented_options[:log_level]).to eq('warn')
       end
-
     end
   end
 
   describe '#augment_with_global_options!' do
     context 'defined flags' do
-      let(:global_config) { { 'external-dir' => 'external-dir_value', 'custom-dir' => 'custom-dir_value',
-                              'no-external-facts' => true, 'no-custom-facts' => true, 'no-ruby' => true} }
+      let(:global_config) do
+        { 'external-dir' => 'external-dir_value', 'custom-dir' => 'custom-dir_value',
+          'no-external-facts' => true, 'no-custom-facts' => true, 'no-ruby' => true }
+      end
 
       before do
         allow_any_instance_of(Facter::ConfigReader).to receive('global').and_return(global_config)
@@ -100,7 +100,7 @@ describe 'OptionsAugmenter' do
     end
 
     context 'undefined flags' do
-      let(:global_config) { { 'no-external-facts' => false, 'no-custom-facts' => false, 'no-ruby' => false} }
+      let(:global_config) { { 'no-external-facts' => false, 'no-custom-facts' => false, 'no-ruby' => false } }
 
       before do
         allow_any_instance_of(Facter::ConfigReader).to receive('global').and_return(global_config)
@@ -133,8 +133,8 @@ describe 'OptionsAugmenter' do
 
   describe '#augments_with_facts_options' do
     context 'options set' do
-      let(:fact_config) { [{'fact' => '13 days'}] }
-      let(:block_fact_list) { ['fact1', 'fact2', 'fact3'] }
+      let(:fact_config) { [{ 'fact' => '13 days' }] }
+      let(:block_fact_list) { %w[fact1 fact2 fact3] }
 
       before do
         allow_any_instance_of(Facter::ConfigReader).to receive('ttls').and_return(fact_config)
@@ -145,7 +145,7 @@ describe 'OptionsAugmenter' do
       let(:augmented_options) { options_augmenter.options }
 
       it 'sets ttls' do
-        expect(augmented_options[:ttls]).to eq([{'fact' => '13 days'}])
+        expect(augmented_options[:ttls]).to eq([{ 'fact' => '13 days' }])
       end
 
       it 'sets block_list' do
