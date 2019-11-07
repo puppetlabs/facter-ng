@@ -26,7 +26,7 @@ module Facter
     end
 
     def refresh_config
-      @conf = File.file?(@config_file_path) ? Hocon.load(@config_file_path) : {}
+      @conf = File.exists?(@config_file_path) ? Hocon.load(@config_file_path) : {}
     end
   end
 end
