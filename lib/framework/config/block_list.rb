@@ -12,7 +12,8 @@ module Facter
       @block_groups_file_path = block_list_path || 'block_groups.conf'
     end
 
-    def block_groups_to_facts
+    # Breakes down blocked groups in blocked facts
+    def blocked_facts
       fact_list = []
       load_block_groups
 
@@ -28,8 +29,8 @@ module Facter
     private
 
     def load_block_groups
-      @block_groups = Hocon.load(@block_groups_file_path)
-      @block_list = ConfigReader.new.block_list
+      @block_groups = File.exist?(@block_groups_file_path) ? Hocon.load(@block_groups_file_path) : {}
+      @block_list = ConfigReader.new.block_list || {}
     end
   end
 end

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 describe 'ConfigReader' do
   describe '#refresh_config' do
@@ -23,7 +24,7 @@ describe 'ConfigReader' do
 
   describe '#block_list' do
     it 'loads block list' do
-      expect(Hocon).to receive(:load).with('facter.conf').and_return({ 'facts' => {'blocklist' => %w[group1 fact1]} })
+      expect(Hocon).to receive(:load).with('facter.conf').and_return('facts' => { 'blocklist' => %w[group1 fact1] })
       config_reader = Facter::ConfigReader.new
       expect(config_reader.block_list).to eq(%w[group1 fact1])
     end
@@ -47,10 +48,10 @@ describe 'ConfigReader' do
       expect(Hocon)
         .to receive(:load)
         .with('facter.conf')
-        .and_return({'facts' => {'ttls' => [{'fact_name' => '10 days'}]}})
+        .and_return('facts' => { 'ttls' => [{ 'fact_name' => '10 days' }] })
 
       config_reader = Facter::ConfigReader.new
-      expect(config_reader.ttls).to eq([{'fact_name' => '10 days'}])
+      expect(config_reader.ttls).to eq([{ 'fact_name' => '10 days' }])
     end
 
     it 'finds no facts' do
@@ -61,7 +62,7 @@ describe 'ConfigReader' do
     end
 
     it 'finds no ttls' do
-      expect(Hocon).to receive(:load).with('facter.conf').and_return({ 'facts' => {} })
+      expect(Hocon).to receive(:load).with('facter.conf').and_return('facts' => {})
       config_reader = Facter::ConfigReader.new
 
       expect(config_reader.ttls).to be_nil
@@ -70,7 +71,7 @@ describe 'ConfigReader' do
 
   describe '#global' do
     it 'loads global config' do
-      expect(Hocon).to receive(:load).with('facter.conf').and_return({ 'global' => 'global_config' })
+      expect(Hocon).to receive(:load).with('facter.conf').and_return('global' => 'global_config')
       config_reader = Facter::ConfigReader.new
 
       expect(config_reader.global).to eq('global_config')
@@ -86,7 +87,7 @@ describe 'ConfigReader' do
 
   describe '#cli' do
     it 'loads cli config' do
-      expect(Hocon).to receive(:load).with('facter.conf').and_return({ 'cli' => 'cli_config' })
+      expect(Hocon).to receive(:load).with('facter.conf').and_return('cli' => 'cli_config')
       config_reader = Facter::ConfigReader.new
 
       expect(config_reader.cli).to eq('cli_config')

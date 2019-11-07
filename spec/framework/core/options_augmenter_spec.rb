@@ -138,7 +138,7 @@ describe 'OptionsAugmenter' do
 
       before do
         allow_any_instance_of(Facter::ConfigReader).to receive('ttls').and_return(fact_config)
-        allow_any_instance_of(Facter::BlockList).to receive(:block_groups_to_facts).and_return(block_fact_list)
+        allow_any_instance_of(Facter::BlockList).to receive(:blocked_facts).and_return(block_fact_list)
         options_augmenter.augment_with_facts_options!
       end
 
@@ -149,14 +149,14 @@ describe 'OptionsAugmenter' do
       end
 
       it 'sets block_list' do
-        expect(augmented_options[:block_facts]).to eq(block_fact_list)
+        expect(augmented_options[:blocked_facts]).to eq(block_fact_list)
       end
     end
 
     context 'options not set' do
       before do
         allow_any_instance_of(Facter::ConfigReader).to receive('ttls').and_return(nil)
-        allow_any_instance_of(Facter::BlockList).to receive(:block_groups_to_facts).and_return(nil)
+        allow_any_instance_of(Facter::BlockList).to receive(:blocked_facts).and_return(nil)
         options_augmenter.augment_with_facts_options!
       end
 
@@ -167,7 +167,7 @@ describe 'OptionsAugmenter' do
       end
 
       it 'sets block_list' do
-        expect(augmented_options[:block_facts]).to be_nil
+        expect(augmented_options[:blocked_facts]).to be_nil
       end
     end
   end
