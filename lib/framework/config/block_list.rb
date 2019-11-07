@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'config_reader'
-
 module Facter
   class BlockList
     include Singleton
