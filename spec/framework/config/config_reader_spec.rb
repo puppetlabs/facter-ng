@@ -5,6 +5,8 @@ describe 'ConfigReader' do
     context 'read config' do
       it 'uses facter.conf' do
         expect(Hocon).to receive(:load).with('facter.conf')
+        expect(File).to receive(:file?).with('facter.conf').and_return(true)
+
         Facter::ConfigReader.new
       end
 
@@ -23,8 +25,13 @@ describe 'ConfigReader' do
   end
 
   describe '#block_list' do
+    before do
+      expect(File).to receive(:file?).with('facter.conf').and_return(true)
+    end
+
     it 'loads block list' do
       expect(Hocon).to receive(:load).with('facter.conf').and_return('facts' => { 'blocklist' => %w[group1 fact1] })
+
       config_reader = Facter::ConfigReader.new
       expect(config_reader.block_list).to eq(%w[group1 fact1])
     end
@@ -44,6 +51,10 @@ describe 'ConfigReader' do
   end
 
   describe '#ttls' do
+    before do
+      expect(File).to receive(:file?).with('facter.conf').and_return(true)
+    end
+
     it 'loads ttls' do
       expect(Hocon)
         .to receive(:load)
@@ -70,6 +81,10 @@ describe 'ConfigReader' do
   end
 
   describe '#global' do
+    before do
+      expect(File).to receive(:file?).with('facter.conf').and_return(true)
+    end
+
     it 'loads global config' do
       expect(Hocon).to receive(:load).with('facter.conf').and_return('global' => 'global_config')
       config_reader = Facter::ConfigReader.new
@@ -86,6 +101,10 @@ describe 'ConfigReader' do
   end
 
   describe '#cli' do
+    before do
+      expect(File).to receive(:file?).with('facter.conf').and_return(true)
+    end
+
     it 'loads cli config' do
       expect(Hocon).to receive(:load).with('facter.conf').and_return('cli' => 'cli_config')
       config_reader = Facter::ConfigReader.new
