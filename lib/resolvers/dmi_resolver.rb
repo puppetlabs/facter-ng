@@ -32,6 +32,7 @@ module Facter
 
           private
 
+          # File.read("/sys/class/dmi/id/#{file}")
           def read_facts(fact_name)
             files = %w[bios_date bios_vendor bios_version board_vendor board_name board_serial
                        chassis_asset_tag chassis_type sys_vendor product_name product_serial
@@ -44,10 +45,10 @@ module Facter
                      'Tablet', 'Convertible', 'Detachable']
             return unless File.directory?('/sys/class/dmi')
 
-            files.each do |file|
-              @fact_list[file.to_sym] = File.read("/sys/class/dmi/id/#{file}")
+            if files.include?(fact_name)
+              @fact_list[fact_name] = File.read("sys/class/dmi/id/#{fact_name}")
+              @fact_list[:chassis_type] = types[@fact_list[:chassis_type].to_i] if fact_name == :chassis_type
             end
-            @fact_list[:chassis_type] = types[@fact_list[:chassis_type].to_i]
             @fact_list[fact_name]
           end
         end
