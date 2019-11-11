@@ -41,7 +41,7 @@ module Facter
 
           leaf = VENDOR_LEAF + 0x100
 
-          while leaf <= VENDOR_LEAF + 0x100
+          while leaf <= VENDOR_LEAF + max_entries
             return true if Cpuid.find(leaf)[1].eql?(xen_vendor)
 
             leaf += 0x100
