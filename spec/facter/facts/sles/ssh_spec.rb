@@ -9,7 +9,7 @@ describe 'Sles Ssh' do
       result_fact = { ssh.name.to_sym =>
                                { 'fingerprints'.to_sym =>
                                      { 'sha1'.to_sym => ssh.fingerprint.sha1,
-                                       'sha2'.to_sym => ssh.fingerprint.sha256 },
+                                       'sha256'.to_sym => ssh.fingerprint.sha256 },
                                  'key'.to_sym => ssh.key,
                                  'type'.to_sym => ssh.type } }
       expected_fact = double(Facter::ResolvedFact, name: 'ssh', value: result_fact)
