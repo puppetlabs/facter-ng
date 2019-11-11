@@ -4,6 +4,8 @@ module Facter
   module Resolvers
     module Linux
       class Filesystems < BaseResolver
+        # :systems
+        # 
         @semaphore = Mutex.new
         @fact_list ||= {}
         @log = Facter::Log.new
@@ -17,9 +19,9 @@ module Facter
           end
 
           def read_filesystems(fact_name)
-            output = File.read('/proc/filesystems')
+            filesystems = File.read('/proc/filesystems')
             array1 = []
-            output.each_line do |line|
+            filesystems.each_line do |line|
               tokens = line.split(' ')
               array1 << tokens if tokens.size == 1
             end
