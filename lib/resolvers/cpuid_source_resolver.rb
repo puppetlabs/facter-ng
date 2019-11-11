@@ -37,7 +37,7 @@ module Facter
           xen_vendor = 'XenVMMXenVMM'
           max_entries = result[0]
 
-          return result[1].eql?(xen_vendor) if max_entries < 4 || max_entries >= 0x10000
+          return result[1].eql?(xen_vendor) if max_entries < 0x4 || max_entries >= 0x10000
 
           leaf = VENDOR_LEAF + 0x100
 
