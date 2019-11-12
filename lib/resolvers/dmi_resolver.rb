@@ -47,9 +47,7 @@ module Facter
 
             if files.include?(fact_name.to_s)
               @fact_list[fact_name] = File.read("/sys/class/dmi/id/#{fact_name}")
-              if fact_name == :chassis_type
-                @fact_list[:chassis_type] = types[@fact_list[:chassis_type].to_i]
-              end
+              @fact_list[:chassis_type] = types[@fact_list[:chassis_type].to_i] if fact_name == :chassis_type
             end
             @fact_list[fact_name]
           end
