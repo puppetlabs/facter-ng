@@ -53,7 +53,6 @@ module Facter
                      'Bus Expansion Chassis', 'Peripheral Chassis', 'Storage Chassis', 'Rack Mount Chassis',
                      'Sealed-Case PC', 'Multi-system', 'CompactPCI', 'AdvancedTCA', 'Blade', 'Blade Enclosure',
                      'Tablet', 'Convertible', 'Detachable']
-
             @fact_list[fact_name] = types[@fact_list[fact_name].to_i - 1]
           end
         end
