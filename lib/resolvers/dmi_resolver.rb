@@ -41,19 +41,20 @@ module Facter
 
             if files.include?(fact_name.to_s)
               @fact_list[fact_name] = File.read("/sys/class/dmi/id/#{fact_name}")
-              @fact_list[fact_name] = chassis_to_name(fact_name) if fact_name == :chassis_type
+              chassis_to_name(@fact_list[fact_name]) if fact_name == :chassis_type
             end
             @fact_list[fact_name]
           end
 
-          def chassis_to_name(fact_name)
+          def chassis_to_name(chassis_type)
             types = ['Other', nil, 'Desktop', 'Low Profile Desktop', 'Pizza Box', 'Mini Tower', 'Tower',
                      'Portable', 'Laptop', 'Notebook', 'Hand Held', 'Docking Station', 'All in One', 'Sub Notebook',
                      'Space-Saving', 'Lunch Box', 'Main System Chassis', 'Expansion Chassis', 'SubChassis',
                      'Bus Expansion Chassis', 'Peripheral Chassis', 'Storage Chassis', 'Rack Mount Chassis',
                      'Sealed-Case PC', 'Multi-system', 'CompactPCI', 'AdvancedTCA', 'Blade', 'Blade Enclosure',
                      'Tablet', 'Convertible', 'Detachable']
-            @fact_list[fact_name] = types[@fact_list[fact_name].to_i - 1]
+            
+            @fact_list[:chassis_type] = types[chassis_type.to_i - 1]
           end
         end
       end
