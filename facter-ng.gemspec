@@ -27,7 +27,8 @@ Gem::Specification.new do |spec|
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
   spec.files = `git ls-files`.split("\n").select { |file_name| file_name.match('^((?!spec).)*$') }
 
-  spec.bindir        = 'bin'
+  spec.bindir = 'bin'
+  spec.extensions << 'ext/extconf.rb'
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
@@ -38,5 +39,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rubocop', '~> 0.74.0'
   spec.add_development_dependency 'rubycritic', '~> 4.1.0'
 
+  spec.add_runtime_dependency 'hocon', '1.3.0'
   spec.add_runtime_dependency 'thor', '~> 0.20.3'
 end
