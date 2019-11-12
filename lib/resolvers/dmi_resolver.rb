@@ -10,16 +10,16 @@ module Facter
 
         class << self
           # :bios_vendor
-          # :bios_release_date
+          # :bios_date
           # :bios_version
           # :board_vendor
-          # :board_serial_number
-          # :board_manufacturer
+          # :board_serial
+          # :board_name
           # :chassis_asset_tag
           # :chassis_type
-          # :manufacturer
-          # :product_serial_number
-          # :product_manufacturer
+          # :sys_vendor
+          # :product_serial
+          # :product_name
           # :product_uuid
 
           def resolve(fact_name)
@@ -45,9 +45,11 @@ module Facter
                      'Tablet', 'Convertible', 'Detachable']
             return unless File.directory?('/sys/class/dmi')
 
-            if files.include?(fact_name)
-              @fact_list[fact_name] = File.read("sys/class/dmi/id/#{fact_name}")
-              @fact_list[:chassis_type] = types[@fact_list[:chassis_type].to_i] if fact_name == :chassis_type
+            if files.include?(fact_name.to_s)
+              @fact_list[fact_name] = File.read("/sys/class/dmi/id/#{fact_name}")
+              if @fact_list[fact_name] == @fact_list[:chassis_type]
+                @fact_list[:chassis_type] = types[@fact_list[:chassis_type].to_i]
+              end
             end
             @fact_list[fact_name]
           end
