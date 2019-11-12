@@ -21,10 +21,11 @@ module Facter
           def read_loadavrg_file(fact_name)
             output = File.read('/proc/loadavg')
             averages = output.split(' ')
-            @fact_list[:loadavrg] = {}
-            @fact_list[:loadavrg].store('1min', averages[0])
-            @fact_list[:loadavrg].store('5min', averages[1])
-            @fact_list[:loadavrg].store('15min', averages[2])
+            load_avrg = {}
+            load_avrg.store('1min', averages[0])
+            load_avrg.store('5min', averages[1])
+            load_avrg.store('15min', averages[2])
+            @fact_list[:loadavrg] = load_avrg
             @fact_list[fact_name]
           end
         end
