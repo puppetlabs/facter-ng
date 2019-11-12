@@ -18,13 +18,13 @@ module Facter
           end
 
           def read_filesystems(fact_name)
-            filesystems = File.read('/proc/filesystems')
-            array1 = []
-            filesystems.each_line do |line|
+            output = File.read('/proc/filesystems')
+            filesystems = []
+            output.each_line do |line|
               tokens = line.split(' ')
-              array1 << tokens if tokens.size == 1
+              filesystems << tokens if tokens.size == 1
             end
-            @fact_list[:systems] = array1.join(',')
+            @fact_list[:systems] = filesystems.sort.join(',')
             @fact_list[fact_name]
           end
         end
