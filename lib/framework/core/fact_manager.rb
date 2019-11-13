@@ -6,16 +6,10 @@ module Facter
   class FactManager
     include Singleton
 
-    def initialize
-      @internal_fact_mgr = InternalFactManager.new
-      @external_fact_mgr = ExternalFactManager.new
-      @fact_loader = FactLoader.instance
-    end
-
     def resolve_facts(options = {}, user_query = [])
-      options = enhance_options(options, user_query)
+      init(options, user_query)
 
-      loaded_facts = @fact_loader.load(options)
+      loaded_facts = @fact_loader.load(@options)
       searched_facts = QueryParser.parse(user_query, loaded_facts)
       internal_facts = @internal_fact_mgr.resolve_facts(searched_facts)
       external_facts = @external_fact_mgr.resolve_facts(searched_facts)
@@ -27,9 +21,9 @@ module Facter
     end
 
     def resolve_core(options = {}, user_query = [])
-      options = enhance_options(options, user_query)
+      init(options, user_query)
 
-      @fact_loader.load(options)
+      @fact_loader.load(@options)
       loaded_facts_hash = @fact_loader.internal_facts
 
       searched_facts = QueryParser.parse(user_query, loaded_facts_hash)
@@ -40,6 +34,15 @@ module Facter
     end
 
     private
+
+    def init(options, user_query)
+      @options ||= enhance_options(options, user_query)
+      @internal_fact_mgr ||= InternalFactManager.new
+      @external_fact_mgr ||= ExternalFactManager.new(@options)
+      @fact_loader ||= FactLoader.instance
+
+      nil
+    end
 
     def enhance_options(options, user_query)
       options_augmenter = OptionsAugmenter.new(options)
