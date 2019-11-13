@@ -53,7 +53,6 @@ module Facter
         @external_facts.concat(@external_fact_loader.external_facts)
       end
 
-      @external_facts = block_facts(@external_facts, options)
       @facts.concat(@external_facts)
     end
 

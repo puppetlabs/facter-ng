@@ -60,7 +60,7 @@ describe 'FactLoader' do
       expect(loaded_facts.size).to eq(0)
     end
 
-    it 'blocks one external fact' do
+    it 'does not blocks external facts' do
       options = { blocked_facts: ['custom_fact'] }
 
       facts_to_load = [loaded_fact_custom_fact]
@@ -70,7 +70,7 @@ describe 'FactLoader' do
       allow(external_fact_loader_double).to receive(:external_facts).and_return([])
 
       loaded_facts = Facter::FactLoader.instance.load(options)
-      expect(loaded_facts.size).to eq(0)
+      expect(loaded_facts).to eq(facts_to_load)
     end
   end
 end
