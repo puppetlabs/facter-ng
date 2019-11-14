@@ -2,7 +2,6 @@
 
 module Facter
   class ExternalFactManager
-
     def resolve_facts(searched_facts)
       searched_facts = filter_external_facts(searched_facts)
       external_facts(searched_facts)
