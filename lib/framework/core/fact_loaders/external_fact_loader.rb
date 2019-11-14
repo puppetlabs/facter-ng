@@ -22,9 +22,11 @@ module Facter
       @facts = @custom_facts.concat(@external_facts)
     end
 
+
     def directories_to_search(options)
-      LegacyFacter.search(*options[:custom_dir]) unless options[:no_custom_facts]
-      LegacyFacter.search_external(options[:external_dir]) unless options[:no_external_facts]
+      LegacyFacter.search(*options[:custom_dir]) if options[:custom_dir] && !options[:no_custom_facts]
+      LegacyFacter.search_external(options[:no_external_facts]) if options[:no_external_facts] &&
+                                                                   !options[:no_external_facts]
     end
 
     def load_custom_facts
