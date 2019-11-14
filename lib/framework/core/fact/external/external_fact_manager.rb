@@ -2,9 +2,6 @@
 
 module Facter
   class ExternalFactManager
-    def initialize(options)
-      @options = options
-    end
 
     def resolve_facts(searched_facts)
       searched_facts = filter_external_facts(searched_facts)
@@ -18,9 +15,6 @@ module Facter
     end
 
     def external_facts(custom_facts)
-      LegacyFacter.search(@options[:custom_dir]) unless @options[:no_exernal_facts]
-      LegacyFacter.search_external(@options[:external_dir]) unless @options[:no_custom_facts]
-
       resolved_custom_facts = []
 
       custom_facts.each do |custom_fact|

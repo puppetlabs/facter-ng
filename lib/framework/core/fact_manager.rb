@@ -38,7 +38,7 @@ module Facter
     def init(options, user_query)
       @options ||= enhance_options(options, user_query)
       @internal_fact_mgr ||= InternalFactManager.new
-      @external_fact_mgr ||= ExternalFactManager.new(@options)
+      @external_fact_mgr ||= ExternalFactManager.new
       @fact_loader ||= FactLoader.instance
 
       nil
