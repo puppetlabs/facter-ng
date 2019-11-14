@@ -6,7 +6,7 @@ module Facter
       FACT_NAME = 'load_average'
 
       def call_the_resolver
-        fact_value = Facter::Resolvers::Linux::LoadAverage.resolve(:loadavrg)
+        fact_value = Resolvers::Linux::LoadAverage.resolve(:loadavrg)
         ResolvedFact.new(FACT_NAME, fact_value)
       end
     end
