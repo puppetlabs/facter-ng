@@ -55,7 +55,7 @@ module Facter
 
         def build_fact_list(comp)
           @fact_list[:oem_strings] = []
-          @fact_list[:oem_strings] += comp.to_enum.map(&:OEMStringArray)
+          @fact_list[:oem_strings] += comp.to_enum.map(&:OEMStringArray).flatten
 
           comp = comp.to_enum.first
           hypervisor = determine_hypervisor_by_model(comp) || determine_hypervisor_by_manufacturer(comp)

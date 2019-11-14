@@ -14,7 +14,7 @@ module Facter
       private
 
       def virtualbox?
-        Resolvers::CpuidSource.resolve(:vendor) == 'VBoxVBoxVBox' ||
+        Resolvers::Virtualization.resolve(:virtual) == 'virtualbox' ||
           Resolvers::DMIComputerSystem.resolve(:name) == 'VirtualBox'
       end
 
@@ -24,11 +24,9 @@ module Facter
 
         version = revision = ''
 
-        oem_strings.each do |string_array|
-          string_array.each do |string|
-            version = string[8, string.size] if string.start_with?('vboxVer_') && version.empty?
-            revision = string[8, string.size] if string.start_with?('vboxRev_') && revision.empty?
-          end
+        oem_strings.each do |string|
+          version = string[8, string.size] if string.start_with?('vboxVer_') && version.empty?
+          revision = string[8, string.size] if string.start_with?('vboxRev_') && revision.empty?
         end
         { version: version, revision: revision }
       end
