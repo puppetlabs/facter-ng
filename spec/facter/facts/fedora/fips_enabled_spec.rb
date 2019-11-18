@@ -3,7 +3,7 @@
 describe 'Fedora FipsEnabled' do
   context '#call_the_resolver' do
     it 'returns a fact' do
-      let(:value) { false }
+      value = false
       expected_fact = double(Facter::ResolvedFact, name: 'fips_enabled', value: value)
 
       allow(Facter::Resolvers::Linux::FipsEnabled).to receive(:resolve).with(:fips_enabled).and_return(value)
