@@ -7,7 +7,9 @@ module Facter
         @log = Facter::Log.new
         @semaphore = Mutex.new
         @fact_list ||= {}
-
+        DIR = '/sys/block/'
+        FILE_PATHS = { sr0_model: 'sr0/device/model', sr0_size: 'sr0/size', sr0_vendor: 'sr0/device/vendor',
+                       sda_model: 'sda/device/model', sda_size: 'sda/size', sda_vendor: 'sda/device/vendor' }.freeze
         class << self
           # :sr0_model
           # :sr0_size
@@ -25,21 +27,10 @@ module Facter
           end
 
           def read_facts(fact_name)
-            read_sr0(fact_name)
-            read_sda(fact_name)
-            @fact_list[fact_name]
-          end
+            return nil unless File.exist?(DIR + FILE_PATHS[fact_name])
 
-          def read_sr0(fact_name)
-            @fact_list[:sr0_model] = File.read('/sys/block/sr0/device/model').strip
-            @fact_list[:sr0_size] = File.read('/sys/block/sr0/size').strip.to_i * 1024
-            @fact_list[:sr0_vendor] = File.read('/sys/block/sr0/device/vendor').strip
-          end
-
-          def read_sda(fact_name)
-            @fact_list[:sda_model] = File.read('/sys/block/sda/device/model').strip
-            @fact_list[:sda_size] = File.read('/sys/block/sda/size').strip.to_i * 1024
-            @fact_list[:sda_vendor] = File.read('/sys/block/sda/device/vendor').strip
+            result = File.read(DIR + FILE_PATHS[fact_name]).strip
+            @fact_list[fact_name] = fact_name.to_s =~ /size/ ? result.to_i * 1024 : result
           end
         end
       end
