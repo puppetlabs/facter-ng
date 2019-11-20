@@ -68,7 +68,7 @@ describe 'OptionsAugmenter' do
     context 'defined flags' do
       let(:global_config) do
         { 'external-dir' => 'external-dir_value', 'custom-dir' => 'custom-dir_value',
-          'no-external-facts' => true, 'no-custom-facts' => true, 'no-ruby' => true }
+          'external-facts' => false, 'custom-facts' => false, 'no-ruby' => true }
       end
 
       before do
@@ -100,7 +100,7 @@ describe 'OptionsAugmenter' do
     end
 
     context 'undefined flags' do
-      let(:global_config) { { 'no-external-facts' => false, 'no-custom-facts' => false, 'no-ruby' => false } }
+      let(:global_config) { { 'external-facts' => true, 'custom-facts' => true, 'no-ruby' => false } }
 
       before do
         allow_any_instance_of(Facter::ConfigReader).to receive('global').and_return(global_config)
