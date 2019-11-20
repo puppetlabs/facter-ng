@@ -25,13 +25,21 @@ module Facter
           end
 
           def read_facts(fact_name)
-            @fact_list[:sr0_size] = File.read('/sys/block/sr0/size')
-            @fact_list[:sr0_model] = File.read('/sys/block/sr0/device/model')
-            @fact_list[:sr0_vendor] = File.read('/sys/block/sr0/device/vendor')
-            @fact_list[:sda_size] = File.read('/sys/block/sda/size')
-            @fact_list[:sda_model] = File.read('/sys/block/sda/device/model')
-            @fact_list[:sda_vendor] = File.read('/sys/block/sda/device/vendor')
+            read_sr0(fact_name)
+            read_sda(fact_name)
             @fact_list[fact_name]
+          end
+
+          def read_sr0(fact_name)
+            @fact_list[:sr0_model] = File.read('/sys/block/sr0/device/model').strip
+            @fact_list[:sr0_size] = File.read('/sys/block/sr0/size').strip.to_i * 1024
+            @fact_list[:sr0_vendor] = File.read('/sys/block/sr0/device/vendor').strip
+          end
+
+          def read_sda(fact_name)
+            @fact_list[:sda_model] = File.read('/sys/block/sda/device/model').strip
+            @fact_list[:sda_size] = File.read('/sys/block/sda/size').strip.to_i * 1024
+            @fact_list[:sda_vendor] = File.read('/sys/block/sda/device/vendor').strip
           end
         end
       end
