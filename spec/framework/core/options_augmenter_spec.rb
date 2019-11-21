@@ -68,7 +68,7 @@ describe 'OptionsAugmenter' do
     context 'defined flags' do
       let(:global_config) do
         { 'external-dir' => 'external-dir_value', 'custom-dir' => 'custom-dir_value',
-          'external-facts' => false, 'custom-facts' => false, 'no-ruby' => true }
+          'no-external-facts' => false, 'no-custom-facts' => false, 'no-ruby' => true }
       end
 
       before do
@@ -86,12 +86,12 @@ describe 'OptionsAugmenter' do
         expect(augmented_options[:custom_dir]).to eq('custom-dir_value')
       end
 
-      it 'sets no-external-facts to true' do
-        expect(augmented_options[:no_external_facts]).to eq(true)
+      it 'sets external-facts to true' do
+        expect(augmented_options[:external_facts]).to eq(true)
       end
 
-      it 'sets no-custom-facts to true' do
-        expect(augmented_options[:no_custom_facts]).to eq(true)
+      it 'sets custom-facts to true' do
+        expect(augmented_options[:custom_facts]).to eq(true)
       end
 
       it 'sets no-ruby to true' do
@@ -117,12 +117,12 @@ describe 'OptionsAugmenter' do
         expect(augmented_options[:custom_dir]).to be_nil
       end
 
-      it 'sets no-external-facts to false' do
-        expect(augmented_options[:no_external_facts]).to eq(false)
+      it 'sets external-facts to true' do
+        expect(augmented_options[:external_facts]).to eq(true)
       end
 
-      it 'sets no-custom-facts to false' do
-        expect(augmented_options[:no_custom_facts]).to eq(false)
+      it 'sets custom-facts to true' do
+        expect(augmented_options[:custom_facts]).to eq(true)
       end
 
       it 'sets no-ruby to false' do
