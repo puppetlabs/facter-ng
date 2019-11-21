@@ -60,6 +60,7 @@ module Facter
           comp = comp.to_enum.first
           hypervisor = determine_hypervisor_by_model(comp) || determine_hypervisor_by_manufacturer(comp)
 
+          @fact_list[:model] = comp.Model
           @fact_list[:virtual] = hypervisor
           @fact_list[:is_virtual] = (!hypervisor.include?('physical')).to_s
         end
