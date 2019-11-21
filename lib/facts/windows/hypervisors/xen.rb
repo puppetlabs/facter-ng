@@ -6,15 +6,15 @@ module Facter
       FACT_NAME = 'hypervisors.xen'
 
       def call_the_resolver
-        fact_value = {context: is_hvm? ? 'hvm': 'pv'} if Resolvers::Virtualization.resolve(:virtual) == 'xen'
+        fact_value = { context: hvm? ? 'hvm' : 'pv' } if Resolvers::Virtualization.resolve(:virtual) == 'xen'
 
         ResolvedFact.new(FACT_NAME, fact_value)
       end
 
       private
 
-      def is_hvm?
-        Resolvers::Virtualization.resolve(:model) =~ /^HVM/
+      def hvm?
+        Resolvers::DMIComputerSystem.resolve(:name) =~ /^HVM/
       end
     end
   end
