@@ -2,7 +2,7 @@
 
 describe 'Windows HypervisorsXen' do
   describe '#call_the_resolver' do
-    context 'when is not VMware hypervisor' do
+    context 'when is not xen hypervisor' do
       it 'returns nil' do
         expected_fact = double(Facter::ResolvedFact, name: 'hypervisors.xen', value: nil)
         allow(Facter::Resolvers::Virtualization).to receive(:resolve).with(:virtual).and_return('value')
