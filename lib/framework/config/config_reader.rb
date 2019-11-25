@@ -5,7 +5,12 @@ module Facter
     attr_accessor :conf
 
     def initialize(config_path = nil)
-      @config_file_path = config_path || 'facter.conf'
+      os = CurrentOs.instance.identifier
+
+      # puts "#{os}"
+      path = os == :windows ? File.join('C:','ProgramData' ,'PuppetLabs', 'facter', 'etc', 'facter.conf') : '/etc/puppetlabs/facter/facter.conf'
+      # puts "#{path}"
+      @config_file_path = config_path || path
       refresh_config
     end
 
@@ -18,6 +23,7 @@ module Facter
     end
 
     def global
+      # puts @conf['global']
       @conf['global']
     end
 
