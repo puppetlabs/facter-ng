@@ -25,8 +25,8 @@ module Facter
     end
 
     def augment_ruby(global_conf)
-      @options[:no_ruby] = global_conf['no-ruby'] unless @options[:no_ruby]
-      @options[:custom_facts] = !@options[:no_ruby] if @options[:no_ruby] == true
+      @options[:ruby] = !global_conf['no-ruby'] if @options[:ruby].nil?
+      @options[:custom_facts] = false if @options[:ruby] == false
     end
   end
 end
