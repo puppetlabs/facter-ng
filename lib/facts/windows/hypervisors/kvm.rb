@@ -6,7 +6,7 @@ module Facter
       FACT_NAME = 'hypervisors.kvm'
 
       def call_the_resolver
-        fact_value = google_or_openstack || {} if kvm?
+        fact_value = discover_provider || {} if kvm?
 
         ResolvedFact.new(FACT_NAME, fact_value)
       end
@@ -20,10 +20,14 @@ module Facter
           product_name != 'VirtualBox' && !product_name.match(/^Parallels/)
       end
 
-      def google_or_openstack
-        return { google: true } if Resolvers::DMIBios.resolve(:manufacturer) == 'Google'
+      def discover_provider
+        manufacturer = Resolvers::DMIBios.resolve(:manufacturer)
 
-        { openstack: true } if Resolvers::DMIComputerSystem.resolve(:name).match(/^OpenStack/)
+        return { google: true } if manufacturer == 'Google'
+
+        return { openstack: true } if Resolvers::DMIComputerSystem.resolve(:name) =~ /^OpenStack/
+
+        return { amazon: true } if manufacturer =~ /^Amazon/
       end
     end
   end
