@@ -113,6 +113,12 @@ module Facter
       puts FACTER_VERSION.to_s
     end
 
+    desc '--list-block-groups', 'List block groups'
+    map ['--list-block-groups'] => :list_block_groups
+    def list_block_groups(*_args)
+      puts Facter::BlockList.instance.block_groups.to_yaml.lines[1..-1].join
+    end
+
     default_task :query
   end
 end
