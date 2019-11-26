@@ -28,6 +28,7 @@ module Facter
                  desc: 'A directory to use for external facts.'
 
     class_option :help,
+                 hide: true,
                  aliases: :h,
                  type: :boolean,
                  desc: 'Print this help message.'
@@ -98,12 +99,13 @@ module Facter
                  desc: '(Deprecated: use `puppet facts` instead) Load the Puppet libraries,' \
                        'thus allowing Facter to load Puppet-specific facts.'
 
-    desc 'query', 'query'
+    desc 'query', 'Default method', hide: true
+    desc '[options] [query] [query] [...]', ''
     def query(*args)
       puts Facter.to_user_output(@options, *args)
     end
 
-    desc '--version, -v', 'Print the version'
+    desc '--version, -v', 'Print the version', hide: true
     map ['--version', '-v'] => :version
     def version
       puts FACTER_VERSION.to_s
