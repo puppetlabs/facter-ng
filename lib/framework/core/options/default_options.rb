@@ -2,7 +2,7 @@
 
 module Facter
   module DefaultOptions
-    def augment_with_defaults
+    def augment_with_defaults!
       cli_defaults
       global_defaults
     end
