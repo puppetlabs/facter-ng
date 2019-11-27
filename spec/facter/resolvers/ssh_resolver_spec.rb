@@ -8,8 +8,8 @@ describe 'SSHResolver' do
       @file_names.first do |file_name|
         file_address = directory_path + file_name
         allow(File).to receive(:directory?).with(directory_path).and_return(true)
-        allow(File).to receive(:file?).with(directory_path + file_name).and_return(true)
-        allow(File).to receive(:read).with(file_address).and_return(filecontent)
+        allow(File).to receive(:file?).with(file_address).and_return(true)
+        allow(File).to receive(:read).with(file_address).and_return(file_content)
       end
     end
   end
@@ -17,7 +17,7 @@ describe 'SSHResolver' do
     let(:filecontent) { [] }
     it 'detects ssh dir,file,fact' do
       result = Facter::Resolvers::SshResolver.resolve(:ssh)
-      expect(result).to eql(filecontent)
+      expect(result).to eql(file_content)
     end
   end
 end
