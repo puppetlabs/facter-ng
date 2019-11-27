@@ -36,7 +36,7 @@ module Facter
       os = CurrentOs.instance.identifier
 
       windows_path = File.join('C:', 'ProgramData', 'PuppetLabs', 'facter', 'etc', 'facter.conf')
-      linux_path = File.join('etc', 'puppetlabs', 'facter', 'facter.conf')
+      linux_path = File.join('/', 'etc', 'puppetlabs', 'facter', 'facter.conf')
 
       os == :windows ? windows_path : linux_path
     end
