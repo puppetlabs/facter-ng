@@ -5,12 +5,7 @@ module Facter
     attr_accessor :conf
 
     def initialize(config_path = nil)
-      os = CurrentOs.instance.identifier
-
-      # puts "#{os}"
-      path = os == :windows ? File.join('C:','ProgramData' ,'PuppetLabs', 'facter', 'etc', 'facter.conf') : '/etc/puppetlabs/facter/facter.conf'
-      # puts "#{path}"
-      @config_file_path = config_path || path
+      @config_file_path = config_path || default_path
       refresh_config
     end
 
@@ -33,6 +28,17 @@ module Facter
 
     def refresh_config
       @conf = File.exist?(@config_file_path) ? Hocon.load(@config_file_path) : {}
+    end
+
+    private
+
+    def default_path
+      os = CurrentOs.instance.identifier
+
+      windows_path = File.join('C:', 'ProgramData', 'PuppetLabs', 'facter', 'etc', 'facter.conf')
+      linux_path = File.join('etc', 'puppetlabs', 'facter', 'facter.conf')
+
+      os == :windows ? windows_path : linux_path
     end
   end
 end

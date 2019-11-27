@@ -6,6 +6,7 @@ module Facter
     include Facter::GlobalOptions
     include Facter::FactsOptions
     include Facter::QueryOptions
+    include Facter::DefaultOptions
 
     attr_reader :options
 

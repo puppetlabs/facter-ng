@@ -48,6 +48,7 @@ module Facter
       options_augmenter.augment_with_facts_options!
       options_augmenter.augment_with_global_options!
       options_augmenter.augment_with_cli_options!
+      options_augmenter.augment_with_defaults
 
       options_augmenter.options
     end
