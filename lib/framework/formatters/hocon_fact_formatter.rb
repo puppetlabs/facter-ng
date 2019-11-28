@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'hocon/config_value_factory'
+
 module Facter
   class HoconFactFormatter
     def initialize
@@ -23,9 +25,7 @@ module Facter
       @log.debug('Formatting for no user query')
       fact_collection = FactCollection.new.build_fact_collection!(resolved_facts)
       fact_collection = Facter::Utils.sort_hash_by_key(fact_collection)
-      pretty_json = hash_to_hocon(fact_collection)
-
-      remove_enclosing_accolades(pretty_json)
+      hash_to_hocon(fact_collection)
     end
 
     def format_for_multiple_user_queries(user_queries, resolved_facts)
@@ -38,11 +38,7 @@ module Facter
       end
 
       facts_to_display = Facter::Utils.sort_hash_by_key(facts_to_display)
-      pretty_json = hash_to_hocon(facts_to_display)
-      pretty_json = remove_enclosing_accolades(pretty_json)
-
-      @log.debug('Remove quotes from value if value is a string')
-      pretty_json.gsub(/^(\S*) => \"(.*)\"/, '\1 => \2')
+      hash_to_hocon(facts_to_display)
     end
 
     def format_for_single_user_query(user_query, resolved_facts)
@@ -52,39 +48,14 @@ module Facter
       fact_collection = Facter::Utils.sort_hash_by_key(fact_collection)
       fact_value = fact_collection.dig(*user_query.split('.'))
 
-      pretty_json = fact_value ? hash_to_hocon(fact_value) : ''
+      return '' unless fact_value
 
-      @log.debug('Remove quotes from value if it is a simple string')
-      pretty_json.gsub(/^"(.*)\"/, '\1')
+      fact_value.class == Hash ? hash_to_hocon(fact_value) : fact_value
     end
 
-    def hash_to_hocon(facts_hash)
-      @log.debug('Converting hash to pretty json')
-      pretty_json = JSON.pretty_generate(facts_hash)
-
-      @log.debug('Change key value delimiter from : to =>')
-      pretty_json.gsub!(/^(.*?)(:)/, '\1 =>')
-
-      @log.debug('Remove quotes from parent nodes')
-      pretty_json.gsub!(/\"(.*)\"\ =>/, '\1 =>')
-
-      pretty_json
-    end
-
-    def remove_enclosing_accolades(pretty_fact_json)
-      @log.debug('Removing enclosing accolades')
-      pretty_fact_json = pretty_fact_json[1..-2]
-
-      @log.debug('Remove empty lines')
-      pretty_fact_json.gsub!(/^$\n/, '')
-
-      @log.debug('Fix indentation after removing enclosed accolades')
-      pretty_fact_json = pretty_fact_json.split("\n").map! { |line| line.gsub(/^  /, '') }
-
-      pretty_fact_json = pretty_fact_json.join("\n")
-
-      @log.debug('remove comas from query results')
-      pretty_fact_json.gsub(/^},/, '}')
+    def hash_to_hocon(fact_collection)
+      render_opts = Hocon::ConfigRenderOptions.new(false, false, true, false)
+      Hocon::ConfigFactory.parse_string(fact_collection.to_json).root.render(render_opts)
     end
 
     def build_fact_collection_for_user_query(user_query, resolved_facts)
