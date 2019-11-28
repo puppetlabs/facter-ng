@@ -12,7 +12,7 @@ describe 'HoconFactFormatter' do
 
     formatted_output = Facter::HoconFactFormatter.new.format(resolved_fact_list)
 
-    expected_output = "os => {\n  architecture => \"x86_64\",\n  family => \"Darwin\",\n  name => \"Darwin\"\n}"
+    expected_output = "os={\n  \s\sarchitecture=\"x86_64\"\n  \s\sfamily=Darwin\n  \s\sname=Darwin\n}\n"
 
     expect(formatted_output).to eq(expected_output)
   end
@@ -36,7 +36,7 @@ describe 'HoconFactFormatter' do
     resolved_fact_list = [resolved_fact1, resolved_fact2]
     formatted_output = Facter::HoconFactFormatter.new.format(resolved_fact_list)
 
-    expected_output = "os.family => Darwin,\nos.name => Darwin"
+    expected_output = "\"os.family\"=Darwin\n\"os.name\"=Darwin\n"
 
     expect(formatted_output).to eq(expected_output)
   end
