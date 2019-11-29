@@ -36,7 +36,7 @@ describe 'LegacyFactFormatter' do
     resolved_fact_list = [resolved_fact1, resolved_fact2]
     formatted_output = Facter::LegacyFactFormatter.new.format(resolved_fact_list)
 
-    expected_output = "os.family => Darwin,\nos.name => Darwin"
+    expected_output = "os.family => Darwin\nos.name => Darwin"
 
     expect(formatted_output).to eq(expected_output)
   end

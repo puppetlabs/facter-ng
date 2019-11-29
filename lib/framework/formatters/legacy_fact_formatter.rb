@@ -21,18 +21,20 @@ module Facter
 
     def format_for_no_query(resolved_facts)
       @log.debug('Formatting for no user query')
-      fact_collection = FormatterHelper.retreieve_fact_collection(resolved_facts)
+      fact_collection = Facter::FormatterHelper.retreieve_fact_collection(resolved_facts)
       pretty_json = hash_to_facter_format(fact_collection)
 
-      remove_enclosing_accolades(pretty_json)
+      pretty_json = remove_enclosing_accolades(pretty_json)
+      remove_comma(pretty_json)
     end
 
     def format_for_multiple_user_queries(user_queries, resolved_facts)
       @log.debug('Formatting for multiple user queries')
 
-      facts_to_display = FormatterHelper.retrieve_facts_to_display_for_user_query(user_queries, resolved_facts)
+      facts_to_display = Facter::FormatterHelper.retrieve_facts_to_display_for_user_query(user_queries, resolved_facts)
       pretty_json = hash_to_facter_format(facts_to_display)
       pretty_json = remove_enclosing_accolades(pretty_json)
+      pretty_json = remove_comma(pretty_json)
 
       @log.debug('Remove quotes from value if value is a string')
       pretty_json.gsub(/^(\S*) => \"(.*)\"/, '\1 => \2')
@@ -41,7 +43,7 @@ module Facter
     def format_for_single_user_query(user_query, resolved_facts)
       @log.debug('Formatting for single user query')
 
-      fact_value = FormatterHelper.retrieve_fact_value_for_single_query(user_query, resolved_facts)
+      fact_value = Facter::FormatterHelper.retrieve_fact_value_for_single_query(user_query, resolved_facts)
 
       pretty_json = fact_value ? hash_to_facter_format(fact_value) : ''
 
@@ -70,12 +72,15 @@ module Facter
       pretty_fact_json.gsub!(/^$\n/, '')
 
       @log.debug('Fix indentation after removing enclosed accolades')
-      pretty_fact_json = pretty_fact_json.split("\n").map! { |line| line.gsub(/^  /, '') }
-
-      pretty_fact_json = pretty_fact_json.join("\n")
+      pretty_fact_json = pretty_fact_json.split("\n").map! { |line| line.gsub(/^  /, '') }.join("\n")
 
       @log.debug('remove comas from query results')
       pretty_fact_json.gsub(/^},/, '}')
+    end
+
+    def remove_comma(output)
+      @log.debug('Remove unnecessary comma')
+      output.split("\n").map! { |line| line.match(/^\s\s/) ? line : line.gsub(/,/, '') }.join("\n")
     end
   end
 end
