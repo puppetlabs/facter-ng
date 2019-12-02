@@ -1,42 +1,35 @@
 # frozen_string_literal: true
 
-require 'singleton'
-
 module Facter
   class FactManager
-    include Singleton
-
-    def initialize
+    attr_accessor :resolved_facts
+    def initialize(options, user_query)
       @internal_fact_mgr = InternalFactManager.new
       @external_fact_mgr = ExternalFactManager.new
+
+      @user_query = user_query
+      enhance_options(options, @user_query)
+
       @fact_loader = FactLoader.instance
+      @fact_loader.load(options)
+
     end
 
-    def resolve_facts(options = {}, user_query = [])
-      options = enhance_options(options, user_query)
-
-      loaded_facts = @fact_loader.load(options)
-      searched_facts = QueryParser.parse(user_query, loaded_facts)
+    def resolve_facts
+      searched_facts = QueryParser.parse(@user_query, @fact_loader.facts)
       internal_facts = @internal_fact_mgr.resolve_facts(searched_facts)
       external_facts = @external_fact_mgr.resolve_facts(searched_facts)
 
-      resolved_facts = override_core_facts(internal_facts, external_facts)
+      @resolved_facts = override_core_facts(internal_facts, external_facts)
       FactFilter.new.filter_facts!(resolved_facts)
-
-      resolved_facts
     end
 
-    def resolve_core(options = {}, user_query = [])
-      options = enhance_options(options, user_query)
-
-      @fact_loader.load(options)
+    def resolve_core
       loaded_facts_hash = @fact_loader.internal_facts
 
-      searched_facts = QueryParser.parse(user_query, loaded_facts_hash)
-      resolved_facts = @internal_fact_mgr.resolve_facts(searched_facts)
+      searched_facts = QueryParser.parse(@user_query, loaded_facts_hash)
+      @resolved_facts = @internal_fact_mgr.resolve_facts(searched_facts)
       FactFilter.new.filter_facts!(resolved_facts)
-
-      resolved_facts
     end
 
     private
@@ -50,7 +43,7 @@ module Facter
       options_augmenter.augment_with_query_options!(user_query)
       options_augmenter.augment_with_defaults!
 
-      options_augmenter.options
+      Options.set(options_augmenter.options)
     end
 
     def override_core_facts(core_facts, custom_facts)

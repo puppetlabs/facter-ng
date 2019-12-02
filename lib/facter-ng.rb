@@ -13,10 +13,11 @@ module Facter
   end
 
   def self.to_user_output(options, *args)
-    resolved_facts = Facter::FactManager.instance.resolve_facts(options, args)
+    fact_manager = Facter::FactManager.new(options, args)
+    fact_manager.resolve_facts
     CacheManager.invalidate_all_caches
     fact_formatter = Facter::FormatterFactory.build(options)
-    fact_formatter.format(resolved_facts)
+    fact_formatter.format(fact_manager.resolved_facts)
   end
 
   def self.value(user_query)
