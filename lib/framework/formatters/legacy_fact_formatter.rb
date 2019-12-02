@@ -72,7 +72,7 @@ module Facter
       pretty_fact_json.gsub!(/^$\n/, '')
 
       @log.debug('Fix indentation after removing enclosed accolades')
-      pretty_fact_json = pretty_fact_json.split("\n").map! { |line| line.gsub(/^  /, '') }.join("\n")
+      pretty_fact_json.gsub!(/^\s\s(.*)$/, '\1')
 
       @log.debug('remove comas from query results')
       pretty_fact_json.gsub(/^},/, '}')
@@ -80,7 +80,7 @@ module Facter
 
     def remove_comma_and_quation(output)
       @log.debug('Remove unnecessary comma and quotation marks')
-      output.split("\n").map! { |line| line.match(/^\s\s/) ? line : line.gsub(/,|\"/, '') }.join("\n")
+      output.split("\n").map! { |line| line.match(/^[\s]+/) ? line : line.gsub(/,|\"/, '') }.join("\n")
     end
   end
 end

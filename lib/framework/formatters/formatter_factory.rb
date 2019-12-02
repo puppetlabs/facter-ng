@@ -5,7 +5,7 @@ module Facter
     def self.build(options)
       return JsonFactFormatter.new if options[:json]
       return YamlFactFormatter.new if options[:yaml]
-      return HoconFactFormatter.new if options[:hocon]
+      return CompatibleFormatter.new if options[:hocon]
 
       LegacyFactFormatter.new
     end
