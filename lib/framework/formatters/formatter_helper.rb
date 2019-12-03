@@ -15,7 +15,7 @@ module Facter
         Facter::Utils.sort_hash_by_key(facts_to_display)
       end
 
-      def retreieve_fact_collection(resolved_facts)
+      def retrieve_fact_collection(resolved_facts)
         fact_collection = FactCollection.new.build_fact_collection!(resolved_facts)
         Facter::Utils.sort_hash_by_key(fact_collection)
       end

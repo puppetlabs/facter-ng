@@ -21,7 +21,7 @@ module Facter
 
     def format_for_no_query(resolved_facts)
       @log.debug('Formatting for no user query')
-      fact_collection = Facter::FormatterHelper.retreieve_fact_collection(resolved_facts)
+      fact_collection = Facter::FormatterHelper.retrieve_fact_collection(resolved_facts)
       pretty_json = hash_to_facter_format(fact_collection)
 
       pretty_json = remove_enclosing_accolades(pretty_json)
@@ -72,15 +72,15 @@ module Facter
       pretty_fact_json.gsub!(/^$\n/, '')
 
       @log.debug('Fix indentation after removing enclosed accolades')
-      pretty_fact_json = pretty_fact_json.split("\n").map! { |line| line.gsub(/^  /, '') }.join("\n")
+      pretty_fact_json = pretty_fact_json.gsub(/^\s\s(.*)$/, '\1')
 
       @log.debug('remove comas from query results')
       pretty_fact_json.gsub(/^},/, '}')
     end
 
     def remove_comma_and_quation(output)
-      @log.debug('Remove unnecessary comma and quotation marks')
-      output.split("\n").map! { |line| line.match(/^\s\s/) ? line : line.gsub(/,|\"/, '') }.join("\n")
+      @log.debug('Remove unnecessary comma and quotation marks on root facts')
+      output.split("\n").map! { |line| line.match(/^[\s]+/) ? line : line.gsub(/,|\"/, '') }.join("\n")
     end
   end
 end

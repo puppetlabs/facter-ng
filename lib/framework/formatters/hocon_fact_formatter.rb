@@ -21,7 +21,7 @@ module Facter
 
     def format_for_no_query(resolved_facts)
       @log.debug('Formatting for no user query')
-      fact_collection = FormatterHelper.retreieve_fact_collection(resolved_facts)
+      fact_collection = FormatterHelper.retrieve_fact_collection(resolved_facts)
       hash_to_hocon(fact_collection)
     end
 

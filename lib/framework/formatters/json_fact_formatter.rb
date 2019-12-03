@@ -21,7 +21,7 @@ module Facter
     def format_for_no_query(resolved_facts)
       @log.debug('No user query provided')
 
-      fact_collection = FormatterHelper.retreieve_fact_collection(resolved_facts)
+      fact_collection = FormatterHelper.retrieve_fact_collection(resolved_facts)
       JSON.pretty_generate(fact_collection)
     end
 
