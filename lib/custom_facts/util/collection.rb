@@ -106,7 +106,7 @@ module LegacyFacter
         facts_before_load = Facter::Utils.deep_copy(@facts.keys)
         internal_loader.load_all
 
-        @custom_facts  = Facter::Utils.deep_copy(@facts.keys) - facts_before_load
+        @custom_facts = Facter::Utils.deep_copy(@facts.keys) - facts_before_load
       end
 
       def load(name)
