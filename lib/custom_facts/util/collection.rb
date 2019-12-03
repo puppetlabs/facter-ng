@@ -101,7 +101,7 @@ module LegacyFacter
 
       # Builds a hash of custom facts
       def custom_facts
-        return  @custom_facts unless @custom_facts.nil?
+        return @custom_facts unless @custom_facts.nil?
 
         facts_before_load = Facter::Utils.deep_copy(@facts)
         internal_loader.load_all

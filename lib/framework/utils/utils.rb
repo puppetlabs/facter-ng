@@ -12,8 +12,8 @@ module Facter
       end
     end
 
-    def self.deep_copy(o)
-      Marshal.load(Marshal.dump(o))
+    def self.deep_copy(obj)
+      Marshal.load(Marshal.dump(obj))
     end
   end
 end
