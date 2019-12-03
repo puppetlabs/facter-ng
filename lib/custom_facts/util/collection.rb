@@ -96,7 +96,7 @@ module LegacyFacter
         facts_before_load = Facter::Utils.deep_copy(@facts.keys)
         load_external_facts
 
-        @external_facts = Facter::Utils.deep_copy(@facts.keys).delete_if { |k, _| facts_before_load.include?(k) }
+        @external_facts = Facter::Utils.deep_copy(@facts.keys) - facts_before_load
       end
 
       # Builds a hash of custom facts
@@ -106,7 +106,7 @@ module LegacyFacter
         facts_before_load = Facter::Utils.deep_copy(@facts.keys)
         internal_loader.load_all
 
-        @custom_facts = Facter::Utils.deep_copy(@facts.keys).delete_if { |k| facts_before_load.include?(k) }
+        @custom_facts  = Facter::Utils.deep_copy(@facts.keys) - facts_before_load
       end
 
       def load(name)
