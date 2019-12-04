@@ -1,49 +1,49 @@
 # frozen_string_literal: true
 
+require 'singleton'
+require 'pry-byebug'
 module Facter
   class FactManager
-    attr_accessor :resolved_facts
-    def initialize(options, user_query)
+    include Singleton
+
+    def initialize
       @internal_fact_mgr = InternalFactManager.new
       @external_fact_mgr = ExternalFactManager.new
-
-      @user_query = user_query
-      enhance_options(options, @user_query)
-
       @fact_loader = FactLoader.instance
-      @fact_loader.load(options)
-
     end
 
-    def resolve_facts
-      searched_facts = QueryParser.parse(@user_query, @fact_loader.facts)
+    def resolve_facts(options = {}, user_query = [])
+      enhance_options(options, user_query)
+      loaded_facts = @fact_loader.load(Options)
+      searched_facts = QueryParser.parse(user_query, loaded_facts)
       internal_facts = @internal_fact_mgr.resolve_facts(searched_facts)
       external_facts = @external_fact_mgr.resolve_facts(searched_facts)
 
-      @resolved_facts = override_core_facts(internal_facts, external_facts)
+      resolved_facts = override_core_facts(internal_facts, external_facts)
       FactFilter.new.filter_facts!(resolved_facts)
+
+      resolved_facts
     end
 
-    def resolve_core
+    def resolve_core(user_query = [])
+      enhance_options(options, user_query)
+
       loaded_facts_hash = @fact_loader.internal_facts
 
-      searched_facts = QueryParser.parse(@user_query, loaded_facts_hash)
-      @resolved_facts = @internal_fact_mgr.resolve_facts(searched_facts)
+      searched_facts = QueryParser.parse(user_query, loaded_facts_hash)
+      resolved_facts = @internal_fact_mgr.resolve_facts(searched_facts)
       FactFilter.new.filter_facts!(resolved_facts)
+
+      resolved_facts
     end
 
     private
 
     def enhance_options(options, user_query)
-      options_augmenter = OptionsAugmenter.new(options)
-
-      options_augmenter.augment_with_facts_options!
-      options_augmenter.augment_with_global_options!
-      options_augmenter.augment_with_cli_options!
-      options_augmenter.augment_with_query_options!(user_query)
-      options_augmenter.augment_with_defaults!
-
-      Options.set(options_augmenter.options)
+      Options.set(options)
+      Options.augment_with_defaults!
+      Options.augment_with_config_file_options!
+      Options.augment_with_query_options!(user_query)
     end
 
     def override_core_facts(core_facts, custom_facts)

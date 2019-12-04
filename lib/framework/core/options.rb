@@ -1,17 +1,22 @@
 # frozen_string_literal: true
 
-require 'pry-byebug'
-
 module Facter
   class Options
-    include Singleton
 
-    def set(options)
-      @options = options || []
+    include Facter::ConfigReaderOptions
+    include Facter::HelperOptions
+    include Facter::DefaultOptions
+
+    include Singleton
+    attr_reader :options
+
+    def set(options = [])
+      @options = options.dup
+      @conf_reader = Facter::ConfigReader.new(@options[:config])
     end
 
-    def get(option)
-      @options[option]
+    def [](option)
+      @options.fetch(option, nil)
     end
 
     def custom_dir
