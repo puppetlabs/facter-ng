@@ -7,7 +7,7 @@ module Facter
 
       if @options[:ruby] == false
         @options[:custom_facts] = false
-        @options[:blocked_facts] = ['ruby'].concat(@options[:blocked_facts])
+        @options[:blocked_facts] = ['ruby'].concat(@options[:blocked_facts] || [])
       end
 
       # convert array or string to array
