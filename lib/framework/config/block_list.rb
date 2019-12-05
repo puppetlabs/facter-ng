@@ -28,7 +28,8 @@ module Facter
 
     def load_block_groups
       @block_groups = File.exist?(@block_groups_file_path) ? Hocon.load(@block_groups_file_path) : {}
-      @block_list = ConfigReader.new(@block_groups_file_path).block_list || {}
+      # TODO: Should receive config file path in constructor
+      @block_list = ConfigReader.new.block_list || {}
     end
   end
 end
