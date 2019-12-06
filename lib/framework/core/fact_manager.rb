@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'singleton'
-require 'pry-byebug'
 module Facter
   class FactManager
     include Singleton
@@ -14,7 +13,7 @@ module Facter
 
     def resolve_facts(options = {}, user_query = [])
       enhance_options(options, user_query)
-      loaded_facts = @fact_loader.load(Options)
+      loaded_facts = @fact_loader.load(Options.options)
       searched_facts = QueryParser.parse(user_query, loaded_facts)
       internal_facts = @internal_fact_mgr.resolve_facts(searched_facts)
       external_facts = @external_fact_mgr.resolve_facts(searched_facts)
@@ -37,10 +36,10 @@ module Facter
 
     private
 
-    def enhance_options(options, user_query)
-      Options.set(options)
+    def enhance_options(cli_options, user_query)
       Options.augment_with_defaults!
       Options.augment_with_config_file_options!
+      Options.augment_with_cli_options!(cli_options)
       Options.augment_with_query_options!(user_query)
     end
 

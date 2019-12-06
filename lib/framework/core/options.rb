@@ -2,17 +2,16 @@
 
 module Facter
   class Options
-
+    include Facter::DefaultOptions
     include Facter::ConfigReaderOptions
     include Facter::HelperOptions
-    include Facter::DefaultOptions
+    include Facter::CliOptions
 
     include Singleton
     attr_reader :options
 
-    def set(options = [])
-      @options = options.dup
-      @conf_reader = Facter::ConfigReader.new(@options[:config])
+    def initialize
+      @options = {}
     end
 
     def [](option)
@@ -36,11 +35,11 @@ module Facter
     end
 
     def self.method_missing(name, *args, &block)
-      begin
-        Facter::Options.instance.send(name.to_s, *args, &block)
-      rescue NoMethodError
-        super(name, *args, &block)
-      end
+      Facter::Options.instance.send(name.to_s, *args, &block)
+    rescue NoMethodError
+      super
     end
+
+    def self.respond_to_missing?(name, include_private) end
   end
 end

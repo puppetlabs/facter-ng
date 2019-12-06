@@ -49,6 +49,4 @@ module Facter
       "#{caller}"
     )
   end
-
-
 end

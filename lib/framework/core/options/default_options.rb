@@ -10,11 +10,12 @@ module Facter
     private
 
     def cli_defaults
-
       @options[:debug] = false
       @options[:trace] = false
       @options[:verbose] = false
-      @options[:log_level] = 'error'
+      @options[:log_level] = 'warn'
+
+      @options[:show_legacy] = false
     end
 
     def global_defaults
