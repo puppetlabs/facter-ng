@@ -37,10 +37,11 @@ module Facter
     private
 
     def enhance_options(cli_options, user_query)
-      Options.augment_with_defaults!
-      Options.augment_with_config_file_options!
-      Options.augment_with_cli_options!(cli_options)
-      Options.augment_with_query_options!(user_query)
+      options = Options.instance
+      options.augment_with_defaults!
+      options.augment_with_config_file_options!(cli_options[:config])
+      options.augment_with_cli_options!(cli_options)
+      options.augment_with_helper_options!(user_query)
     end
 
     def override_core_facts(core_facts, custom_facts)

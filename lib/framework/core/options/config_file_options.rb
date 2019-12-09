@@ -2,15 +2,14 @@
 
 module Facter
   module ConfigReaderOptions
-    def augment_with_config_file_options!
-      conf_reader = Facter::ConfigReader.new(@options[:config])
-      global_conf = conf_reader.global
+    def augment_with_config_file_options!(config_path)
+      conf_reader = Facter::ConfigReader.new(config_path)
 
       augment_cli(conf_reader.cli)
-      augment_custom(global_conf)
-      augment_external(global_conf)
-      augment_ruby(global_conf)
-      augment_facts(global_conf)
+      augment_custom(conf_reader.global)
+      augment_external(conf_reader.global)
+      augment_ruby(conf_reader.global)
+      augment_facts(conf_reader.ttls)
     end
 
     private
@@ -44,12 +43,10 @@ module Facter
       @options[:ruby] = !global_conf['no-ruby'] || @options[:ruby]
     end
 
-    def augment_facts(global_conf)
+    def augment_facts(ttls)
       @options[:blocked_facts] = Facter::BlockList.instance.blocked_facts || @options[:blocked_facts]
 
-      return unless global_conf
-
-      @options[:ttls] = global_conf.ttls || @options[:ttls]
+      @options[:ttls] = ttls || @options[:ttls]
     end
   end
 end

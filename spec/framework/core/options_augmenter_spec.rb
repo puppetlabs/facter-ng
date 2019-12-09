@@ -174,14 +174,14 @@ describe 'OptionsAugmenter' do
 
   describe '#augment_with_helper_options' do
     it 'sets user_query' do
-      options_augmenter.augment_with_query_options!(['os'])
+      options_augmenter.augment_with_helper_options!(['os'])
       augmented_options = options_augmenter.options
 
       expect(augmented_options[:user_query]).to eq(true)
     end
 
     it 'does not set user_query' do
-      options_augmenter.augment_with_query_options!([])
+      options_augmenter.augment_with_helper_options!([])
       augmented_options = options_augmenter.options
 
       expect(augmented_options[:user_query]).to be_nil
@@ -191,7 +191,7 @@ describe 'OptionsAugmenter' do
       let(:options_augmenter) { Facter::OptionsAugmenter.new(ruby: false) }
 
       before do
-        options_augmenter.augment_with_query_options!([])
+        options_augmenter.augment_with_helper_options!([])
       end
 
       let(:augmented_options) { options_augmenter.options }

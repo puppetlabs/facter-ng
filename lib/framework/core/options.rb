@@ -4,8 +4,8 @@ module Facter
   class Options
     include Facter::DefaultOptions
     include Facter::ConfigReaderOptions
-    include Facter::HelperOptions
     include Facter::CliOptions
+    include Facter::HelperOptions
 
     include Singleton
     attr_reader :options
