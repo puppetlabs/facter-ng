@@ -20,7 +20,9 @@ module Facter
 
     def global_defaults
       @options[:custom_facts] = true
+      @options[:custom_dir] = []
       @options[:external_facts] = true
+      @options[:external_dir] = []
       @options[:ruby] = true
     end
   end

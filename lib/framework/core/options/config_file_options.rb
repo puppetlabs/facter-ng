@@ -17,36 +17,36 @@ module Facter
     def augment_cli(file_cli_conf)
       return unless file_cli_conf
 
-      @options[:debug] = file_cli_conf['debug'] || @options[:debug]
-      @options[:trace] = file_cli_conf['trace'] || @options[:trace]
-      @options[:verbose] = file_cli_conf['verbose'] || @options[:verbose]
-      @options[:log_level] = file_cli_conf['log-level'] || @options[:log_level]
+      @options[:debug] = file_cli_conf['debug'] unless file_cli_conf['debug'].nil?
+      @options[:trace] = file_cli_conf['trace'] unless file_cli_conf['trace'].nil?
+      @options[:verbose] = file_cli_conf['verbose'] unless file_cli_conf['verbose'].nil?
+      @options[:log_level] = file_cli_conf['log-level'] unless file_cli_conf['log-level'].nil?
     end
 
     def augment_custom(file_global_conf)
       return unless file_global_conf
 
-      @options[:custom_facts] = !file_global_conf['no-custom-facts'] || @options[:custom_facts]
-      @options[:custom_dir] = file_global_conf['custom-dir'] || @options[:custom_dir]
+      @options[:custom_facts] = !file_global_conf['no-custom-facts'] unless file_global_conf['no-custom-facts'].nil?
+      @options[:custom_dir] = file_global_conf['custom-dir'] unless file_global_conf['custom-dir'].nil?
     end
 
     def augment_external(global_conf)
       return unless global_conf
 
-      @options[:external_facts] = !global_conf['no-external-facts'] || @options[:external_facts]
-      @options[:external_dir] = global_conf['external-dir'] || @options[:external_dir]
+      @options[:external_facts] = !global_conf['no-external-facts'] unless global_conf['no-external-facts'].nil?
+      @options[:external_dir] = global_conf['external-dir'] unless global_conf['external-dir'].nil?
     end
 
     def augment_ruby(global_conf)
       return unless global_conf
 
-      @options[:ruby] = !global_conf['no-ruby'] || @options[:ruby]
+      @options[:ruby] = !global_conf['no-ruby'] unless global_conf['no-ruby'].nil?
     end
 
     def augment_facts(ttls)
-      @options[:blocked_facts] = Facter::BlockList.instance.blocked_facts || @options[:blocked_facts]
+      @options[:blocked_facts] = Facter::BlockList.instance.blocked_facts
 
-      @options[:ttls] = ttls || @options[:ttls]
+      @options[:ttls] = ttls unless ttls.nil?
     end
   end
 end

@@ -3,18 +3,16 @@
 describe 'OptionsAugmenter' do
   before do
     Singleton.__init__(Facter::ConfigReader)
-    Singleton.__init__(Facter::BlockList)
+    #Singleton.__init__(Facter::BlockList)
     Singleton.__init__(Facter::Options)
   end
 
-  # let(:options_augmenter) { Facter::OptionsAugmenter.new({}) }
+  let(:options) { Facter::Options.instance.options }
 
   describe '#augment_with_defaults!' do
     before do
       Facter::Options.instance.augment_with_defaults!
     end
-
-    let(:options) { Facter::Options.instance.options }
 
     it 'sets debug to false' do
       expect(options[:debug]).to be_falsey
@@ -40,8 +38,16 @@ describe 'OptionsAugmenter' do
       expect(options[:custom_facts]).to be_truthy
     end
 
+    it 'set custom-dir with empty array' do
+      expect(options[:custom_dir].size).to eq(0)
+    end
+
     it 'sets external_facts to true' do
       expect(options[:external_facts]).to be_truthy
+    end
+
+    it 'sets external-dir with empty array' do
+      expect(options[:external_dir].size).to eq(0)
     end
 
     it 'sets ruby to true' do
@@ -49,201 +55,130 @@ describe 'OptionsAugmenter' do
     end
   end
 
-  # describe '#augment_with_cli_options' do
-  #  context 'defined flags to true' do
-  #    let(:cli_config) { { 'debug' => true, 'trace' => true, 'verbose' => true, 'log-level' => 'info' } }
-  #
-  #    before do
-  #      allow_any_instance_of(Facter::ConfigReader).to receive('cli').and_return(cli_config)
-  #      options_augmenter.augment_with_cli_options!
-  #    end
-  #
-  #    let(:augmented_options) { options_augmenter.options }
-  #
-  #    it 'sets debug to true' do
-  #      expect(augmented_options[:debug]).to eq(true)
-  #    end
-  #
-  #    it 'sets trace to true' do
-  #      expect(augmented_options[:trace]).to eq(true)
-  #    end
-  #
-  #    it 'sets verbose to true' do
-  #      expect(augmented_options[:verbose]).to eq(true)
-  #    end
-  #
-  #    it 'sets log-level to info' do
-  #      expect(augmented_options[:log_level]).to eq('info')
-  #    end
-  #  end
-  #
-  #  context 'defined flags to false' do
-  #    let(:cli_config) { { 'debug' => false, 'trace' => false, 'verbose' => false, 'log-level' => 'warn' } }
-  #
-  #    before do
-  #      allow_any_instance_of(Facter::ConfigReader).to receive('cli').and_return(cli_config)
-  #      options_augmenter.augment_with_cli_options!
-  #    end
-  #
-  #    let(:augmented_options) { options_augmenter.options }
-  #
-  #    it 'sets debug to false' do
-  #      expect(augmented_options[:debug]).to eq(false)
-  #    end
-  #
-  #    it 'sets trace to false' do
-  #      expect(augmented_options[:trace]).to eq(false)
-  #    end
-  #
-  #    it 'sets verbose to false' do
-  #      expect(augmented_options[:verbose]).to eq(false)
-  #    end
-  #
-  #    it 'sets log-level to warn' do
-  #      expect(augmented_options[:log_level]).to eq('warn')
-  #    end
-  #  end
-  # end
-  #
-  # describe '#augment_with_global_options!' do
-  #  context 'defined flags' do
-  #    let(:global_config) do
-  #      { 'external-dir' => 'external-dir_value', 'custom-dir' => 'custom-dir_value',
-  #        'no-external-facts' => true, 'no-custom-facts' => true, 'no-ruby' => true }
-  #    end
-  #
-  #    before do
-  #      allow_any_instance_of(Facter::ConfigReader).to receive('global').and_return(global_config)
-  #      options_augmenter.augment_with_global_options!
-  #    end
-  #
-  #    let(:augmented_options) { options_augmenter.options }
-  #
-  #    it 'sets external-dir' do
-  #      expect(augmented_options[:external_dir]).to eq('external-dir_value')
-  #    end
-  #
-  #    it 'sets custom-dir' do
-  #      expect(augmented_options[:custom_dir]).to eq('custom-dir_value')
-  #    end
-  #
-  #    it 'sets external-facts to false' do
-  #      expect(augmented_options[:external_facts]).to eq(false)
-  #    end
-  #
-  #    it 'sets custom-facts to false' do
-  #      expect(augmented_options[:custom_facts]).to eq(false)
-  #    end
-  #
-  #    it 'sets ruby to false' do
-  #      expect(augmented_options[:ruby]).to eq(false)
-  #    end
-  #  end
-  #
-  #  context 'undefined flags' do
-  #    let(:global_config) { { 'no-external-facts' => false, 'no-custom-facts' => false, 'no-ruby' => false } }
-  #
-  #    before do
-  #      allow_any_instance_of(Facter::ConfigReader).to receive('global').and_return(global_config)
-  #      options_augmenter.augment_with_global_options!
-  #    end
-  #
-  #    let(:augmented_options) { options_augmenter.options }
-  #
-  #    it 'unset external-dir' do
-  #      expect(augmented_options[:external_dir]).to be_nil
-  #    end
-  #
-  #    it 'unset custom-dir' do
-  #      expect(augmented_options[:custom_dir]).to be_nil
-  #    end
-  #
-  #    it 'sets external-facts to true' do
-  #      expect(augmented_options[:external_facts]).to eq(true)
-  #    end
-  #
-  #    it 'sets custom-facts to true' do
-  #      expect(augmented_options[:custom_facts]).to eq(true)
-  #    end
-  #
-  #    it 'sets ruby to true' do
-  #      expect(augmented_options[:ruby]).to eq(true)
-  #    end
-  #  end
-  # end
-  #
-  # describe '#augments_with_facts_options' do
-  #  context 'options set' do
-  #    let(:fact_config) { [{ 'fact' => '13 days' }] }
-  #    let(:block_fact_list) { %w[fact1 fact2 fact3] }
-  #
-  #    before do
-  #      allow_any_instance_of(Facter::ConfigReader).to receive('ttls').and_return(fact_config)
-  #      allow_any_instance_of(Facter::BlockList).to receive(:blocked_facts).and_return(block_fact_list)
-  #      options_augmenter.augment_with_facts_options!
-  #    end
-  #
-  #    let(:augmented_options) { options_augmenter.options }
-  #
-  #    it 'sets ttls' do
-  #      expect(augmented_options[:ttls]).to eq([{ 'fact' => '13 days' }])
-  #    end
-  #
-  #    it 'sets block_list' do
-  #      expect(augmented_options[:blocked_facts]).to eq(block_fact_list)
-  #    end
-  #  end
-  #
-  #  context 'options not set' do
-  #    before do
-  #      allow_any_instance_of(Facter::ConfigReader).to receive('ttls').and_return(nil)
-  #      allow_any_instance_of(Facter::BlockList).to receive(:blocked_facts).and_return(nil)
-  #      options_augmenter.augment_with_facts_options!
-  #    end
-  #
-  #    let(:augmented_options) { options_augmenter.options }
-  #
-  #    it 'sets ttls' do
-  #      expect(augmented_options[:ttls]).to be_nil
-  #    end
-  #
-  #    it 'sets block_list' do
-  #      expect(augmented_options[:blocked_facts]).to be_nil
-  #    end
-  #  end
-  # end
-  #
-  # describe '#augment_with_helper_options' do
-  #  it 'sets user_query' do
-  #    options_augmenter.augment_with_helper_options!(['os'])
-  #    augmented_options = options_augmenter.options
-  #
-  #    expect(augmented_options[:user_query]).to eq(true)
-  #  end
-  #
-  #  it 'does not set user_query' do
-  #    options_augmenter.augment_with_helper_options!([])
-  #    augmented_options = options_augmenter.options
-  #
-  #    expect(augmented_options[:user_query]).to be_nil
-  #  end
-  #
-  #  context 'ruby facts is false' do
-  #    let(:options_augmenter) { Facter::OptionsAugmenter.new(ruby: false) }
-  #
-  #    before do
-  #      options_augmenter.augment_with_helper_options!([])
-  #    end
-  #
-  #    let(:augmented_options) { options_augmenter.options }
-  #
-  #    it 'blocks ruby facts' do
-  #      expect(augmented_options[:blocked_facts]).to eq(['ruby'])
-  #    end
-  #
-  #    it 'sets custom_facts to false' do
-  #      expect(augmented_options[:custom_facts]).to be_falsey
-  #    end
-  #  end
-  # end
+  describe '#augment_with_config_file_options!' do
+    context 'sets options from config file' do
+      let(:config_reader_double) { double(Facter::ConfigReader) }
+      let(:block_list_double) { double(Facter::BlockList) }
+
+      before do
+        allow(Facter::ConfigReader).to receive(:new).with('config_path').and_return(config_reader_double)
+        allow(config_reader_double).to receive(:cli).and_return(
+          { 'debug' => true , 'trace' => true, 'verbose' => true, 'log-level' => 'err' })
+
+        allow(config_reader_double).to receive(:global).and_return(
+          { 'no-custom-facts' => false, 'custom-dir' => ['custom_dir1', 'custom_dir2'],
+          'no-external-facts' => false,  'external-dir' => ['external_dir1', 'external_dir2'],
+          'no-ruby' => false})
+        allow(config_reader_double).to receive(:ttls).and_return([ { "timezone" => "30 days" }])
+
+        allow(Facter::BlockList).to receive(:instance).and_return(block_list_double)
+        allow(block_list_double).to receive(:blocked_facts).and_return(['block_fact1', 'blocked_fact2'])
+
+        Facter::Options.instance.augment_with_config_file_options!('config_path')
+      end
+
+      it 'sets debug to true' do
+        expect(options[:debug]).to be_truthy
+      end
+
+      it 'sets trace to true' do
+        expect(options[:trace]).to be_truthy
+      end
+
+      it 'sets verbose to true' do
+        expect(options[:verbose]).to be_truthy
+      end
+
+      it 'sets logs level to error' do
+        expect(options[:log_level]).to eq('err')
+      end
+
+      it 'sets custom-facts to true' do
+        expect(options[:custom_facts]).to be_truthy
+      end
+
+      it 'sets custom-dir' do
+        expect(options[:custom_dir]).to eq(['custom_dir1', 'custom_dir2'])
+      end
+
+      it 'sets external-facts to true' do
+        expect(options[:external_facts]).to be_truthy
+      end
+
+      it 'sets external-dir' do
+        expect(options[:external_dir]).to eq(['external_dir1', 'external_dir2'])
+      end
+
+      it 'sets ruby to true' do
+        expect(options[:ruby]).to be_truthy
+      end
+
+      it 'sets blocked_facts' do
+        expect(options[:blocked_facts]).to eq(['block_fact1', 'blocked_fact2'])
+      end
+
+      it 'sets ttls' do
+        expect(options[:ttls]).to eq([ { "timezone" => "30 days" }])
+      end
+    end
+
+    context 'override default options' do
+      let(:config_reader_double) { double(Facter::ConfigReader) }
+      let(:block_list_double) { double(Facter::BlockList) }
+
+      before do
+        allow(Facter::ConfigReader).to receive(:new).with('config_path').and_return(config_reader_double)
+        allow(config_reader_double).to receive(:cli).and_return(
+          { 'debug' => true , 'trace' => true, 'verbose' => true, 'log-level' => 'err' })
+
+        allow(config_reader_double).to receive(:global).and_return(
+          { 'no-custom-facts' => true, 'no-external-facts' => true, 'no-ruby' => true})
+
+        allow(config_reader_double).to receive(:ttls).and_return([ { "timezone" => "30 days" }])
+
+        allow(Facter::BlockList).to receive(:instance).and_return(block_list_double)
+        allow(block_list_double).to receive(:blocked_facts).and_return(['block_fact1', 'blocked_fact2'])
+
+        Facter::Options.instance.augment_with_defaults!
+        Facter::Options.instance.augment_with_config_file_options!('config_path')
+      end
+
+      it 'sets debug to true' do
+        expect(options[:debug]).to be_truthy
+      end
+
+      it 'sets trace to true' do
+        expect(options[:trace]).to be_truthy
+      end
+
+      it 'sets verbose to true' do
+        expect(options[:verbose]).to be_truthy
+      end
+
+      it 'sets logs level to error' do
+        expect(options[:log_level]).to eq('err')
+      end
+
+      it 'sets custom-facts to true' do
+        expect(options[:custom_facts]).to be_falsey
+      end
+
+      it 'sets external-facts to true' do
+        expect(options[:external_facts]).to be_falsey
+      end
+
+      it 'sets ruby to true' do
+        expect(options[:ruby]).to be_falsey
+      end
+
+      it 'sets blocked_facts' do
+        expect(options[:blocked_facts]).to eq(['block_fact1', 'blocked_fact2'])
+      end
+
+      it 'sets ttls' do
+        expect(options[:ttls]).to eq([ { "timezone" => "30 days" }])
+      end
+    end
+  end
+
 end
