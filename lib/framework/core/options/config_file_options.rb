@@ -5,6 +5,7 @@ module Facter
     def augment_with_config_file_options!(config_path)
       conf_reader = Facter::ConfigReader.new(config_path)
 
+      augment_config_path(config_path)
       augment_cli(conf_reader.cli)
       augment_custom(conf_reader.global)
       augment_external(conf_reader.global)
@@ -13,6 +14,10 @@ module Facter
     end
 
     private
+
+    def augment_config_path(config_path)
+      @options[:config] = config_path
+    end
 
     def augment_cli(file_cli_conf)
       return unless file_cli_conf
