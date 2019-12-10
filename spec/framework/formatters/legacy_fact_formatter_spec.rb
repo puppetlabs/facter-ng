@@ -28,6 +28,18 @@ describe 'LegacyFactFormatter' do
     expect(formatted_output).to eq(expected_output)
   end
 
+  it 'formats to legacy for a single user query that contains :' do
+    resolved_fact =
+      double(Facter::ResolvedFact, name: 'networking.ip6', value: 'fe80::7ca0:ab22:703a:b329',
+                                   user_query: 'networking.ip6', filter_tokens: [])
+    resolved_fact_list = [resolved_fact]
+    formatted_output = Facter::LegacyFactFormatter.new.format(resolved_fact_list)
+
+    expected_output = 'fe80::7ca0:ab22:703a:b329'
+
+    expect(formatted_output).to eq(expected_output)
+  end
+
   it 'formats to legacy for multiple user queries' do
     resolved_fact1 =
       double(Facter::ResolvedFact, name: 'os.name', value: 'Darwin', user_query: 'os.name', filter_tokens: [])
