@@ -8,10 +8,13 @@ module Facter
     include Facter::HelperOptions
 
     include Singleton
-    attr_reader :options
 
     def initialize
       @options = {}
+    end
+
+    def get
+      @options
     end
 
     def [](option)

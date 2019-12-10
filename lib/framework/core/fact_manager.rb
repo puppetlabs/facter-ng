@@ -13,7 +13,7 @@ module Facter
 
     def resolve_facts(options = {}, user_query = [])
       enhance_options(options, user_query)
-      loaded_facts = @fact_loader.load(Options.options)
+      loaded_facts = @fact_loader.load(Options.get)
       searched_facts = QueryParser.parse(user_query, loaded_facts)
       internal_facts = @internal_fact_mgr.resolve_facts(searched_facts)
       external_facts = @external_fact_mgr.resolve_facts(searched_facts)

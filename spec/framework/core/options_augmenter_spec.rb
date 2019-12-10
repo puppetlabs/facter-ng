@@ -7,7 +7,7 @@ describe 'OptionsAugmenter' do
     # Singleton.__init__(Facter::Options)
   end
 
-  let(:options) { Facter::Options.instance.options }
+  let(:options) { Facter::Options.instance.get }
 
   describe '#augment_with_defaults!' do
     before do
