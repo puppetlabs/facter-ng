@@ -3,7 +3,7 @@
 describe 'OptionsAugmenter' do
   before do
     Singleton.__init__(Facter::ConfigReader)
-    #Singleton.__init__(Facter::BlockList)
+    # Singleton.__init__(Facter::BlockList)
     Singleton.__init__(Facter::Options)
   end
 
@@ -63,16 +63,18 @@ describe 'OptionsAugmenter' do
       before do
         allow(Facter::ConfigReader).to receive(:new).with('config_path').and_return(config_reader_double)
         allow(config_reader_double).to receive(:cli).and_return(
-          { 'debug' => true , 'trace' => true, 'verbose' => true, 'log-level' => 'err' })
+          'debug' => true, 'trace' => true, 'verbose' => true, 'log-level' => 'err'
+        )
 
         allow(config_reader_double).to receive(:global).and_return(
-          { 'no-custom-facts' => false, 'custom-dir' => ['custom_dir1', 'custom_dir2'],
-          'no-external-facts' => false,  'external-dir' => ['external_dir1', 'external_dir2'],
-          'no-ruby' => false})
-        allow(config_reader_double).to receive(:ttls).and_return([ { "timezone" => "30 days" }])
+          'no-custom-facts' => false, 'custom-dir' => %w[custom_dir1 custom_dir2],
+          'no-external-facts' => false, 'external-dir' => %w[external_dir1 external_dir2],
+          'no-ruby' => false
+        )
+        allow(config_reader_double).to receive(:ttls).and_return([{ 'timezone' => '30 days' }])
 
         allow(Facter::BlockList).to receive(:instance).and_return(block_list_double)
-        allow(block_list_double).to receive(:blocked_facts).and_return(['block_fact1', 'blocked_fact2'])
+        allow(block_list_double).to receive(:blocked_facts).and_return(%w[block_fact1 blocked_fact2])
 
         Facter::Options.instance.augment_with_config_file_options!('config_path')
       end
@@ -98,7 +100,7 @@ describe 'OptionsAugmenter' do
       end
 
       it 'sets custom-dir' do
-        expect(options[:custom_dir]).to eq(['custom_dir1', 'custom_dir2'])
+        expect(options[:custom_dir]).to eq(%w[custom_dir1 custom_dir2])
       end
 
       it 'sets external-facts to true' do
@@ -106,7 +108,7 @@ describe 'OptionsAugmenter' do
       end
 
       it 'sets external-dir' do
-        expect(options[:external_dir]).to eq(['external_dir1', 'external_dir2'])
+        expect(options[:external_dir]).to eq(%w[external_dir1 external_dir2])
       end
 
       it 'sets ruby to true' do
@@ -114,11 +116,11 @@ describe 'OptionsAugmenter' do
       end
 
       it 'sets blocked_facts' do
-        expect(options[:blocked_facts]).to eq(['block_fact1', 'blocked_fact2'])
+        expect(options[:blocked_facts]).to eq(%w[block_fact1 blocked_fact2])
       end
 
       it 'sets ttls' do
-        expect(options[:ttls]).to eq([ { "timezone" => "30 days" }])
+        expect(options[:ttls]).to eq([{ 'timezone' => '30 days' }])
       end
     end
 
@@ -129,15 +131,17 @@ describe 'OptionsAugmenter' do
       before do
         allow(Facter::ConfigReader).to receive(:new).with('config_path').and_return(config_reader_double)
         allow(config_reader_double).to receive(:cli).and_return(
-          { 'debug' => true , 'trace' => true, 'verbose' => true, 'log-level' => 'err' })
+          'debug' => true, 'trace' => true, 'verbose' => true, 'log-level' => 'err'
+        )
 
         allow(config_reader_double).to receive(:global).and_return(
-          { 'no-custom-facts' => true, 'no-external-facts' => true, 'no-ruby' => true})
+          'no-custom-facts' => true, 'no-external-facts' => true, 'no-ruby' => true
+        )
 
-        allow(config_reader_double).to receive(:ttls).and_return([ { "timezone" => "30 days" }])
+        allow(config_reader_double).to receive(:ttls).and_return([{ 'timezone' => '30 days' }])
 
         allow(Facter::BlockList).to receive(:instance).and_return(block_list_double)
-        allow(block_list_double).to receive(:blocked_facts).and_return(['block_fact1', 'blocked_fact2'])
+        allow(block_list_double).to receive(:blocked_facts).and_return(%w[block_fact1 blocked_fact2])
 
         Facter::Options.instance.augment_with_defaults!
         Facter::Options.instance.augment_with_config_file_options!('config_path')
@@ -172,13 +176,12 @@ describe 'OptionsAugmenter' do
       end
 
       it 'sets blocked_facts' do
-        expect(options[:blocked_facts]).to eq(['block_fact1', 'blocked_fact2'])
+        expect(options[:blocked_facts]).to eq(%w[block_fact1 blocked_fact2])
       end
 
       it 'sets ttls' do
-        expect(options[:ttls]).to eq([ { "timezone" => "30 days" }])
+        expect(options[:ttls]).to eq([{ 'timezone' => '30 days' }])
       end
     end
   end
-
 end
