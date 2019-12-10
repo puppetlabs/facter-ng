@@ -2,9 +2,9 @@
 
 describe 'OptionsAugmenter' do
   before do
-    # Singleton.__init__(Facter::ConfigReader)
-    # Singleton.__init__(Facter::BlockList)
-    # Singleton.__init__(Facter::Options)
+    Singleton.__init__(Facter::ConfigReader)
+    Singleton.__init__(Facter::BlockList)
+    Singleton.__init__(Facter::Options)
   end
 
   let(:options) { Facter::Options.instance.get }
@@ -228,6 +228,87 @@ describe 'OptionsAugmenter' do
 
     it 'converts external dir string to array' do
       expect(options[:external_dir]).to eq(['external_dir'])
+    end
+  end
+
+  describe '#get' do
+    before do
+      cli_options = { 'ruby' => true }
+      Facter::Options.instance.augment_with_cli_options!(cli_options)
+    end
+
+    it 'sets ruby option' do
+      expect(Facter::Options.instance.get).to eq(ruby: true)
+    end
+  end
+
+  describe '#custom_dir?' do
+    context 'custom dir is true' do
+      before do
+        cli_options = { 'custom_facts' => true, 'custom_dir' => %w[custom_dir1 custom_dir2] }
+        Facter::Options.instance.augment_with_cli_options!(cli_options)
+      end
+
+      it 'returns that custom dir exists' do
+        expect(Facter::Options.instance.custom_dir?).to be_truthy
+      end
+    end
+
+    context 'custom dir is false' do
+      before do
+        cli_options = { 'custom_facts' => false, 'custom_dir' => %w[custom_dir1 custom_dir2] }
+        Facter::Options.instance.augment_with_cli_options!(cli_options)
+      end
+
+      it 'returns that custom dir dos not exists' do
+        expect(Facter::Options.instance.custom_dir?).to be_falsey
+      end
+    end
+  end
+
+  describe '#customn_dir' do
+    before do
+      cli_options = { 'custom_dir' => %w[custom_dir1 custom_dir2] }
+      Facter::Options.instance.augment_with_cli_options!(cli_options)
+    end
+
+    it 'returns custom dirs' do
+      expect(Facter::Options.instance.custom_dir).to eq(%w[custom_dir1 custom_dir2])
+    end
+  end
+
+  describe '#external_dir?' do
+    context 'external dir is true' do
+      before do
+        cli_options = { 'external_facts' => true, 'external_dir' => %w[external_dir1 external_dir2] }
+        Facter::Options.instance.augment_with_cli_options!(cli_options)
+      end
+
+      it 'returns that external dir exists' do
+        expect(Facter::Options.instance.external_dir?).to be_truthy
+      end
+    end
+
+    context 'external dir is false' do
+      before do
+        cli_options = { 'external_facts' => false, 'external_dir' => %w[external_dir1 external_dir2] }
+        Facter::Options.instance.augment_with_cli_options!(cli_options)
+      end
+
+      it 'returns that external dir does not exists' do
+        expect(Facter::Options.instance.external_dir?).to be_falsey
+      end
+    end
+  end
+
+  describe '#external_dir' do
+    before do
+      cli_options = { 'external_dir' => %w[external_dir1 external_dir2] }
+      Facter::Options.instance.augment_with_cli_options!(cli_options)
+    end
+
+    it 'returns external dirs' do
+      expect(Facter::Options.instance.external_dir).to eq(%w[external_dir1 external_dir2])
     end
   end
 end

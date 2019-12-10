@@ -21,20 +21,20 @@ module Facter
       @options.fetch(option, nil)
     end
 
-    def custom_dir
-      @options[:custom_dir]
-    end
-
     def custom_dir?
       @options[:custom_dir] && @options[:custom_facts]
     end
 
-    def external_dir
-      @options[:external_dir]
+    def custom_dir
+      @options[:custom_dir]
     end
 
     def external_dir?
       @options[:external_dir] && @options[:external_facts]
+    end
+
+    def external_dir
+      @options[:external_dir]
     end
 
     def self.method_missing(name, *args, &block)
