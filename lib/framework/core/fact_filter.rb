@@ -7,7 +7,7 @@ module Facter
   class FactFilter
     def filter_facts!(searched_facts)
       searched_facts.each do |fact|
-        value = fact.filter_tokens.any? ? fact.value.dig(*fact.filter_tokens.map(&:to_sym)) : fact.value
+        value = fact.filter_tokens.any? ? fact.value.dig(*fact.filter_tokens.map(&:to_s).map(&:to_sym)) : fact.value
         fact.value = value
       end
     end
