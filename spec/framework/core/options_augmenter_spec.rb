@@ -184,4 +184,29 @@ describe 'OptionsAugmenter' do
       end
     end
   end
+
+  describe '#augment_with_cli_options!' do
+    before do
+      Facter::Options.instance.augment_with_defaults!
+      cli_options = { 'ruby' => false, 'external_facts' => false, 'custom_dir' => ['custom_dir'] }
+      Facter::Options.instance.augment_with_cli_options!(cli_options)
+    end
+
+    context 'override default with cli facts' do
+      it 'sets ruby to true' do
+        expect(options[:ruby]).to be_falsey
+      end
+
+      it 'sets external_facts to false' do
+        expect(options[:external_facts]). to be_falsey
+      end
+
+      it 'sets custom_dir' do
+        expect(options[:custom_dir]).to eq(['custom_dir'])
+      end
+    end
+  end
+
+  describe '#augment_with_helper_options!' do
+  end
 end

@@ -44,7 +44,8 @@ module Facter
     end
 
     def augment_facts(ttls)
-      @options[:blocked_facts] = Facter::BlockList.instance.blocked_facts
+      blocked_facts = Facter::BlockList.instance.blocked_facts
+      @options[:blocked_facts] = blocked_facts unless blocked_facts.nil?
 
       @options[:ttls] = ttls unless ttls.nil?
     end
