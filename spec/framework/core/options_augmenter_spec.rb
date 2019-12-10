@@ -2,9 +2,9 @@
 
 describe 'OptionsAugmenter' do
   before do
-    Singleton.__init__(Facter::ConfigReader)
+    # Singleton.__init__(Facter::ConfigReader)
     # Singleton.__init__(Facter::BlockList)
-    Singleton.__init__(Facter::Options)
+    # Singleton.__init__(Facter::Options)
   end
 
   let(:options) { Facter::Options.instance.options }
@@ -208,5 +208,26 @@ describe 'OptionsAugmenter' do
   end
 
   describe '#augment_with_helper_options!' do
+    before do
+      cli_options = { 'ruby' => false, 'external_dir' => 'external_dir' }
+      Facter::Options.instance.augment_with_cli_options!(cli_options)
+      Facter::Options.instance.augment_with_helper_options!(%w[first_user_query second_user_query])
+    end
+
+    it 'sets user_query to true' do
+      expect(options[:user_query]).to be_truthy
+    end
+
+    it 'sets custom_facts to false' do
+      expect(options[:custom_facts]).to be_falsey
+    end
+
+    it 'adds ruby to block list' do
+      expect(options[:blocked_facts].include?('ruby')).to be_truthy
+    end
+
+    it 'converts external dir string to array' do
+      expect(options[:external_dir]).to eq(['external_dir'])
+    end
   end
 end
