@@ -7,7 +7,7 @@ describe 'OptionsAugmenter' do
     Singleton.__init__(Facter::Options)
   end
 
-  #let(:options_augmenter) { Facter::OptionsAugmenter.new({}) }
+  # let(:options_augmenter) { Facter::OptionsAugmenter.new({}) }
 
   describe '#augment_with_defaults!' do
     before do
@@ -49,8 +49,7 @@ describe 'OptionsAugmenter' do
     end
   end
 
-
-  #describe '#augment_with_cli_options' do
+  # describe '#augment_with_cli_options' do
   #  context 'defined flags to true' do
   #    let(:cli_config) { { 'debug' => true, 'trace' => true, 'verbose' => true, 'log-level' => 'info' } }
   #
@@ -104,9 +103,9 @@ describe 'OptionsAugmenter' do
   #      expect(augmented_options[:log_level]).to eq('warn')
   #    end
   #  end
-  #end
+  # end
   #
-  #describe '#augment_with_global_options!' do
+  # describe '#augment_with_global_options!' do
   #  context 'defined flags' do
   #    let(:global_config) do
   #      { 'external-dir' => 'external-dir_value', 'custom-dir' => 'custom-dir_value',
@@ -171,9 +170,9 @@ describe 'OptionsAugmenter' do
   #      expect(augmented_options[:ruby]).to eq(true)
   #    end
   #  end
-  #end
+  # end
   #
-  #describe '#augments_with_facts_options' do
+  # describe '#augments_with_facts_options' do
   #  context 'options set' do
   #    let(:fact_config) { [{ 'fact' => '13 days' }] }
   #    let(:block_fact_list) { %w[fact1 fact2 fact3] }
@@ -212,9 +211,9 @@ describe 'OptionsAugmenter' do
   #      expect(augmented_options[:blocked_facts]).to be_nil
   #    end
   #  end
-  #end
+  # end
   #
-  #describe '#augment_with_helper_options' do
+  # describe '#augment_with_helper_options' do
   #  it 'sets user_query' do
   #    options_augmenter.augment_with_helper_options!(['os'])
   #    augmented_options = options_augmenter.options
@@ -246,5 +245,5 @@ describe 'OptionsAugmenter' do
   #      expect(augmented_options[:custom_facts]).to be_falsey
   #    end
   #  end
-  #end
+  # end
 end
