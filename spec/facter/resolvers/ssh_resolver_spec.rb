@@ -25,8 +25,15 @@ describe 'SshResolver' do
 
       context 'ecdsa file exists' do
         let(:content) { load_fixture('ecdsa').read }
-        let(:fingerprint) { Facter::FingerPrint.new( "SSHFP 3 1 fd92cf867fac0042d491eb1067e4f3cabf54039a" , "SSHFP 3 2 a51271a67987d7bbd685fa6d7cdd2823a30373ab01420b094480523fabff2a05" ) }
-        let(:result) { Facter::Ssh.new( fingerprint , "ecdsa-sha2-nistp256" , "AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBNG0AgjrPXt5/osLsmECV/qISOwaRmDW1yNSHZiAJvZ6p6ZUilg5vqtSskaUsT5XN8J2amVktN6wOHDwtWiEbpM=" , "ecdsa")}
+        let(:fingerprint) do
+          Facter::FingerPrint.new('SSHFP 3 1 fd92cf867fac0042d491eb1067e4f3cabf54039a',
+                                  'SSHFP 3 2 a51271a67987d7bbd685fa6d7cdd2823a30373ab01420b094480523fabff2a05')
+        end
+        let(:result) do
+          Facter::Ssh.new(fingerprint, 'ecdsa-sha2-nistp256', 'AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAA' \
+'IbmlzdHAyNTYAAABBBNG0AgjrPXt5/osLsmECV/qISOwaRmDW1yNSHZiAJvZ6p6ZUilg5vqtSskaUsT5XN8J2amVktN6wOHDwtWiEbpM=',
+                          'ecdsa')
+        end
         it 'returns fact' do
           expect(Facter::Resolvers::SshResolver.resolve(:ssh)).to eql([result])
         end
