@@ -16,21 +16,24 @@ describe 'SshResolver' do
           end
         end
         allow(File).to receive(:read).with('/etc/ssh_host_ecdsa_key.pub').and_return(content)
+        allow(Facter::FingerPrint).to receive(:new).and_return(fingerprint)
+        allow(Facter::Ssh).to receive(:new).and_return(result)
       end
       after do
-        Facter::Resolvers::SshResolver.invalidate_cache()
+        Facter::Resolvers::SshResolver.invalidate_cache
       end
 
       context 'ecdsa file exists' do
         let(:content) { load_fixture('ecdsa').read }
+        let(:fingerprint) { Facter::FingerPrint.new( "SSHFP 3 1 fd92cf867fac0042d491eb1067e4f3cabf54039a" , "SSHFP 3 2 a51271a67987d7bbd685fa6d7cdd2823a30373ab01420b094480523fabff2a05" ) }
+        let(:result) { Facter::Ssh.new( fingerprint , "ecdsa-sha2-nistp256" , "AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBNG0AgjrPXt5/osLsmECV/qISOwaRmDW1yNSHZiAJvZ6p6ZUilg5vqtSskaUsT5XN8J2amVktN6wOHDwtWiEbpM=" , "ecdsa")}
         it 'returns fact' do
-          expect(Facter::Resolvers::SshResolver.resolve(:ssh)).to eql(content)
+          expect(Facter::Resolvers::SshResolver.resolve(:ssh)).to eql([result])
         end
       end
       # context 'ecdsa file doesnt exist' do
       #   it { allow(File).to receive(:file?).with('ssh_host_ecdsa_key.pub').and_return(false) }
       # end
-
     end
   end
 end
