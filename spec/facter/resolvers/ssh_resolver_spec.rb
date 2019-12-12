@@ -35,18 +35,12 @@ describe 'SshResolver' do
           .and_return(rsa_fingerprint)
 
         expect(Facter::Ssh)
-          .to receive(:new).with(fingerprint, 'ecdsa-sha2-nistp256', 'AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAA' \
-          'IbmlzdHAyNTYAAABBBNG0AgjrPXt5/osLsmECV/qISOwaRmDW1yNSHZiAJvZ6p6ZUilg5vqtSskaUsT5XN8J2amVktN6wOHDwtWiEbpM=',
+          .to receive(:new).with(fingerprint, 'ecdsa-sha2-nistp256', load_fixture('ecdsa_key').read,
                                  'ecdsa')
                            .and_return(result)
 
         expect(Facter::Ssh)
-          .to receive(:new).with(rsa_fingerprint, 'ssh-rsa', 'AAAAB3NzaC1yc2EAAAADAQABAAABgQDb4P6/Iw6/WoW1rM'\
-          'bIdpq7qSd8ktGgta2CC3CGrx4AXxjbofyegH+B9wadIrmyNcHmLFAneAmeb+H/dewRMa5Hb7tMN8z+/X9MRzlMaZDGo+1CeXQkJ'\
-          'z7SywJrMXb00VcfSmGKe+aHr4OSdN7cXsAR3BzjUSjXdCMkNcp7bw0gcQOmMtqpxFXzbLyFeQgaXtDGwVeByzE9//mhdNv5+pcg'\
-          '3Jx0aC2ED9yrq78HpKYyvLx0t7SpE2i9y+meJxrk/SqlL2BJHAugRwXJkEexPr2hOoulc+PYcbEs8uGiliQEK6aqAtJYVgzcnrDaj'\
-          'sElGkQnN9/A9uXY8N0VTLPbYBIz6v+XdWiSK+NA1uzb/GN1XnTvCP0XDTtpzBsMG/m9C02Hq6xQDDWsPp+xv2VfYlVCrlJVf/CHeKE'\
-          'vy78WS+HMu3McvzKmP1Topow+utEqk4qfNxEs7FwwbdDcI02dsWJWJ+1FeCz+ZiscJI0LN0NKvM3xCLGt4hf6s9/JD9b6lO8=', 'rsa')
+          .to receive(:new).with(rsa_fingerprint, 'ssh-rsa', load_fixture('rsa_key').read, 'rsa')
                            .and_return(rsa_result)
       end
 
@@ -72,17 +66,12 @@ describe 'SshResolver' do
 
         let(:result) do
           double(Facter::Ssh, fingerprint: fingerprint, type: 'ecdsa-sha2-nistp256',
-                              key: 'AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBNG0AgjrPXt5/osLsmECV/qISOwa'\
-                  'RmDW1yNSHZiAJvZ6p6ZUilg5vqtSskaUsT5XN8J2amVktN6wOHDwtWiEbpM=', name: 'ecdsa')
+                              key: load_fixture('ecdsa_key').read, name: 'ecdsa')
         end
 
         let(:rsa_result) do
-          double(Facter::Ssh, fingerprint: rsa_fingerprint, type: 'ssh-rsa', key: 'AAAAB3NzaC1yc2EAAAADAQABAAABgQDb4P'\
-          '6/Iw6/WoW1rMbIdpq7qSd8ktGgta2CC3CGrx4AXxjbofyegH+B9wadIrmyNcHmLFAneAmeb+H/dewRMa5Hb7tMN8z+/X9MRzlMaZDGo+1C'\
-          'eXQkJz7SywJrMXb00VcfSmGKe+aHr4OSdN7cXsAR3BzjUSjXdCMkNcp7bw0gcQOmMtqpxFXzbLyFeQgaXtDGwVeByzE9//mhdNv5+pcg3J'\
-          'x0aC2ED9yrq78HpKYyvLx0t7SpE2i9y+meJxrk/SqlL2BJHAugRwXJkEexPr2hOoulc+PYcbEs8uGiliQEK6aqAtJYVgzcnrDajsElGkQn'\
-          'N9/A9uXY8N0VTLPbYBIz6v+XdWiSK+NA1uzb/GN1XnTvCP0XDTtpzBsMG/m9C02Hq6xQDDWsPp+xv2VfYlVCrlJVf/CHeKEvy78WS+HMu3'\
-          'McvzKmP1Topow+utEqk4qfNxEs7FwwbdDcI02dsWJWJ+1FeCz+ZiscJI0LN0NKvM3xCLGt4hf6s9/JD9b6lO8=', name: 'rsa')
+          double(Facter::Ssh, fingerprint: rsa_fingerprint, type: 'ssh-rsa',
+                 key: load_fixture('rsa_key').read, name: 'rsa')
         end
 
         it 'returns fact' do
