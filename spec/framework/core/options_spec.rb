@@ -27,7 +27,7 @@ describe 'Options' do
     end
 
     it 'sets log_level to warn' do
-      expect(options[:log_level]).to eq('warn')
+      expect(options[:log_level]).to eq(:warn)
     end
 
     it 'sets show_legacy to false' do
@@ -63,7 +63,7 @@ describe 'Options' do
       before do
         allow(Facter::ConfigReader).to receive(:new).with('config_path').and_return(config_reader_double)
         allow(config_reader_double).to receive(:cli).and_return(
-          'debug' => true, 'trace' => true, 'verbose' => true, 'log-level' => 'err'
+          'debug' => true, 'trace' => true, 'verbose' => true, 'log-level' => :err
         )
 
         allow(config_reader_double).to receive(:global).and_return(
@@ -92,7 +92,7 @@ describe 'Options' do
       end
 
       it 'sets logs level to error' do
-        expect(options[:log_level]).to eq('err')
+        expect(options[:log_level]).to eq(:err)
       end
 
       it 'sets custom-facts to true' do
@@ -131,7 +131,7 @@ describe 'Options' do
       before do
         allow(Facter::ConfigReader).to receive(:new).with('config_path').and_return(config_reader_double)
         allow(config_reader_double).to receive(:cli).and_return(
-          'debug' => true, 'trace' => true, 'verbose' => true, 'log-level' => 'err'
+          'debug' => true, 'trace' => true, 'verbose' => true, 'log-level' => :err
         )
 
         allow(config_reader_double).to receive(:global).and_return(
@@ -160,7 +160,7 @@ describe 'Options' do
       end
 
       it 'sets logs level to error' do
-        expect(options[:log_level]).to eq('err')
+        expect(options[:log_level]).to eq(:err)
       end
 
       it 'sets custom-facts to true' do
