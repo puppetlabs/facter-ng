@@ -16,7 +16,11 @@ describe 'SshResolver' do
           end
         end
         allow(File).to receive(:read).with('/etc/ssh_host_ecdsa_key.pub').and_return(content)
-        allow(Facter::FingerPrint).to receive(:new).and_return(fingerprint)
+        expect(Facter::FingerPrint)
+          .to receive(:new)
+          .with('SSHFP 3 1 fd92cf867fac0042d491eb1067e4f3cabf54039a',
+                'SSHFP 3 2 a51271a67987d7bbd685fa6d7cdd2823a30373ab01420b094480523fabff2a05')
+          .and_return(fingerprint)
         allow(Facter::Ssh).to receive(:new).and_return(result)
       end
       after do
