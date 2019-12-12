@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Facter
-  module ConfigReaderOptions
+  module ConfigFileOptions
     def augment_with_config_file_options!(config_path)
       conf_reader = Facter::ConfigReader.new(config_path)
 
