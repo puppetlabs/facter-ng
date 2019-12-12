@@ -23,11 +23,9 @@ module Facter
       end
 
       @invalid_pairs_rules.each do |key, value|
-        values = [value]
-        any_value = ''
-        values.flatten.each { |val| any_value = val if options.include?(val) }
-        if options.include?(key) && !any_value.empty?
-          write_error_and_exit("#{key} and #{any_value} options conflict: please specify only one.")
+        common_values = [value].flatten & options
+        if options.include?(key) && common_values.any?
+          write_error_and_exit("#{key} and #{common_values.first} options conflict: please specify only one.")
         end
       end
     end

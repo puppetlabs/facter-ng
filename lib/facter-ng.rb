@@ -15,7 +15,6 @@ module Facter
   end
 
   def self.to_user_output(options, *args)
-    OptionsValidator.validate(options)
     resolved_facts = Facter::FactManager.instance.resolve_facts(options, args)
     CacheManager.invalidate_all_caches
     fact_formatter = Facter::FormatterFactory.build(options)
@@ -30,7 +29,6 @@ module Facter
   end
 
   def self.add(name, options = {}, &block)
-    OptionsValidator.validate(options)
     LegacyFacter.add(name, options, &block)
   end
 
