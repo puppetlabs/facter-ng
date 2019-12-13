@@ -42,16 +42,16 @@ describe 'SshResolver' do
           .and_return(ed25519_fingerprint)
 
         expect(Facter::Ssh)
-          .to receive(:new).with(ecdsa_fingerprint, 'ecdsa-sha2-nistp256', load_fixture('ecdsa_key').read,
+          .to receive(:new).with(ecdsa_fingerprint, 'ecdsa-sha2-nistp256', load_fixture('ecdsa_key').read.strip!,
                                  'ecdsa')
                            .and_return(ecdsa_result)
 
         expect(Facter::Ssh)
-          .to receive(:new).with(rsa_fingerprint, 'ssh-rsa', load_fixture('rsa_key').read, 'rsa')
+          .to receive(:new).with(rsa_fingerprint, 'ssh-rsa', load_fixture('rsa_key').read.strip!, 'rsa')
                            .and_return(rsa_result)
 
         expect(Facter::Ssh)
-          .to receive(:new).with(ed25519_fingerprint, 'ssh-ed25519', load_fixture('ed25519_key').read, 'ed25519')
+          .to receive(:new).with(ed25519_fingerprint, 'ssh-ed25519', load_fixture('ed25519_key').read.strip!, 'ed25519')
                            .and_return(ed25519_result)
       end
 
@@ -60,9 +60,9 @@ describe 'SshResolver' do
       end
 
       context 'ecdsa file exists' do
-        let(:ecdsa_content) { load_fixture('ecdsa').read }
-        let(:rsa_content) { load_fixture('rsa').read }
-        let(:ed25519_content) { load_fixture('ed25519').read }
+        let(:ecdsa_content) { load_fixture('ecdsa').read.strip! }
+        let(:rsa_content) { load_fixture('rsa').read.strip! }
+        let(:ed25519_content) { load_fixture('ed25519').read.strip! }
 
         let(:ecdsa_fingerprint) do
           double(Facter::FingerPrint,
@@ -84,17 +84,17 @@ describe 'SshResolver' do
 
         let(:ecdsa_result) do
           double(Facter::Ssh, fingerprint: ecdsa_fingerprint, type: 'ecdsa-sha2-nistp256',
-                              key: load_fixture('ecdsa_key').read, name: 'ecdsa')
+                              key: load_fixture('ecdsa_key').read.strip!, name: 'ecdsa')
         end
 
         let(:rsa_result) do
           double(Facter::Ssh, fingerprint: rsa_fingerprint, type: 'ssh-rsa',
-                              key: load_fixture('rsa_key').read, name: 'rsa')
+                              key: load_fixture('rsa_key').read.strip!, name: 'rsa')
         end
 
         let(:ed25519_result) do
           double(Facter::Ssh, fingerpint: ed25519_fingerprint, type: 'ssh-ed22519',
-                              key: load_fixture('ed25519_key').read, name: 'ed25519')
+                              key: load_fixture('ed25519_key').read.strip!, name: 'ed25519')
         end
 
         it 'returns fact' do
