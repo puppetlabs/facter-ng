@@ -7,11 +7,10 @@ describe 'Fedora Ssh' do
       ssh = Facter::Ssh.new(Facter::FingerPrint.new('test', 'test'), 'ecdsa', 'test', 'ecdsa')
       result << ssh
       result_fact = { ssh.name.to_sym =>
-                          { :fingerprints =>
-                                { :sha1 => ssh.fingerprint.sha1,
-                                  :sha256 => ssh.fingerprint.sha256 },
-                            :key => ssh.key,
-                            :type => ssh.type } }
+                          { fingerprints: { sha1: ssh.fingerprint.sha1,
+                                            sha256: ssh.fingerprint.sha256 },
+                            key: ssh.key,
+                            type: ssh.type } }
       expected_fact = double(Facter::ResolvedFact, name: 'ssh', value: result_fact)
       allow(Facter::Resolvers::SshResolver).to receive(:resolve).with(:ssh).and_return(result)
       allow(Facter::ResolvedFact).to receive(:new).with('ssh', result_fact).and_return(expected_fact)
