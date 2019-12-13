@@ -14,11 +14,7 @@ module Facter
     end
 
     def determine_callers_name(sender_self)
-      @class_name = if sender_self.class.name != 'Class'
-                      sender_self.class.name
-                    else
-                      sender_self.name
-                    end
+      @class_name = sender_self.class.name != 'Class' ? sender_self.class.name : sender_self.name
     end
 
     def set_format_for_file_logger
@@ -37,7 +33,6 @@ module Facter
 
     def self.level(log_level)
       @@logger.level = log_level
-      @@logger.level = :debug
     end
 
     def info(msg)

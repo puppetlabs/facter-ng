@@ -12,8 +12,8 @@ module Facter
     end
 
     def resolve_facts(options = {}, user_query = [])
-      enhance_options(options, user_query)
-      Log.level(:warn)
+      options = enhance_options(options, user_query)
+      Log.level(options.get[:log_level])
 
       # log = Log.new(self)
       @log.info('Test message')
@@ -46,6 +46,8 @@ module Facter
       options.augment_with_config_file_options!(cli_options[:config])
       options.augment_with_cli_options!(cli_options)
       options.augment_with_helper_options!(user_query)
+
+      options
     end
 
     def override_core_facts(core_facts, custom_facts)
