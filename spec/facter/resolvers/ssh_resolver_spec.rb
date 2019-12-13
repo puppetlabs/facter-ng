@@ -101,9 +101,6 @@ describe 'SshResolver' do
           expect(Facter::Resolvers::SshResolver.resolve(:ssh)).to eq([rsa_result, ecdsa_result, ed25519_result])
         end
       end
-      # context 'ecdsa file doesnt exist' do
-      #   it { allow(File).to receive(:file?).with('ssh_host_ecdsa_key.pub').and_return(false) }
-      # end
     end
   end
 end
