@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'singleton'
 module Facter
   class FactManager
     include Singleton
@@ -9,10 +8,15 @@ module Facter
       @internal_fact_mgr = InternalFactManager.new
       @external_fact_mgr = ExternalFactManager.new
       @fact_loader = FactLoader.instance
+      @log = Log.new(self)
     end
 
     def resolve_facts(options = {}, user_query = [])
       enhance_options(options, user_query)
+      Log.level(:warn)
+
+      # log = Log.new(self)
+      @log.info('Test message')
       loaded_facts = @fact_loader.load(Options.get)
       searched_facts = QueryParser.parse(user_query, loaded_facts)
       internal_facts = @internal_fact_mgr.resolve_facts(searched_facts)

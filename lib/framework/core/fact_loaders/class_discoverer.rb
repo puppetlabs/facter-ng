@@ -5,7 +5,7 @@ module Facter
     include Singleton
 
     def initialize
-      @log = Log.new
+      @log = Log.new(self)
     end
 
     def discover_classes(operating_system)
@@ -14,7 +14,7 @@ module Facter
       # select only classes
       os_module_name.constants.select { |c| os_module_name.const_get(c).is_a? Class }
     rescue NameError
-      @log.error("There is no module named #{operating_system}")
+      # @log.error("There is no module named #{operating_system}")
       []
     end
   end
