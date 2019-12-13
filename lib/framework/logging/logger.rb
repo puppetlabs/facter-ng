@@ -31,16 +31,24 @@ module Facter
       end
     end
 
-    def self.level(log_level)
+    def self.level=(log_level)
       @@logger.level = log_level
+    end
+
+    def self.level
+      @@logger.level
+    end
+
+    def debug(msg)
+      @@logger.debug(@class_name + ' --- ' + msg)
     end
 
     def info(msg)
       @@logger.info(@class_name + ' --- ' + msg)
     end
 
-    def debug(msg)
-      @@logger.debug(@class_name + ' --- ' + msg)
+    def warn(msg)
+      @@logger.warn(@class_name + ' --- ' + msg)
     end
 
     def error(msg)

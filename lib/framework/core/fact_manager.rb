@@ -13,7 +13,7 @@ module Facter
 
     def resolve_facts(options = {}, user_query = [])
       options = enhance_options(options, user_query)
-      Log.level(options.get[:log_level])
+      Log.level = options.get[:log_level]
 
       loaded_facts = @fact_loader.load(Options.get)
       searched_facts = QueryParser.parse(user_query, loaded_facts)
