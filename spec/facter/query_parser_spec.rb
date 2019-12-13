@@ -18,6 +18,21 @@ describe 'QueryParser' do
       expect(matched_facts.first.fact_class).to eq(os_name_class)
     end
 
+    it 'compose filter_tokens correctly' do
+      query_list = ['os.release.arry.1.val2']
+
+      os_name_class = Class.const_get('Facter::Ubuntu::OsName')
+
+      loaded_fact_os_name = double(Facter::LoadedFact, name: 'os.release', klass: os_name_class, type: :core)
+      loaded_facts = [loaded_fact_os_name]
+
+      matched_facts = Facter::QueryParser.parse(query_list, loaded_facts)
+
+      expect(matched_facts.size).to eq(1)
+      expect(matched_facts.first.fact_class).to eq(os_name_class)
+      expect(matched_facts.first.filter_tokens).to eq([:arry, 1, :val2])
+    end
+
     it 'creates one legacy fact' do
       query_list = ['ipaddress_ens160']
 
