@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Facter
-  module ConfigReaderOptions
+  module ConfigFileOptions
     def augment_with_config_file_options!(config_path)
       conf_reader = Facter::ConfigReader.new(config_path)
 
@@ -25,7 +25,7 @@ module Facter
       @options[:debug] = file_cli_conf['debug'] unless file_cli_conf['debug'].nil?
       @options[:trace] = file_cli_conf['trace'] unless file_cli_conf['trace'].nil?
       @options[:verbose] = file_cli_conf['verbose'] unless file_cli_conf['verbose'].nil?
-      @options[:log_level] = file_cli_conf['log-level'] unless file_cli_conf['log-level'].nil?
+      @options[:log_level] = file_cli_conf['log-level'].to_sym unless file_cli_conf['log-level'].nil?
     end
 
     def augment_custom(file_global_conf)

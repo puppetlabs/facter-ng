@@ -3,7 +3,7 @@
 module Facter
   class Options
     include Facter::DefaultOptions
-    include Facter::ConfigReaderOptions
+    include Facter::ConfigFileOptions
     include Facter::CliOptions
     include Facter::HelperOptions
 

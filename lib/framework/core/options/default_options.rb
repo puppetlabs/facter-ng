@@ -13,8 +13,7 @@ module Facter
       @options[:debug] = false
       @options[:trace] = false
       @options[:verbose] = false
-      @options[:log_level] = 'warn'
-
+      @options[:log_level] = :warn
       @options[:show_legacy] = false
     end
 
