@@ -6,7 +6,7 @@ describe 'FactFilter' do
     resolved_fact = Facter::ResolvedFact.new('os.release', fact_value)
 
     resolved_fact.user_query = 'os.release.major'
-    resolved_fact.filter_tokens = ['major']
+    resolved_fact.filter_tokens = [:major]
 
     Facter::FactFilter.new.filter_facts!([resolved_fact])
 
@@ -18,7 +18,7 @@ describe 'FactFilter' do
     resolved_fact = Facter::ResolvedFact.new('os.release', fact_value)
 
     resolved_fact.user_query = 'os.release.arry.1.val2'
-    resolved_fact.filter_tokens = %w[arry 1 val2]
+    resolved_fact.filter_tokens = [:arry, 1, :val2]
 
     Facter::FactFilter.new.filter_facts!([resolved_fact])
 
