@@ -92,7 +92,7 @@ module Facter
 
       def construct_filter_tokens(query_tokens, query_token_range)
         (query_tokens - query_tokens[query_token_range]).map do |token|
-          token !~ /\D/ && !token.empty? ? token.to_i : token.to_sym
+          token =~ /^[0-9]+$/ ? token.to_i : token.to_sym
         end
       end
     end
