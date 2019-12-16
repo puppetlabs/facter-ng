@@ -12,7 +12,7 @@ module Facter
     end
 
     def formatter=(format)
-      @stderr_logger.formatter = format
+      @stdout_logger.formatter = format
       @stderr_logger.formatter = format
     end
 
