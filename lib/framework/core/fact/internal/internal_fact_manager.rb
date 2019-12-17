@@ -6,9 +6,8 @@ module Facter
       searched_facts = filter_internal_facts(searched_facts)
 
       threads = start_threads(searched_facts)
-      resolved_facts = join_threads(threads, searched_facts)
 
-      resolved_facts
+      join_threads(threads, searched_facts)
     end
 
     private
@@ -38,7 +37,7 @@ module Facter
         resolved_facts << thread.value
       end
 
-      resolved_facts.flatten!
+      resolved_facts.flatten!.uniq!(&:name)
 
       FactAugmenter.augment_resolved_facts(searched_facts, resolved_facts)
     end
