@@ -43,6 +43,7 @@ private_methods def allow_attr_change(resolved_fact_mock, fact_name, fact_value)
 end
 
 def mock_resolved_fact(fact_name, fact_value, user_query = nil, filter_tokens = [], type = :core)
+
   resolved_fact_mock = double(Facter::ResolvedFact, name: fact_name, value: fact_value,
                                                     user_query: user_query, filter_tokens: filter_tokens, type: type)
 
