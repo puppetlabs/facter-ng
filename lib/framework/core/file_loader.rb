@@ -41,7 +41,7 @@ os = ENV['RACK_ENV'] == 'test' ? '' : CurrentOs.instance.identifier
 
 os_hierarchy = CurrentOs.instance.hierarchy
 os_hierarchy.each { |operating_system| load_lib_dirs('facts', operating_system.downcase, '**') }
-puts os.inspect
+
 load_lib_dirs('resolvers', os.to_s, '**') if os.to_s =~ /win|aix|solaris|macosx/
 
 require "#{ROOT_DIR}/lib/custom_facts/core/legacy_facter"
