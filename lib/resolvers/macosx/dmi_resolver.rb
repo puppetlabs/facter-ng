@@ -24,6 +24,7 @@ module Facter
           def read_facts(fact_name)
             # OSX only supports the product name
             @fact_list[:model], _status = Open3.capture2('sysctl -n hw.model')
+            @fact_list[:model].strip!
             @fact_list[fact_name]
           end
         end
