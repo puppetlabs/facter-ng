@@ -5,7 +5,7 @@ Metrics/LineLength:
   Max: 120
 
 Metrics/MethodLength:
-  Max: 20
+  Max: 25
   Exclude:
     - 'lib/custom_facts/util/values.rb'
     - 'lib/custom_facts/util/confine.rb'
@@ -23,6 +23,7 @@ Naming/ClassAndModuleCamelCase:
     - 'spec/mocks/**/*'
 
 Metrics/AbcSize:
+  Max: 30
   Exclude:
     - 'spec/custom_facts/util/parser_spec.rb'
     - 'spec/custom_facts/core/logging_spec.rb'
