@@ -36,7 +36,7 @@ module Facter
         thread.join
         resolved_facts << thread.value
       end
-
+      
       resolved_facts.flatten!
       resolved_facts.uniq!(&:name)
 

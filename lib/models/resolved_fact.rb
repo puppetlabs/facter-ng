@@ -2,6 +2,7 @@
 
 module Facter
   class ResolvedFact
+
     attr_reader :name, :type
     attr_accessor :user_query, :filter_tokens, :value
 
