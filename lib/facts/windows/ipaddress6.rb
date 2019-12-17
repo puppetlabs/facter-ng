@@ -8,7 +8,7 @@ module Facter
 
       def initialize(*args)
         @log = Log.new
-        @log.debug 'Dispatching to resolve: ' + args.inspect
+        @log.debug "Dispatching to resolve: #{args.inspect}"
       end
 
       def call_the_resolver

@@ -28,8 +28,6 @@ describe 'QueryParser' do
 
       matched_facts = Facter::QueryParser.parse(query_list, loaded_facts)
 
-      expect(matched_facts.size).to eq(1)
-      expect(matched_facts.first.fact_class).to eq(os_name_class)
       expect(matched_facts.first.filter_tokens).to eq([:arry, 1, :val2])
     end
 
