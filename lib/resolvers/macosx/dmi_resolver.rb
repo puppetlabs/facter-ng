@@ -9,18 +9,7 @@ module Facter
         @fact_list ||= {}
 
         class << self
-          # :bios_vendor
-          # :bios_date
-          # :bios_version
-          # :board_vendor
-          # :board_serial
-          # :board_name
-          # :chassis_asset_tag
-          # :chassis_type
-          # :sys_vendor
-          # :product_serial
-          # :product_name
-          # :product_uuid
+          #:model
 
           def resolve(fact_name)
             @semaphore.synchronize do
@@ -33,21 +22,10 @@ module Facter
           private
 
           def read_facts(fact_name)
-            # CTL_HW, HW_MODEL ?
-            # OSX only supports the product name ???
+            # OSX only supports the product name
             @fact_list[:model], _status = Open3.capture2('sysctl -n hw.model')
             @fact_list[fact_name]
           end
-
-          # def chassis_to_name(chassis_type)
-          #  types = ['Other', nil, 'Desktop', 'Low Profile Desktop', 'Pizza Box', 'Mini Tower', 'Tower',
-          #           'Portable', 'Laptop', 'Notebook', 'Hand Held', 'Docking Station', 'All in One', 'Sub Notebook',
-          #           'Space-Saving', 'Lunch Box', 'Main System Chassis', 'Expansion Chassis', 'SubChassis',
-          #           'Bus Expansion Chassis', 'Peripheral Chassis', 'Storage Chassis', 'Rack Mount Chassis',
-          #           'Sealed-Case PC', 'Multi-system', 'CompactPCI', 'AdvancedTCA', 'Blade', 'Blade Enclosure',
-          #           'Tablet', 'Convertible', 'Detachable']
-          #  @fact_list[:chassis_type] = types[chassis_type.to_i - 1]
-          # end
         end
       end
     end
