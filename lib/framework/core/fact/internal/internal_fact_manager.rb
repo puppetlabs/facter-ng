@@ -37,7 +37,8 @@ module Facter
         resolved_facts << thread.value
       end
 
-      resolved_facts.flatten!.uniq!(&:name)
+      resolved_facts.flatten!
+      resolved_facts.uniq!(&:name)
 
       FactAugmenter.augment_resolved_facts(searched_facts, resolved_facts)
     end

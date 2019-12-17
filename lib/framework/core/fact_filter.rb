@@ -6,7 +6,7 @@ module Facter
   # and major is the filter criteria inside tha fact
   class FactFilter
     def filter_facts!(searched_facts)
-      searched_facts = filter_legacy_facts(searched_facts)
+      filter_legacy_facts!(searched_facts)
       searched_facts.each do |fact|
         fact.value = symbolize_all_keys(fact.value) if fact.value.is_a?(Hash)
         fact.value = fact.filter_tokens.any? ? fact.value.dig(*fact.filter_tokens) : fact.value
@@ -23,10 +23,10 @@ module Facter
       symbolized_hash
     end
 
-    def filter_legacy_facts(resolved_facts)
-      return resolved_facts if Options.get[:show_legacy]
-      return resolved_facts.select!{|fact| !fact.type} unless Options.get[:user_query]
-      resolved_facts
+    def filter_legacy_facts!(resolved_facts)
+      return if Options.get[:show_legacy]
+
+      resolved_facts.reject!(&:type) unless Options.get[:user_query]
     end
   end
 end
