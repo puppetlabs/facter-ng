@@ -6,7 +6,7 @@ module Facter
       FACT_NAME = 'dmi.product.name'
 
       def call_the_resolver
-        fact_value = Resolvers::Linux::DmiBios.resolve(:product_name)
+        fact_value = Resolvers::Macosx::DmiBios.resolve(:model).strip!
         ResolvedFact.new(FACT_NAME, fact_value)
       end
     end
