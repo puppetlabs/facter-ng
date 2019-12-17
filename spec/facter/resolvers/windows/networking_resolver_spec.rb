@@ -29,12 +29,12 @@ describe 'Windows Networking Resolver' do
     context 'when fails to retrieve networking information after 3 tries' do
       let(:error_code) { NetworkingFFI::ERROR_BUFFER_OVERFLOW }
       before do
-        allow(FFI::MemoryPointer).to receive(:new).exactly(4).time
+        allow(FFI::MemoryPointer).to receive(:new).exactly(4).times
                                                   .with(IpAdapterAddressesLh.size, NetworkingFFI::BUFFER_LENGTH)
                                                   .and_return(adapter_address)
         allow(NetworkingFFI)
           .to receive(:GetAdaptersAddresses)
-          .exactly(3).time
+          .exactly(3).times
           .with(NetworkingFFI::AF_UNSPEC, 14, FFI::Pointer::NULL, adapter_address, size_ptr)
           .and_return(error_code)
       end
