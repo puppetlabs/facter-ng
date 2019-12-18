@@ -3,7 +3,6 @@
 module Facter
   class QueryParser
     @log = Log.new(self)
-
     class << self
       # Searches for facts that could resolve a user query.
       # There are 4 types of facts:
@@ -44,9 +43,9 @@ module Facter
         query_tokens = query.end_with?('.*') ? [query] : query.split('.')
         size = query_tokens.size
 
-      size.times do |i|
-        query_token_range = 0..size - i - 1
-        resolvable_fact_list = get_facts_matching_tokens(query_tokens, query_token_range, loaded_fact_hash)
+        size.times do |i|
+          query_token_range = 0..size - i - 1
+          resolvable_fact_list = get_facts_matching_tokens(query_tokens, query_token_range, loaded_fact_hash)
 
           return resolvable_fact_list if resolvable_fact_list.any?
         end

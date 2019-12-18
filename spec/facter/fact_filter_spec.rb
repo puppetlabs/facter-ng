@@ -6,12 +6,11 @@ describe 'FactFilter' do
       context 'hash keys are symbols' do
         let(:fact_value) { { full: '18.7.0', major: '18', minor: 7 } }
         let(:resolved_fact) { Facter::ResolvedFact.new('os.release', fact_value) }
-        
+
         before do
           resolved_fact.user_query = 'os.release.major'
           resolved_fact.filter_tokens = [:major]
         end
-
 
         it 'filters hash value inside fact' do
           Facter::FactFilter.new.filter_facts!([resolved_fact])
@@ -25,7 +24,7 @@ describe 'FactFilter' do
 
         before do
           resolved_fact.user_query = 'my.fact./key1'
-          resolved_fact.filter_tokens = ['/key1']
+          resolved_fact.filter_tokens = ['/key1'.to_sym]
         end
 
         it 'filters hash value inside fact' do
