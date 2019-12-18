@@ -33,7 +33,7 @@ module Facter
               :uid => login_info.uid,
               :group => group_info.name,
               :gid => login_info.gid,
-              :privileged => (login_info.uid == 0) ? 'true' : 'false'
+              :privileged => login_info.uid == 0
           }
           @fact_list[fact_name]
         end
