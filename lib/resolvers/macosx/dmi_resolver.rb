@@ -15,17 +15,16 @@ module Facter
             @semaphore.synchronize do
               result ||= @fact_list[fact_name]
               subscribe_to_manager
-              result || read_facts(fact_name)
+              result || read_facts
             end
           end
 
           private
 
-          def read_facts(fact_name)
+          def read_facts
             # OSX only supports the product name
-            @fact_list[:model], _status = Open3.capture2('sysctl -n hw.model')
-            @fact_list[:model].strip!
-            @fact_list[fact_name]
+            output, _status = Open3.capture2('sysctl -n hw.model')
+            @fact_list[:macosx_model] = output&.strip
           end
         end
       end
