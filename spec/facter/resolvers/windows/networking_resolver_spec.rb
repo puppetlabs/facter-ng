@@ -62,14 +62,15 @@ describe 'Windows Networking Resolver' do
       let(:error_code) { NetworkingFFI::ERROR_SUCCES }
       let(:adapter) do
         OpenStruct.new(OperStatus: NetworkingFFI::IF_OPER_STATUS_UP, IfType: NetworkingFFI::IF_TYPE_ETHERNET_CSMACD,
-                       DnsSuffix: ptr, FriendlyName: ptr, Flags: 0, Mtu: 1500, FirstUnicastAddress: ptr)
+                       DnsSuffix: dns_ptr, FriendlyName: friendly_name_ptr, Flags: 0, Mtu: 1500,
+                       FirstUnicastAddress: ptr)
       end
+      let(:dns_ptr) { double(FFI::Pointer, read_wide_string_without_length: '10.122.0.2') }
+      let(:friendly_name_ptr) { double(FFI::Pointer, read_wide_string_without_length: 'Ethernet0') }
       let(:ptr) { double(FFI::Pointer) }
       let(:unicast) { OpenStruct.new(Address: ptr, Next: ptr, to_ptr: FFI::Pointer::NULL) }
       before do
         allow(IpAdapterAddressesLh).to receive(:read_list).with(adapter_address).and_yield(adapter)
-        allow(ptr).to receive(:read_wide_string_without_length).and_return('10.122.0.2')
-        allow(ptr).to receive(:read_wide_string_without_length).and_return('Ethernet0')
         allow(IpAdapterUnicastAddressLH).to receive(:read_list).with(ptr).and_yield(unicast)
         allow(NetworkUtils).to receive(:address_to_string).with(ptr).and_return(nil)
         allow(IpAdapterUnicastAddressLH).to receive(:new).with(ptr).and_return(unicast)
@@ -96,10 +97,12 @@ describe 'Windows Networking Resolver' do
       let(:error_code) { NetworkingFFI::ERROR_SUCCES }
       let(:adapter) do
         OpenStruct.new(OperStatus: NetworkingFFI::IF_OPER_STATUS_UP, IfType: NetworkingFFI::IF_TYPE_ETHERNET_CSMACD,
-                       DnsSuffix: ptr, FriendlyName: ptr, Flags: 0, Mtu: 1500, FirstUnicastAddress: ptr, Next: ptr,
-                       to_ptr: FFI::Pointer::NULL)
+                       DnsSuffix: dns_ptr, FriendlyName: friendly_name_ptr, Flags: 0, Mtu: 1500,
+                       FirstUnicastAddress: ptr, Next: ptr, to_ptr: FFI::Pointer::NULL)
       end
       let(:ptr) { double(FFI::Pointer) }
+      let(:dns_ptr) { double(FFI::Pointer, read_wide_string_without_length: '10.122.0.2') }
+      let(:friendly_name_ptr) { double(FFI::Pointer, read_wide_string_without_length: 'Ethernet0') }
       let(:unicast) { OpenStruct.new(Address: address, Next: ptr, to_ptr: FFI::Pointer::NULL, OnLinkPrefixLength: 24) }
       let(:address) { OpenStruct.new(lpSockaddr: ptr) }
       let(:sock_address) { OpenStruct.new(sa_family: NetworkingFFI::AF_INET) }
@@ -112,8 +115,6 @@ describe 'Windows Networking Resolver' do
       end
       before do
         allow(IpAdapterAddressesLh).to receive(:read_list).with(adapter_address).and_yield(adapter)
-        allow(ptr).to receive(:read_wide_string_without_length).and_return('10.122.0.2')
-        allow(ptr).to receive(:read_wide_string_without_length).and_return('Ethernet0')
         allow(IpAdapterUnicastAddressLH).to receive(:read_list).with(ptr).and_yield(unicast)
         allow(NetworkUtils).to receive(:address_to_string).with(address).and_return('10.16.127.3')
         allow(SockAddr).to receive(:new).with(ptr).and_return(sock_address)
@@ -143,10 +144,12 @@ describe 'Windows Networking Resolver' do
       let(:error_code) { NetworkingFFI::ERROR_SUCCES }
       let(:adapter) do
         OpenStruct.new(OperStatus: NetworkingFFI::IF_OPER_STATUS_UP, IfType: NetworkingFFI::IF_TYPE_ETHERNET_CSMACD,
-                       DnsSuffix: ptr, FriendlyName: ptr, Flags: 0, Mtu: 1500, FirstUnicastAddress: ptr, Next: ptr,
-                       to_ptr: FFI::Pointer::NULL)
+                       DnsSuffix: dns_ptr, FriendlyName: friendly_name_ptr, Flags: 0, Mtu: 1500,
+                       FirstUnicastAddress: ptr, Next: ptr, to_ptr: FFI::Pointer::NULL)
       end
       let(:ptr) { double(FFI::Pointer) }
+      let(:dns_ptr) { double(FFI::Pointer, read_wide_string_without_length: '10.122.0.2') }
+      let(:friendly_name_ptr) { double(FFI::Pointer, read_wide_string_without_length: 'Ethernet0') }
       let(:unicast) { OpenStruct.new(Address: address, Next: ptr, to_ptr: FFI::Pointer::NULL, OnLinkPrefixLength: 24) }
       let(:address) { OpenStruct.new(lpSockaddr: ptr) }
       let(:sock_address) { OpenStruct.new(sa_family: NetworkingFFI::AF_INET) }
@@ -159,8 +162,6 @@ describe 'Windows Networking Resolver' do
       end
       before do
         allow(IpAdapterAddressesLh).to receive(:read_list).with(adapter_address).and_yield(adapter)
-        allow(ptr).to receive(:read_wide_string_without_length).and_return('10.122.0.2')
-        allow(ptr).to receive(:read_wide_string_without_length).and_return('Ethernet0')
         allow(IpAdapterUnicastAddressLH).to receive(:read_list).with(ptr).and_yield(unicast)
         allow(NetworkUtils).to receive(:address_to_string).with(address).and_return('fe80::7ca0:ab22:703a:b329')
         allow(SockAddr).to receive(:new).with(ptr).and_return(sock_address)
