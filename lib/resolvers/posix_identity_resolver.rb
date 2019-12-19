@@ -29,11 +29,11 @@ module Facter
           login_info = Etc.getpwnam(login)
           group_info = Etc.getgrgid(login_info.gid)
           @fact_list = {
-              :user => login_info.name,
-              :uid => login_info.uid,
-              :group => group_info.name,
-              :gid => login_info.gid,
-              :privileged => login_info.uid == 0
+            user: login_info.name,
+            uid: login_info.uid,
+            group: group_info.name,
+            gid: login_info.gid,
+            privileged: login_info.uid.zero?
           }
           @fact_list[fact_name]
         end
