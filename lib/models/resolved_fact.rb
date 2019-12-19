@@ -2,12 +2,15 @@
 
 module Facter
   class ResolvedFact
-    attr_accessor :name, :value, :user_query, :filter_tokens, :type
+    attr_reader :name, :type
+    attr_accessor :user_query, :filter_tokens, :value
 
-    def initialize(name, value = '', type = nil)
+    def initialize(name, value = '', type = :core)
       @name = name
       @value = value
-      @type = type
+      logger = Log.new(self)
+      type =~ /core|legacy/ ? @type = type : logger.warn('The specified type is invalid!')
+      @type ||= :unknown
     end
   end
 end

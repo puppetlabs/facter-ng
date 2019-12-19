@@ -24,9 +24,10 @@ module Facter
     end
 
     def filter_legacy_facts!(resolved_facts)
+      resolved_facts.reject! { |fact| fact.type =~ /unknown/ }
       return if Options.get[:show_legacy]
 
-      resolved_facts.reject!(&:type) unless Options.get[:user_query]
+      resolved_facts.reject! { |fact| fact.type =~ /legacy/ } unless Options.get[:user_query]
     end
   end
 end
