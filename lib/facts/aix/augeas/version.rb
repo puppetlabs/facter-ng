@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 module Facter
-  module Fedora
-    class LoadAverage
-      FACT_NAME = 'load_average'
+  module Aix
+    class AugeasVersion
+      FACT_NAME = 'augeas.version'
 
       def call_the_resolver
-        fact_value = Resolvers::Linux::LoadAverage.resolve(:loadavrg)
+        fact_value = Resolvers::Augeas.resolve(:augeas_version)
         ResolvedFact.new(FACT_NAME, fact_value)
       end
     end
