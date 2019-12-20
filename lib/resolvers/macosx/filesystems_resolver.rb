@@ -19,7 +19,6 @@ module Facter
 
           def read_filesystems(fact_name)
             output, _status = Open3.capture2('mount')
-            puts output.match /.*\(([a-z]+)\,*/
             @fact_list[:macosx_filesystems] = output
             @fact_list[fact_name]
           end
