@@ -54,8 +54,7 @@ module Facter
               path = fs.mount_point
               options = fs.options.split(',')
 
-              next if path =~ %r{^/(proc|sys)} && filesystem != 'tmpfs'
-              next if filesystem == 'autofs'
+              next if path =~ %r{^/(proc|sys)} && filesystem != 'tmpfs' || filesystem == 'autofs'
 
               stats = Sys::Filesystem.stat(path)
               size_bytes = stats.bytes_total
