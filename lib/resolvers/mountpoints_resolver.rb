@@ -24,7 +24,7 @@ module Facter
 
           def root_device
             cmdline = File.read('/proc/cmdline')
-            match = cmdline.match(/root=([^\\s]+)/)
+            match = cmdline.match(/root=([^\s]+)/)
             match&.captures&.first
           end
 
@@ -38,21 +38,24 @@ module Facter
             end
           end
 
+          def compute_device(device)
+            # If the "root" device, lookup the actual device from the kernel options
+            # This is done because not all systems symlink /dev/root
+            device = root_device if device == '/dev/root'
+            device
+          end
+
           def read_mounts
             require 'sys/filesystem'
             mounts = []
             Sys::Filesystem.mounts do |fs|
-              device = fs.name
+              device = compute_device(fs.name)
               filesystem = fs.mount_type
               path = fs.mount_point
               options = fs.options.split(',')
 
               next if path =~ %r{^/(proc|sys)} && filesystem != 'tmpfs'
               next if filesystem == 'autofs'
-
-              # If the "root" device, lookup the actual device from the kernel options
-              # This is done because not all systems symlink /dev/root
-              device = root_device if device == '/dev/root'
 
               stats = Sys::Filesystem.stat(path)
               size_bytes = stats.bytes_total
