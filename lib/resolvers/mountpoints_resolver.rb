@@ -28,10 +28,10 @@ module Facter
             match&.captures&.first
           end
 
-          def compute_capacity(used, available, total)
-            if used == available
+          def compute_capacity(used, total)
+            if used == total
               '100%'
-            elsif used.positive? && total.positive?
+            elsif used.positive?
               "#{format('%.2f', 100.0 * used.to_f / total.to_f)}%"
             else
               '0%'
@@ -62,7 +62,7 @@ module Facter
 
               used_bytes = stats.bytes_used
               total_bytes = used_bytes + available_bytes
-              capacity = compute_capacity(used_bytes, available_bytes, total_bytes)
+              capacity = compute_capacity(used_bytes, total_bytes)
 
               size = Facter::BytesToHumanReadable.convert(size_bytes)
               available = Facter::BytesToHumanReadable.convert(available_bytes)
