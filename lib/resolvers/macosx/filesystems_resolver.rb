@@ -19,7 +19,12 @@ module Facter
 
           def read_filesystems(fact_name)
             output, _status = Open3.capture2('mount')
-            @fact_list[:macosx_filesystems] = output
+            filesystems = []
+            output.each_line do |line|
+              filesystem = line.match(/\(([a-z]+)\,*/).to_s
+              filesystems << filesystem[1..-2]
+            end
+            @fact_list[:macosx_filesystems] = filesystems.uniq.sort.join(',')
             @fact_list[fact_name]
           end
         end
