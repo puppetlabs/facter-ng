@@ -10,7 +10,7 @@ module Facter
 
         fact = {}
         mountpoints.each do |mnt|
-          fact[mnt[:path]] = mnt.reject { |k| k == :path }
+          fact[mnt[:path].to_sym] = mnt.reject { |k| k == :path }
         end
 
         ResolvedFact.new(FACT_NAME, fact)

@@ -6,7 +6,7 @@ module Facter
       class Mountpoints < BaseResolver
         @semaphore = Mutex.new
         @fact_list ||= {}
-        @log = Facter::Log.new
+        @log = Facter::Log.new(self)
         class << self
           def resolve(fact_name)
             @semaphore.synchronize do
@@ -45,7 +45,7 @@ module Facter
             device
           end
 
-          def read_mounts
+          def read_mounts # rubocop:disable Metrics/AbcSize
             require 'sys/filesystem'
             mounts = []
             Sys::Filesystem.mounts do |fs|
