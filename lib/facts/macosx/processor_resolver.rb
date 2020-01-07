@@ -32,11 +32,11 @@ module Facter
             @fact_list[fact_name]
           end
 
-          def build_fact_list(result)
-            build_logical_count(result[0])
-            build_physical_count(result[1])
-            build_models(result[2])
-            build_speed(result[3])
+          def build_fact_list(processors_data)
+            build_logical_count(processors_data[0])
+            build_physical_count(processors_data[1])
+            build_models(processors_data[2])
+            build_speed(processors_data[3])
           end
 
           def build_logical_count(count)
@@ -59,7 +59,8 @@ module Facter
           def convert_hz(speed)
             prefix = { 3 => 'k', 6 => 'M', 9 => 'G', 12 => 'T' }
             power = Math.log10(speed).floor
-            speed.fdiv(10**power).to_s + ' ' + prefix[power] + 'Hz'
+            validated_speed = power.zero? ? speed.to_f : speed.fdiv(10**power)
+            format('%<displayed_speed>.2f', displayed_speed: validated_speed).to_s + ' ' + prefix[power] + 'Hz'
           end
         end
       end
