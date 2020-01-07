@@ -7,10 +7,10 @@ module Facter
         @log = Facter::Log.new(self)
         @semaphore = Mutex.new
         @fact_list ||= {}
-        @items = { logical_count: 'hw.logicalcpu_max',
-                   physical_count: 'hw.physicalcpu_max',
-                   brand: 'machdep.cpu.brand_string',
-                   speed: 'hw.cpufrequency_max' }
+        ITEMS = { logical_count: 'hw.logicalcpu_max',
+                  physical_count: 'hw.physicalcpu_max',
+                  brand: 'machdep.cpu.brand_string',
+                  speed: 'hw.cpufrequency_max' }.freeze
         class << self
           # Count
           # Models
@@ -27,7 +27,7 @@ module Facter
           private
 
           def read_processor_data(fact_name)
-            output, _status = Open3.capture2("sysctl #{@items.values.join(' ')}")
+            output, _status = Open3.capture2("sysctl #{ITEMS.values.join(' ')}")
             build_fact_list(output.split("\n"))
             @fact_list[fact_name]
           end
@@ -40,20 +40,20 @@ module Facter
           end
 
           def build_logical_count(count)
-            @fact_list[:logicalcount] = count.split(': ').fetch(1).to_i
+            @fact_list[:logicalcount] = count.split(': ')[1].to_i
           end
 
           def build_physical_count(count)
-            @fact_list[:physicalcount] = count.split(': ').fetch(1).to_i
+            @fact_list[:physicalcount] = count.split(': ')[1].to_i
           end
 
           def build_models(model)
             brand = model.split(': ').fetch(1)
-            @fact_list[:models] = Array.new(@fact_list[:logicalcount].to_i).fill(brand)
+            @fact_list[:models] = Array.new(@fact_list[:logicalcount].to_i, brand)
           end
 
           def build_speed(value)
-            @fact_list[:speed] = convert_hz(value.split(': ').fetch(1).to_i)
+            @fact_list[:speed] = convert_hz(value.split(': ')[1].to_i)
           end
 
           def convert_hz(speed)
