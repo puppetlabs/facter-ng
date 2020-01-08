@@ -66,15 +66,44 @@ describe 'LegacyFactFormatter' do
   end
 
   context 'when the fact value is nil' do
-    let(:resolved_fact) do
+    let(:resolved_fact1) do
       Facter::ResolvedFact.new('my_external_fact', nil)
     end
-    it 'returns empty string' do
-      resolved_fact.user_query = 'my_external_fact'
-      resolved_fact.filter_tokens = []
 
-      formatted_output = Facter::LegacyFactFormatter.new.format([resolved_fact])
-      expect(formatted_output).to eq('')
+    let(:resolved_fact2) do
+      Facter::ResolvedFact.new('my_external_fact2', nil)
+    end
+
+    before(:each) do
+      resolved_fact1.user_query = 'my_external_fact'
+      resolved_fact1.filter_tokens = []
+
+      resolved_fact2.user_query = 'my_external_fact2'
+      resolved_fact2.filter_tokens = []
+    end
+
+    context 'for single user query' do
+      it 'returns empty strings' do
+        formatted_output = Facter::LegacyFactFormatter.new.format([resolved_fact1])
+        expect(formatted_output).to eq('')
+      end
+    end
+
+    context 'for multiple user queries' do
+      it 'returns empty strings for values' do
+        formatted_output = Facter::LegacyFactFormatter.new.format([resolved_fact1, resolved_fact2])
+        expect(formatted_output).to eq("my_external_fact => \nmy_external_fact2 => ")
+      end
+    end
+
+    context ' for no user query' do
+      it 'returns no facts with nil values' do
+        resolved_fact1.user_query = ''
+        resolved_fact2.user_query = ''
+        resolved_fact2.value = 'my_fact2_value'
+        formatted_output = Facter::LegacyFactFormatter.new.format([resolved_fact1, resolved_fact2])
+        expect(formatted_output).to eq('my_external_fact2 => my_fact2_value')
+      end
     end
   end
 end

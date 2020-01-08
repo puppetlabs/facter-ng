@@ -8,7 +8,6 @@ module Facter
 
     def format(resolved_facts)
       user_queries = resolved_facts.uniq(&:user_query).map(&:user_query)
-      replace_nil_with_empty_string(resolved_facts)
 
       return if user_queries.count < 1
       return format_for_multiple_user_queries(user_queries, resolved_facts) if user_queries.count > 1
@@ -35,6 +34,7 @@ module Facter
 
     def format_for_multiple_user_queries(user_queries, resolved_facts)
       @log.debug('Formatting for multiple user queries')
+      replace_nil_with_empty_string(resolved_facts)
 
       facts_to_display = Facter::FormatterHelper.retrieve_facts_to_display_for_user_query(user_queries, resolved_facts)
       pretty_json = hash_to_facter_format(facts_to_display)
@@ -47,6 +47,7 @@ module Facter
 
     def format_for_single_user_query(user_query, resolved_facts)
       @log.debug('Formatting for single user query')
+      replace_nil_with_empty_string(resolved_facts)
 
       fact_value = Facter::FormatterHelper.retrieve_fact_value_for_single_query(user_query, resolved_facts)
 
