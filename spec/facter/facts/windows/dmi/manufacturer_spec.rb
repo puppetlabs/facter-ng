@@ -3,19 +3,21 @@
 describe 'Windows DmiManufacturer' do
   context '#call_the_resolver' do
     let(:value) { 'VMware, Inc.' }
-    let(:expected_resolved_fact) { double(Facter::ResolvedFact, name: 'dmi.manufacturer', value: value) }
-    let(:resolved_legacy_fact) { double(Facter::ResolvedFact, name: 'manufacturer', value: value, type: :legacy) }
     subject(:fact) { Facter::Windows::DmiManufacturer.new }
 
     before do
-      expect(Facter::Resolvers::DMIBios).to receive(:resolve).with(:manufacturer).and_return(value)
-      expect(Facter::ResolvedFact).to receive(:new).with('dmi.manufacturer', value).and_return(expected_resolved_fact)
-      expect(Facter::ResolvedFact).to receive(:new).with('manufacturer', value, :legacy)
-                                                   .and_return(resolved_legacy_fact)
+      allow(Facter::Resolvers::DMIBios).to receive(:resolve).with(:manufacturer).and_return(value)
+    end
+
+    it 'calls Facter::Resolvers::DMIBios' do
+      expect(Facter::Resolvers::DMIBios).to receive(:resolve).with(:manufacturer)
+      fact.call_the_resolver
     end
 
     it 'returns manufacturer fact' do
-      expect(fact.call_the_resolver).to eq([expected_resolved_fact, resolved_legacy_fact])
+      expect(fact.call_the_resolver).to be_an_instance_of(Array).and \
+        contain_exactly(an_object_having_attributes(name: 'dmi.manufacturer', value: value),
+                        an_object_having_attributes(name: 'manufacturer', value: value, type: :legacy))
     end
   end
 end

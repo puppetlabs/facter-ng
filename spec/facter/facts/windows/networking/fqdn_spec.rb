@@ -2,14 +2,11 @@
 
 describe 'Windows NetworkingFqdn' do
   context '#call_the_resolver' do
-    let(:expected_resolved_fact) { double(Facter::ResolvedFact, name: 'networking.fqdn', value: value) }
-    let(:resolved_legacy_fact) { double(Facter::ResolvedFact, name: 'fqdn', value: value, type: :legacy) }
     subject(:fact) { Facter::Windows::NetworkingFqdn.new }
 
     before do
       allow(Facter::Resolvers::Networking).to receive(:resolve).with(:domain).and_return(domain_name)
       allow(Facter::Resolvers::Hostname).to receive(:resolve).with(:hostname).and_return(hostname)
-      expect(Facter::ResolvedFact).to receive(:new).with('networking.fqdn', value).and_return(expected_resolved_fact)
     end
 
     context 'when domain and hostname could be resolved' do
@@ -17,12 +14,16 @@ describe 'Windows NetworkingFqdn' do
       let(:hostname) { 'hostname' }
       let(:value) { "#{hostname}.#{domain_name}" }
 
-      before do
-        expect(Facter::ResolvedFact).to receive(:new).with('fqdn', value, :legacy).and_return(resolved_legacy_fact)
+      it 'calls Facter::Resolvers::Networking and Facter::Resolvers::Hostname' do
+        expect(Facter::Resolvers::Networking).to receive(:resolve).with(:domain)
+        expect(Facter::Resolvers::Hostname).to receive(:resolve).with(:hostname)
+        fact.call_the_resolver
       end
 
       it 'returns fqdn fact' do
-        expect(fact.call_the_resolver).to eq([expected_resolved_fact, resolved_legacy_fact])
+        expect(fact.call_the_resolver).to be_an_instance_of(Array).and \
+          contain_exactly(an_object_having_attributes(name: 'networking.fqdn', value: value),
+                          an_object_having_attributes(name: 'fqdn', value: value, type: :legacy))
       end
     end
 
@@ -32,7 +33,8 @@ describe 'Windows NetworkingFqdn' do
       let(:value) { nil }
 
       it 'returns nil' do
-        expect(fact.call_the_resolver).to eq(expected_resolved_fact)
+        expect(fact.call_the_resolver).to be_an_instance_of(Facter::ResolvedFact).and \
+          have_attributes(name: 'networking.fqdn', value: nil)
       end
     end
 
@@ -41,12 +43,10 @@ describe 'Windows NetworkingFqdn' do
       let(:hostname) { 'hostname' }
       let(:value) { hostname }
 
-      before do
-        expect(Facter::ResolvedFact).to receive(:new).with('fqdn', value, :legacy).and_return(resolved_legacy_fact)
-      end
-
       it 'returns hostname as fqdn' do
-        expect(fact.call_the_resolver).to eq([expected_resolved_fact, resolved_legacy_fact])
+        expect(fact.call_the_resolver).to be_an_instance_of(Array).and \
+          contain_exactly(an_object_having_attributes(name: 'networking.fqdn', value: value),
+                          an_object_having_attributes(name: 'fqdn', value: value, type: :legacy))
       end
     end
 
@@ -56,7 +56,8 @@ describe 'Windows NetworkingFqdn' do
       let(:value) { nil }
 
       it 'returns nil' do
-        expect(fact.call_the_resolver).to eq(expected_resolved_fact)
+        expect(fact.call_the_resolver).to be_an_instance_of(Facter::ResolvedFact).and \
+          have_attributes(name: 'networking.fqdn', value: nil)
       end
     end
   end

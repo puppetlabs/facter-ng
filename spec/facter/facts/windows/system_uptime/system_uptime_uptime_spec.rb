@@ -3,19 +3,21 @@
 describe 'Windows SystemUptimeUptime' do
   context '#call_the_resolver' do
     let(:value) { '9:42 hours' }
-    let(:expected_resolved_fact) { double(Facter::ResolvedFact, name: 'system_uptime.uptime', value: value) }
-    let(:resolved_legacy_fact) { double(Facter::ResolvedFact, name: 'uptime', value: value, type: :legacy) }
     subject(:fact) { Facter::Windows::SystemUptimeUptime.new }
 
     before do
-      expect(Facter::Resolvers::Windows::Uptime).to receive(:resolve).with(:uptime).and_return(value)
-      expect(Facter::ResolvedFact).to receive(:new).with('system_uptime.uptime', value)
-                                                   .and_return(expected_resolved_fact)
-      expect(Facter::ResolvedFact).to receive(:new).with('uptime', value, :legacy).and_return(resolved_legacy_fact)
+      allow(Facter::Resolvers::Windows::Uptime).to receive(:resolve).with(:uptime).and_return(value)
     end
 
-    it 'returns uptime fact' do
-      expect(fact.call_the_resolver).to eq([expected_resolved_fact, resolved_legacy_fact])
+    it 'calls Facter::Resolvers::Windows::Uptime' do
+      expect(Facter::Resolvers::Windows::Uptime).to receive(:resolve).with(:uptime)
+      fact.call_the_resolver
+    end
+
+    it 'returns time since last boot' do
+      expect(fact.call_the_resolver).to be_an_instance_of(Array).and \
+        contain_exactly(an_object_having_attributes(name: 'system_uptime.uptime', value: value),
+                        an_object_having_attributes(name: 'uptime', value: value, type: :legacy))
     end
   end
 end
