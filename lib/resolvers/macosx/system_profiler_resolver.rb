@@ -31,15 +31,22 @@ module Facter
       class << self
         def resolve(fact_name)
           @semaphore.synchronize do
-            result ||= @fact_list[fact_name]
-            subscribe_to_manager
-            result || retrieve_system_profiler(fact_name)
+            begin
+              result ||= @fact_list.fetch(fact_name) { |key| retrieve_system_profiler(key) }
+              subscribe_to_manager
+              result
+            rescue LoadError => e
+              @log.error("resolving fact #{fact_name}, but #{e}")
+              @fact_list[fact_name] = nil
+              return nil
+            end
           end
         end
 
         private
 
         def retrieve_system_profiler(fact_name)
+          require 'non_existing_require'
           @log.debug 'Executing command: system_profiler SPSoftwareDataType SPHardwareDataType'
           output, _status = Open3.capture2('system_profiler SPHardwareDataType SPSoftwareDataType')
           system_profiler = output.scan(/.*:[ ].*$/).map { |e| e.strip.match(/(.*?): (.*)/).captures }.to_h
