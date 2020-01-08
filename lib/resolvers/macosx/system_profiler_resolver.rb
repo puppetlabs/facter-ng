@@ -28,22 +28,14 @@ module Facter
                     uptime: 'Time since boot',
                     username: 'User Name' }.freeze
 
+
       class << self
-        def resolve(fact_name)
-          @semaphore.synchronize do
-            begin
-              result ||= @fact_list.fetch(fact_name) { |key| retrieve_system_profiler(key) }
-              subscribe_to_manager
-              result
-            rescue LoadError => e
-              @log.error("resolving fact #{fact_name}, but #{e}")
-              @fact_list[fact_name] = nil
-              return nil
-            end
-          end
-        end
 
         private
+
+        def res(fact_name)
+          @fact_list.fetch(fact_name) { |key| retrieve_system_profiler(key) }
+        end
 
         def retrieve_system_profiler(fact_name)
           require 'non_existing_require'
