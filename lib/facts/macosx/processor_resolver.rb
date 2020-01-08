@@ -12,10 +12,10 @@ module Facter
                   brand: 'machdep.cpu.brand_string',
                   speed: 'hw.cpufrequency_max' }.freeze
         class << self
-          # Count
-          # Models
-          # PhysicalCount
-          # Speed
+          # :logicalcount
+          # :models
+          # :physicalcount
+          # :speed
           def resolve(fact_name)
             @semaphore.synchronize do
               result ||= @fact_list[fact_name]
@@ -57,6 +57,8 @@ module Facter
           end
 
           def convert_hz(speed)
+            return nil if speed.zero?
+
             prefix = { 3 => 'k', 6 => 'M', 9 => 'G', 12 => 'T' }
             power = Math.log10(speed).floor
             validated_speed = power.zero? ? speed.to_f : speed.fdiv(10**power)
