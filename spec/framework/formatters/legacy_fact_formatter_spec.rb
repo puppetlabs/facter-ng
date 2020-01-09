@@ -74,18 +74,45 @@ describe 'LegacyFactFormatter' do
       Facter::ResolvedFact.new('my_external_fact2', nil)
     end
 
+    let(:nested_fact1) do
+      Facter::ResolvedFact.new('my.nested.fact1', nil)
+    end
+
+    let(:nested_fact2) do
+      Facter::ResolvedFact.new('my.nested.fact2', nil)
+    end
+
     before(:each) do
       resolved_fact1.user_query = 'my_external_fact'
       resolved_fact1.filter_tokens = []
 
       resolved_fact2.user_query = 'my_external_fact2'
       resolved_fact2.filter_tokens = []
+
+      nested_fact1.user_query = 'my'
+      nested_fact1.filter_tokens = []
+
+      nested_fact2.user_query = 'my.nested.fact2'
+      nested_fact2.filter_tokens = []
     end
 
     context 'for single user query' do
-      it 'returns empty strings' do
+      it 'returns empty string' do
         formatted_output = Facter::LegacyFactFormatter.new.format([resolved_fact1])
         expect(formatted_output).to eq('')
+      end
+
+      context 'for nested facts' do
+        it 'returns empty strings for first level query' do
+          formatted_output = Facter::LegacyFactFormatter.new.format([nested_fact1])
+          expect(formatted_output).to eq('')
+        end
+
+        it 'returns empty strings for leaf level query' do
+          nested_fact1.user_query = 'my.nested.fact1'
+          formatted_output = Facter::LegacyFactFormatter.new.format([nested_fact1])
+          expect(formatted_output).to eq('')
+        end
       end
     end
 
@@ -94,15 +121,41 @@ describe 'LegacyFactFormatter' do
         formatted_output = Facter::LegacyFactFormatter.new.format([resolved_fact1, resolved_fact2])
         expect(formatted_output).to eq("my_external_fact => \nmy_external_fact2 => ")
       end
+
+      context 'for nested facts' do
+        it 'returns empty strings for first and leaf level query' do
+          formatted_output = Facter::LegacyFactFormatter.new.format([nested_fact1, nested_fact2])
+          expect(formatted_output).to eq("my => \nmy.nested.fact2 => ")
+        end
+      end
     end
 
-    context ' for no user query' do
-      it 'returns no facts with nil values' do
+    context 'for no user query' do
+      before do
         resolved_fact1.user_query = ''
         resolved_fact2.user_query = ''
+
         resolved_fact2.value = 'my_fact2_value'
+
+        nested_fact1.user_query = ''
+        nested_fact2.user_query = ''
+      end
+
+      it 'returns no facts with nil values' do
         formatted_output = Facter::LegacyFactFormatter.new.format([resolved_fact1, resolved_fact2])
         expect(formatted_output).to eq('my_external_fact2 => my_fact2_value')
+      end
+
+      context 'for nested facts' do
+        it 'prints no values if both facts are nill' do
+          formatted_output = Facter::LegacyFactFormatter.new.format([nested_fact1, nested_fact2])
+          expect(formatted_output).to eq('')
+        end
+
+        it 'prints only the fact that is not nil' do
+          formatted_output = Facter::LegacyFactFormatter.new.format([nested_fact1, nested_fact2, resolved_fact2])
+          expect(formatted_output).to eq('my_external_fact2 => my_fact2_value')
+        end
       end
     end
   end
