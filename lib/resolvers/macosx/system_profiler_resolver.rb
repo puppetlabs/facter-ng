@@ -33,7 +33,7 @@ module Facter
 
         private
 
-        def res(fact_name)
+        def post_resolve(fact_name)
           @fact_list.fetch(fact_name) { |key| retrieve_system_profiler(key) }
         end
 

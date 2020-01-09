@@ -13,7 +13,7 @@ module Facter
 
       def self.resolve(fact_name)
         @semaphore.synchronize do
-          res(fact_name)
+          post_resolve(fact_name)
           subscribe_to_manager
         end
       rescue LoadError => e
@@ -21,7 +21,7 @@ module Facter
         @fact_list[fact_name] = nil
       end
 
-      def self.res(fact_name)
+      def self.post_resolve(fact_name)
         raise NotImplementedError, "You must implement res(fact_name) method in #{self.name}"
       end
     end

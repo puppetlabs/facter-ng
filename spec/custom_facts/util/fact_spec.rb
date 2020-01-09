@@ -43,7 +43,7 @@ describe LegacyFacter::Util::Fact do
   end
 
   describe 'adding resolution mechanisms by name' do
-    let(:res) do
+    let(:post_resolve) do
       double 'resolution',
              name: 'named',
              options: nil,
