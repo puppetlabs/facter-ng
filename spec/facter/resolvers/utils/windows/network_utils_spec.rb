@@ -139,14 +139,6 @@ describe 'NetworkUtils' do
       end
     end
 
-    context "address's scope should be host" do
-      let(:address) { '::1' }
-
-      it 'returns scope6' do
-        expect(NetworkUtils.get_scope(address)).to eql('host')
-      end
-    end
-
     context "address's scope should be global" do
       let(:address) { '::ffff:192.0.2.128' }
 
