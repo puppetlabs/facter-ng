@@ -33,7 +33,7 @@ module Facter
 
       facts_to_display = Facter::FormatterHelper.retrieve_facts_to_display_for_user_query(user_queries, resolved_facts)
 
-      facts_to_display.each { |k, v| facts_to_display[k] = v.nil? ? '' : v}
+      facts_to_display.each { |k, v| facts_to_display[k] = v.nil? ? '' : v }
       pretty_json = hash_to_facter_format(facts_to_display)
       pretty_json = remove_enclosing_accolades(pretty_json)
       pretty_json = remove_comma_and_quation(pretty_json)
