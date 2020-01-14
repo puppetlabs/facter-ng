@@ -12,10 +12,10 @@ module Facter
       private
 
       def construct_addresses_hash
-        result = { system: Resolvers::Networking.resolve(:dhcp) }
+        servers = { system: Resolvers::Networking.resolve(:dhcp) }
         interfaces = Resolvers::Networking.resolve(:interfaces)
-        interfaces.each { |interface_name, info| result[interface_name] = info[:dhcp] if info[:dhcp] }
-        result
+        interfaces.each { |interface_name, info| servers[interface_name] = info[:dhcp] if info[:dhcp] }
+        servers
       end
     end
   end
