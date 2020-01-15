@@ -3,18 +3,18 @@
 module Facter
   class ExternalFactLoader
     def custom_facts
-      @custom_facts.nil? ? load_custom_facts : @custom_facts
+      @custom_facts ||= load_custom_facts
     end
 
     def external_facts
-      @external_facts.nil? ? load_external_facts : @external_facts
+      @external_facts ||= load_external_facts
     end
 
     def all_facts
       load_custom_facts if @custom_facts.nil?
       load_external_facts if @external_facts.nil?
 
-      @facts.nil? ? Utils.deep_copy(@custom_facts).concat(@external_facts) : @facts
+      @facts.nil? ? Utils.deep_copy(@custom_facts).concat(Utils.deep_copy(@external_facts)) : @facts
     end
 
     private
