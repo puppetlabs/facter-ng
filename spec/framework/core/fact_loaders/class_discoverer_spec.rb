@@ -5,13 +5,13 @@ describe 'ClassDiscoverer' do
     it 'loads all classes' do
       allow_any_instance_of(Module).to receive(:constants).and_return(%i[NetworkInterface OsName])
 
-      expect(Facter::ClassDiscoverer.instance.discover_classes('Ubuntu')).to eq(%i[NetworkInterface OsName])
+      expect(Facter::ClassDiscoverer.instance.discover_classes('Debian')).to eq(%i[NetworkInterface OsName])
     end
 
     it 'loads no classes' do
       allow_any_instance_of(Module).to receive(:constants).and_return([])
 
-      expect(Facter::ClassDiscoverer.instance.discover_classes('Ubuntu')).to eq([])
+      expect(Facter::ClassDiscoverer.instance.discover_classes('Debian')).to eq([])
     end
   end
 end

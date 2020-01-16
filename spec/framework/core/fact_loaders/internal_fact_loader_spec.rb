@@ -2,7 +2,7 @@
 
 describe 'InternalFactLoader' do
   before do
-    allow_any_instance_of(OsDetector).to receive(:hierarchy).and_return([:Ubuntu])
+    allow_any_instance_of(OsDetector).to receive(:hierarchy).and_return([:Debian])
   end
 
   describe '#initialize' do
@@ -10,7 +10,7 @@ describe 'InternalFactLoader' do
       it 'loads one legacy fact and sees it as core' do
         allow_any_instance_of(Facter::ClassDiscoverer)
           .to receive(:discover_classes)
-          .with(:Ubuntu)
+          .with(:Debian)
           .and_return([:NetworkInterface])
 
         stub_const('Facter::Ubuntu::NetworkInterface::FACT_NAME', 'ipaddress_.*')
@@ -27,7 +27,7 @@ describe 'InternalFactLoader' do
       it 'loads one core fact' do
         allow_any_instance_of(Facter::ClassDiscoverer)
           .to receive(:discover_classes)
-          .with(:Ubuntu)
+          .with(:Debian)
           .and_return([:OsName])
 
         stub_const('Facter::Ubuntu::OsName::FACT_NAME', 'os.name')
@@ -42,7 +42,7 @@ describe 'InternalFactLoader' do
       it 'loads one legacy fact and one core fact' do
         allow_any_instance_of(Facter::ClassDiscoverer)
           .to receive(:discover_classes)
-          .with(:Ubuntu)
+          .with(:Debian)
           .and_return(%i[NetworkInterface OsName])
 
         stub_const('Facter::Ubuntu::NetworkInterface::FACT_NAME', 'ipaddress_.*')
@@ -60,7 +60,7 @@ describe 'InternalFactLoader' do
       it 'loads no facts' do
         allow_any_instance_of(Facter::ClassDiscoverer)
           .to receive(:discover_classes)
-          .with(:Ubuntu)
+          .with(:Debian)
           .and_return([])
         internal_fact_loader = Facter::InternalFactLoader.new
         all_facts_hash = internal_fact_loader.facts
