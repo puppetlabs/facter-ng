@@ -40,8 +40,7 @@ class OsDetector
       @version = resolver.resolve(:version)
       break if @identifier
     end
-    @identifier = 'ubuntu' if @identifier == 'debian'
-    @identifier = 'fedora' if @identifier == 'amzn'
+
     @identifier
   end
 
@@ -50,11 +49,13 @@ class OsDetector
 
     case operating_system.to_sym
     when :ubuntu
-      ['Ubuntu']
-    when :debian
-      ['Ubuntu']
+      ['Debian', 'Ubuntu']
     when :fedora
-      ['Fedora']
+      ['El', 'Fedora']
+    when :amzn
+      ['El', 'Amzn']
+    when :rhel
+      ['El', 'Rhel']
     else
       [operating_system.to_s.capitalize]
     end
