@@ -2,7 +2,7 @@
 
 describe 'InternalFactLoader' do
   before do
-    allow_any_instance_of(CurrentOs).to receive(:hierarchy).and_return([:Ubuntu])
+    allow_any_instance_of(OsDetector).to receive(:hierarchy).and_return([:Ubuntu])
   end
 
   describe '#initialize' do

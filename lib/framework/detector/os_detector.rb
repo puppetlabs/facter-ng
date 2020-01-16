@@ -2,7 +2,7 @@
 
 require 'rbconfig'
 
-class CurrentOs
+class OsDetector
   include Singleton
 
   attr_reader :identifier, :version, :hierarchy
@@ -22,7 +22,7 @@ class CurrentOs
                   when /linux/
                     detect_distro
                   when /solaris|bsd/
-                    :solaris # TODO: break up login.
+                    :solaris
                   when /aix/
                     :aix
                   else
