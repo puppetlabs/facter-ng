@@ -20,15 +20,15 @@ describe 'InternalFactManager' do
     end
 
     it 'resolved one legacy fact' do
-      ubuntu_networking_interface = double(Facter::Debian::NetworkInterface)
+      windows_networking_interface = double(Facter::Windows::NetworkInterfaces)
 
-      resolved_fact = mock_resolved_fact('ipaddress_ens160', '192.168.5.121', nil, [], :legacy)
+      resolved_fact = mock_resolved_fact('network_Ethernet0', '192.168.5.121', nil, [], :legacy)
 
-      allow(ubuntu_networking_interface).to receive(:new).and_return(ubuntu_networking_interface)
-      allow(ubuntu_networking_interface).to receive(:call_the_resolver).and_return(resolved_fact)
+      allow(windows_networking_interface).to receive(:new).and_return(windows_networking_interface)
+      allow(windows_networking_interface).to receive(:call_the_resolver).and_return(resolved_fact)
 
-      searched_fact = double(Facter::SearchedFact, name: 'ipaddress_.*', fact_class: ubuntu_networking_interface,
-                                                   filter_tokens: [], user_query: '', type: :legacy)
+      searched_fact = double(Facter::SearchedFact, name: 'network_.*', fact_class: windows_networking_interface,
+                                                   filter_tokens: [], user_query: '', type: :core)
 
       core_fact_manager = Facter::InternalFactManager.new
       resolved_facts = core_fact_manager.resolve_facts([searched_fact])

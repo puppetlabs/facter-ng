@@ -8,12 +8,13 @@ describe 'InternalFactLoader' do
   describe '#initialize' do
     context 'load facts' do
       it 'loads one legacy fact and sees it as core' do
+        allow_any_instance_of(OsDetector).to receive(:hierarchy).and_return([:Windows])
         allow_any_instance_of(Facter::ClassDiscoverer)
           .to receive(:discover_classes)
-          .with(:Debian)
-          .and_return([:NetworkInterface])
+          .with(:Windows)
+          .and_return([:NetworkInterfaces])
 
-        stub_const('Facter::Ubuntu::NetworkInterface::FACT_NAME', 'ipaddress_.*')
+        stub_const('Facter::Windows::NetworkInterfaces::FACT_NAME', 'network_.*')
 
         internal_fact_loader = Facter::InternalFactLoader.new
         legacy_facts = internal_fact_loader.legacy_facts
@@ -40,21 +41,23 @@ describe 'InternalFactLoader' do
       end
 
       it 'loads one legacy fact and one core fact' do
+        allow_any_instance_of(OsDetector).to receive(:hierarchy).and_return([:Windows])
+
         allow_any_instance_of(Facter::ClassDiscoverer)
           .to receive(:discover_classes)
-          .with(:Debian)
-          .and_return(%i[NetworkInterface OsName])
+          .with(:Windows)
+          .and_return(%i[NetworkInterfaces OsName])
 
-        stub_const('Facter::Ubuntu::NetworkInterface::FACT_NAME', 'ipaddress_.*')
-        stub_const('Facter::Ubuntu::OsName::FACT_NAME', 'os.name')
+        stub_const('Facter::Windows::NetworkInterface::FACT_NAME', 'network_.*')
+        stub_const('Facter::Windows::OsName::FACT_NAME', 'os.name')
 
         internal_fact_loader = Facter::InternalFactLoader.new
         all_facts = internal_fact_loader.facts
 
-        expect(all_facts.size).to eq(2)
-        expect(all_facts.first.type).to eq(:core)
-        all_facts.shift
-        expect(all_facts.first.type).to eq(:core)
+        expect(all_facts.size).to eq(3)
+        all_facts.each do |fact|
+          expect(fact.type).to eq(:core)
+        end
       end
 
       it 'loads no facts' do

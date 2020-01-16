@@ -6,11 +6,11 @@ describe 'FactLoader' do
     let(:external_fact_loader_double) { double(Facter::ExternalFactLoader) }
 
     let(:ubuntu_os_name) { double(Facter::Debian::OsName) }
-    let(:networking_class) { double(Facter::Debian::NetworkInterface) }
+    let(:networking_class) { double(Facter::Windows::NetworkInterfaces) }
 
     let(:loaded_fact_os_name) { double(Facter::LoadedFact, name: 'os.name', klass: ubuntu_os_name, type: :core) }
     let(:loaded_fact_networking) do
-      double(Facter::LoadedFact, name: 'ipaddress_.*', klass: networking_class, type: :legacy)
+      double(Facter::LoadedFact, name: 'network_.*', klass: networking_class, type: :legacy)
     end
     let(:loaded_fact_custom_fact) { double(Facter::LoadedFact, name: 'custom_fact', klass: nil, type: :custom) }
 
