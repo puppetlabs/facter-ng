@@ -44,7 +44,7 @@ class OsDetector
     @identifier
   end
 
-  def create_hierarchy(operating_system)
+  def create_hierarchy(operating_system) # rubocop:disable Metrics/CyclomaticComplexity:
     return [] unless operating_system
 
     case operating_system.to_sym
@@ -56,6 +56,8 @@ class OsDetector
       %w[El Amzn]
     when :rhel
       %w[El Rhel]
+    when :opensuse
+      %w[Sles Opensuse]
     else
       [operating_system.to_s.capitalize]
     end
