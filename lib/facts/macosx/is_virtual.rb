@@ -24,17 +24,17 @@ module Facter
       end
 
       def hypervisor_name
-        # model_identifier = Facter::Resolvers::SystemProfiler.resolve(:model_identifier)
-        model_identifier = `system_profiler SPHardwareDataType | awk '/Model Identifier/ {print $3}'`
-        return 'vmware' if model_identifier.start_with?('VMware')
+        model_identifier = Facter::Resolvers::SystemProfiler.resolve(:model_identifier)
+        # model_identifier =  Reesolvers::SystemProfiler.resolve(:model_identifier)
+        return 'vmware' if model_identifier&.start_with?('VMware')
 
-        # boot_rom_version = Facter::Resolvers::SystemProfiler.resolve(:boot_rom_version)
-        boot_rom_version = `system_profiler SPHardwareDataType | awk '/Boot ROM Version/ {print $4}'`
-        return 'virtualbox' if boot_rom_version.start_with?('VirtualBox')
+        boot_rom_version = Facter::Resolvers::SystemProfiler.resolve(:boot_rom_version)
+        # boot_rom_version = Reesolvers::SystemProfiler.resolve(:boot_rom_version)
+        return 'virtualbox' if boot_rom_version&.start_with?('VirtualBox')
 
-        # subsystem_vendor_id = Facter::Resolvers::SystemProfiler.resolve(:subsystem_vendor_id)
-        subsystem_vendor_id = `system_profiler SPEthernetDataType | awk '/Subsystem Vendor ID/ {print $4}'`
-        return 'parallels' if subsystem_vendor_id.start_with?('0x1ab8')
+        subsystem_vendor_id = Facter::Resolvers::SystemProfiler.resolve(:subsystem_vendor_id)
+        # subsystem_vendor_id = `system_profiler SPEthernetDataType | awk '/Subsystem Vendor ID/ {print $4}'`
+        return 'parallels' if subsystem_vendor_id&.start_with?('0x1ab8')
       end
     end
   end
