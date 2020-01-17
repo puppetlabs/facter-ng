@@ -15,7 +15,7 @@ module Facter
     def initialize
       @facts = []
 
-      os_descendents = CurrentOs.instance.hierarchy
+      os_descendents = OsDetector.instance.hierarchy
       load_all_oses(os_descendents)
     end
 
@@ -45,14 +45,8 @@ module Facter
     end
 
     def load_fact(fact_name, klass)
-      loaded_fact = LoadedFact.new(fact_name, klass, fact_type(klass))
+      loaded_fact = LoadedFact.new(fact_name, klass)
       @facts << loaded_fact
-    end
-
-    def fact_type(klass)
-      return nil unless klass.const_defined?('FACT_TYPE')
-
-      klass::FACT_TYPE
     end
   end
 end

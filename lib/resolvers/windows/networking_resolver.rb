@@ -9,15 +9,11 @@ module Facter
       @semaphore = Mutex.new
       @fact_list ||= {}
       class << self
-        def resolve(fact_name)
-          @semaphore.synchronize do
-            result ||= @fact_list[fact_name]
-            subscribe_to_manager
-            result || read_network_information(fact_name)
-          end
-        end
-
         private
+
+        def post_resolve(fact_name)
+          @fact_list.fetch(fact_name) { read_network_information(fact_name) }
+        end
 
         def read_network_information(fact_name)
           size_ptr = FFI::MemoryPointer.new(NetworkingFFI::BUFFER_LENGTH)
@@ -160,6 +156,7 @@ module Facter
             interface[:ip6] = bind[:address]
             interface[:netmask6] = bind[:netmask]
             interface[:network6] = bind[:network]
+            interface[:scope6] =  NetworkUtils.get_scope(bind[:address])
           else
             interface[:network] = bind[:network]
             interface[:netmask] = bind[:netmask]
@@ -170,7 +167,7 @@ module Facter
         def set_networking_other_facts(value, interface_name)
           return unless @fact_list[:primary] == interface_name
 
-          %i[mtu dhcp mac ip ip6 netmask netmask6 network network6].each do |key|
+          %i[mtu dhcp mac ip ip6 scope6 netmask netmask6 network network6].each do |key|
             @fact_list[key] = value[key]
           end
         end

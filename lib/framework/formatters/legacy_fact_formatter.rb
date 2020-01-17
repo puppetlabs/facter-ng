@@ -32,6 +32,8 @@ module Facter
       @log.debug('Formatting for multiple user queries')
 
       facts_to_display = Facter::FormatterHelper.retrieve_facts_to_display_for_user_query(user_queries, resolved_facts)
+
+      facts_to_display.each { |k, v| facts_to_display[k] = v.nil? ? '' : v }
       pretty_json = hash_to_facter_format(facts_to_display)
       pretty_json = remove_enclosing_accolades(pretty_json)
       pretty_json = remove_comma_and_quation(pretty_json)
@@ -47,7 +49,7 @@ module Facter
 
       return fact_value if fact_value.is_a?(String)
 
-      pretty_json = fact_value ? hash_to_facter_format(fact_value) : ''
+      pretty_json = fact_value.nil? ? '' : hash_to_facter_format(fact_value)
 
       @log.debug('Remove quotes from value if it is a simple string')
       pretty_json.gsub(/^"(.*)\"/, '\1')
@@ -82,7 +84,7 @@ module Facter
 
     def remove_comma_and_quation(output)
       @log.debug('Remove unnecessary comma and quotation marks on root facts')
-      output.split("\n").map! { |line| line.match(/^[\s]+/) ? line : line.gsub(/,|\"/, '') }.join("\n")
+      output.split("\n").map! { |line| line.match(/^[\s]+/) ? line : line.gsub(/,$|\"/, '') }.join("\n")
     end
   end
 end

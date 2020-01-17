@@ -9,7 +9,11 @@ module Facter
       filter_legacy_facts!(searched_facts)
       searched_facts.each do |fact|
         fact.value = symbolize_all_keys(fact.value) if fact.value.is_a?(Hash)
-        fact.value = fact.filter_tokens.any? ? fact.value.dig(*fact.filter_tokens) : fact.value
+        fact.value = if fact.filter_tokens.any? && fact.value.respond_to?(:dig)
+                       fact.value.dig(*fact.filter_tokens)
+                     else
+                       fact.value
+                     end
       end
     end
 
@@ -24,10 +28,9 @@ module Facter
     end
 
     def filter_legacy_facts!(resolved_facts)
-      resolved_facts.reject! { |fact| fact.type =~ /unknown/ }
       return if Options.get[:show_legacy]
 
-      resolved_facts.reject! { |fact| fact.type =~ /legacy/ } unless Options.get[:user_query]
+      resolved_facts.reject!(&:legacy?) unless Options.get[:user_query]
     end
   end
 end
