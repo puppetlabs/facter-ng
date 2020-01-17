@@ -8,7 +8,7 @@ module Facter
     end
 
     def augment_with_to_hash_defaults!
-      cli_to_hash_defaults
+      @options[:show_legacy] = true
     end
 
     private
@@ -19,10 +19,6 @@ module Facter
       @options[:verbose] = false
       @options[:log_level] = :warn
       @options[:show_legacy] = false
-    end
-
-    def cli_to_hash_defaults
-      @options[:show_legacy] = true
     end
 
     def global_defaults
