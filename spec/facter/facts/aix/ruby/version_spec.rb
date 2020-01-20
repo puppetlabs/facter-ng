@@ -18,7 +18,7 @@ describe 'Aix RubyVersion' do
       expect(fact.call_the_resolver)
         .to be_an_instance_of(Array)
         .and contain_exactly(an_object_having_attributes(name: 'ruby.version', value: value),
-                             an_object_having_attributes(name: 'rubyversion', value: value))
+                             an_object_having_attributes(name: 'rubyversion', value: value, type: :legacy))
     end
   end
 end
