@@ -66,11 +66,15 @@ module Facter
           @log.debug 'Executing command: system_profiler SPSoftwareDataType SPHardwareDataType'
           output, _status = Open3.capture2('system_profiler SPHardwareDataType SPSoftwareDataType')
           @fact_list = output.scan(/.*:[ ].*$/).map { |e| e.strip.match(/(.*?): (.*)/).captures }.to_h
+          normalize_factlist
+
+          @fact_list[fact_name]
+        end
+
+        def normalize_factlist
           @fact_list = @fact_list.map do |k, v|
             [k.downcase.gsub(' ', '_').gsub('(', '').gsub(')', '').to_sym, v]
           end.to_h
-
-          @fact_list[fact_name]
         end
       end
     end
