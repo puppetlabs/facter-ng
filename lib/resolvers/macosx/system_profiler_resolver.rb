@@ -3,30 +3,6 @@
 module Facter
   module Resolvers
     class SystemProfiler < BaseResolver
-      @log = Facter::Log.new(self)
-      @semaphore = Mutex.new
-      # NAME_HASH = { boot_rom_version: 'Boot ROM Version',
-      #              cores: 'Total Number of Cores',
-      #              hardware_uuid: 'Hardware UUID',
-      #              l2_cache_per_core: 'L2 Cache (per Core)',
-      #              l3_cache: 'L3 Cache',
-      #              memory: 'Memory',
-      #              model_identifier: 'Model Identifier',
-      #              model_name: 'Model Name',
-      #              processor_name: 'Processor Name',
-      #              processor_speed: 'Processor Speed',
-      #              processors: 'Number of Processors',
-      #              serial_number: 'Serial Number (system)',
-      #              smc_version: 'SMC Version (system)',
-      #              boot_mode: 'Boot Mode',
-      #              boot_volume: 'Boot Volume',
-      #              computer_name: 'Computer Name',
-      #              kernel_version: 'Kernel Version',
-      #              secure_virtual_memory: 'Secure Virtual Memory',
-      #              system_version: 'System Version',
-      #              uptime: 'Time since boot',
-      #              username: 'User Name' }.freeze
-
       # model_name
       # model_identifier
       # processor_name
@@ -50,6 +26,10 @@ module Facter
       # secure_virtual_memory
       # system_integrity_protection
       # time_since_boot
+      # smc_version_system
+
+      @log = Facter::Log.new(self)
+      @semaphore = Mutex.new
 
       class << self
         private
