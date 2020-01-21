@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-describe 'Ubuntu OsName' do
+describe 'Debian OsName' do
   context '#call_the_resolver' do
-    let(:value) { 'Ubuntu' }
-    subject(:fact) { Facter::Ubuntu::OsName.new }
+    let(:value) { 'Debian' }
+    subject(:fact) { Facter::Debian::OsName.new }
 
     before do
       allow(Facter::Resolvers::LsbRelease).to receive(:resolve).with(:distributor_id).and_return(value)
