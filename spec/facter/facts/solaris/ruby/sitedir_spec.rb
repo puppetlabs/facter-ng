@@ -2,15 +2,22 @@
 
 describe 'Solaris RubySitedir' do
   context '#call_the_resolver' do
-    it 'returns a fact' do
-      value = '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.5.0'
+    let(:value) { '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.5.0' }
+    subject(:fact) { Facter::Solaris::RubySitedir.new }
 
-      expected_fact = double(Facter::ResolvedFact, name: 'ruby.sitedir', value: value)
+    before do
       allow(Facter::Resolvers::Ruby).to receive(:resolve).with(:sitedir).and_return(value)
-      allow(Facter::ResolvedFact).to receive(:new).with('ruby.sitedir', value).and_return(expected_fact)
+    end
 
-      fact = Facter::Solaris::RubySitedir.new
-      expect(fact.call_the_resolver).to eq(expected_fact)
+    it 'calls Facter::Resolvers::Ruby' do
+      expect(Facter::Resolvers::Ruby).to receive(:resolve).with(:sitedir).and_return(value)
+      fact.call_the_resolver
+    end
+
+    it 'return ruby sitedir fact' do
+      expect(fact.call_the_resolver)
+        .to be_an_instance_of(Facter::ResolvedFact)
+        .and have_attributes(name: 'ruby.sitedir', value: value)
     end
   end
 end

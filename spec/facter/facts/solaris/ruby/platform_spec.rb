@@ -2,15 +2,22 @@
 
 describe 'Solaris RubyPlatform' do
   context '#call_the_resolver' do
-    it 'returns a fact' do
-      value = 'x86_64-linux'
+    let(:value) { 'x86_64-linux' }
+    subject(:fact) { Facter::Solaris::RubyPlatform.new }
 
-      expected_fact = double(Facter::ResolvedFact, name: 'ruby.platform', value: value)
+    before do
       allow(Facter::Resolvers::Ruby).to receive(:resolve).with(:platform).and_return(value)
-      allow(Facter::ResolvedFact).to receive(:new).with('ruby.platform', value).and_return(expected_fact)
+    end
 
-      fact = Facter::Solaris::RubyPlatform.new
-      expect(fact.call_the_resolver).to eq(expected_fact)
+    it 'calls Facter::Resolvers::Ruby' do
+      expect(Facter::Resolvers::Ruby).to receive(:resolve).with(:platform).and_return(value)
+      fact.call_the_resolver
+    end
+
+    it 'return ruby.platform fact' do
+      expect(fact.call_the_resolver)
+        .to be_an_instance_of(Facter::ResolvedFact)
+        .and have_attributes(name: 'ruby.platform', value: value)
     end
   end
 end
