@@ -23,33 +23,6 @@ module Facter
           @fact_list[fact_name]
         end
 
-
-        def parse_ip_address
-          output, _status = Open3.capture2('ip address')
-          lines = output.read.split("\n")
-
-          i = 0
-          while i < lines.size
-            if lines[i] =~ /[0-9]+\:/
-              interface_info = lines[i]
-              mac_info = lines[i + 1]
-              i += 2
-            end
-
-            while !lines[i].nil? && lines[i].strip.start_with?('inet ')
-              inet_info = lines[i] + '\n' + lines[i + 1]
-              i += 2
-            end
-
-            while !lines[i].nil? && lines[i].strip.start_with?('inet6 ')
-              inet6_info = lines[i] + '\n' + lines[i + 1]
-              i += 2
-            end
-          end
-          #lines.inspect
-        end
-
-
         def retrieve_interface_info
           output, _status = Open3.capture2('ip -o address')
           interfaces = {}
