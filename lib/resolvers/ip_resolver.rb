@@ -16,17 +16,9 @@ module Facter
 
         def retrieve_ip(fact_name)
           @fact_list ||= {}
-          #parse_ip_address
+
           retrieve_default_interface_and_ip
-          # network_info = {}
-
-          # network_info['interfaces'] = interface_info
-
-          # defaults = retrieve_default_interface_and_ip
-
-          # network_info['primary'] = defaults[:interface]
-          # network_info['ip'] = defaults[:ip]
-          @fact_list[:interfaces] = interface_info
+          retrieve_interface_info
 
           @fact_list[fact_name]
         end
@@ -58,7 +50,7 @@ module Facter
         end
 
 
-        def interface_info
+        def retrieve_interface_info
           output, _status = Open3.capture2('ip -o address')
           interfaces = {}
 
@@ -69,7 +61,7 @@ module Facter
             fill_io_v6_info!(ip_tokens, interfaces)
           end
 
-          interfaces
+          @fact_list[:interfaces] = interfaces
         end
 
         def fill_ip_v4_info!(ip_tokens, network_info)
