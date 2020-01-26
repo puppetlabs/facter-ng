@@ -7,7 +7,7 @@ module Facter
       ALIASES = 'ipaddress'
 
       def call_the_resolver
-        fact_value = Resolvers::Ip.resolve(:ip)
+        fact_value = Resolvers::Linux::Networking.resolve(:ip)
 
         [ResolvedFact.new(FACT_NAME, fact_value), ResolvedFact.new(ALIASES, fact_value, :legacy)]
       end

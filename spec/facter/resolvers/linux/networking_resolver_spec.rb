@@ -15,7 +15,7 @@ describe 'Ip' do
     end
 
     it 'develops' do
-      Facter::Resolvers::Ip.resolve(:ip)
+      Facter::Resolvers::Networking.resolve(:ip)
     end
   end
 end
