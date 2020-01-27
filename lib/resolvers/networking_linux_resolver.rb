@@ -38,7 +38,7 @@ module Facter
         end
 
         def fill_ip_v4_info!(ip_tokens, network_info)
-          return unless ip_tokens[2].casecmp?('inet')
+          return unless ip_tokens[2].casecmp('inet').zero?
 
           interface_name = ip_tokens[1]
           ip4_info = ip_tokens[3].split('/')
@@ -52,7 +52,7 @@ module Facter
         end
 
         def fill_io_v6_info!(ip_tokens, network_info)
-          return unless ip_tokens[2].casecmp?('inet6')
+          return unless ip_tokens[2].casecmp('inet6').zero?
 
           interface_name = ip_tokens[1]
           ip6_info = ip_tokens[3].split('/')
