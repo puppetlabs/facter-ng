@@ -7,16 +7,7 @@ describe 'IpaddressResolver' do
     end
 
     context 'when returns ip' do
-      let(:route) do
-        "route to: default
-        destination: default
-              mask: default
-            gateway: 10.160.24.1
-          interface: en0
-              flags: <UP,GATEWAY,DONE,STATIC,PRCLONING>
-        recvpipe  sendpipe  ssthresh  rtt,msec    rttvar  hopcount      mtu     expire
-              0         0         0         0         0         0      1500         0"
-      end
+      let(:route) { load_fixture('osx_route').read }
       let(:ip) { '10.0.0.1' }
 
       it 'detects ipadress' do
