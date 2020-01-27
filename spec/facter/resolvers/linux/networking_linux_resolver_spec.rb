@@ -30,10 +30,11 @@ describe 'Ip' do
                 [
                   { address: '127.0.0.1', netmask: '255.0.0.0', network: '127.0.0.0' }
                 ],
-              'bindings6' =>
+            'bindings6' =>
                 [
                   { address: '::1', netmask: 'ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff', network: '::1' }
-                ] },
+                ]
+          },
           'ens160' => {
             'bindings' => [
               { address: '10.16.119.155', netmask: '255.255.240.0', network: '10.16.112.0' },
