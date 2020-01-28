@@ -16,6 +16,8 @@ module LegacyFacter
       # @return [String]
       # @deprecated
       attr_accessor :ldapname
+
+      # Fact options e.g. fact_type
       attr_accessor :options
 
       attr_accessor :used_resolution_weight
