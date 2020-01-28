@@ -28,7 +28,9 @@ describe 'Debian NetworkingInterfaces' do
     end
 
     it 'returns hostname fact' do
-      be_an_instance_of(Facter::ResolvedFact).and have_attributes(name: 'interfaces', value: value)
+      expect(fact.call_the_resolver)
+        .to be_an_instance_of(Facter::ResolvedFact)
+        .and have_attributes(name: 'networking.interfaces', value: value)
     end
   end
 end

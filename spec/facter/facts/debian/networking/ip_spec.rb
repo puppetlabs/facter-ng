@@ -15,8 +15,8 @@ describe 'Debian NetworkingIp' do
     end
 
     it 'returns hostname fact' do
-      be_an_instance_of(Array)
-        .and contain_exactly(an_object_having_attributes(name: 'ip', value: value),
+      expect(fact.call_the_resolver).to be_an_instance_of(Array)
+        .and contain_exactly(an_object_having_attributes(name: 'networking.ip', value: value),
                              an_object_having_attributes(name: 'ipaddress', value: value, type: :legacy))
     end
   end

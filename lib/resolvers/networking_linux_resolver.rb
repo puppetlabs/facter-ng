@@ -74,7 +74,7 @@ module Facter
           default_ip = ip_route_tokens[6]
 
           @fact_list[:ip] = default_ip
-          @fact_list[:interface] = default_interface
+          @fact_list[:primary_interface] = default_interface
         end
 
         def build_binding(addr, mask_length)
