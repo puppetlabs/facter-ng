@@ -16,6 +16,7 @@ module LegacyFacter
       # @return [String]
       # @deprecated
       attr_accessor :ldapname
+      attr_accessor :options
 
       attr_accessor :used_resolution_weight
 
@@ -49,6 +50,7 @@ module LegacyFacter
       #
       # @api private
       def add(options = {}, &block)
+        @options = options
         define_resolution(nil, options, &block)
       end
 
