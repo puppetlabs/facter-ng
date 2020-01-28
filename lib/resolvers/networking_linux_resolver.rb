@@ -81,11 +81,9 @@ module Facter
           require 'ipaddr'
 
           ip = IPAddr.new(addr)
-          mask = if ip.ipv6?
-                   IPAddr.new('ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff').mask(mask_length)
-                 else
-                   IPAddr.new('255.255.255.255').mask(mask_length)
-                 end
+          mask_helper = ip.ipv6? ? 'ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff' : '255.255.255.255'
+          mask = IPAddr.new(mask_helper).mask(mask_length)
+
           { address: addr, netmask: mask.to_s, network: ip.mask(mask_length).to_s }
         end
 
