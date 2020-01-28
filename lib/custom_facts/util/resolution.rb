@@ -96,6 +96,8 @@ module LegacyFacter
 
         @weight = options.delete(:has_weight) if options.key?(:has_weight)
 
+        @fact_type = options.delete(:fact_type) if options.key?(:fact_type)
+
         raise ArgumentError, "Invalid resolution options #{options.keys.inspect}" unless options.keys.empty?
       end
 

@@ -95,7 +95,7 @@ module LegacyFacter
 
         load_external_facts
         external_facts = @facts.reject { |_k, v| v.options[:fact_type] }
-        @external_facts = Facter::Utils.deep_copy(external_facts)
+        @external_facts = Facter::Utils.deep_copy(external_facts.keys)
       end
 
       # Builds a hash of custom facts
@@ -104,7 +104,7 @@ module LegacyFacter
 
         internal_loader.load_all
         custom_facts = @facts.select { |_k, v| v.options[:fact_type] }
-        @custom_facts = Facter::Utils.deep_copy(custom_facts)
+        @custom_facts = Facter::Utils.deep_copy(custom_facts.keys)
       end
 
       def load(name)
