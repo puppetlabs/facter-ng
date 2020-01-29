@@ -56,6 +56,8 @@ class OsDetector
       %w[El Amzn]
     when :rhel
       %w[El Rhel]
+    when :centos
+      %w[El Centos]
     when :opensuse
       %w[Sles Opensuse]
     else
