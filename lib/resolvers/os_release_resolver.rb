@@ -34,6 +34,7 @@ module Facter
 
           result = Hash[*pairs.flatten]
           result.each { |k, v| @fact_list[k.downcase.to_sym] = v }
+          @fact_list[:name] = @fact_list[:name].split(' ')[0].strip if @fact_list[:name]
 
           @fact_list[:identifier] = @fact_list[:id]
 

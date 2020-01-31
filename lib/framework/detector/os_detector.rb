@@ -49,17 +49,17 @@ class OsDetector
 
     case operating_system.to_sym
     when :ubuntu
-      %w[Debian Ubuntu]
+      %w[Debian]
     when :fedora
-      %w[El Fedora]
+      %w[El]
     when :amzn
-      %w[El Amzn]
+      %w[El]
     when :rhel
-      %w[El Rhel]
+      %w[El]
     when :centos
-      %w[El Centos]
+      %w[El]
     when :opensuse
-      %w[Sles Opensuse]
+      %w[Sles]
     else
       [operating_system.to_s.capitalize]
     end
