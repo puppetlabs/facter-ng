@@ -1,20 +1,20 @@
+# frozen_string_literal: true
+
 describe 'El disks' do
-  let(:disk) {
+  let(:disk) do
     {
       disks: {
         sda: {
-          model: "Virtual disk",
-          size: "20.00 GiB",
-          size_bytes: 21474836480,
-          vendor: "VMware"
+          model: 'Virtual disk',
+          size: '20.00 GiB',
+          size_bytes: 21_474_836_480,
+          vendor: 'VMware'
         }
       }
     }
-  }
+  end
 
   subject(:fact) { Facter::El::Disks.new }
-
-
 
   context '#call_the_resolver' do
     before(:each) do
