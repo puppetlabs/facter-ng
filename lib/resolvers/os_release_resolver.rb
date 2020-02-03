@@ -46,13 +46,13 @@ module Facter
         end
 
         def process_name
-          if @fact_list[:name].downcase.start_with?('red')
-            @fact_list[:name] = @fact_list[:name].split(' ')[0..1].join
+          return unless @fact_list[:name]
 
-            return
-          end
-
-          @fact_list[:name] = @fact_list[:name].split(' ')[0].strip if @fact_list[:name]
+          @fact_list[:name] = if @fact_list[:name].downcase.start_with?('red')
+                                @fact_list[:name].split(' ')[0..1].join
+                              else
+                                @fact_list[:name].split(' ')[0].strip
+                              end
         end
       end
     end
