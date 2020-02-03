@@ -48,20 +48,20 @@ class OsDetector
     return [] unless operating_system
 
     case operating_system.to_sym
-      when :ubuntu
-        %w[Debian]
-      when :fedora
-        %w[El]
-      when :amzn
-        %w[El]
-      when :rhel
-        %w[El]
-      when :centos
-        %w[El]
-      when :opensuse
-        %w[Sles]
-      else
-        [operating_system.to_s.capitalize]
-      end
+    when :ubuntu
+      %w[Debian]
+    when :fedora
+      %w[El]
+    when :amzn
+      %w[El]
+    when :rhel
+      %w[El]
+    when :centos
+      %w[El]
+    when :opensuse
+      %w[Sles]
+    else
+      [operating_system.to_s.capitalize]
+    end
   end
 end
