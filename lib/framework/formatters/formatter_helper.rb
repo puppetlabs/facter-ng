@@ -35,7 +35,7 @@ module Facter
 
       def split_user_query(user_query)
         queries = user_query.split('.')
-        queries.map!{|query| query =~ /^[0-9]+$/ ? query.to_i : query}
+        queries.map! { |query| query =~ /^[0-9]+$/ ? query.to_i : query }
       end
     end
   end
