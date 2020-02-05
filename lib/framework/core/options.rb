@@ -13,6 +13,14 @@ module Facter
       @options = {}
     end
 
+    def refresh(cli_options, user_query)
+      @cli_options = cli_options
+      @user_query = user_query
+      initialize_options
+
+      @options
+    end
+
     def get
       @options
     end
@@ -41,6 +49,14 @@ module Facter
       @options[:debug] = log_level
     end
 
+    def persistent_options
+      @persistent_options
+    end
+
+    def persistent_options=(persistent_options)
+      @persistent_options = persistent_options
+    end
+
     def self.method_missing(name, *args, &block)
       Facter::Options.instance.send(name.to_s, *args, &block)
     rescue NoMethodError
@@ -48,5 +64,16 @@ module Facter
     end
 
     def self.respond_to_missing?(name, include_private) end
+
+    private
+
+    def initialize_options
+      augment_with_defaults!
+      augment_with_to_hash_defaults! if @cli_options[:to_hash]
+      augment_with_config_file_options!(@cli_options[:config])
+      augment_with_cli_options!(@cli_options)
+      @options.merge(@persistent_options) if @persistent_options
+      augment_with_helper_options!(@user_query)
+    end
   end
 end

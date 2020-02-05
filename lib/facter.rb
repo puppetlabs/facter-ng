@@ -8,10 +8,11 @@ require "#{ROOT_DIR}/lib/framework/core/file_loader"
 require "#{ROOT_DIR}/lib/framework/core/options/options_validator"
 
 module Facter
-  def self.[](name)
+  @options = Options.instance
+  
+	def self.[](name)
     fact(name)
   end
-
   def self.add(name, options = {}, &block)
     options[:fact_type] = :custom
     LegacyFacter.add(name, options, &block)
@@ -96,15 +97,20 @@ module Facter
 
   def self.to_hash
     options = { to_hash: true }
+    options = @options.refresh(options, args)
     resolved_facts = Facter::FactManager.instance.resolve_facts(options)
     CacheManager.invalidate_all_caches
     FactCollection.new.build_fact_collection!(resolved_facts)
   end
 
-  def self.to_user_output(options, *args)
-    resolved_facts = Facter::FactManager.instance.resolve_facts(options, args)
+
+
+  def self.to_user_output(cli_options, *args)
+    @options.refresh(cli_options, args)
+
+    resolved_facts = Facter::FactManager.instance.resolve_facts(@options, args)
     CacheManager.invalidate_all_caches
-    fact_formatter = Facter::FormatterFactory.build(options)
+    fact_formatter = Facter::FormatterFactory.build(@options)
 
     if Options.instance[:strict]
       missing_names = args - resolved_facts.map(&:user_query).uniq
