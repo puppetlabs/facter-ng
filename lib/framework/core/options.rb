@@ -13,7 +13,7 @@ module Facter
       @options = {}
     end
 
-    def refresh(cli_options, user_query)
+    def refresh(cli_options = {}, user_query = [])
       @cli_options = cli_options
       @user_query = user_query
       initialize_options
@@ -45,17 +45,13 @@ module Facter
       @options[:external_dir]
     end
 
-    def change_log_level(log_level)
-      @options[:debug] = log_level
-    end
+    # def change_log_level(log_level)
+    #  @options[:debug] = log_level
+    # end
 
-    def persistent_options
-      @persistent_options
-    end
+    attr_reader :persistent_options
 
-    def persistent_options=(persistent_options)
-      @persistent_options = persistent_options
-    end
+    attr_writer :persistent_options
 
     def self.method_missing(name, *args, &block)
       Facter::Options.instance.send(name.to_s, *args, &block)
@@ -72,7 +68,7 @@ module Facter
       augment_with_to_hash_defaults! if @cli_options[:to_hash]
       augment_with_config_file_options!(@cli_options[:config])
       augment_with_cli_options!(@cli_options)
-      @options.merge(@persistent_options) if @persistent_options
+      @options.merge!(@persistent_options) if @persistent_options
       augment_with_helper_options!(@user_query)
     end
   end

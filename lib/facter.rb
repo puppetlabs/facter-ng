@@ -39,11 +39,14 @@ module Facter
   end
 
   def self.debugging?
-    Options.instance[:debug]
+    Options[:debug]
   end
 
   def self.debugging(debug_bool)
-    Options.instance.change_log_level(debug_bool)
+    @options.persistent_options = { debug: true }
+    @options.refresh({}, [])
+
+    debug_bool
   end
 
   def self.fact(name)
@@ -65,12 +68,12 @@ module Facter
     @logger ||= Log.new(self)
     @logger.error(
       "--#{name}-- not implemented but required \n" \
-  'with params: ' \
-  "#{args.inspect} \n" \
-  'with block: ' \
-  "#{block.inspect}  \n" \
-  "called by:  \n" \
-  "#{caller} \n"
+      'with params: ' \
+      "#{args.inspect} \n" \
+      'with block: ' \
+      "#{block.inspect}  \n" \
+      "called by:  \n" \
+      "#{caller} \n"
     )
     nil
   end
@@ -96,14 +99,12 @@ module Facter
   end
 
   def self.to_hash
-    options = { to_hash: true }
-    options = @options.refresh(options, args)
-    resolved_facts = Facter::FactManager.instance.resolve_facts(options)
+    to_hash_options = { to_hash: true }
+    @options.refresh(to_hash_options)
+    resolved_facts = Facter::FactManager.instance.resolve_facts(@options)
     CacheManager.invalidate_all_caches
     FactCollection.new.build_fact_collection!(resolved_facts)
   end
-
-
 
   def self.to_user_output(cli_options, *args)
     @options.refresh(cli_options, args)
@@ -132,8 +133,9 @@ module Facter
   end
 
   def self.value(user_query)
+    @options.refresh({}, [user_query])
     user_query = user_query.to_s
-    resolved_facts = Facter::FactManager.instance.resolve_facts({}, [user_query])
+    resolved_facts = Facter::FactManager.instance.resolve_facts(@options, [user_query])
     CacheManager.invalidate_all_caches
     fact_collection = FactCollection.new.build_fact_collection!(resolved_facts)
     splitted_user_query = Facter::Utils.split_user_query(user_query)
