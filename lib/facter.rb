@@ -43,7 +43,7 @@ module Facter
   end
 
   def self.debugging(debug_bool)
-    @options.persistent_options = { debug: true }
+    @options.priority_options = { debug: true }
     @options.refresh
 
     debug_bool
@@ -99,15 +99,16 @@ module Facter
   end
 
   def self.to_hash
-    to_hash_options = { to_hash: true }
-    @options.refresh(to_hash_options)
+    @options.priority_options = { to_hash: true }
+    @options.refresh
     resolved_facts = Facter::FactManager.instance.resolve_facts(@options)
     CacheManager.invalidate_all_caches
     FactCollection.new.build_fact_collection!(resolved_facts)
   end
 
   def self.to_user_output(cli_options, *args)
-    @options.refresh(cli_options, args)
+    @options.priority_options = cli_options
+    @options.refresh(args)
 
     resolved_facts = Facter::FactManager.instance.resolve_facts(@options, args)
     CacheManager.invalidate_all_caches
@@ -133,7 +134,7 @@ module Facter
   end
 
   def self.value(user_query)
-    @options.refresh({}, [user_query])
+    @options.refresh([user_query])
     user_query = user_query.to_s
     resolved_facts = Facter::FactManager.instance.resolve_facts(@options, [user_query])
     CacheManager.invalidate_all_caches

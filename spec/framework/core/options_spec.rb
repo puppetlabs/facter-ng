@@ -326,4 +326,42 @@ describe 'Options' do
       expect(Facter::Options.instance.external_dir).to eq(%w[external_dir1 external_dir2])
     end
   end
+
+  describe '#refresh' do
+    before do
+      cli_options = { 'external_dir' => %w[external_dir1 external_dir2] }
+      Facter::Options.instance.augment_with_cli_options!(cli_options)
+    end
+
+    let(:subject) { Facter::Options.instance }
+
+    context 'with persistent options' do
+      it 'sets debug to true' do
+        subject.priority_options = { debug: true }
+        expect(subject.refresh[:debug]).to eq(true)
+      end
+
+      it 'sets debug to false' do
+        subject.priority_options = { debug: false }
+        expect(subject.refresh[:debug]).to eq(false)
+      end
+    end
+
+    context 'priority options have the highest priority' do
+      before do
+        Facter::Options.instance.augment_with_defaults!
+      end
+
+      let(:subject) { Facter::Options.instance }
+
+      it 'sets debug to true' do
+        expect(subject.refresh[:debug]).to eq(false)
+      end
+
+      it 'sets debug to false' do
+        subject.priority_options = { debug: false }
+        expect(subject.refresh[:debug]).to eq(false)
+      end
+    end
+  end
 end

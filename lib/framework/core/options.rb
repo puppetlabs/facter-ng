@@ -9,14 +9,14 @@ module Facter
 
     include Singleton
 
-    attr_accessor :persistent_options
+    attr_accessor :priority_options
 
     def initialize
       @options = {}
+      @priority_options = {}
     end
 
-    def refresh(cli_options = {}, user_query = [])
-      @cli_options = cli_options
+    def refresh(user_query = [])
       @user_query = user_query
       initialize_options
 
@@ -59,10 +59,10 @@ module Facter
 
     def initialize_options
       augment_with_defaults!
-      augment_with_to_hash_defaults! if @cli_options[:to_hash]
-      augment_with_config_file_options!(@cli_options[:config])
-      augment_with_cli_options!(@cli_options)
-      @options.merge!(@persistent_options) if @persistent_options
+      augment_with_to_hash_defaults! if @priority_options[:to_hash]
+      augment_with_config_file_options!(@priority_options[:config])
+      augment_with_cli_options!(@priority_options)
+      # @options.merge!(@persistent_options) if @persistent_options
       augment_with_helper_options!(@user_query)
     end
   end

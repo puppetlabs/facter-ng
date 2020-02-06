@@ -307,7 +307,7 @@ describe 'Facter' do
 
   describe '#debugging' do
     it 'sets log level to debug' do
-      expect(Facter::Options.instance).to receive(:persistent_options=).with(debug: true)
+      expect(Facter::Options.instance).to receive(:priority_options=).with(debug: true)
       Facter.debugging(true)
     end
   end
