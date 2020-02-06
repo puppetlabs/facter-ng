@@ -9,6 +9,8 @@ module Facter
 
     include Singleton
 
+    attr_accessor :persistent_options
+
     def initialize
       @options = {}
     end
@@ -44,14 +46,6 @@ module Facter
     def external_dir
       @options[:external_dir]
     end
-
-    # def change_log_level(log_level)
-    #  @options[:debug] = log_level
-    # end
-
-    attr_reader :persistent_options
-
-    attr_writer :persistent_options
 
     def self.method_missing(name, *args, &block)
       Facter::Options.instance.send(name.to_s, *args, &block)

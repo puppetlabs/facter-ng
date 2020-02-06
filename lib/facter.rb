@@ -44,7 +44,7 @@ module Facter
 
   def self.debugging(debug_bool)
     @options.persistent_options = { debug: true }
-    @options.refresh({}, [])
+    @options.refresh
 
     debug_bool
   end
