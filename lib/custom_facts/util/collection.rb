@@ -103,7 +103,9 @@ module LegacyFacter
         return @custom_facts unless @custom_facts.nil?
 
         internal_loader.load_all
-        custom_facts = @facts.select { |_k, v| v.options[:fact_type] }
+        custom_facts = @facts.select do |_k, v|
+          v.options[:fact_type]
+        end
         @custom_facts = Facter::Utils.deep_copy(custom_facts.keys)
       end
 

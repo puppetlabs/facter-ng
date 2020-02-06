@@ -8,6 +8,11 @@ require "#{ROOT_DIR}/lib/framework/core/file_loader"
 require "#{ROOT_DIR}/lib/framework/core/options/options_validator"
 
 module Facter
+  def self.define_fact(name, options = {}, &block)
+    options[:fact_type] = :custom
+    LegacyFacter.define_fact(name, options, &block)
+  end
+
   def self.to_hash
     options = { to_hash: true }
     resolved_facts = Facter::FactManager.instance.resolve_facts(options)

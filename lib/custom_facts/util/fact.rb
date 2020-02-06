@@ -38,6 +38,8 @@ module LegacyFacter
 
         @resolves = []
         @searching = false
+        @options = {}
+        @options[:fact_type] = options[:fact_type]
 
         @value = nil
       end

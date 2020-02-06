@@ -254,4 +254,11 @@ describe 'Facter' do
       Facter.debugging?
     end
   end
+
+  describe '#define_fact' do
+    it 'defines a new fact' do
+      expect(LegacyFacter).to receive(:define_fact).once
+      Facter.trace?
+    end
+  end
 end
