@@ -25,7 +25,7 @@ describe 'Logger' do
 
   describe '#debug' do
     it 'writes debug message' do
-      expect(multi_logger_double).to receive(:debug).with('Class --- debug_message')
+      expect(multi_logger_double).to receive(:debug).with('Class - debug_message')
       log = Facter::Log.new(Class)
       log.debug('debug_message')
     end
@@ -33,7 +33,7 @@ describe 'Logger' do
 
   describe '#info' do
     it 'writes info message' do
-      expect(multi_logger_double).to receive(:info).with('Class --- info_message')
+      expect(multi_logger_double).to receive(:info).with('Class - info_message')
       log = Facter::Log.new(Class)
       log.info('info_message')
     end
@@ -41,7 +41,7 @@ describe 'Logger' do
 
   describe '#warn' do
     it 'writes warn message' do
-      expect(multi_logger_double).to receive(:warn).with('Class --- warn_message')
+      expect(multi_logger_double).to receive(:warn).with('Class - warn_message')
       log = Facter::Log.new(Class)
       log.warn('warn_message')
     end
@@ -49,7 +49,7 @@ describe 'Logger' do
 
   describe '#error' do
     it 'writes error message' do
-      expect(multi_logger_double).to receive(:error).with('Class --- error_message')
+      expect(multi_logger_double).to receive(:error).with('Class - error_message')
       log = Facter::Log.new(Class)
       log.error('error_message')
     end
