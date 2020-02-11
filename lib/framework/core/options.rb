@@ -4,7 +4,7 @@ module Facter
   class Options
     include Facter::DefaultOptions
     include Facter::ConfigFileOptions
-    include Facter::CliOptions
+    include Facter::PriorityOptions
     include Facter::HelperOptions
 
     include Singleton
@@ -61,8 +61,7 @@ module Facter
       augment_with_defaults!
       augment_with_to_hash_defaults! if @priority_options[:to_hash]
       augment_with_config_file_options!(@priority_options[:config])
-      augment_with_cli_options!(@priority_options)
-      # @options.merge!(@persistent_options) if @persistent_options
+      augment_with_priority_options!(@priority_options)
       augment_with_helper_options!(@user_query)
     end
   end

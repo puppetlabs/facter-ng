@@ -9,10 +9,11 @@ require "#{ROOT_DIR}/lib/framework/core/options/options_validator"
 
 module Facter
   @options = Options.instance
-  
-	def self.[](name)
+
+  def self.[](name)
     fact(name)
   end
+
   def self.add(name, options = {}, &block)
     options[:fact_type] = :custom
     LegacyFacter.add(name, options, &block)
@@ -114,13 +115,7 @@ module Facter
     CacheManager.invalidate_all_caches
     fact_formatter = Facter::FormatterFactory.build(@options)
 
-    if Options.instance[:strict]
-      missing_names = args - resolved_facts.map(&:user_query).uniq
-      if missing_names.count.positive?
-        status = 1
-        log_errors(missing_names)
-      end
-    end
+    status = error_check(args, resolved_facts)
 
     [fact_formatter.format(resolved_facts), status || 0]
   end
@@ -146,5 +141,19 @@ module Facter
   def self.version
     version_file = ::File.join(ROOT_DIR, 'VERSION')
     ::File.read(version_file).strip
+  end
+
+  private_class_method def self.error_check(args, resolved_facts)
+    if Options.instance[:strict]
+      missing_names = args - resolved_facts.map(&:user_query).uniq
+      if missing_names.count.positive?
+        status = 1
+        log_errors(missing_names)
+      else
+        status = nil
+      end
+    end
+
+    status
   end
 end
