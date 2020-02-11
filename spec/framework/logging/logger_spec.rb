@@ -48,6 +48,20 @@ describe 'Logger' do
   end
 
   describe '#error' do
+    it 'writes error message with color on macosx' do
+      allow(OsDetector.instance).to receive(:detect).and_return(:macosx)
+      expect(multi_logger_double).to receive(:error).with("Class - \e[31merror_message\e[0m")
+      log = Facter::Log.new(Class)
+      log.error('error_message', true)
+    end
+
+    it 'writes error message not colorized on Windows' do
+      allow(OsDetector.instance).to receive(:detect).and_return(:windows)
+      expect(multi_logger_double).to receive(:error).with('Class - error_message')
+      log = Facter::Log.new(Class)
+      log.error('error_message', true)
+    end
+
     it 'writes error message' do
       expect(multi_logger_double).to receive(:error).with('Class - error_message')
       log = Facter::Log.new(Class)
