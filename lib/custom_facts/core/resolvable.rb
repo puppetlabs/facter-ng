@@ -75,8 +75,8 @@ module LegacyFacter
         LegacyFacter.log_exception(e, "Fact resolution #{qualified_name} resolved to an invalid value: #{e.message}")
         nil
       rescue StandardError => e
-        LegacyFacter.log_exception(e, "error while resolving custom fact #{qualified_name}: #{e.message}")
-        nil
+        LegacyFacter.log_exception(e, "Error while resolving custom fact #{qualified_name}: #{e.message}")
+        exit 1
       end
 
       private

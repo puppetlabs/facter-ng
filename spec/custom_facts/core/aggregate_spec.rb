@@ -67,7 +67,9 @@ describe LegacyFacter::Core::Aggregate do
 
       expect(LegacyFacter).to receive(:warn).with(/dependency cycles: .*[:first, :second]/)
 
-      subject.value
+      expect { subject.value }.to raise_error(SystemExit) do |error|
+        expect(error.status).to eq(1)
+      end
     end
 
     it 'passes all requested chunk results to the depending chunk' do
