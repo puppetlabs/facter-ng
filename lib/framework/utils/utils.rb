@@ -21,20 +21,16 @@ module Facter
       queries.map! { |query| query =~ /^[0-9]+$/ ? query.to_i : query }
     end
 
-    def self.deep_stringify_keys(hash)
-      {}.tap do |h|
-        hash.each { |key, value| key.class == Integer ? h[key] = map_value(value) : h[key.to_s] = map_value(value) }
-      end
-    end
-
-    def self.map_value(collection)
-      case collection
+    def self.deep_stringify_symbol_keys(object, &block)
+      case object
       when Hash
-        deep_stringify_keys(collection)
+        object.each_with_object({}) do |(key, value), result|
+          result[yield(key)] = deep_stringify_symbol_keys(value, &block)
+        end
       when Array
-        collection.map { |value| map_value(value) }
+        object.map { |e| deep_stringify_symbol_keys(e, &block) }
       else
-        collection
+        object
       end
     end
   end
