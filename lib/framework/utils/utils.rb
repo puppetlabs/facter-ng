@@ -17,18 +17,17 @@ module Facter
     end
 
     def self.split_user_query(user_query)
-      queries = user_query.split('.')
-      queries.map! { |query| query =~ /^[0-9]+$/ ? query.to_i : query }
+      user_query.split('.')
     end
 
-    def self.deep_stringify_symbol_keys(object, &block)
+    def self.deep_stringify_keys(object)
       case object
       when Hash
         object.each_with_object({}) do |(key, value), result|
-          result[yield(key)] = deep_stringify_symbol_keys(value, &block)
+          result[key.to_s] = deep_stringify_keys(value)
         end
       when Array
-        object.map { |e| deep_stringify_symbol_keys(e, &block) }
+        object.map { |e| deep_stringify_keys(e) }
       else
         object
       end
