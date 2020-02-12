@@ -20,5 +20,22 @@ module Facter
       queries = user_query.split('.')
       queries.map! { |query| query =~ /^[0-9]+$/ ? query.to_i : query }
     end
+
+    def self.deep_stringify_keys(hash)
+      {}.tap do |h|
+        hash.each { |key, value| key.class == Integer ? h[key] = map_value(value) : h[key.to_s] = map_value(value) }
+      end
+    end
+
+    def self.map_value(collection)
+      case collection
+      when Hash
+        deep_stringify_keys(collection)
+      when Array
+        collection.map { |value| map_value(value) }
+      else
+        collection
+      end
+    end
   end
 end
