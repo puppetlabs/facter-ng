@@ -31,10 +31,12 @@ describe 'SolarisZFS' do
   context 'Resolve zfs facts' do
     let(:output) { zfs_command_response }
     let(:st) { 'exit 0' }
-    it 'returns zfs facts' do
+    it 'returns zfs version fact' do
       result = Facter::Resolvers::Solaris::ZFS.resolve(:zfs_version)
       expect(result).to eq('6')
+    end
 
+    it 'returns zfs featurenumbers fact' do
       result = Facter::Resolvers::Solaris::ZFS.resolve(:zfs_featurenumbers)
       expect(result).to eq('1, 2, 3, 4, 5, 6')
     end
