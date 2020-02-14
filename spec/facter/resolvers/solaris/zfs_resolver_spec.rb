@@ -26,16 +26,16 @@ describe 'SolarisZFS' do
       .and_return([output, status])
   end
   after do
-    Facter::Resolvers::SolarisZFS.invalidate_cache
+    Facter::Resolvers::Solaris::ZFS.invalidate_cache
   end
   context 'Resolve zfs facts' do
     let(:output) { zfs_command_response }
     let(:st) { 'exit 0' }
     it 'returns zfs facts' do
-      result = Facter::Resolvers::SolarisZFS.resolve(:zfs_version)
+      result = Facter::Resolvers::Solaris::ZFS.resolve(:zfs_version)
       expect(result).to eq('6')
 
-      result = Facter::Resolvers::SolarisZFS.resolve(:zfs_featurenumbers)
+      result = Facter::Resolvers::Solaris::ZFS.resolve(:zfs_featurenumbers)
       expect(result).to eq('1, 2, 3, 4, 5, 6')
     end
   end

@@ -6,7 +6,7 @@ module Facter
       FACT_NAME = 'zfs_featurenumbers'
 
       def call_the_resolver
-        fact_value = Resolvers::SolarisZFS.resolve(:zfs_featurenumbers)
+        fact_value = Resolvers::Solaris::ZFS.resolve(:zfs_featurenumbers)
         ResolvedFact.new(FACT_NAME, fact_value)
       end
     end
