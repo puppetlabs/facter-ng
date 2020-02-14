@@ -21,9 +21,9 @@ describe 'SolarisZFS' do
   before do
     status = double(Process::Status, to_s: st)
     expect(Open3).to receive(:capture2)
-                         .with('zfs upgrade -v')
-                         .ordered
-                         .and_return([output, status])
+      .with('zfs upgrade -v')
+      .ordered
+      .and_return([output, status])
   end
   after do
     Facter::Resolvers::SolarisZFS.invalidate_cache
