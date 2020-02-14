@@ -61,7 +61,6 @@ module Facter
 
   def self.log_errors(missing_names)
     @logger ||= Log.new(self)
-
     missing_names.each do |missing_name|
       @logger.error("fact \"#{missing_name}\" does not exist.", true)
     end
@@ -104,7 +103,12 @@ module Facter
   def self.to_hash
     @options.priority_options = { to_hash: true }
     @options.refresh
-    resolved_facts = Facter::FactManager.instance.resolve_facts(@options)
+
+    @logger ||= Log.new(self)
+    block_list = BlockList.instance.block_list
+    @logger.debug("blocking collection of #{block_list.join("\s")} facts") if !block_list.empty? && Options[:block]
+
+    resolved_facts = Facter::FactManager.instance.resolve_facts
     CacheManager.invalidate_all_caches
     FactCollection.new.build_fact_collection!(resolved_facts)
   end
@@ -112,6 +116,10 @@ module Facter
   def self.to_user_output(cli_options, *args)
     @options.priority_options = { is_cli: true }.merge!(cli_options.map { |(k, v)| [k.to_sym, v] }.to_h)
     @options.refresh(args)
+
+    @logger = Log.new(self)
+    block_list = BlockList.instance.block_list
+    @logger.debug("blocking collection of #{block_list.join("\s")} facts") if !block_list.empty? && Options[:block]
 
     resolved_facts = Facter::FactManager.instance.resolve_facts(@options, args)
     CacheManager.invalidate_all_caches
