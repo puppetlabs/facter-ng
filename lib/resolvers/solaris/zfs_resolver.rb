@@ -21,7 +21,7 @@ module Facter
         def build_zfs_facts
           output, _status = Open3.capture2('zfs upgrade -v')
           feature_numbers = output.scan(/^\s+(\d+)/).flatten
-          @fact_list[:zfs_featurenumbers] = feature_numbers.join(', ')
+          @fact_list[:zfs_featurenumbers] = feature_numbers
           @fact_list[:zfs_version] = feature_numbers.last
         end
       end
