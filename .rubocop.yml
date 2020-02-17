@@ -4,10 +4,6 @@ Documentation:
 Metrics/LineLength:
   Max: 120
 
-Metrics/ModuleLength:
-  Exclude:
-    - 'lib/facter-ng.rb'
-
 Metrics/MethodLength:
   Max: 20
   Exclude:
@@ -32,6 +28,7 @@ Naming/ClassAndModuleCamelCase:
     - 'spec/mocks/**/*'
 
 Metrics/AbcSize:
+  Max: 16
   Exclude:
     - 'spec/custom_facts/util/parser_spec.rb'
     - 'spec/custom_facts/core/logging_spec.rb'
