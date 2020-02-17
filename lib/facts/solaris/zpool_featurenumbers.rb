@@ -2,7 +2,7 @@
 
 module Facter
   module Solaris
-    class ZpoolFeatureNumbers
+    class ZPoolFeatureNumbers
       FACT_NAME = 'zpool_featurenumbers'
 
       def call_the_resolver

@@ -2,7 +2,7 @@
 
 module Facter
   module Solaris
-    class ZpoolVersion
+    class ZPoolVersion
       FACT_NAME = 'zpool_version'
 
       def call_the_resolver

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../utils/zfs_zpool_parser'
+require_relative 'zfs_zpool_parser'
 
 module Facter
   module Resolvers
