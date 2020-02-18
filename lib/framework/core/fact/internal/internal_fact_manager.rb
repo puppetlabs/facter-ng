@@ -5,9 +5,8 @@ module Facter
     def resolve_facts(searched_facts)
       searched_facts = filter_internal_facts(searched_facts)
 
-      threads = start_threads(searched_facts)
-
-      join_threads(threads, searched_facts)
+      # resolve_parallel(searched_facts)
+      resolve_sequentially(searched_facts)
     end
 
     private
@@ -35,6 +34,24 @@ module Facter
       threads.each do |thread|
         thread.join
         resolved_facts << thread.value
+      end
+
+      resolved_facts.flatten!
+
+      FactAugmenter.augment_resolved_facts(searched_facts, resolved_facts)
+    end
+
+    def resolve_parallel(searched_facts)
+      threads = start_threads(searched_facts)
+      join_threads(threads, searched_facts)
+    end
+
+    def resolve_sequentially(searched_facts)
+      resolved_facts = []
+
+      searched_facts.each do |searched_fact|
+        fact = CoreFact.new(searched_fact)
+        resolved_facts << fact.create
       end
 
       resolved_facts.flatten!
