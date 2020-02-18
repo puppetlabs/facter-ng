@@ -4,10 +4,6 @@ Documentation:
 Metrics/LineLength:
   Max: 120
 
-Metrics/ModuleLength:
-  Exclude:
-    - 'lib/facter-ng.rb'
-
 Metrics/MethodLength:
   Max: 20
   Exclude:
