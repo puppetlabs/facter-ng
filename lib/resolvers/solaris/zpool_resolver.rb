@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'zfs_zpool_parser'
-
 module Facter
   module Resolvers
     module Solaris
@@ -22,9 +20,13 @@ module Facter
           end
 
           def build_zpool_facts
-            feature_numbers, version = ZPoolZFSParser.feature_numbers_and_version(zpool: true)
-            @fact_list[:zpool_featurenumbers] = feature_numbers
-            @fact_list[:zpool_version] = version
+            output, _status = Open3.capture2('zpool upgrade -v')
+            features_list = output.scan(/^\s+(\d+)/).flatten
+
+            return if features_list.empty?
+
+            @fact_list[:zpool_featurenumbers] = features_list.join(', ')
+            @fact_list[:zpool_version] = features_list.last
           end
         end
       end
