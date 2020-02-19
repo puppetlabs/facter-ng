@@ -27,14 +27,16 @@ describe 'SolarisZFS' do
     end
   end
 
-  context 'Resolve zfs fact when zfs command is not found' do
+  context 'Resolve zfs facts when zfs command is not found' do
     let(:output) { 'zfs command not found' }
-    it 'returns nil' do
-      actual_feature_numbers = Facter::Resolvers::Solaris::ZFS.resolve(:zfs_featurenumbers)
-      actual_version = Facter::Resolvers::Solaris::ZFS.resolve(:zfs_featurenumbers)
+    it 'returns nil for zfs version fact' do
+      result = Facter::Resolvers::Solaris::ZFS.resolve(:zfs_version)
+      expect(result).to eq(nil)
+    end
 
-      expect(actual_feature_numbers).to eq(nil)
-      expect(actual_version).to eq(nil)
+    it 'returns nil for zfs featurenumbers fact' do
+      result = Facter::Resolvers::Solaris::ZFS.resolve(:zfs_featurenumbers)
+      expect(result).to eq(nil)
     end
   end
 end
