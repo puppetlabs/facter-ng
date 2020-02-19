@@ -13,9 +13,9 @@ describe 'Solaris ZFS' do
     end
 
     it 'returns zfs_featurenumbers fact' do
-      expected_fact = double(Facter::ResolvedFact, name: 'zfs_featurenumbers', value: '1, 2, 3, 4, 5')
-      allow(Facter::Resolvers::Solaris::ZFS).to receive(:resolve).with(:zfs_featurenumbers).and_return('1, 2, 3, 4, 5')
-      allow(Facter::ResolvedFact).to receive(:new).with('zfs_featurenumbers', '1, 2, 3, 4, 5').and_return(expected_fact)
+      expected_fact = double(Facter::ResolvedFact, name: 'zfs_featurenumbers', value: '1,2,3,4,5')
+      allow(Facter::Resolvers::Solaris::ZFS).to receive(:resolve).with(:zfs_featurenumbers).and_return('1,2,3,4,5')
+      allow(Facter::ResolvedFact).to receive(:new).with('zfs_featurenumbers', '1,2,3,4,5').and_return(expected_fact)
 
       fact = Facter::Solaris::ZFSFeatureNumbers.new
 

@@ -9,12 +9,12 @@ describe 'Solaris ZPool' do
     end
 
     it 'returns zpool_featurenumbers fact' do
-      expected_fact = double(Facter::ResolvedFact, name: 'zpool_featurenumbers', value: '1, 2, 3, 4, 5, 6, 7')
+      expected_fact = double(Facter::ResolvedFact, name: 'zpool_featurenumbers', value: '1,2,3,4,5,6,7')
       allow(Facter::Resolvers::Solaris::ZPool).to receive(:resolve)
         .with('zpool_featurenumbers')
-        .and_return('1, 2, 3, 4, 5, 6, 7')
+        .and_return('1,2,3,4,5,6,7')
       allow(Facter::ResolvedFact).to receive(:new)
-        .with('zpool_feature', '1, 2, 3, 4, 5, 6, 7')
+        .with('zpool_feature', '1,2,3,4,5,6,7')
         .and_return(expected_fact)
     end
   end
