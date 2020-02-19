@@ -20,9 +20,14 @@ module Facter
           end
 
           def build_zfs_facts
-            feature_numbers, version = ZPoolZFSParser.feature_numbers_and_version(zfs: true)
-            @fact_list[:zfs_featurenumbers] = feature_numbers
-            @fact_list[:zfs_version] = version
+            output, _status = Open3.capture2('zfs upgrade -v')
+            features_list = output.scan(/^\s+(\d+)/).flatten
+            if features_list.empty?
+              @fact_list[:zfs_version] = @fact_list[:zfs_featurenumbers] = nil
+            else
+              @fact_list[:zfs_featurenumbers] = features_list.join(', ')
+              @fact_list[:zfs_version] = features_list.last
+            end
           end
         end
       end
