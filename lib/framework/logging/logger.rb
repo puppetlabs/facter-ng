@@ -18,6 +18,7 @@ module Facter
 
     def self.add_legacy_logger(output)
       return if @@legacy_logger
+
       @@legacy_logger = Logger.new(output)
       set_format_for_legacy_logger
       @@logger.add_logger(@@legacy_logger)
