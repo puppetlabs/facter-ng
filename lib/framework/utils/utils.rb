@@ -17,7 +17,8 @@ module Facter
     end
 
     def self.split_user_query(user_query)
-      user_query.split('.')
+      queries = user_query.split('.')
+      queries.map! { |query| query =~ /^[0-9]+$/ ? query.to_i : query }
     end
 
     def self.deep_stringify_keys(object)

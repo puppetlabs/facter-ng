@@ -30,7 +30,7 @@ module Facter
     resolved_facts = Facter::FactManager.instance.resolve_core([user_query])
     fact_collection = FactCollection.new.build_fact_collection!(resolved_facts)
     splitted_user_query = Facter::Utils.split_user_query(user_query)
-    fact_collection = Utils.deep_stringify_keys(fact_collection)
+    #fact_collection = Utils.deep_stringify_keys(fact_collection)
     fact_collection.dig(*splitted_user_query)
   end
 
@@ -138,7 +138,7 @@ module Facter
     CacheManager.invalidate_all_caches
     fact_collection = FactCollection.new.build_fact_collection!(resolved_facts)
     splitted_user_query = Facter::Utils.split_user_query(user_query)
-    fact_collection = Utils.deep_stringify_keys(fact_collection)
+    #fact_collection = Utils.deep_stringify_keys(fact_collection)
     fact_collection.dig(*splitted_user_query)
   end
 

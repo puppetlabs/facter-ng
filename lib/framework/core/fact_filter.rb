@@ -8,7 +8,7 @@ module Facter
     def filter_facts!(searched_facts)
       filter_legacy_facts!(searched_facts)
       searched_facts.each do |fact|
-        fact.value = symbolize_all_keys(fact.value) if fact.value.is_a?(Hash)
+        #fact.value = symbolize_all_keys(fact.value) if fact.value.is_a?(Hash)
         fact.value = if fact.filter_tokens.any? && fact.value.respond_to?(:dig)
                        fact.value.dig(*fact.filter_tokens)
                      else

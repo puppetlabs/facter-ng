@@ -26,7 +26,7 @@ module Facter
         fact_collection = build_fact_collection_for_user_query(user_query, resolved_facts)
         fact_collection = Utils.sort_hash_by_key(fact_collection)
         splitted_user_query = Utils.split_user_query(user_query)
-        fact_collection = Utils.deep_stringify_keys(fact_collection)
+        #fact_collection = Utils.deep_stringify_keys(fact_collection)
         fact_collection.dig(*splitted_user_query)
       end
 
