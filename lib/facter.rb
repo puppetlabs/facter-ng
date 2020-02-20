@@ -9,6 +9,8 @@ require "#{ROOT_DIR}/lib/framework/core/options/options_validator"
 
 module Facter
   @options = Options.instance
+  Log.add_legacy_logger(STDOUT)
+  @logger = Log.new(self)
 
   def self.[](name)
     fact(name)
