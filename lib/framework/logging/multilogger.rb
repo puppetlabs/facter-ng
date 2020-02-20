@@ -9,7 +9,6 @@ module Facter
     # Array of loggers to be logged to. These can be anything that acts reasonably
     # like a Logger.
     attr_reader :loggers
-    @@file_logger = Logger.new(File.new("#{ROOT_DIR}/example.log", 'a'))
 
     # For things like level and progname, retrieve from the first active logging.
     # There's an implicit assumption that these will be the same across all
@@ -68,15 +67,6 @@ module Facter
       loggers.first.level <= ERROR
     end
 
-    def set_format
-      @loggers.each do |logger|
-        logger.formatter = proc do |severity, datetime, _progname, msg|
-          datetime = datetime.strftime(@datetime_format || '%Y-%m-%d %H:%M:%S.%6N ')
-          "[#{datetime}] #{severity} #{msg} \n"
-        end
-      end
-    end
-
     #
     # === Synopsis
     #
@@ -92,9 +82,12 @@ module Facter
     #
     # Create an instance.
     #
-    def initialize
-      legacy_logger = Options[:is_cli] ? Logger.new(STDERR) : Logger.new(STDOUT)
-      @loggers = [@@file_logger, legacy_logger]
+    def initialize(loggers)
+      @loggers = loggers
+    end
+
+    def add_logger(logger)
+      @loggers << logger
     end
 
     # Methods that write to logs just write to each contained logging in turn
