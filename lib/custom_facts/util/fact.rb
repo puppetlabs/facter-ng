@@ -165,7 +165,7 @@ module LegacyFacter
         resolutions.each do |resolve|
           begin
             value = resolve.value
-          rescue Facter::Util::ResolveCustomFactError => _e
+          rescue Facter::ResolveCustomFactError
             break
           end
           @used_resolution_weight = resolve.weight
