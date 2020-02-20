@@ -51,7 +51,7 @@ describe Facter::LegacyFactFormatter do
     nested_fact2.filter_tokens = [3]
 
     nested_fact3.user_query = 'my.nested.fact3.my_nested_fact_value.1.another'
-    nested_fact3.filter_tokens = [:my_nested_fact_value, 1, :another]
+    nested_fact3.filter_tokens = ['my_nested_fact_value', 1, 'another']
 
     nil_resolved_fact1.user_query = 'nil_resolved_fact1'
     nil_resolved_fact1.filter_tokens = []
