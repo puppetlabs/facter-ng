@@ -76,7 +76,8 @@ module LegacyFacter
         nil
       rescue StandardError => e
         LegacyFacter.log_exception(e, "Error while resolving custom fact #{qualified_name}: #{e.message}")
-        exit 1
+        at_exit { exit 1 }
+        raise Facter::Util::ResolveCustomFactError
       end
 
       private
