@@ -5,14 +5,15 @@ describe Logger do
   let(:multi_logger_double) { double(Facter::MultiLogger) }
 
   before do
+    Facter::Log.class_variable_set(:@@file_logger, file_logger_double)
     Facter::Log.class_variable_set(:@@logger, multi_logger_double)
 
-    allow(multi_logger_double).to receive(:set_format)
+    allow(file_logger_double).to receive(:formatter=)
   end
 
   describe '#initialize' do
     it 'sets formatters' do
-      expect(multi_logger_double).to receive(:set_format)
+      expect(file_logger_double).to receive(:formatter=)
 
       Facter::Log.new(Class)
     end

@@ -59,7 +59,7 @@ module Facter
     private
 
     def initialize_options
-      @options = {}
+      @options = { config: @priority_options[:config] }
       augment_with_defaults!
       augment_with_to_hash_defaults! if @priority_options[:to_hash]
       augment_with_config_file_options!(@options[:config])
