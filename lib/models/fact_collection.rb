@@ -8,7 +8,8 @@ module Facter
 
     def build_fact_collection!(facts)
       facts.each do |fact|
-        bury(*fact.name.split('.') + fact.filter_tokens.map(&:to_s) << fact.value) unless fact.value.nil?
+        fact.filter_tokens.map! { |query| query =~ /^[0-9]+$/ ? query.to_i : query.to_s }
+        bury(*fact.name.split('.').map(&:to_s) + fact.filter_tokens << fact.value) unless fact.value.nil?
       end
 
       self

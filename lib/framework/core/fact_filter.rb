@@ -22,7 +22,7 @@ module Facter
     def symbolize_all_keys(hash)
       symbolized_hash = {}
       hash.each do |k, v|
-        k = k =~ /^[0-9]+$/ ? k.to_i : k
+        k = k.to_s =~ /^[0-9]+$/ ? k.to_i : k.to_sym
         symbolized_hash[k] = v.is_a?(Hash) ? symbolize_all_keys(v) : v
       end
       symbolized_hash
