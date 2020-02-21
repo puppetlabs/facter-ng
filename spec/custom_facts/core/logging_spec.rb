@@ -164,7 +164,7 @@ describe LegacyFacter::Core::Logging do
         raise 'unexpected logging level'
       end
       subject.on_message
-      expect(called).to be
+      expect(called).to be true
       true
     end
 

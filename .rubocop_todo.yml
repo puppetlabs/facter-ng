@@ -10,11 +10,6 @@
 RSpec/AnyInstance:
   Enabled: false
 
-# Offense count: 1
-RSpec/Be:
-  Exclude:
-    - 'spec/custom_facts/core/logging_spec.rb'
-
 # Offense count: 79
 # Configuration parameters: Prefixes.
 # Prefixes: when, with, without
