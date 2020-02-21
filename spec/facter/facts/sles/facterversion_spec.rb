@@ -2,9 +2,9 @@
 
 describe 'Sles facterversion' do
   describe '#call_the_resolver' do
-    let(:value) { '4.0.3' }
-
     subject(:fact) { Facter::Sles::Facterversion.new }
+
+    let(:value) { '4.0.3' }
 
     before do
       allow(Facter::Resolvers::Facterversion).to receive(:resolve).with(:facterversion).and_return(value)

@@ -2,9 +2,9 @@
 
 describe 'Windows NetworkingIp' do
   describe '#call_the_resolver' do
-    let(:value) { '0.16.121.255' }
-
     subject(:fact) { Facter::Windows::NetworkingIp.new }
+
+    let(:value) { '0.16.121.255' }
 
     before do
       allow(Facter::Resolvers::Networking).to receive(:resolve).with(:ip).and_return(value)

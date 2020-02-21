@@ -2,9 +2,9 @@
 
 describe 'Windows FipsEnabled' do
   describe '#call_the_resolver' do
-    let(:value) { true }
-
     subject(:fact) { Facter::Windows::FipsEnabled.new }
+
+    let(:value) { true }
 
     before do
       allow(Facter::Resolvers::Windows::Fips).to receive(:resolve).with(:fips_enabled).and_return(value)

@@ -2,9 +2,9 @@
 
 describe 'Windows NetworkingNetmask6' do
   describe '#call_the_resolver' do
-    let(:value) { 'ffff:ffff:ffff:ffff::' }
-
     subject(:fact) { Facter::Windows::NetworkingNetmask6.new }
+
+    let(:value) { 'ffff:ffff:ffff:ffff::' }
 
     before do
       allow(Facter::Resolvers::Networking).to receive(:resolve).with(:netmask6).and_return(value)

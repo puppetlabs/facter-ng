@@ -2,9 +2,9 @@
 
 describe 'Windows OsHardware' do
   describe '#call_the_resolver' do
-    let(:value) { 'x86_64' }
-
     subject(:fact) { Facter::Windows::OsHardware.new }
+
+    let(:value) { 'x86_64' }
 
     before do
       allow(Facter::Resolvers::HardwareArchitecture).to receive(:resolve).with(:hardware).and_return(value)

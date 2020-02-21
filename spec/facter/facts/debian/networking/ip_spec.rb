@@ -2,9 +2,9 @@
 
 describe 'Debian NetworkingIp' do
   describe '#call_the_resolver' do
-    let(:value) { '10.16.122.163' }
-
     subject(:fact) { Facter::Debian::NetworkingIp.new }
+
+    let(:value) { '10.16.122.163' }
 
     before do
       allow(Facter::Resolvers::NetworkingLinux).to receive(:resolve).with(:ip).and_return(value)

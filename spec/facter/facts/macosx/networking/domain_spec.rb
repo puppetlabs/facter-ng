@@ -2,9 +2,9 @@
 
 describe 'Macosx NetworkingDomain' do
   describe '#call_the_resolver' do
-    let(:value) { 'domain' }
-
     subject(:fact) { Facter::Macosx::NetworkingDomain.new }
+
+    let(:value) { 'domain' }
 
     before do
       allow(Facter::Resolvers::Hostname).to receive(:resolve).with(:domain).and_return(value)

@@ -2,9 +2,9 @@
 
 describe 'Solaris OsArchitecture' do
   describe '#call_the_resolver' do
-    let(:value) { 'i86pc' }
-
     subject(:fact) { Facter::Solaris::OsArchitecture.new }
+
+    let(:value) { 'i86pc' }
 
     before do
       allow(Facter::Resolvers::Uname).to receive(:resolve).with(:machine).and_return(value)

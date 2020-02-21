@@ -2,12 +2,12 @@
 
 describe 'Macosx SystemProfilerSecureVirtualMemory' do
   describe '#call_the_resolver' do
+    subject(:fact) { Facter::Macosx::SystemProfilerSecureVirtualMemory.new }
+
     let(:value) { 'Enabled' }
     let(:expected_resolved_fact) do
       double(Facter::ResolvedFact, name: 'system_profiler.secure_virtual_memory', value: value)
     end
-
-    subject(:fact) { Facter::Macosx::SystemProfilerSecureVirtualMemory.new }
 
     before do
       expect(Facter::Resolvers::SystemProfiler).to receive(:resolve).with(:secure_virtual_memory).and_return(value)

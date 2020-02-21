@@ -2,10 +2,10 @@
 
 describe 'Aix LoadAverages' do
   describe '#call_the_resolver' do
+    subject(:fact) { Facter::Aix::LoadAverages.new }
+
     let(:value) { { '1m' => 0.01, '5m' => 0.02, '15m' => 0.03 } }
     let(:expected_resolved_fact) { double(Facter::ResolvedFact, name: 'load_averages', value: value) }
-
-    subject(:fact) { Facter::Aix::LoadAverages.new }
 
     before do
       expect(Facter::Resolvers::Aix::LoadAverages).to receive(:resolve).with(:load_averages).and_return(value)

@@ -2,9 +2,9 @@
 
 describe 'Sles OsName' do
   describe '#call_the_resolver' do
-    let(:value) { 'SLES' }
-
     subject(:fact) { Facter::Sles::OsName.new }
+
+    let(:value) { 'SLES' }
 
     before do
       allow(Facter::Resolvers::OsRelease).to receive(:resolve).with(:name).and_return(value)

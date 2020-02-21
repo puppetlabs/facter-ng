@@ -2,9 +2,9 @@
 
 describe 'Windows MemorySystemAvailable' do
   describe '#call_the_resolver' do
-    let(:value) { '1.00 KiB' }
-
     subject(:fact) { Facter::Windows::MemorySystemAvailable.new }
+
+    let(:value) { '1.00 KiB' }
 
     before do
       allow(Facter::Resolvers::Memory).to receive(:resolve).with(:available_bytes).and_return(1024)

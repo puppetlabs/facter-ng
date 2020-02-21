@@ -65,11 +65,6 @@ RSpec/IteratedExpectation:
     - 'spec/custom_facts/core/aggregate_spec.rb'
     - 'spec/custom_facts/core/suitable_spec.rb'
 
-# Offense count: 134
-# Cop supports --auto-correct.
-RSpec/LeadingSubject:
-  Enabled: false
-
 # Offense count: 16
 RSpec/LeakyConstantDeclaration:
   Exclude:

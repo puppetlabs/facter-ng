@@ -2,10 +2,10 @@
 
 describe 'Debian OsRelease' do
   describe '#call_the_resolver' do
+    subject(:fact) { Facter::Debian::OsRelease.new }
+
     let(:value) { '10.9' }
     let(:value_final) {  { 'full' => '10.9', 'major' => '10', 'minor' => '9' } }
-
-    subject(:fact) { Facter::Debian::OsRelease.new }
 
     before do
       allow(Facter::Resolvers::LsbRelease).to receive(:resolve).with(:release).and_return(value)

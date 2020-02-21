@@ -2,9 +2,9 @@
 
 describe 'Windows RubyVersion' do
   describe '#call_the_resolver' do
-    let(:value) { '2.5.7' }
-
     subject(:fact) { Facter::Windows::RubyVersion.new }
+
+    let(:value) { '2.5.7' }
 
     before do
       allow(Facter::Resolvers::Ruby).to receive(:resolve).with(:version).and_return(value)

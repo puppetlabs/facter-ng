@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 describe 'El disks' do
+  subject(:fact) { Facter::El::Disks.new }
+
   let(:disk) do
     {
       disks: {
@@ -13,8 +15,6 @@ describe 'El disks' do
       }
     }
   end
-
-  subject(:fact) { Facter::El::Disks.new }
 
   describe '#call_the_resolver' do
     before do

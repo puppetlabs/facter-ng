@@ -2,9 +2,9 @@
 
 describe 'AIX OsArchitecture' do
   describe '#call_the_resolver' do
-    let(:value) { 'x86_64' }
-
     subject(:fact) { Facter::Aix::OsArchitecture.new }
+
+    let(:value) { 'x86_64' }
 
     before do
       allow(Facter::Resolvers::Architecture).to receive(:resolve).with(:architecture).and_return(value)

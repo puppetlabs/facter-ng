@@ -2,9 +2,9 @@
 
 describe 'Aix NetworkingPrimary' do
   describe '#call_the_resolver' do
-    let(:value) { 'en0' }
-
     subject(:fact) { Facter::Aix::NetworkingPrimary.new }
+
+    let(:value) { 'en0' }
 
     before do
       allow(Facter::Resolvers::Aix::Networking).to receive(:resolve).with(:primary).and_return(value)

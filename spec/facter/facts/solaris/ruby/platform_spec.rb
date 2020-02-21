@@ -2,9 +2,9 @@
 
 describe 'Solaris RubyPlatform' do
   describe '#call_the_resolver' do
-    let(:value) { 'x86_64-linux' }
-
     subject(:fact) { Facter::Solaris::RubyPlatform.new }
+
+    let(:value) { 'x86_64-linux' }
 
     before do
       allow(Facter::Resolvers::Ruby).to receive(:resolve).with(:platform).and_return(value)

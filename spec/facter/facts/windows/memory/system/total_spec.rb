@@ -2,9 +2,9 @@
 
 describe 'Windows MemorySystemTotal' do
   describe '#call_the_resolver' do
-    let(:value) { '1.00 KiB' }
-
     subject(:fact) { Facter::Windows::MemorySystemTotal.new }
+
+    let(:value) { '1.00 KiB' }
 
     before do
       allow(Facter::Resolvers::Memory).to receive(:resolve).with(:total_bytes).and_return(1024)

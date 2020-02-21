@@ -2,9 +2,9 @@
 
 describe 'AIX OsName' do
   describe '#call_the_resolver' do
-    let(:value) { 'AIX' }
-
     subject(:fact) { Facter::Aix::OsName.new }
+
+    let(:value) { 'AIX' }
 
     before do
       allow(Facter::Resolvers::Uname).to receive(:resolve).with(:kernelname).and_return(value)

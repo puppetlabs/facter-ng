@@ -2,9 +2,9 @@
 
 describe 'Windows Processor' do
   describe '#call_the_resolver' do
-    let(:processor) { ['Intel(R) Xeon(R) Gold 6138 CPU @ 2.00GHz', 'Intel(R) Xeon(R) Gold 6138 CPU @ 2.00GHz'] }
-
     subject(:fact) { Facter::Windows::Processor.new }
+
+    let(:processor) { ['Intel(R) Xeon(R) Gold 6138 CPU @ 2.00GHz', 'Intel(R) Xeon(R) Gold 6138 CPU @ 2.00GHz'] }
 
     before do
       allow(Facter::Resolvers::Processors).to receive(:resolve).with(:models).and_return(processor)

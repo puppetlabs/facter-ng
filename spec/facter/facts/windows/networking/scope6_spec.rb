@@ -2,9 +2,9 @@
 
 describe 'Windows NetworkingScope6' do
   describe '#call_the_resolver' do
-    let(:value) { 'link' }
-
     subject(:fact) { Facter::Windows::NetworkingScope6.new }
+
+    let(:value) { 'link' }
 
     before do
       allow(Facter::Resolvers::Networking).to receive(:resolve).with(:scope6).and_return(value)

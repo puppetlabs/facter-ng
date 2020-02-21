@@ -2,12 +2,12 @@
 
 describe 'DiskResolver' do
   describe '#resolve' do
+    subject(:resolver) { Facter::Resolvers::Linux::Disk }
+
     let(:paths) { { model: '/device/model', size: '/size', vendor: '/device/vendor' } }
     let(:disks) { %w[sr0 sda] }
     let(:size) { '41943040' }
     let(:expected_output) { { 'sda' => { size: size.to_i * 512 }, 'sr0' => { size: size.to_i * 512 } } }
-
-    subject(:resolver) { Facter::Resolvers::Linux::Disk }
 
     before do
       allow(Dir).to receive(:entries).with('/sys/block').and_return(['.', '..', 'sr0', 'sda'])

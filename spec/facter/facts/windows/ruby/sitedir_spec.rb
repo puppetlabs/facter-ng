@@ -2,9 +2,9 @@
 
 describe 'Windows RubySitedir' do
   describe '#call_the_resolver' do
-    let(:value) { 'C:/Program Files/Puppet Labs/Puppet/puppet/lib/ruby/site_ruby/2.5.0' }
-
     subject(:fact) { Facter::Windows::RubySitedir.new }
+
+    let(:value) { 'C:/Program Files/Puppet Labs/Puppet/puppet/lib/ruby/site_ruby/2.5.0' }
 
     before do
       allow(Facter::Resolvers::Ruby).to receive(:resolve).with(:sitedir).and_return(value)

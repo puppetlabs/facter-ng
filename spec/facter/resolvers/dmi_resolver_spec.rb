@@ -2,9 +2,9 @@
 
 describe 'DmiResolver' do
   describe '#resolve' do
-    let(:test_dir) { '/sys/class/dmi' }
-
     subject(:resolver) { Facter::Resolvers::Linux::DmiBios }
+
+    let(:test_dir) { '/sys/class/dmi' }
 
     before do
       allow(File).to receive(:directory?).with(test_dir).and_return(true)

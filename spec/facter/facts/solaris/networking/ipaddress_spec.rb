@@ -2,9 +2,9 @@
 
 describe 'Solaris NetworkingIpaddress' do
   describe '#call_the_resolver' do
-    let(:value) { '10.0.0.1' }
-
     subject(:fact) { Facter::Solaris::NetworkingIpaddress.new }
+
+    let(:value) { '10.0.0.1' }
 
     before do
       allow(Facter::Resolvers::Solaris::Ipaddress).to receive(:resolve).with(:ip).and_return(value)

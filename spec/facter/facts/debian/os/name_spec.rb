@@ -2,9 +2,9 @@
 
 describe 'Debian OsName' do
   describe '#call_the_resolver' do
-    let(:value) { 'Debian' }
-
     subject(:fact) { Facter::Debian::OsName.new }
+
+    let(:value) { 'Debian' }
 
     before do
       allow(Facter::Resolvers::LsbRelease).to receive(:resolve).with(:distributor_id).and_return(value)

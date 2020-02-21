@@ -2,9 +2,9 @@
 
 describe 'Windows OsFamily' do
   describe '#call_the_resolver' do
-    let(:value) { 'windows' }
-
     subject(:fact) { Facter::Windows::OsFamily.new }
+
+    let(:value) { 'windows' }
 
     before do
       allow(Facter::Resolvers::Kernel).to receive(:resolve).with(:kernel).and_return(value)

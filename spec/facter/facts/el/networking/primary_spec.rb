@@ -2,9 +2,9 @@
 
 describe 'El NetworkingPrimary' do
   describe '#call_the_resolver' do
-    let(:value) { 'ens160' }
-
     subject(:fact) { Facter::El::NetworkingPrimary.new }
+
+    let(:value) { 'ens160' }
 
     before do
       allow(Facter::Resolvers::NetworkingLinux).to receive(:resolve).with(:primary_interface).and_return(value)

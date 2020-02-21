@@ -2,9 +2,9 @@
 
 describe 'Windows SystemUptimeUptime' do
   describe '#call_the_resolver' do
-    let(:value) { '9:42 hours' }
-
     subject(:fact) { Facter::Windows::SystemUptimeUptime.new }
+
+    let(:value) { '9:42 hours' }
 
     before do
       allow(Facter::Resolvers::Windows::Uptime).to receive(:resolve).with(:uptime).and_return(value)

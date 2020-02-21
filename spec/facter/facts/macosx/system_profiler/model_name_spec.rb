@@ -2,10 +2,10 @@
 
 describe 'Macosx SystemProfilerModelName' do
   describe '#call_the_resolver' do
+    subject(:fact) { Facter::Macosx::SystemProfilerModelName.new }
+
     let(:value) { 'MacBook Pro' }
     let(:expected_resolved_fact) { double(Facter::ResolvedFact, name: 'system_profiler.model_name', value: value) }
-
-    subject(:fact) { Facter::Macosx::SystemProfilerModelName.new }
 
     before do
       expect(Facter::Resolvers::SystemProfiler).to receive(:resolve).with(:model_name).and_return(value)

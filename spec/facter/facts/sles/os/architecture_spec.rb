@@ -2,9 +2,9 @@
 
 describe 'Sles OsArchitecture' do
   describe '#call_the_resolver' do
-    let(:value) { 'x86_64' }
-
     subject(:fact) { Facter::Sles::OsArchitecture.new }
+
+    let(:value) { 'x86_64' }
 
     before do
       allow(Facter::Resolvers::Uname).to receive(:resolve).with(:machine).and_return(value)

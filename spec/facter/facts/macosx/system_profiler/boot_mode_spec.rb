@@ -2,10 +2,10 @@
 
 describe 'Macosx SystemProfilerBootMode' do
   describe '#call_the_resolver' do
+    subject(:fact) { Facter::Macosx::SystemProfilerBootMode.new }
+
     let(:value) { 'Normal' }
     let(:expected_resolved_fact) { double(Facter::ResolvedFact, name: 'system_profiler.boot_mode', value: value) }
-
-    subject(:fact) { Facter::Macosx::SystemProfilerBootMode.new }
 
     before do
       expect(Facter::Resolvers::SystemProfiler).to receive(:resolve).with(:boot_mode).and_return(value)

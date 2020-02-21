@@ -2,9 +2,9 @@
 
 describe 'Sles OsRelease' do
   describe '#call_the_resolver' do
-    let(:value) { '10.0' }
-
     subject(:fact) { Facter::Sles::OsRelease.new }
+
+    let(:value) { '10.0' }
 
     before do
       allow(Facter::Resolvers::OsRelease).to receive(:resolve).with(:version_id).and_return('10')

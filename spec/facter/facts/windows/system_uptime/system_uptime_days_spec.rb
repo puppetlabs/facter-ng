@@ -2,9 +2,9 @@
 
 describe 'Windows SystemUptimeDays' do
   describe '#call_the_resolver' do
-    let(:value) { '2' }
-
     subject(:fact) { Facter::Windows::SystemUptimeDays.new }
+
+    let(:value) { '2' }
 
     before do
       allow(Facter::Resolvers::Windows::Uptime).to receive(:resolve).with(:days).and_return(value)

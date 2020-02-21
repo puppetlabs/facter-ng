@@ -2,10 +2,10 @@
 
 describe 'Macosx SystemProfilerProcessorSpeed' do
   describe '#call_the_resolver' do
+    subject(:fact) { Facter::Macosx::SystemProfilerProcessorSpeed.new }
+
     let(:value) { '2.8 GHz' }
     let(:expected_resolved_fact) { double(Facter::ResolvedFact, name: 'system_profiler.processor_speed', value: value) }
-
-    subject(:fact) { Facter::Macosx::SystemProfilerProcessorSpeed.new }
 
     before do
       expect(Facter::Resolvers::SystemProfiler).to receive(:resolve).with(:processor_speed).and_return(value)

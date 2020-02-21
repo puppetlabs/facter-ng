@@ -2,9 +2,9 @@
 
 describe 'El OsFamily' do
   describe '#call_the_resolver' do
-    let(:value) { 'RedHat' }
-
     subject(:fact) { Facter::El::OsFamily.new }
+
+    let(:value) { 'RedHat' }
 
     it 'returns os family fact' do
       expect(fact.call_the_resolver).to be_an_instance_of(Array).and \

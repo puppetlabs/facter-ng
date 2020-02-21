@@ -2,9 +2,9 @@
 
 describe 'Windows NetworkingMac' do
   describe '#call_the_resolver' do
-    let(:value) { '00:50:56:9A:7E:98' }
-
     subject(:fact) { Facter::Windows::NetworkingMac.new }
+
+    let(:value) { '00:50:56:9A:7E:98' }
 
     before do
       allow(Facter::Resolvers::Networking).to receive(:resolve).with(:mac).and_return(value)
