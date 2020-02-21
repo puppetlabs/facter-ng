@@ -26,7 +26,7 @@ describe 'Windows IdentityResolver' do
       expect(Facter::Resolvers::Identity.resolve(:user)).to eql('MG93C9IN9WKOITF\Administrator')
     end
     it 'detects that user is administrator' do
-      expect(Facter::Resolvers::Identity.resolve(:privileged)).to eql(true)
+      expect(Facter::Resolvers::Identity.resolve(:privileged)).to be(true)
     end
   end
 
@@ -40,7 +40,7 @@ describe 'Windows IdentityResolver' do
       expect(Facter::Resolvers::Identity.resolve(:user)).to eql('MG93C9IN9WKOITF\User')
     end
     it 'detects that user is not administrator' do
-      expect(Facter::Resolvers::Identity.resolve(:privileged)).to eql(false)
+      expect(Facter::Resolvers::Identity.resolve(:privileged)).to be(false)
     end
   end
 
@@ -54,7 +54,7 @@ describe 'Windows IdentityResolver' do
       expect(Facter::Resolvers::Identity.resolve(:user)).to eql('MG93C9IN9WKOITF\User')
     end
     it 'could not determine if user is admin' do
-      expect(Facter::Resolvers::Identity.resolve(:privileged)).to eql(nil)
+      expect(Facter::Resolvers::Identity.resolve(:privileged)).to be(nil)
     end
   end
 
@@ -67,12 +67,12 @@ describe 'Windows IdentityResolver' do
     it 'logs debug message when trying to resolve user' do
       allow_any_instance_of(Facter::Log).to receive(:debug)
         .with("failure resolving identity facts: #{error_number}")
-      expect(Facter::Resolvers::Identity.resolve(:user)).to eql(nil)
+      expect(Facter::Resolvers::Identity.resolve(:user)).to be(nil)
     end
     it 'logs debug message when trying to find if user is privileged' do
       allow_any_instance_of(Facter::Log).to receive(:debug)
         .with("failure resolving identity facts: #{error_number}")
-      expect(Facter::Resolvers::Identity.resolve(:privileged)).to eql(nil)
+      expect(Facter::Resolvers::Identity.resolve(:privileged)).to be(nil)
     end
   end
 
@@ -85,12 +85,12 @@ describe 'Windows IdentityResolver' do
     it 'logs debug message when trying to resolve user' do
       allow_any_instance_of(Facter::Log).to receive(:debug)
         .with("failure resolving identity facts: #{error_number}")
-      expect(Facter::Resolvers::Identity.resolve(:user)).to eql(nil)
+      expect(Facter::Resolvers::Identity.resolve(:user)).to be(nil)
     end
     it 'logs debug message when trying to find if user is privileged' do
       allow_any_instance_of(Facter::Log).to receive(:debug)
         .with("failure resolving identity facts: #{error_number}")
-      expect(Facter::Resolvers::Identity.resolve(:privileged)).to eql(nil)
+      expect(Facter::Resolvers::Identity.resolve(:privileged)).to be(nil)
     end
   end
 end

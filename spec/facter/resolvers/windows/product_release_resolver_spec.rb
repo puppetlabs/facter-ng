@@ -62,7 +62,7 @@ describe 'Windows ProductReleaseResolver' do
       end
 
       it 'detects installation type as nil' do
-        expect(Facter::Resolvers::ProductRelease.resolve(:installation_type)).to eql(nil)
+        expect(Facter::Resolvers::ProductRelease.resolve(:installation_type)).to be(nil)
       end
 
       it 'detects product name' do

@@ -17,7 +17,7 @@ describe 'Windows NetKVM' do
       let(:reg) { { 'puppet' => 'labs' } }
 
       it 'returns false' do
-        expect(Facter::Resolvers::NetKVM.resolve(:kvm)).to eql(false)
+        expect(Facter::Resolvers::NetKVM.resolve(:kvm)).to be(false)
       end
     end
 
@@ -25,7 +25,7 @@ describe 'Windows NetKVM' do
       let(:reg) { { 'puppet' => 'labs', 'netkvm' => 'info' } }
 
       it 'returns true' do
-        expect(Facter::Resolvers::NetKVM.resolve(:kvm)).to eql(true)
+        expect(Facter::Resolvers::NetKVM.resolve(:kvm)).to be(true)
       end
     end
   end

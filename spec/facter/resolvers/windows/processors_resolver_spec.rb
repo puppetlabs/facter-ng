@@ -22,10 +22,10 @@ describe 'Windows ProcessorsResolver' do
       expect(Facter::Resolvers::Processors.resolve(:isa)).to eql('x86')
     end
     it 'counts proccesors' do
-      expect(Facter::Resolvers::Processors.resolve(:count)).to eql(2)
+      expect(Facter::Resolvers::Processors.resolve(:count)).to be(2)
     end
     it 'counts physical processors' do
-      expect(Facter::Resolvers::Processors.resolve(:physicalcount)).to eql(1)
+      expect(Facter::Resolvers::Processors.resolve(:physicalcount)).to be(1)
     end
   end
 
@@ -42,10 +42,10 @@ describe 'Windows ProcessorsResolver' do
       expect(Facter::Resolvers::Processors.resolve(:isa)).to eql('x86')
     end
     it 'counts proccesors' do
-      expect(Facter::Resolvers::Processors.resolve(:count)).to eql(2)
+      expect(Facter::Resolvers::Processors.resolve(:count)).to be(2)
     end
     it 'counts physical processors' do
-      expect(Facter::Resolvers::Processors.resolve(:physicalcount)).to eql(2)
+      expect(Facter::Resolvers::Processors.resolve(:physicalcount)).to be(2)
     end
   end
 
@@ -55,7 +55,7 @@ describe 'Windows ProcessorsResolver' do
     it 'logs that is unknown architecture' do
       allow_any_instance_of(Facter::Log).to receive(:debug)
         .with('Unable to determine processor type: unknown architecture')
-      expect(Facter::Resolvers::Processors.resolve(:isa)).to eql(nil)
+      expect(Facter::Resolvers::Processors.resolve(:isa)).to be(nil)
     end
   end
 
@@ -66,12 +66,12 @@ describe 'Windows ProcessorsResolver' do
       allow_any_instance_of(Facter::Log).to receive(:debug)
         .with('WMI query returned no results'\
         'for Win32_Processor with values Name, Architecture and NumberOfLogicalProcessors.')
-      expect(Facter::Resolvers::Processors.resolve(:isa)).to eql(nil)
+      expect(Facter::Resolvers::Processors.resolve(:isa)).to be(nil)
     end
     it 'detects that models, count and physicalcount nil' do
-      expect(Facter::Resolvers::Processors.resolve(:models)).to eql(nil)
-      expect(Facter::Resolvers::Processors.resolve(:count)).to eql(nil)
-      expect(Facter::Resolvers::Processors.resolve(:physicalcount)).to eql(nil)
+      expect(Facter::Resolvers::Processors.resolve(:models)).to be(nil)
+      expect(Facter::Resolvers::Processors.resolve(:count)).to be(nil)
+      expect(Facter::Resolvers::Processors.resolve(:physicalcount)).to be(nil)
     end
   end
 
@@ -81,12 +81,12 @@ describe 'Windows ProcessorsResolver' do
     it 'detects that isa is nil' do
       allow_any_instance_of(Facter::Log).to receive(:debug)
         .with('Unable to determine processor type: unknown architecture')
-      expect(Facter::Resolvers::Processors.resolve(:isa)).to eql(nil)
+      expect(Facter::Resolvers::Processors.resolve(:isa)).to be(nil)
     end
     it 'detects that models, count and physicalcount nil' do
       expect(Facter::Resolvers::Processors.resolve(:models)).to eql([nil])
-      expect(Facter::Resolvers::Processors.resolve(:count)).to eql(1)
-      expect(Facter::Resolvers::Processors.resolve(:physicalcount)).to eql(1)
+      expect(Facter::Resolvers::Processors.resolve(:count)).to be(1)
+      expect(Facter::Resolvers::Processors.resolve(:physicalcount)).to be(1)
     end
   end
 end

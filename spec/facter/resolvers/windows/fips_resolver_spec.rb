@@ -17,7 +17,7 @@ describe 'Windows Fips' do
       let(:is_fips) { 255 }
 
       it 'detects that fips is enabled' do
-        expect(Facter::Resolvers::Windows::Fips.resolve(:fips_enabled)).to eql(true)
+        expect(Facter::Resolvers::Windows::Fips.resolve(:fips_enabled)).to be(true)
       end
     end
 
@@ -25,7 +25,7 @@ describe 'Windows Fips' do
       let(:is_fips) { 0 }
 
       it "detects that fips isn't enabled" do
-        expect(Facter::Resolvers::Windows::Fips.resolve(:fips_enabled)).to eql(false)
+        expect(Facter::Resolvers::Windows::Fips.resolve(:fips_enabled)).to be(false)
       end
     end
   end

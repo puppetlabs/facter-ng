@@ -24,14 +24,14 @@ describe 'AIX HardwareResolver' do
     context 'when line does not contain value' do
       let(:result) { 'test = hardware' }
       it 'detects hardware as nil' do
-        expect(Facter::Resolvers::Hardware.resolve(:hardware)).to eql(nil)
+        expect(Facter::Resolvers::Hardware.resolve(:hardware)).to be(nil)
       end
     end
 
     context 'when fails to retrieve fact' do
       let(:result) { nil }
       it 'detects hardware as nil' do
-        expect(Facter::Resolvers::Hardware.resolve(:hardware)).to eql(nil)
+        expect(Facter::Resolvers::Hardware.resolve(:hardware)).to be(nil)
       end
     end
   end

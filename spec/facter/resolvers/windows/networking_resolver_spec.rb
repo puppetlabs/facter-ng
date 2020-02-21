@@ -22,7 +22,7 @@ describe 'Windows Networking Resolver' do
       let(:error_code) { NetworkingFFI::ERROR_NO_DATA }
       it 'logs debug message and returns nil' do
         allow_any_instance_of(Facter::Log).to receive(:debug).with('Unable to retrieve networking facts!')
-        expect(Facter::Resolvers::Networking.resolve(:interfaces)).to eql(nil)
+        expect(Facter::Resolvers::Networking.resolve(:interfaces)).to be(nil)
       end
     end
 
@@ -39,7 +39,7 @@ describe 'Windows Networking Resolver' do
           .and_return(error_code)
       end
       it 'returns nil' do
-        expect(Facter::Resolvers::Networking.resolve(:interfaces)).to eql(nil)
+        expect(Facter::Resolvers::Networking.resolve(:interfaces)).to be(nil)
       end
     end
 
@@ -54,7 +54,7 @@ describe 'Windows Networking Resolver' do
       end
 
       it 'returns nil' do
-        expect(Facter::Resolvers::Networking.resolve(:interfaces)).to eql(nil)
+        expect(Facter::Resolvers::Networking.resolve(:interfaces)).to be(nil)
       end
     end
 
@@ -87,9 +87,9 @@ describe 'Windows Networking Resolver' do
       end
 
       it 'returns nil for mtu and other networking facts as primary interface is nil' do
-        expect(Facter::Resolvers::Networking.resolve(:mtu)).to eql(nil)
-        expect(Facter::Resolvers::Networking.resolve(:dhcp)).to eql(nil)
-        expect(Facter::Resolvers::Networking.resolve(:mac)).to eql(nil)
+        expect(Facter::Resolvers::Networking.resolve(:mtu)).to be(nil)
+        expect(Facter::Resolvers::Networking.resolve(:dhcp)).to be(nil)
+        expect(Facter::Resolvers::Networking.resolve(:mac)).to be(nil)
       end
     end
 

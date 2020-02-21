@@ -166,10 +166,10 @@ describe 'Windows VirtualizationResolver' do
       allow_any_instance_of(Facter::Log).to receive(:debug)
         .with('WMI query returned no results'\
                                       ' for Win32_ComputerSystem with values Manufacturer, Model and OEMStringArray.')
-      expect(Facter::Resolvers::Virtualization.resolve(:virtual)).to eql(nil)
+      expect(Facter::Resolvers::Virtualization.resolve(:virtual)).to be(nil)
     end
     it 'detects that is_virtual nil' do
-      expect(Facter::Resolvers::Virtualization.resolve(:is_virtual)).to eql(nil)
+      expect(Facter::Resolvers::Virtualization.resolve(:is_virtual)).to be(nil)
     end
   end
 

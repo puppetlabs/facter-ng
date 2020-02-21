@@ -15,11 +15,6 @@ RSpec/Be:
   Exclude:
     - 'spec/custom_facts/core/logging_spec.rb'
 
-# Offense count: 119
-# Cop supports --auto-correct.
-RSpec/BeEql:
-  Enabled: false
-
 # Offense count: 415
 # Cop supports --auto-correct.
 RSpec/ContextMethod:

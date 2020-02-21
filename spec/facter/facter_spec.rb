@@ -291,7 +291,7 @@ describe 'Facter' do
 
       it 'logs a debug message' do
         expect_any_instance_of(Facter::Log).to receive(:debug).with(message)
-        expect(Facter.debug(message)).to eql(nil)
+        expect(Facter.debug(message)).to be(nil)
       end
     end
 
@@ -300,7 +300,7 @@ describe 'Facter' do
 
       it "doesn't log anything" do
         expect_any_instance_of(Facter::Log).not_to receive(:debug).with(message)
-        expect(Facter.debug(message)).to eql(nil)
+        expect(Facter.debug(message)).to be(nil)
       end
     end
   end

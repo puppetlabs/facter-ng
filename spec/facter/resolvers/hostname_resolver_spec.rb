@@ -56,7 +56,7 @@ describe 'HostnameResolver' do
       let(:host) { nil }
 
       it 'detects that hostname is nil' do
-        expect(Facter::Resolvers::Hostname.resolve(:hostname)).to eql(nil)
+        expect(Facter::Resolvers::Hostname.resolve(:hostname)).to be(nil)
       end
     end
   end

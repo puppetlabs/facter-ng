@@ -20,7 +20,7 @@ describe 'Windows WinOsDescription' do
         .with('WMI query returned no results for Win32_OperatingSystem'\
                    'with values ProductType and OtherTypeDescription.')
 
-      expect(Facter::Resolvers::WinOsDescription.resolve(:full)).to eql(nil)
+      expect(Facter::Resolvers::WinOsDescription.resolve(:full)).to be(nil)
     end
   end
 
@@ -30,11 +30,11 @@ describe 'Windows WinOsDescription' do
     let(:type) {}
 
     it 'returns consumerrel true' do
-      expect(Facter::Resolvers::WinOsDescription.resolve(:consumerrel)).to eql(true)
+      expect(Facter::Resolvers::WinOsDescription.resolve(:consumerrel)).to be(true)
     end
 
     it 'returns description as nil' do
-      expect(Facter::Resolvers::WinOsDescription.resolve(:description)).to eql(nil)
+      expect(Facter::Resolvers::WinOsDescription.resolve(:description)).to be(nil)
     end
   end
 
@@ -44,7 +44,7 @@ describe 'Windows WinOsDescription' do
     let(:type) { 'description' }
 
     it 'returns consumerrel false' do
-      expect(Facter::Resolvers::WinOsDescription.resolve(:consumerrel)).to eql(false)
+      expect(Facter::Resolvers::WinOsDescription.resolve(:consumerrel)).to be(false)
     end
 
     it 'returns description' do

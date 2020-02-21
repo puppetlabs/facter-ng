@@ -32,10 +32,10 @@ describe 'Windows DMIBiosResolver' do
     it 'logs debug message and serial_number is nil' do
       allow_any_instance_of(Facter::Log).to receive(:debug)
         .with('WMI query returned no results for Win32_BIOS with values Manufacturer and SerialNumber.')
-      expect(Facter::Resolvers::DMIBios.resolve(:serial_number)).to eql(nil)
+      expect(Facter::Resolvers::DMIBios.resolve(:serial_number)).to be(nil)
     end
     it 'detects manufacturer as nil' do
-      expect(Facter::Resolvers::DMIBios.resolve(:manufacturer)).to eql(nil)
+      expect(Facter::Resolvers::DMIBios.resolve(:manufacturer)).to be(nil)
     end
   end
 
@@ -46,10 +46,10 @@ describe 'Windows DMIBiosResolver' do
     end
 
     it 'detects SerialNumber as nil' do
-      expect(Facter::Resolvers::DMIBios.resolve(:serial_number)).to eql(nil)
+      expect(Facter::Resolvers::DMIBios.resolve(:serial_number)).to be(nil)
     end
     it 'detects manufacturer as nil' do
-      expect(Facter::Resolvers::DMIBios.resolve(:manufacturer)).to eql(nil)
+      expect(Facter::Resolvers::DMIBios.resolve(:manufacturer)).to be(nil)
     end
   end
 end

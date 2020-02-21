@@ -22,7 +22,7 @@ describe 'NetworkUtils' do
       let(:address) { FFI::Pointer::NULL }
       let(:error) { 0 }
       it 'returns nil' do
-        expect(NetworkUtils.address_to_string(addr)).to eql(nil)
+        expect(NetworkUtils.address_to_string(addr)).to be(nil)
       end
     end
 
@@ -41,7 +41,7 @@ describe 'NetworkUtils' do
       let(:error) { 1 }
       it 'returns nil and logs debug message' do
         allow_any_instance_of(Facter::Log).to receive(:debug).with('address to string translation failed!')
-        expect(NetworkUtils.address_to_string(addr)).to eql(nil)
+        expect(NetworkUtils.address_to_string(addr)).to be(nil)
       end
     end
   end
@@ -49,37 +49,37 @@ describe 'NetworkUtils' do
   describe '#ignored_ip_address' do
     context 'when input is empty' do
       it 'returns true' do
-        expect(NetworkUtils.ignored_ip_address('')).to eql(true)
+        expect(NetworkUtils.ignored_ip_address('')).to be(true)
       end
     end
 
     context 'when input starts with 127.' do
       it 'returns true' do
-        expect(NetworkUtils.ignored_ip_address('127.255.0.2')).to eql(true)
+        expect(NetworkUtils.ignored_ip_address('127.255.0.2')).to be(true)
       end
     end
 
     context 'when input is a valid ipv4 address' do
       it 'returns false' do
-        expect(NetworkUtils.ignored_ip_address('169.255.0.2')).to eql(false)
+        expect(NetworkUtils.ignored_ip_address('169.255.0.2')).to be(false)
       end
     end
 
     context 'when input starts with fe80' do
       it 'returns true' do
-        expect(NetworkUtils.ignored_ip_address('fe80::')).to eql(true)
+        expect(NetworkUtils.ignored_ip_address('fe80::')).to be(true)
       end
     end
 
     context 'when input equal with ::1' do
       it 'returns true' do
-        expect(NetworkUtils.ignored_ip_address('::1')).to eql(true)
+        expect(NetworkUtils.ignored_ip_address('::1')).to be(true)
       end
     end
 
     context 'when input is a valid ipv6 address' do
       it 'returns false' do
-        expect(NetworkUtils.ignored_ip_address('fe70::7d01:99a1:3900:531b')).to eql(false)
+        expect(NetworkUtils.ignored_ip_address('fe70::7d01:99a1:3900:531b')).to be(false)
       end
     end
   end

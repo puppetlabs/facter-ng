@@ -24,14 +24,14 @@ describe 'AIX ArchitectureResolver' do
     context 'when line does not value' do
       let(:result) { 'test = x86' }
       it 'detects architecture as nil' do
-        expect(Facter::Resolvers::Architecture.resolve(:architecture)).to eql(nil)
+        expect(Facter::Resolvers::Architecture.resolve(:architecture)).to be(nil)
       end
     end
 
     context 'when fails to retrieve fact' do
       let(:result) { nil }
       it 'detects architecture as nil' do
-        expect(Facter::Resolvers::Architecture.resolve(:architecture)).to eql(nil)
+        expect(Facter::Resolvers::Architecture.resolve(:architecture)).to be(nil)
       end
     end
   end
