@@ -58,12 +58,6 @@ RSpec/LeakyConstantDeclaration:
     - 'spec/facter/resolvers/macosx/mountpoints_resolver_spec.rb'
     - 'spec/facter/resolvers/utils/windows/network_utils_spec.rb'
 
-# Offense count: 1
-# Cop supports --auto-correct.
-RSpec/LetBeforeExamples:
-  Exclude:
-    - 'spec/custom_facts/util/parser_spec.rb'
-
 # Offense count: 428
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: have_received, receive

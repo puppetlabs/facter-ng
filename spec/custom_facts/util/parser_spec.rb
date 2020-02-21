@@ -8,6 +8,8 @@ require 'tmpdir'
 describe LegacyFacter::Util::Parser do
   include PuppetlabsSpec::Files
 
+  let(:data) { { 'one' => 'two', 'three' => 'four' } }
+
   describe 'extension_matches? function' do
     it 'matches extensions when subclass uses match_extension' do
       expect(described_class.extension_matches?('myfile.foobar', 'foobar')).to be true
@@ -31,8 +33,6 @@ describe LegacyFacter::Util::Parser do
       expect(described_class.extension_matches?('myfile.exT1', 'EXT1')).to be true
     end
   end
-
-  let(:data) { { 'one' => 'two', 'three' => 'four' } }
 
   describe 'yaml' do
     let(:data_in_yaml) { YAML.dump(data) }
