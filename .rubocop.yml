@@ -129,3 +129,6 @@ Naming/FileName:
 
 RSpec/ExampleLength:
   Enabled: false
+
+RSpec/DescribedClass:
+  EnforcedStyle: explicit

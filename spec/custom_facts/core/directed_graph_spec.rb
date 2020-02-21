@@ -3,7 +3,7 @@
 require_relative '../../spec_helper_legacy'
 
 describe LegacyFacter::Core::DirectedGraph do
-  subject(:graph) { described_class.new }
+  subject(:graph) { LegacyFacter::Core::DirectedGraph.new }
 
   describe 'detecting cycles' do
     it 'is acyclic if the graph is empty' do

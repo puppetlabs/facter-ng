@@ -4,7 +4,7 @@
 require_relative '../../spec_helper_legacy'
 
 describe Facter::Util::Resolution do
-  subject(:resolution) { described_class.new(:foo, stub_fact) }
+  subject(:resolution) { Facter::Util::Resolution.new(:foo, stub_fact) }
 
   let(:stub_fact) { double('fact', name: :stubfact) }
 

@@ -1,7 +1,7 @@
 require_relative '../../spec_helper_legacy'
 
 describe LegacyFacter::Util::Normalization do
-  subject { described_class }
+  subject { LegacyFacter::Util::Normalization }
 
   def utf16(str)
     if String.method_defined?(:encode) && defined?(::Encoding)

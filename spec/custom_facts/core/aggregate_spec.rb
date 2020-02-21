@@ -3,7 +3,7 @@
 require_relative '../../spec_helper_legacy'
 
 describe LegacyFacter::Core::Aggregate do
-  subject { described_class.new('aggregated', fact) }
+  subject { LegacyFacter::Core::Aggregate.new('aggregated', fact) }
 
   let(:fact) { double('stub_fact', name: 'stub_fact') }
 

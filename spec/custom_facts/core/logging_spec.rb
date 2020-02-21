@@ -3,7 +3,7 @@
 require_relative '../../spec_helper_legacy'
 
 describe LegacyFacter::Core::Logging do
-  subject { described_class }
+  subject { LegacyFacter::Core::Logging }
 
   after do
     subject.debugging(false)

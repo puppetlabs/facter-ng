@@ -5,27 +5,27 @@ require_relative '../../spec_helper_legacy'
 
 describe LegacyFacter::Util::Confine do
   it 'requires a fact name' do
-    expect(described_class.new('yay', true).fact).to eq 'yay'
+    expect(LegacyFacter::Util::Confine.new('yay', true).fact).to eq 'yay'
   end
 
   it 'accepts a value specified individually' do
-    expect(described_class.new('yay', 'test').values).to eq ['test']
+    expect(LegacyFacter::Util::Confine.new('yay', 'test').values).to eq ['test']
   end
 
   it 'accepts multiple values specified at once' do
-    expect(described_class.new('yay', 'test', 'other').values).to eq %w[test other]
+    expect(LegacyFacter::Util::Confine.new('yay', 'test', 'other').values).to eq %w[test other]
   end
 
   it 'fails if no fact name is provided' do
-    expect { described_class.new(nil, :test) }.to raise_error(ArgumentError)
+    expect { LegacyFacter::Util::Confine.new(nil, :test) }.to raise_error(ArgumentError)
   end
 
   it 'fails if no values were provided' do
-    expect { described_class.new('yay') }.to raise_error(ArgumentError)
+    expect { LegacyFacter::Util::Confine.new('yay') }.to raise_error(ArgumentError)
   end
 
   it 'has a method for testing whether it matches' do
-    expect(described_class.new('yay', :test)).to respond_to(:true?)
+    expect(LegacyFacter::Util::Confine.new('yay', :test)).to respond_to(:true?)
   end
 
   describe 'when evaluating' do
@@ -42,7 +42,7 @@ describe LegacyFacter::Util::Confine do
     it 'returns false if the fact does not exist' do
       expect(LegacyFacter).to receive(:[]).with('yay').and_return nil
 
-      expect(described_class.new('yay', 'test').true?).to be false
+      expect(LegacyFacter::Util::Confine.new('yay', 'test').true?).to be false
     end
 
     it 'uses the returned fact to get the value' do
@@ -50,7 +50,7 @@ describe LegacyFacter::Util::Confine do
 
       expect(@fact).to receive(:value).and_return nil
 
-      described_class.new('yay', 'test').true?
+      LegacyFacter::Util::Confine.new('yay', 'test').true?
     end
 
     it 'returns false if the fact has no value' do
@@ -123,23 +123,23 @@ describe LegacyFacter::Util::Confine do
 
     it 'accepts and evaluate a block argument against the fact' do
       expect(@fact).to receive(:value).and_return 'foo'
-      confine = described_class.new(:yay) { |f| f === 'foo' }
+      confine = LegacyFacter::Util::Confine.new(:yay) { |f| f === 'foo' }
       expect(confine.true?).to be true
     end
 
     it 'returns false if the block raises a StandardError when checking a fact' do
       allow(@fact).to receive(:value).and_return 'foo'
-      confine = described_class.new(:yay) { |_f| raise StandardError }
+      confine = LegacyFacter::Util::Confine.new(:yay) { |_f| raise StandardError }
       expect(confine.true?).to be false
     end
 
     it 'accepts and evaluate only a block argument' do
-      expect(described_class.new { true }.true?).to be true
-      expect(described_class.new { false }.true?).to be false
+      expect(LegacyFacter::Util::Confine.new { true }.true?).to be true
+      expect(LegacyFacter::Util::Confine.new { false }.true?).to be false
     end
 
     it 'returns false if the block raises a StandardError' do
-      expect(described_class.new { raise StandardError }.true?).to be false
+      expect(LegacyFacter::Util::Confine.new { raise StandardError }.true?).to be false
     end
   end
 end

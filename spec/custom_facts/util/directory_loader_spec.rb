@@ -6,7 +6,7 @@ require_relative '../../spec_helper_legacy'
 describe LegacyFacter::Util::DirectoryLoader do
   include PuppetlabsSpec::Files
 
-  subject { described_class.new(tmpdir('directory_loader')) }
+  subject { LegacyFacter::Util::DirectoryLoader.new(tmpdir('directory_loader')) }
 
   let(:collection) { LegacyFacter::Util::Collection.new(double('internal loader'), subject) }
 
@@ -21,13 +21,13 @@ describe LegacyFacter::Util::DirectoryLoader do
   it 'raises an error when the directory does not exist' do
     missing_dir = 'missing'
     allow(File).to receive(:directory?).with(missing_dir).and_return(false)
-    expect { described_class.loader_for(missing_dir) }
+    expect { LegacyFacter::Util::DirectoryLoader.loader_for(missing_dir) }
       .to raise_error LegacyFacter::Util::DirectoryLoader::NoSuchDirectoryError
   end
 
   it "does nothing bad when dir doesn't exist" do
     fakepath = '/foobar/path'
-    my_loader = described_class.new(fakepath)
+    my_loader = LegacyFacter::Util::DirectoryLoader.new(fakepath)
     expect(FileTest.exists?(my_loader.directory)).to be false
     expect { my_loader.load(collection) }.not_to raise_error
   end
@@ -83,7 +83,7 @@ describe LegacyFacter::Util::DirectoryLoader do
     end
 
     describe 'given a custom weight' do
-      subject { described_class.new(tmpdir('directory_loader'), 10) }
+      subject { LegacyFacter::Util::DirectoryLoader.new(tmpdir('directory_loader'), 10) }
 
       it 'sets that weight for loaded external facts' do
         collection.add('f1', value: 'higher_weight_fact') { has_weight(11) }
