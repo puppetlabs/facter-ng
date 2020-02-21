@@ -39,11 +39,11 @@ describe LegacyFacter::Core::Suitable do
       subject.confine('one', &block)
     end
 
-    it 'should accept a single block parameter' do
+    it 'accepts a single block parameter' do
       subject.confine { true }
     end
 
-    it 'should create a Util::Confine instance for the provided block parameter' do
+    it 'creates a Util::Confine instance for the provided block parameter' do
       block = -> { true }
       expect(LegacyFacter::Util::Confine).to receive :new
 

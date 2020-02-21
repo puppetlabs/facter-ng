@@ -38,7 +38,7 @@ describe 'SolarisOsRelease' do
     let(:output) { 'Oracle Solaris 11 X86' }
     let(:st) { 'exit 0' }
 
-    it 'should return append 0 to minor version if no minor version is in file but regex pattern matches ' do
+    it 'returns append 0 to minor version if no minor version is in file but regex pattern matches' do
       result = Facter::Resolvers::SolarisRelease.resolve(:full)
       expect(result).to eq('11.0')
     end
