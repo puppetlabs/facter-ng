@@ -25,7 +25,7 @@ module Facter
 
             return if features_list.empty?
 
-            @fact_list[:zfs_featurenumbers] = features_list.join(', ')
+            @fact_list[:zfs_featurenumbers] = features_list.join(',')
             @fact_list[:zfs_version] = features_list.last
           end
         end
