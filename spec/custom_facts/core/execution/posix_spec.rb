@@ -34,12 +34,12 @@ describe LegacyFacter::Core::Execution::Posix, unless: LegacyFacter::Util::Confi
 
     context 'and not provided with an absolute path' do
       it 'returns the absolute path if found' do
-        expect(File).to receive(:file?).with('/bin/foo').never
+        expect(File).not_to receive(:file?).with('/bin/foo')
         expect(File).to receive(:executable?).with('/bin/foo').and_return false
         expect(File).to receive(:file?).with('/sbin/foo').and_return true
         expect(File).to receive(:executable?).with('/sbin/foo').and_return true
-        expect(File).to receive(:file?).with('/usr/sbin/foo').never
-        expect(File).to receive(:executable?).with('/usr/sbin/foo').never
+        expect(File).not_to receive(:file?).with('/usr/sbin/foo')
+        expect(File).not_to receive(:executable?).with('/usr/sbin/foo')
         expect(subject.which('foo')).to eq '/sbin/foo'
       end
 

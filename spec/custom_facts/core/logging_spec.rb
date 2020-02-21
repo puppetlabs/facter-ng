@@ -14,7 +14,7 @@ describe LegacyFacter::Core::Logging do
   describe 'emitting debug messages' do
     it "doesn't log a message when debugging is disabled" do
       subject.debugging(false)
-      expect(subject).to receive(:puts).never
+      expect(subject).not_to receive(:puts)
       subject.debug('foo')
     end
 
@@ -190,7 +190,7 @@ describe LegacyFacter::Core::Logging do
 
     it 'does not call puts for debug or debugonce' do
       subject.on_message {}
-      expect(subject).to receive(:puts).never
+      expect(subject).not_to receive(:puts)
       subject.debug('debug message')
       subject.debugonce('debug once message')
     end
@@ -202,7 +202,7 @@ describe LegacyFacter::Core::Logging do
 
     it 'does not call Kernel.warn for warn or warnonce' do
       subject.on_message {}
-      expect(Kernel).to receive(:warn).never
+      expect(Kernel).not_to receive(:warn)
       subject.warn('warn message')
       subject.warnonce('warn once message')
     end
@@ -214,7 +214,7 @@ describe LegacyFacter::Core::Logging do
 
     it 'does not call $stderr.puts for show_time' do
       subject.on_message {}
-      expect($stderr).to receive(:puts).never
+      expect($stderr).not_to receive(:puts)
       subject.show_time('debug message')
     end
 

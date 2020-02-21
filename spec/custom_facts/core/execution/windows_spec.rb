@@ -38,7 +38,7 @@ describe LegacyFacter::Core::Execution::Windows, as_platform: :windows do
       it 'returns the absolute path if found' do
         expect(File).to receive(:executable?).with('C:\Windows\system32\foo.exe').and_return false
         expect(File).to receive(:executable?).with('C:\Windows\foo.exe').and_return true
-        expect(File).to receive(:executable?).with('C:\Windows\System32\Wbem\foo.exe').never
+        expect(File).not_to receive(:executable?).with('C:\Windows\System32\Wbem\foo.exe')
 
         expect(subject.which('foo.exe')).to eq 'C:\Windows\foo.exe'
       end

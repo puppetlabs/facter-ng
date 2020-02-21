@@ -45,7 +45,7 @@ describe LegacyFacter::Util::DirectoryLoader do
 
     it "ignores files that begin with '.'" do
       not_to_be_used_collection = double('collection should not be used')
-      expect(not_to_be_used_collection).to receive(:add).never
+      expect(not_to_be_used_collection).not_to receive(:add)
 
       data = { 'f1' => 'one', 'f2' => 'two' }
       write_to_file('.data.yaml', YAML.dump(data))

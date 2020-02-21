@@ -47,7 +47,7 @@ describe LegacyFacter::Core::Resolvable do
 
   describe 'timing out' do
     it 'uses #limit instead of #timeout to determine the timeout period' do
-      expect(subject).to receive(:timeout).never
+      expect(subject).not_to receive(:timeout)
       expect(subject).to receive(:limit).and_return(25)
       expect(Timeout).to receive(:timeout).with(25)
 

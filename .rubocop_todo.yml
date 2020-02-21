@@ -92,23 +92,6 @@ RSpec/NamedSubject:
 RSpec/NestedGroups:
   Max: 4
 
-# Offense count: 1
-# Cop supports --auto-correct.
-RSpec/ReceiveCounts:
-  Exclude:
-    - 'spec/facter/resolvers/wpar_resolver_spec.rb'
-
-# Offense count: 13
-# Cop supports --auto-correct.
-RSpec/ReceiveNever:
-  Exclude:
-    - 'spec/custom_facts/core/execution/posix_spec.rb'
-    - 'spec/custom_facts/core/execution/windows_spec.rb'
-    - 'spec/custom_facts/core/logging_spec.rb'
-    - 'spec/custom_facts/core/resolvable_spec.rb'
-    - 'spec/custom_facts/util/directory_loader_spec.rb'
-    - 'spec/custom_facts/util/loader_spec.rb'
-
 # Offense count: 7
 RSpec/RepeatedDescription:
   Exclude:

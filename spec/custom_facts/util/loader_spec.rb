@@ -197,8 +197,8 @@ describe LegacyFacter::Util::Loader do
       expect(loader).to receive(:search_path).and_return %w[/one/dir]
       allow(File).to receive(:file?).and_return false
       expect(File).to receive(:file?).with('/one/dir/testing.rb').and_return false
-      expect(File).to receive(:exist?).with('/one/dir/testing').never
-      expect(Kernel).to receive(:load).never
+      expect(File).not_to receive(:exist?).with('/one/dir/testing')
+      expect(Kernel).not_to receive(:load)
 
       loader.load(:testing)
     end
@@ -278,7 +278,7 @@ describe LegacyFacter::Util::Loader do
     loader = loader_from(env: {})
     loader.load_all
 
-    expect(loader).to receive(:kernel_load).with(/ec2/).never
+    expect(loader).not_to receive(:kernel_load).with(/ec2/)
     loader.load(:ec2)
   end
 end
