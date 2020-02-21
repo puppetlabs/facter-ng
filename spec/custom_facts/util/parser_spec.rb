@@ -10,25 +10,25 @@ describe LegacyFacter::Util::Parser do
 
   describe 'extension_matches? function' do
     it 'matches extensions when subclass uses match_extension' do
-      expect(LegacyFacter::Util::Parser.extension_matches?('myfile.foobar', 'foobar')).to be true
+      expect(described_class.extension_matches?('myfile.foobar', 'foobar')).to be true
     end
 
     it 'matches extensions when subclass uses match_extension with an array' do
-      expect(LegacyFacter::Util::Parser.extension_matches?('myfile.ext1', %w[ext1 ext2 ext3])).to be true
-      expect(LegacyFacter::Util::Parser.extension_matches?('myfile.ext2', %w[ext1 ext2 ext3])).to be true
-      expect(LegacyFacter::Util::Parser.extension_matches?('myfile.ext3', %w[ext1 ext2 ext3])).to be true
+      expect(described_class.extension_matches?('myfile.ext1', %w[ext1 ext2 ext3])).to be true
+      expect(described_class.extension_matches?('myfile.ext2', %w[ext1 ext2 ext3])).to be true
+      expect(described_class.extension_matches?('myfile.ext3', %w[ext1 ext2 ext3])).to be true
     end
 
     it 'matches extension ignoring case on file' do
-      expect(LegacyFacter::Util::Parser.extension_matches?('myfile.EXT1', 'ext1')).to be true
-      expect(LegacyFacter::Util::Parser.extension_matches?('myfile.ExT1', 'ext1')).to be true
-      expect(LegacyFacter::Util::Parser.extension_matches?('myfile.exT1', 'ext1')).to be true
+      expect(described_class.extension_matches?('myfile.EXT1', 'ext1')).to be true
+      expect(described_class.extension_matches?('myfile.ExT1', 'ext1')).to be true
+      expect(described_class.extension_matches?('myfile.exT1', 'ext1')).to be true
     end
 
     it 'matches extension ignoring case for match_extension' do
-      expect(LegacyFacter::Util::Parser.extension_matches?('myfile.EXT1', 'EXT1')).to be true
-      expect(LegacyFacter::Util::Parser.extension_matches?('myfile.ExT1', 'EXT1')).to be true
-      expect(LegacyFacter::Util::Parser.extension_matches?('myfile.exT1', 'EXT1')).to be true
+      expect(described_class.extension_matches?('myfile.EXT1', 'EXT1')).to be true
+      expect(described_class.extension_matches?('myfile.ExT1', 'EXT1')).to be true
+      expect(described_class.extension_matches?('myfile.exT1', 'EXT1')).to be true
     end
   end
 
@@ -47,7 +47,7 @@ describe LegacyFacter::Util::Parser do
       # YAML data with an error
       allow(File).to receive(:read).with(data_file).and_return(data_in_yaml + '}')
       allow(LegacyFacter).to receive(:warn).at_least(:one)
-      expect { LegacyFacter::Util::Parser.parser_for(data_file).results }.not_to raise_error
+      expect { described_class.parser_for(data_file).results }.not_to raise_error
     end
   end
 
@@ -58,7 +58,7 @@ describe LegacyFacter::Util::Parser do
     it 'returns a hash of whatever is stored on disk' do
       pending('this test requires the json library') unless LegacyFacter.json?
       allow(File).to receive(:read).with(data_file).and_return(data_in_json)
-      expect(LegacyFacter::Util::Parser.parser_for(data_file).results).to eq data
+      expect(described_class.parser_for(data_file).results).to eq data
     end
   end
 
@@ -68,7 +68,7 @@ describe LegacyFacter::Util::Parser do
     shared_examples_for 'txt parser' do
       it 'returns a hash of whatever is stored on disk' do
         allow(File).to receive(:read).with(data_file).and_return(data_in_txt)
-        expect(LegacyFacter::Util::Parser.parser_for(data_file).results).to eq data
+        expect(described_class.parser_for(data_file).results).to eq data
       end
     end
 
@@ -144,7 +144,7 @@ describe LegacyFacter::Util::Parser do
       it 'returns nothing parser if not on windows' do
         allow(LegacyFacter::Util::Config).to receive(:windows?).and_return(false)
         cmds.each do |cmd|
-          expect(LegacyFacter::Util::Parser.parser_for(cmd))
+          expect(described_class.parser_for(cmd))
             .to be_an_instance_of(LegacyFacter::Util::Parser::NothingParser)
         end
       end
@@ -152,7 +152,7 @@ describe LegacyFacter::Util::Parser do
       it 'returns script parser if on windows' do
         expect(LegacyFacter::Util::Config).to receive(:windows?).and_return(true).at_least(:once)
         cmds.each do |cmd|
-          expect(LegacyFacter::Util::Parser.parser_for(cmd))
+          expect(described_class.parser_for(cmd))
             .to be_an_instance_of(LegacyFacter::Util::Parser::ScriptParser)
         end
       end
@@ -171,7 +171,7 @@ describe LegacyFacter::Util::Parser do
       it 'returns nothing parser if not on windows' do
         allow(LegacyFacter::Util::Config).to receive(:windows?).and_return(false)
         cmds.each do |cmd|
-          expect(LegacyFacter::Util::Parser.parser_for(cmd))
+          expect(described_class.parser_for(cmd))
             .to be_an_instance_of(LegacyFacter::Util::Parser::NothingParser)
         end
       end
@@ -179,7 +179,7 @@ describe LegacyFacter::Util::Parser do
       it 'returns script parser if on windows' do
         allow(LegacyFacter::Util::Config).to receive(:windows?).and_return(true)
         cmds.each do |cmd|
-          expect(LegacyFacter::Util::Parser.parser_for(cmd))
+          expect(described_class.parser_for(cmd))
             .to be_an_instance_of(LegacyFacter::Util::Parser::ScriptParser)
         end
       end
@@ -240,7 +240,7 @@ describe LegacyFacter::Util::Parser do
 
   describe 'nothing parser' do
     it 'uses the nothing parser when there is no other parser' do
-      expect(LegacyFacter::Util::Parser.parser_for('this.is.not.valid').results).to be nil
+      expect(described_class.parser_for('this.is.not.valid').results).to be nil
     end
   end
 end

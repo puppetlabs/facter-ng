@@ -13,19 +13,19 @@ describe LegacyFacter::Util::Loader do
   end
 
   it 'has a method for loading individual facts by name' do
-    expect(LegacyFacter::Util::Loader.new).to respond_to(:load)
+    expect(described_class.new).to respond_to(:load)
   end
 
   it 'has a method for loading all facts' do
-    expect(LegacyFacter::Util::Loader.new).to respond_to(:load_all)
+    expect(described_class.new).to respond_to(:load_all)
   end
 
   it 'has a method for returning directories containing facts' do
-    expect(LegacyFacter::Util::Loader.new).to respond_to(:search_path)
+    expect(described_class.new).to respond_to(:search_path)
   end
 
   describe '#valid_seach_path?' do
-    let(:loader) { LegacyFacter::Util::Loader.new }
+    let(:loader) { described_class.new }
 
     # Used to have test for " " as a directory since that should
     # be a relative directory, but on Windows in both 1.8.7 and
@@ -68,7 +68,7 @@ describe LegacyFacter::Util::Loader do
   end
 
   describe 'when determining the search path' do
-    let(:loader) { LegacyFacter::Util::Loader.new }
+    let(:loader) { described_class.new }
 
     it 'includes the facter subdirectory of all paths in ruby LOAD_PATH' do
       dirs = $LOAD_PATH.collect { |d| File.expand_path('facter', d) }
@@ -138,7 +138,7 @@ describe LegacyFacter::Util::Loader do
 
     describe 'and the FACTERLIB environment variable is set' do
       it 'includes all paths in FACTERLIB' do
-        loader = LegacyFacter::Util::Loader.new('FACTERLIB' => "/one/path#{File::PATH_SEPARATOR}/two/path")
+        loader = described_class.new('FACTERLIB' => "/one/path#{File::PATH_SEPARATOR}/two/path")
 
         allow(File).to receive(:directory?).and_return false
         allow(File).to receive(:directory?).with('/one/path').and_return true
@@ -175,7 +175,7 @@ describe LegacyFacter::Util::Loader do
     end
 
     it 'does not load any ruby files from subdirectories matching the fact name in the search path' do
-      loader = LegacyFacter::Util::Loader.new
+      loader = described_class.new
       allow(File).to receive(:file?).and_return false
       expect(File).to receive(:file?).with('/one/dir/testing.rb').and_return true
       expect(Kernel).to receive(:load).with('/one/dir/testing.rb')
@@ -193,7 +193,7 @@ describe LegacyFacter::Util::Loader do
     end
 
     it "does not load files that don't end in '.rb'" do
-      loader = LegacyFacter::Util::Loader.new
+      loader = described_class.new
       expect(loader).to receive(:search_path).and_return %w[/one/dir]
       allow(File).to receive(:file?).and_return false
       expect(File).to receive(:file?).with('/one/dir/testing.rb').and_return false
@@ -205,7 +205,7 @@ describe LegacyFacter::Util::Loader do
   end
 
   describe 'when loading all facts' do
-    let(:loader) { LegacyFacter::Util::Loader.new }
+    let(:loader) { described_class.new }
 
     before do
       allow(loader).to receive(:search_path).and_return([])

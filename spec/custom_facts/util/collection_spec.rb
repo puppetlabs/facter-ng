@@ -11,7 +11,7 @@ describe LegacyFacter::Util::Collection do
     allow(load).to receive(:load_all).and_return nil
     load
   end
-  let(:collection) { LegacyFacter::Util::Collection.new(internal_loader, external_loader) }
+  let(:collection) { described_class.new(internal_loader, external_loader) }
 
   it 'delegates its load_all method to its loader' do
     expect(internal_loader).to receive(:load_all)
@@ -238,7 +238,7 @@ describe LegacyFacter::Util::Collection do
 
   describe 'external facts' do
     let(:external_loader) { SingleFactLoader.new(:test_fact, 'fact value') }
-    let(:collection) { LegacyFacter::Util::Collection.new(internal_loader, external_loader) }
+    let(:collection) { described_class.new(internal_loader, external_loader) }
 
     it 'loads when a specific fact is requested' do
       expect(collection.fact(:test_fact).value).to eq 'fact value'

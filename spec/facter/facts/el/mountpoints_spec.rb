@@ -2,7 +2,7 @@
 
 describe Facter::El::Mountpoints do
   describe '#call_the_resolver' do
-    subject(:fact) { Facter::El::Mountpoints.new }
+    subject(:fact) { described_class.new }
 
     context 'when resolver returns hash' do
       let(:resolver_output) do
