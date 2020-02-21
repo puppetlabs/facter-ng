@@ -29,7 +29,7 @@ describe LegacyFacter::Util::DirectoryLoader do
     fakepath = '/foobar/path'
     my_loader = described_class.new(fakepath)
     expect(FileTest.exists?(my_loader.directory)).to be false
-    expect { my_loader.load(collection) }.to_not raise_error
+    expect { my_loader.load(collection) }.not_to raise_error
   end
 
   describe 'when loading facts from disk' do

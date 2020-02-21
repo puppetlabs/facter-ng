@@ -24,7 +24,7 @@ describe LegacyFacter::Util::Config do
       host_os = %w[mswin win32 dos mingw cygwin]
       host_os.each do |h|
         allow(RbConfig::CONFIG).to receive(:[]).with('host_os').and_return(h)
-        expect(described_class.windows?).to be_truthy
+        expect(described_class).to be_windows
       end
     end
 
@@ -32,7 +32,7 @@ describe LegacyFacter::Util::Config do
       host_os = %w[darwin linux]
       host_os.each do |h|
         allow(RbConfig::CONFIG).to receive(:[]).with('host_os').and_return(h)
-        expect(described_class.windows?).to be_falsey
+        expect(described_class).not_to be_windows
       end
     end
   end
@@ -42,7 +42,7 @@ describe LegacyFacter::Util::Config do
       host_os = ['darwin']
       host_os.each do |h|
         allow(RbConfig::CONFIG).to receive(:[]).with('host_os').and_return(h)
-        expect(described_class.mac?).to be_truthy
+        expect(described_class).to be_mac
       end
     end
   end

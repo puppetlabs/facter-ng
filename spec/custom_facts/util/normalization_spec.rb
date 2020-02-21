@@ -42,7 +42,7 @@ describe LegacyFacter::Util::Normalization do
         str = 'factvalue'.encode(Encoding::UTF_16LE).freeze
         normalized_str = subject.normalize(str)
         expect(normalized_str.encoding).to eq(Encoding::UTF_8)
-        expect(normalized_str).to_not be_frozen
+        expect(normalized_str).not_to be_frozen
       end
 
       it 'rejects strings that are not UTF-8 and do not match their claimed encoding' do

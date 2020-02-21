@@ -88,14 +88,14 @@ describe LegacyFacter::Core::Suitable do
       subject.confine operatingsystem: 'Redhat'
       expect(subject.confines.first).to receive(:true?).and_return(false)
 
-      expect(subject).to_not be_suitable
+      expect(subject).not_to be_suitable
     end
 
     it 'recalculates suitability on every invocation' do
       subject.confine kernel: 'Linux'
 
       expect(subject.confines.first).to receive(:true?).and_return(false)
-      expect(subject).to_not be_suitable
+      expect(subject).not_to be_suitable
 
       expect(subject.confines.first).to receive(:true?).and_return(true)
       expect(subject).to be_suitable

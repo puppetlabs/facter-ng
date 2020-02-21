@@ -34,7 +34,7 @@ describe LegacyFacter::Core::DirectedGraph do
     it 'is cyclic if there is a loop in the graph' do
       graph[:one] = [:two]
       graph[:two] = [:one]
-      expect(graph).to_not be_acyclic
+      expect(graph).not_to be_acyclic
     end
 
     it 'can return the cycles in the graph' do
