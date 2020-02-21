@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Windows MacaddressInterfaces' do
+describe Facter::Windows::MacaddressInterfaces do
   subject(:fact) { Facter::Windows::MacaddressInterfaces.new }
 
   before do

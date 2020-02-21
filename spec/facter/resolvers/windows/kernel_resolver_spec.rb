@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Windows KernelResolver' do
+describe Facter::Resolvers::Kernel do
   before do
     ver_ptr = double('FFI::MemoryPointer')
     ver = double('OsVersionInfoEx', size: nil)

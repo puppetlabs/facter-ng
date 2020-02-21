@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'AIX HardwareResolver' do
+describe Facter::Resolvers::Hardware do
   describe '#resolve' do
     before do
       odm = double('ODMQuery')

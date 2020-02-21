@@ -21,10 +21,6 @@ RSpec/Be:
 RSpec/ContextWording:
   Enabled: false
 
-# Offense count: 425
-RSpec/DescribeClass:
-  Enabled: false
-
 # Offense count: 82
 RSpec/ExpectInHook:
   Enabled: false

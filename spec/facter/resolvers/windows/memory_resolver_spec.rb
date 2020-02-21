@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Windows MemoryResolver' do
+describe Facter::Resolvers::Memory do
   before do
     state_ptr = double('FFI::MemoryPointer', size: nil)
     state = double('PerformanceInformation', size: nil)

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Macosx SystemProfilerHardwareUuid' do
+describe Facter::Macosx::SystemProfilerHardwareUuid do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Macosx::SystemProfilerHardwareUuid.new }
 

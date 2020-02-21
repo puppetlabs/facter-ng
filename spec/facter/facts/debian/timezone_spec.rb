@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Ubuntu Timezone' do
+describe Facter::Debian::Timezone do
   describe '#call_the_resolver' do
     it 'returns a fact' do
       expected_fact = double(Facter::ResolvedFact, name: 'timezone', value: 'value')

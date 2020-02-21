@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'MemoryResolver' do
+describe Facter::Resolvers::Linux::Memory do
   subject(:resolver) { Facter::Resolvers::Linux::Memory }
 
   before do

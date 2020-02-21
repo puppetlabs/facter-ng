@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'ODMQuery' do
+describe Facter::ODMQuery do
   let(:odm_query) { Facter::ODMQuery.new }
 
   before do

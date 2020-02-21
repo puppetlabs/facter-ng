@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'ZPool' do
+describe Facter::Resolvers::Solaris::ZPool do
   before do
     status = double(Process::Status, to_s: st)
     expect(Open3).to receive(:capture2)

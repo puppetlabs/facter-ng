@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Ubuntu RubyPlatform' do
+describe Facter::Debian::RubyPlatform do
   describe '#call_the_resolver' do
     let(:value) { 'x86_64-linux' }
 

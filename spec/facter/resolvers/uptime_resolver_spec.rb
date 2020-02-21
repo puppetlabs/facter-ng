@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'UptimeResolver' do
+describe Facter::Resolvers::Uptime do
   after { Facter::Resolvers::Uptime.invalidate_cache }
 
   describe 'all uptime stats' do

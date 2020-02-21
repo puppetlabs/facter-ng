@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'DmiResolver' do
+describe Facter::Resolvers::Linux::DmiBios do
   describe '#resolve' do
     subject(:resolver) { Facter::Resolvers::Linux::DmiBios }
 

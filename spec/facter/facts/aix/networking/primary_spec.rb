@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Aix NetworkingPrimary' do
+describe Facter::Aix::NetworkingPrimary do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Aix::NetworkingPrimary.new }
 

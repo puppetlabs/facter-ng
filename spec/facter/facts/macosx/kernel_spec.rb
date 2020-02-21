@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Macosx Kernel' do
+describe Facter::Macosx::Kernel do
   describe '#call_the_resolver' do
     it 'returns a fact' do
       value = 'Darwin'

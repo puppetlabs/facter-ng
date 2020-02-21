@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Macosx SystemProfilerSerialNumber' do
+describe Facter::Macosx::SystemProfilerSerialNumber do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Macosx::SystemProfilerSerialNumber.new }
 

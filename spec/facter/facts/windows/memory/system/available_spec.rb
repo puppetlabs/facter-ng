@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Windows MemorySystemAvailable' do
+describe Facter::Windows::MemorySystemAvailable do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Windows::MemorySystemAvailable.new }
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Macosx SystemProfilerCores' do
+describe Facter::Macosx::SystemProfilerCores do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Macosx::SystemProfilerCores.new }
 

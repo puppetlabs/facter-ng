@@ -2,7 +2,7 @@
 
 require 'ostruct'
 
-describe 'IdentityResolver' do
+describe Facter::Resolvers::PosxIdentity do
   before do
     allow(Etc).to receive(:getpwuid)
       .and_return(OpenStruct.new(name: 'test1.test2',

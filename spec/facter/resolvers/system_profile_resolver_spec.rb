@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Macosx System Profile Resolver' do
+describe Facter::Resolvers::SystemProfiler do
   before do
     allow(Open3).to receive(:capture2)
       .with('system_profiler SPHardwareDataType SPSoftwareDataType')

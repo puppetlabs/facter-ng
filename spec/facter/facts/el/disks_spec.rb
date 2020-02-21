@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'El disks' do
+describe Facter::El::Disks do
   subject(:fact) { Facter::El::Disks.new }
 
   let(:disk) do

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Macosx DmiProductName' do
+describe Facter::Macosx::DmiProductName do
   describe '#call_the_resolver' do
     it 'returns a fact' do
       expected_fact = double(Facter::ResolvedFact, name: 'dmi.product.name', value: 'MacBookPro11,4')

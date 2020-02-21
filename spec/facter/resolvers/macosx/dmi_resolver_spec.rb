@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'DmiResolver' do
+describe Facter::Resolvers::Macosx::DmiBios do
   describe '#resolve' do
     context 'when it detects model' do
       let(:macosx_model) { 'MacBookPro11,4' }

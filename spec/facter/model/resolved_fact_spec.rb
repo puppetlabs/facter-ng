@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'ResolvedFact' do
+describe Facter::ResolvedFact do
   context 'when is a legacy fact' do
     subject(:resolved_fact) { Facter::ResolvedFact.new('fact_name', 'fact_value', :legacy) }
 

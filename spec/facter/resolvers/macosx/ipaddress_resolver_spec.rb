@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'IpaddressResolver' do
+describe Facter::Resolvers::Macosx::Ipaddress do
   describe '#resolve' do
     after do
       Facter::Resolvers::Macosx::Ipaddress.invalidate_cache

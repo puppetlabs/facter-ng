@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'SLES RubyVersion' do
+describe Facter::Sles::RubyVersion do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Sles::RubyVersion.new }
 

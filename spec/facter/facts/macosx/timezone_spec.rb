@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Macosx Timezone' do
+describe Facter::Macosx::Timezone do
   describe '#call_the_resolver' do
     let(:value) { 'EET' }
 

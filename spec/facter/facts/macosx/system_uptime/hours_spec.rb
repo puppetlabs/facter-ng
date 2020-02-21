@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Macosx SystemUptimeHours' do
+describe Facter::Macosx::SystemUptimeHours do
   describe '#call_the_resolver' do
     let(:value) { '2' }
 

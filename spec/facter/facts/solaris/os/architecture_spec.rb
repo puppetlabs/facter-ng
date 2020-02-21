@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Solaris OsArchitecture' do
+describe Facter::Solaris::OsArchitecture do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Solaris::OsArchitecture.new }
 

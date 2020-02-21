@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Macosx ProcessorsSpeed' do
+describe Facter::Macosx::ProcessorsSpeed do
   describe '#call_the_resolver' do
     it 'returns processors fact' do
       value = 1_800_000_000

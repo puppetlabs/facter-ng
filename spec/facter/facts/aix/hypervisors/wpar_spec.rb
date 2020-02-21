@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Aix HypervisorsWpar' do
+describe Facter::Aix::HypervisorsWpar do
   describe '#call_the_resolver' do
     it 'returns a wpar only hypervisor fact' do
       expected_fact_name = 'hypervisors.wpar'

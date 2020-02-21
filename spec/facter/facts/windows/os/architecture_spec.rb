@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Windows OsArchitecture' do
+describe Facter::Windows::OsArchitecture do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Windows::OsArchitecture.new }
 

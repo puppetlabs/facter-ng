@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Macosx ProcessorsModels' do
+describe Facter::Macosx::ProcessorsSpeedModels do
   describe '#call_the_resolver' do
     it 'returns processors fact' do
       expected_fact = double(Facter::ResolvedFact, name: 'processors.models', value: 'value')

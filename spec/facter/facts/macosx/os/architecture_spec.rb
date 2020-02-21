@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Macosx OsArchitecture' do
+describe Facter::Macosx::OsArchitecture do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Macosx::OsArchitecture.new }
 

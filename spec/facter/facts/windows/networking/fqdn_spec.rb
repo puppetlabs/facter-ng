@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Windows NetworkingFqdn' do
+describe Facter::Windows::NetworkingFqdn do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Windows::NetworkingFqdn.new }
 

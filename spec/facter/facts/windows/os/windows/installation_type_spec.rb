@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Windows OsWindowsInstallationType' do
+describe Facter::Windows::OsWindowsInstallationType do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Windows::OsWindowsInstallationType.new }
 

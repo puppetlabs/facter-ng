@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Windows IdentityResolver' do
+describe Facter::Resolvers::Identity do
   before do
     size_ptr = double('FFI::MemoryPointer', read_uint32: 1)
     name_ptr = double('FFI::MemoryPointer', read_wide_string_with_length: user_name)

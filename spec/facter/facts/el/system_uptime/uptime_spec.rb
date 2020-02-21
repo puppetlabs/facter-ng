@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Fedora SystemUptimeUptime' do
+describe Facter::El::SystemUptimeUptime do
   describe '#call_the_resolver' do
     it 'returns a fact' do
       value = '4:27 hours'

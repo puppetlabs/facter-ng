@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Sles OsRelease' do
+describe Facter::Sles::OsRelease do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Sles::OsRelease.new }
 

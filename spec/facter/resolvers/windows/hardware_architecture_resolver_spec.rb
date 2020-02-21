@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Windows HardwareArchitectureResolver' do
+describe Facter::Resolvers::HardwareArchitecture do
   let(:sys_info_ptr) { double('FFI::MemoryPointer') }
   let(:sys_info) { double(SystemInfo) }
   let(:dummyunion) { double(DummyUnionName) }

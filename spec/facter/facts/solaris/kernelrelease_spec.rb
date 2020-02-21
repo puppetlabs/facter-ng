@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Solaris Kernelrelease' do
+describe Facter::Solaris::Kernelrelease do
   describe '#call_the_resolver' do
     it 'returns a fact' do
       expected_fact = double(Facter::ResolvedFact, name: 'kernelrelease', value: '5.11')

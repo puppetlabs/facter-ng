@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Macosx Filesystems' do
+describe Facter::Macosx::Filesystems do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Macosx::Filesystems.new }
 

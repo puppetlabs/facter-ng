@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Windows ProductReleaseResolver' do
+describe Facter::Resolvers::ProductRelease do
   describe '#resolve' do
     context 'when all fields exist in registry' do
       let(:reg) { { 'EditionID' => ed, 'InstallationType' => install, 'ProductName' => prod, 'ReleaseId' => release } }

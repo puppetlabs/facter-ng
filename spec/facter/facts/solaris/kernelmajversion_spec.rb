@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Solaris Kernelmajversion' do
+describe Facter::Solaris::Kernelmajversion do
   after do
     Facter::Resolvers::Uname.invalidate_cache
   end

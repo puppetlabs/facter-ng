@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Ubuntu MemorySwapAvailable' do
+describe Facter::Debian::MemorySwapAvailable do
   describe '#call_the_resolver' do
     let(:value) { '1.00 KiB' }
 

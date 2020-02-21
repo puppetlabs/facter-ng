@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'FilesystemsResolver' do
+describe Facter::Resolvers::Macosx::Filesystems do
   before do
     allow(Open3).to receive(:capture2).with('mount').and_return(load_fixture('macosx_filesystems'))
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Sles OsHardware' do
+describe Facter::Sles::OsHardware do
   describe '#call_the_resolver' do
     it 'returns a fact' do
       expected_fact = double(Facter::ResolvedFact, name: 'os.hardware', value: 'value')

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Macosx SystemProfilerBootMode' do
+describe Facter::Macosx::SystemProfilerBootMode do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Macosx::SystemProfilerBootMode.new }
 

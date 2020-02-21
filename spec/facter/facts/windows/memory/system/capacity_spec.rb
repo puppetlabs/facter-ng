@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Windows MemorySystemCapacity' do
+describe Facter::Windows::MemorySystemCapacity do
   describe '#call_the_resolver' do
     it 'returns a fact' do
       expected_fact = double(Facter::ResolvedFact, name: 'memory.system.capacity', value: 'value')

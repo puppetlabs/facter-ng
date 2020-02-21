@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Fedora DmiBiosVendor' do
+describe Facter::El::DmiBiosVendor do
   describe '#call_the_resolver' do
     it 'returns a fact' do
       value = 'Phoenix Technologies LTD'

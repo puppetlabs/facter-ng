@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Windows NetKVM' do
+describe Facter::Resolvers::NetKVM do
   describe '#resolve' do
     before do
       allow(Win32::Registry::HKEY_LOCAL_MACHINE).to receive(:open)

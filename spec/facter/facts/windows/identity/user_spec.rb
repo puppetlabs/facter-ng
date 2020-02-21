@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Windows IdentityUser' do
+describe Facter::Windows::IdentityUser do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Windows::IdentityUser.new }
 

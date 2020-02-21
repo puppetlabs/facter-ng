@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Sles RubySitedir' do
+describe Facter::Sles::RubySitedir do
   describe '#call_the_resolver' do
     it 'returns a fact' do
       value = '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.5.0'

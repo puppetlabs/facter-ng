@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Macosx IsVirtual' do
+describe Facter::Macosx::IsVirtual do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Macosx::IsVirtual.new }
 

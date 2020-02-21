@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Wpar' do
+describe Facter::Resolvers::Wpar do
   describe '#oslevel 6.1+' do
     before do
       lparstat_w = load_fixture('lparstat_w').read

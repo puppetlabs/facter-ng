@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Fedora Filesystems' do
+describe Facter::El::Filesystems do
   describe '#call_the_resolver' do
     it 'returns a fact' do
       value = 'ext2,ext3,ext4,xfs'

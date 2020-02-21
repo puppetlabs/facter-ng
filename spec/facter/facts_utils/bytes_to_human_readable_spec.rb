@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'BytesToHumanReadable' do
+describe Facter::BytesToHumanReadable do
   describe '.convert' do
     it 'returns nil if bytes variable is nil' do
       expect(Facter::BytesToHumanReadable.convert(nil)).to be(nil)

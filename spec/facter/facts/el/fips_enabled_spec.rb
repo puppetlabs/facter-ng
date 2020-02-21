@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Fedora FipsEnabled' do
+describe Facter::El::FipsEnabled do
   describe '#call_the_resolver' do
     let(:value) { false }
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Sles Kernelmajversion' do
+describe Facter::Sles::Kernelmajversion do
   describe '#call_the_resolver' do
     it 'returns a fact' do
       expected_fact = double(Facter::ResolvedFact, name: 'kernelmajversion', value: '3.12')

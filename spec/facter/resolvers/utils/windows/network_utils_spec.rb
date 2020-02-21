@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'NetworkUtils' do
+describe NetworkUtils do
   describe '#address_to_strig' do
     let(:addr) { double('SocketAddress') }
     let(:size) { double(FFI::MemoryPointer) }

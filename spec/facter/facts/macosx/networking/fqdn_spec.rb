@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Macosx NetworkingFqdn' do
+describe Facter::Macosx::NetworkingFqdn do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Macosx::NetworkingFqdn.new }
 

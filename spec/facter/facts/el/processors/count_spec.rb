@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Fedora ProcessorsCount' do
+describe Facter::El::ProcessorsCount do
   describe '#call_the_resolver' do
     it 'returns a fact' do
       value = '4'

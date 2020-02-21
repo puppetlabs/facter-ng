@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Aix LoadAverages' do
+describe Facter::Aix::LoadAverages do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Aix::LoadAverages.new }
 

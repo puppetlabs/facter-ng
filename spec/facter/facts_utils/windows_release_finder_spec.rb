@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'WindowsReleaseFinder' do
+describe Facter::WindowsReleaseFinder do
   let(:input) { { consumerrel: cons, description: desc, kernel_version: k_version, version: version } }
 
   describe '#find windows release when version nil' do

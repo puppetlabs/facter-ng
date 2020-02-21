@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Solaris RubyPlatform' do
+describe Facter::Solaris::RubyPlatform do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Solaris::RubyPlatform.new }
 

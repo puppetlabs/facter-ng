@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Windows Ipaddress6Interfaces' do
+describe Facter::Windows::Ipaddress6Interfaces do
   subject(:fact) { Facter::Windows::Ipaddress6Interfaces.new }
 
   before do

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Sles NetworkingPrimary' do
+describe Facter::Sles::NetworkingPrimary do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Sles::NetworkingPrimary.new }
 

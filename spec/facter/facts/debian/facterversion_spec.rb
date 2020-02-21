@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Ubuntu Facterversion' do
+describe Facter::Debian::Facterversion do
   describe '#call_the_resolver' do
     let(:value) { '0.0.5' }
 

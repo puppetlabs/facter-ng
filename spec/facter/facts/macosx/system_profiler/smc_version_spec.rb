@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Macosx SystemProfilerSmcVersion' do
+describe Facter::Macosx::SystemProfilerSmcVersion do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Macosx::SystemProfilerSmcVersion.new }
 

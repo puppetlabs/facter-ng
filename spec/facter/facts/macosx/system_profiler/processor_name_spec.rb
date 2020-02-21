@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Macosx SystemProfilerProcessorName' do
+describe Facter::Macosx::SystemProfilerProcessorName do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Macosx::SystemProfilerProcessorName.new }
 

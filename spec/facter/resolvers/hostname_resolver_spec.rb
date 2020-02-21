@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'HostnameResolver' do
+describe Facter::Resolvers::Hostname do
   describe '#resolve' do
     before do
       allow(Open3).to receive(:capture2).with('hostname').and_return(host)

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Macosx RubyVersion' do
+describe Facter::Macosx::RubyVersion do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Macosx::RubyVersion.new }
 

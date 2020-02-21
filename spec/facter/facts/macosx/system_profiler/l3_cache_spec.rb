@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Macosx SystemProfilerL3Cache' do
+describe Facter::Macosx::SystemProfilerL3Cache do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Macosx::SystemProfilerL3Cache.new }
 

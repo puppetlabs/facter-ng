@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Fedora SystemUptimeSeconds' do
+describe Facter::El::SystemUptimeSeconds do
   describe '#call_the_resolver' do
     it 'returns a fact' do
       value = '16059'

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Sles Kernelrelease' do
+describe Facter::Sles::Kernelrelease do
   describe '#call_the_resolver' do
     it 'returns a fact' do
       expected_fact = double(Facter::ResolvedFact, name: 'kernelrelease', value: '3.12.49-11-default')

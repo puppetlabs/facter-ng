@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Debian OsName' do
+describe Facter::Debian::OsName do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Debian::OsName.new }
 

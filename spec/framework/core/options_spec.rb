@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Options' do
+describe Facter::Options do
   before do
     Singleton.__init__(Facter::ConfigReader)
     Singleton.__init__(Facter::BlockList)

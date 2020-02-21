@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Windows OsHardware' do
+describe Facter::Windows::OsHardware do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Windows::OsHardware.new }
 

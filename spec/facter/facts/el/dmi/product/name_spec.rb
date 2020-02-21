@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Fedora DmiProductName' do
+describe Facter::El::DmiProductName do
   describe '#call_the_resolver' do
     it 'returns a fact' do
       value = 'VMware Virtual Platform'

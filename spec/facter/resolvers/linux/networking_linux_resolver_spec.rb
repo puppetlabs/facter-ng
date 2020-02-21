@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Ip' do
+describe Facter::Resolvers::NetworkingLinux do
   describe '#resolve' do
     before do
       allow(Open3).to receive(:capture2)

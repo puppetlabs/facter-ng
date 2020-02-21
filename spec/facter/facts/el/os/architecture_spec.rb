@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Fedora OsArchitecture' do
+describe Facter::El::OsArchitecture do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::El::OsArchitecture.new }
 

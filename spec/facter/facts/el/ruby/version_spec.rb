@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'El RubyVersion' do
+describe Facter::El::RubyVersion do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::El::RubyVersion.new }
 

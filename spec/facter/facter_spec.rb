@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Facter' do
+describe Facter do
   let(:fact_name) { 'os.name' }
   let(:fact_value) { 'ubuntu' }
   let(:os_fact) do

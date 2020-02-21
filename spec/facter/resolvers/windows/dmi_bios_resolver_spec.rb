@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Windows DMIBiosResolver' do
+describe Facter::Resolvers::DMIBios do
   before do
     win = double('Win32Ole')
 

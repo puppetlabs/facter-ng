@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'UnameResolver' do
+describe Facter::Resolvers::Uname do
   before do
     allow(Open3).to receive(:capture2)
       .with('uname -m &&

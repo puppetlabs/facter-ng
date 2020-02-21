@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Fedora RubyPlatform' do
+describe Facter::El::RubyPlatform do
   describe '#call_the_resolver' do
     it 'returns a fact' do
       value = 'x86_64-linux'

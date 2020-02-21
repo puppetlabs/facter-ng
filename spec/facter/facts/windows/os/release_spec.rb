@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Windows OsRelease' do
+describe Facter::Windows::OsRelease do
   subject(:fact) { Facter::Windows::OsRelease.new }
 
   before do

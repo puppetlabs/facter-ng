@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Windows ProcessorsCount' do
+describe Facter::Windows::ProcessorsCount do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Windows::ProcessorsCount.new }
 

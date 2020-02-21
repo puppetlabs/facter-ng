@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Windows SystemUptimeSeconds' do
+describe Facter::Windows::SystemUptimeSeconds do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Windows::SystemUptimeSeconds.new }
 

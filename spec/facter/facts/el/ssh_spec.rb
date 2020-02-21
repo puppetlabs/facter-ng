@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Fedora Ssh' do
+describe Facter::El::Ssh do
   describe '#call_the_resolver' do
     it 'returns a fact' do
       result = []

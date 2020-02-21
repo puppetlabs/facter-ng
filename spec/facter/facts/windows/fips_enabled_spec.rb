@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Windows FipsEnabled' do
+describe Facter::Windows::FipsEnabled do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Windows::FipsEnabled.new }
 

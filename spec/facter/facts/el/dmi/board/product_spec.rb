@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Fedora DmiBoardProduct' do
+describe Facter::El::DmiBoardProduct do
   describe '#call_the_resolver' do
     it 'returns a fact' do
       value = '440BX Desktop Reference Platform'

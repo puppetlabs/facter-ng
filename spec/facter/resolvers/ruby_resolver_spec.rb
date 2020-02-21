@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'RubyResolver' do
+describe Facter::Resolvers::Ruby do
   describe '#resolve ruby facts' do
     it 'detects ruby sitedir' do
       expect(Facter::Resolvers::Ruby.resolve(:sitedir)).to eql(RbConfig::CONFIG['sitelibdir'])

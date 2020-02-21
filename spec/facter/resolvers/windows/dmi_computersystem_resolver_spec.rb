@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Windows DMIComputerSystemResolver' do
+describe Facter::Resolvers::DMIComputerSystem do
   before do
     win = double('Win32Ole')
 

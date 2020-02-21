@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Windows MemorySystemTotal' do
+describe Facter::Windows::MemorySystemTotal do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Windows::MemorySystemTotal.new }
 

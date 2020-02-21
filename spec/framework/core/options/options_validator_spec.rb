@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'OptionsValidator' do
+describe Facter::OptionsValidator do
   describe '#validate' do
     context 'when options are invalid pairs' do
       let(:options) { ['--puppet', '--no-ruby'] }

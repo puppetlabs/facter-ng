@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Macosx SystemProfilerUsername' do
+describe Facter::Macosx::SystemProfilerUsername do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Macosx::SystemProfilerUsername.new }
 

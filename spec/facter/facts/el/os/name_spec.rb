@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'El OsName' do
+describe Facter::El::OsName do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::El::OsName.new }
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'DiskResolver' do
+describe Facter::Resolvers::Linux::Disk do
   describe '#resolve' do
     subject(:resolver) { Facter::Resolvers::Linux::Disk }
 

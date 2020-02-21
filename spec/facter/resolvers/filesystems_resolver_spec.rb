@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'FilesystemsResolver' do
+describe Facter::Resolvers::Linux::Filesystems do
   let(:systems) { 'ext2,ext3,ext4,xfs' }
 
   before do

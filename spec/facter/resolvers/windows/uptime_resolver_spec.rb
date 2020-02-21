@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Windows UptimeResolver' do
+describe Facter::Resolvers::Windows::Uptime do
   before do
     win = double('Win32Ole')
 

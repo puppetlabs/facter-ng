@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'AIX ArchitectureResolver' do
+describe Facter::Resolvers::Architecture do
   describe '#resolve' do
     before do
       odm = double('ODMQuery')

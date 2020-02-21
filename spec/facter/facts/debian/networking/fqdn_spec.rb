@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Debian NetworkingFqdn' do
+describe Facter::Debian::NetworkingFqdn do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Debian::NetworkingFqdn.new }
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'SolarisZoneName' do
+describe Facter::Resolvers::SolarisZone do
   before do
     status = double(Process::Status, to_s: st)
     expect(Open3).to receive(:capture2)

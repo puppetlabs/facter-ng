@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Win32Ole' do
+describe Win32Ole do
   before do
     result = double(WIN32OLE)
     allow(WIN32OLE).to receive(:new).with('WbemScripting.SWbemLocator').and_return(result)

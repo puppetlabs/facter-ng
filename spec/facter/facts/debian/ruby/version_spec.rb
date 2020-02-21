@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Debian RubyVersion' do
+describe Facter::Debian::RubyVersion do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Debian::RubyVersion.new }
 

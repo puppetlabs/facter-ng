@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'IpaddressResolver' do
+describe Facter::Resolvers::Solaris::Ipaddress do
   describe '#resolve' do
     after do
       Facter::Resolvers::Solaris::Ipaddress.invalidate_cache

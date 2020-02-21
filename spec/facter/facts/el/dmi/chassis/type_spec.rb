@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Fedora DmiChassisType' do
+describe Facter::El::DmiChassisType do
   describe '#call_the_resolver' do
     it 'returns a fact' do
       value = 'Low Profile Desktop'

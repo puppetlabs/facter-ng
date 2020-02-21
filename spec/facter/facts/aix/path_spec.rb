@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Aix Path' do
+describe Facter::Aix::Path do
   describe '#call_the_resolver' do
     it 'returns a fact' do
       value = '/usr/bin:/etc:/usr/sbin:/usr/ucb:/usr/bin/X11:/sbin:/usr/java6/jre/bin:/usr/java6/bin'

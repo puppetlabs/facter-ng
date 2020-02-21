@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Aix Kernelversion' do
+describe Facter::Aix::Kernelversion do
   describe '#call_the_resolver' do
     it 'returns a fact' do
       expected_fact = double(Facter::ResolvedFact, name: 'kernelversion', value: '6100')

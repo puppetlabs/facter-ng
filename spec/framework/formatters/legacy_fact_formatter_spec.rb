@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'LegacyFactFormatter' do
+describe Facter::LegacyFactFormatter do
   let(:resolved_fact1) do
     Facter::ResolvedFact.new('resolved_fact1', 'resolved_fact1_value')
   end

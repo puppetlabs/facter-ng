@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Windows IdentityPrivileged' do
+describe Facter::Windows::IdentityPrivileged do
   describe '#call_the_resolver' do
     it 'returns a fact' do
       expected_fact = double(Facter::ResolvedFact, name: 'identity.privileged', value: 'value')

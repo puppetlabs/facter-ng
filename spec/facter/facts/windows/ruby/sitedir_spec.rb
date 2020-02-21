@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Windows RubySitedir' do
+describe Facter::Windows::RubySitedir do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Windows::RubySitedir.new }
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Macosx SystemProfilerBootVolume' do
+describe Facter::Macosx::SystemProfilerBootVolume do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Macosx::SystemProfilerBootVolume.new }
 

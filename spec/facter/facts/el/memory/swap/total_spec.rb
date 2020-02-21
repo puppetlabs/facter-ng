@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Fedora MemorySwapTotal' do
+describe Facter::El::MemorySwapTotal do
   describe '#call_the_resolver' do
     it 'returns a fact' do
       expected_fact = double(Facter::ResolvedFact, name: 'memory.swap.total', value: '1.0 KiB')

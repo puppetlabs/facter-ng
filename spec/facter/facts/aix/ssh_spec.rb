@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Aix Ssh' do
+describe Facter::Aix::Ssh do
   describe '#call_the_resolver' do
     it 'returns a fact' do
       ssh1 = Facter::Ssh.new(Facter::FingerPrint.new('test', 'test'), 'ecdsa', 'test', 'ecdsa')

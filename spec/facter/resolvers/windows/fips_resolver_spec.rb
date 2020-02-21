@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Windows Fips' do
+describe Facter::Resolvers::Windows::Fips do
   describe '#resolve' do
     let(:reg) { { 'Enabled' => is_fips } }
 

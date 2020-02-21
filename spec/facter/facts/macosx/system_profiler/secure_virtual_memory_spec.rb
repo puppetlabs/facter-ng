@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Macosx SystemProfilerSecureVirtualMemory' do
+describe Facter::Macosx::SystemProfilerSecureVirtualMemory do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Macosx::SystemProfilerSecureVirtualMemory.new }
 

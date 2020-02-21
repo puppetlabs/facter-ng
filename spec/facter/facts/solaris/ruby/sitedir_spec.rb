@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Solaris RubySitedir' do
+describe Facter::Solaris::RubySitedir do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Solaris::RubySitedir.new }
 

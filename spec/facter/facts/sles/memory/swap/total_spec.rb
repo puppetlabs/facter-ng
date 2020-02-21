@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Sles MemorySwapTotal' do
+describe Facter::Sles::MemorySwapTotal do
   describe '#call_the_resolver' do
     let(:value) { '1.00 KiB' }
 

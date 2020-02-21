@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Solaris facterversion' do
+describe Facter::Solaris::Facterversion do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Solaris::Facterversion.new }
 

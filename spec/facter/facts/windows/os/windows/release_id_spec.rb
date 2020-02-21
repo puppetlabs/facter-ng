@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Windows OsWindowsReleaseID' do
+describe Facter::Windows::OsWindowsReleaseID do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Windows::OsWindowsReleaseID.new }
 

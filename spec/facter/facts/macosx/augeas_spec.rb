@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Macosx Augeas' do
+describe Facter::Macosx::Augeas do
   describe '#call_the_resolver' do
     it 'returns augeas fact' do
       expected_fact = double(Facter::ResolvedFact, name: 'augeas.version', value: '1.12.0')

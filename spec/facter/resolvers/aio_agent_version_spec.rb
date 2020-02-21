@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'AgentResolver' do
+describe Facter::Resolvers::Agent do
   describe '#resolve' do
     it 'detects puppet version' do
       allow(File).to receive(:read).with("#{ROOT_DIR}/lib/puppet/VERSION").and_return('7.0.1')

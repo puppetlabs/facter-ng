@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'FacterversionResolver' do
+describe Facter::Resolvers::Facterversion do
   describe '#resolve' do
     let(:version) { '4.0.1' }
 

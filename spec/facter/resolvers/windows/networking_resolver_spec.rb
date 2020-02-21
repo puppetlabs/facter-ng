@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Windows Networking Resolver' do
+describe Facter::Resolvers::Networking do
   describe '#resolve' do
     let(:size_ptr) { double(FFI::MemoryPointer) }
     let(:adapter_address) { double(FFI::MemoryPointer) }

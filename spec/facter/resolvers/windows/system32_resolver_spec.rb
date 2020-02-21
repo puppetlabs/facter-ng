@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Windows System32Resolver' do
+describe Facter::Resolvers::System32 do
   before do
     allow(ENV).to receive(:[]).with('SystemRoot').and_return(win_path)
 

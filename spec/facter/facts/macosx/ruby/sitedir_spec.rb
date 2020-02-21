@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Macosx RubySitedir' do
+describe Facter::Macosx::RubySitedir do
   describe '#call_the_resolver' do
     let(:value) { '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.6.3' }
 

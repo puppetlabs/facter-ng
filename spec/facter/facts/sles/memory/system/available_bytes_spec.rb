@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Sles MemorySystemAvailableBytes' do
+describe Facter::Sles::MemorySystemAvailableBytes do
   describe '#call_the_resolver' do
     it 'returns a fact' do
       expected_fact = double(Facter::ResolvedFact, name: 'memory.system.available_bytes', value: 4_900_515_840)

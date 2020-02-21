@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Windows ProcessorsResolver' do
+describe Facter::Resolvers::Processors do
   before do
     win = double('Win32Ole')
 

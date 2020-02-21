@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Macosx LoadAverage' do
+describe Facter::Macosx::LoadAverages do
   describe '#call_the_resolver' do
     it 'returns a fact' do
       expected_fact = double(Facter::ResolvedFact, name: 'load_averages', value: 'value')

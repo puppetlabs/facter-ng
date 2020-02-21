@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Fedora Facterversion' do
+describe Facter::El::Facterversion do
   describe '#call_the_resolver' do
     it 'returns a fact' do
       expected_fact = double(Facter::ResolvedFact, name: 'facterversion', value: '0.0.10')

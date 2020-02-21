@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Windows WinOsDescription' do
+describe Facter::Resolvers::WinOsDescription do
   before do
     win = double('Win32Ole')
 

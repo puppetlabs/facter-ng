@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Aix AugeasVersion' do
+describe Facter::Aix::AugeasVersion do
   describe '#call_the_resolver' do
     it 'returns a fact' do
       expected_fact = double(Facter::ResolvedFact, name: 'augeas.version', value: '1.12.0')

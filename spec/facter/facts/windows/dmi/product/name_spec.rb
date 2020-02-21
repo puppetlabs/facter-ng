@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Windows DmiProductName' do
+describe Facter::Windows::DmiProductName do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Windows::DmiProductName.new }
 

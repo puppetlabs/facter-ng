@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Windows ProcessorsModels' do
+describe Facter::Windows::ProcessorsModels do
   describe '#call_the_resolver' do
     it 'returns a fact' do
       expected_fact = double(Facter::ResolvedFact, name: 'processors.models', value: 'value')

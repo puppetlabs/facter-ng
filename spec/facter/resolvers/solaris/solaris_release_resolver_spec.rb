@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'SolarisOsRelease' do
+describe Facter::Resolvers::SolarisRelease do
   before do
     status = double(Process::Status, to_s: st)
     allow(Open3).to receive(:capture2)

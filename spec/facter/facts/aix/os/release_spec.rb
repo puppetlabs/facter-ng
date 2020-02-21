@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'AIX OsRelease' do
+describe Facter::Aix::OsRelease do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Aix::OsRelease.new }
 

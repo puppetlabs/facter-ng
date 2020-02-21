@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Windows MemorySystemAvailableBytes' do
+describe Facter::Windows::MemorySystemAvailableBytes do
   subject(:fact) { Facter::Windows::MemorySystemAvailableBytes.new }
 
   before do

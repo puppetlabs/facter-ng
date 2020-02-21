@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Solaris Zone' do
+describe Facter::Solaris::Zone do
   describe '#call_the_resolver' do
     # let(:zone_name){"global"}
     it 'returns a fact' do

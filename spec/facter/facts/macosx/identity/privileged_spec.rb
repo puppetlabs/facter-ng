@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Macosx IdentityPrivileged' do
+describe Facter::Macosx::IdentityPrivileged do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Macosx::IdentityPrivileged.new }
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Fedora DmiBiosReleaseDate' do
+describe Facter::El::DmiBiosReleaseDate do
   describe '#call_the_resolver' do
     it 'returns a fact' do
       value = '07/03/2018'

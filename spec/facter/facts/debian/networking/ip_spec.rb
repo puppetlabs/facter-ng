@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Debian NetworkingIp' do
+describe Facter::Debian::NetworkingIp do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Debian::NetworkingIp.new }
 

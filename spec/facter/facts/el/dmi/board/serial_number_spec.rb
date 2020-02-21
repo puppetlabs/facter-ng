@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Fedora DmiBoardSerialNumber' do
+describe Facter::El::DmiBoardSerialNumber do
   describe '#call_the_resolver' do
     it 'returns a fact' do
       value = 'None'

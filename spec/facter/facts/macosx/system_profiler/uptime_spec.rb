@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Macosx SystemProfilerUptime' do
+describe Facter::Macosx::SystemProfilerUptime do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Macosx::SystemProfilerUptime.new }
 

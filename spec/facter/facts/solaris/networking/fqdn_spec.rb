@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Solaris NetworkingFqdn' do
+describe Facter::Solaris::NetworkingFqdn do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Solaris::NetworkingFqdn.new }
 

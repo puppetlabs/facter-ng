@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Solaris ZPool version' do
+describe Facter::Solaris::ZPoolVersion do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Solaris::ZPoolVersion.new }
 

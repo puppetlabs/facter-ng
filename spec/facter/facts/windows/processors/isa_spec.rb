@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Windows ProcessorsIsa' do
+describe Facter::Windows::ProcessorsIsa do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Windows::ProcessorsIsa.new }
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Macosx SystemProfilerKernelVersion' do
+describe Facter::Macosx::SystemProfilerKernelVersion do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Macosx::SystemProfilerKernelVersion.new }
 

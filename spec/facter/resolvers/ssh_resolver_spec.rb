@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'SshResolver' do
+describe Facter::Resolvers::SshResolver do
   describe '#folders' do
     describe 'When /etc folder exists' do
       let(:paths) { %w[/etc/ssh /usr/local/etc/ssh /etc /usr/local/etc /etc/opt/ssh] }

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Windows MtuInterfaces' do
+describe Facter::Windows::MtuInterfaces do
   subject(:fact) { Facter::Windows::MtuInterfaces.new }
 
   before do

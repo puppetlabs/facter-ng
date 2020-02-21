@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Windows VirtualizationResolver' do
+describe Facter::Resolvers::Virtualization do
   before do
     win = double('Win32Ole')
 

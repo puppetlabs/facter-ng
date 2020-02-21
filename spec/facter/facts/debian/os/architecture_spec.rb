@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Ubuntu OsArchitecture' do
+describe Facter::Debian::OsArchitecture do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Debian::OsArchitecture.new }
 

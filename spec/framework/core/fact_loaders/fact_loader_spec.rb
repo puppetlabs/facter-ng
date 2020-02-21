@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'FactLoader' do
+describe Facter::FactLoader do
   describe '#load' do
     let(:internal_fact_loader_double) { double(Facter::InternalFactLoader) }
     let(:external_fact_loader_double) { double(Facter::ExternalFactLoader) }

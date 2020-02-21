@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Fedora Timezone' do
+describe Facter::El::Timezone do
   describe '#call_the_resolver' do
     it 'returns a fact' do
       value = 'EEST'

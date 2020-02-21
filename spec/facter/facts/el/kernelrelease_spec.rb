@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Fedora Kernelrelease' do
+describe Facter::El::Kernelrelease do
   describe '#call_the_resolver' do
     it 'returns a fact' do
       value = '4.19.2-300.fc29.x86_64'

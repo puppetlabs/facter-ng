@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Ubuntu SystemUptimeUptime' do
+describe Facter::Debian::SystemUptimeUptime do
   describe '#call_the_resolver' do
     let(:value) { { uptime: '6 days' } }
 

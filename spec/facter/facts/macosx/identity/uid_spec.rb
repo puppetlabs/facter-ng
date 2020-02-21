@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Macosx IdentityUid' do
+describe Facter::Macosx::IdentityUid do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Macosx::IdentityUid.new }
 

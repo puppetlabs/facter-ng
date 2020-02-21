@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Sles MemorySwapAvailableBytes' do
+describe Facter::Sles::MemorySwapAvailableBytes do
   describe '#call_the_resolver' do
     it 'returns a fact' do
       expected_fact = double(Facter::ResolvedFact, name: 'memory.swap.available_bytes', value: 1024)
