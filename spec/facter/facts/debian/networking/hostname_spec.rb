@@ -3,6 +3,7 @@
 describe 'Debian NetworkingHostname' do
   describe '#call_the_resolver' do
     let(:value) { 'host' }
+
     subject(:fact) { Facter::Debian::NetworkingHostname.new }
 
     before do

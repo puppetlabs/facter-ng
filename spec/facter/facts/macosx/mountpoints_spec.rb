@@ -35,6 +35,7 @@ describe Facter::Macosx::Mountpoints do
         allow(Facter::Resolvers::Macosx::Mountpoints).to \
           receive(:resolve).with(:mountpoints).and_return(resolver_output)
       end
+
       it 'calls Facter::Resolvers::Macosx::Mountpoints' do
         expect(Facter::Resolvers::Macosx::Mountpoints).to receive(:resolve).with(:mountpoints)
         fact.call_the_resolver

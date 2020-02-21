@@ -3,6 +3,7 @@
 describe 'Debian NetworkingDomain' do
   describe '#call_the_resolver' do
     let(:value) { 'domain' }
+
     subject(:fact) { Facter::Debian::NetworkingDomain.new }
 
     before do

@@ -3,6 +3,7 @@
 describe 'Windows NetworkingMac' do
   describe '#call_the_resolver' do
     let(:value) { '00:50:56:9A:7E:98' }
+
     subject(:fact) { Facter::Windows::NetworkingMac.new }
 
     before do

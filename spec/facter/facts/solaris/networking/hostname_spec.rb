@@ -3,6 +3,7 @@
 describe 'Solaris NetworkingHostname' do
   describe '#call_the_resolver' do
     let(:value) { 'host' }
+
     subject(:fact) { Facter::Solaris::NetworkingHostname.new }
 
     before do

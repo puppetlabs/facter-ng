@@ -6,7 +6,9 @@ describe 'DiskResolver' do
     let(:disks) { %w[sr0 sda] }
     let(:size) { '41943040' }
     let(:expected_output) { { 'sda' => { size: size.to_i * 512 }, 'sr0' => { size: size.to_i * 512 } } }
+
     subject(:resolver) { Facter::Resolvers::Linux::Disk }
+
     before do
       allow(Dir).to receive(:entries).with('/sys/block').and_return(['.', '..', 'sr0', 'sda'])
       allow(File).to receive(:exist?).with('/sys/block/sr0/size').and_return(true)
@@ -18,6 +20,7 @@ describe 'DiskResolver' do
       end
       allow(File).to receive(:read).and_return(size)
     end
+
     after do
       Facter::Resolvers::Linux::Disk.invalidate_cache
     end

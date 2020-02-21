@@ -3,6 +3,7 @@
 describe 'Windows OsWindowsReleaseID' do
   describe '#call_the_resolver' do
     let(:value) { '1607' }
+
     subject(:fact) { Facter::Windows::OsWindowsReleaseID.new }
 
     before do

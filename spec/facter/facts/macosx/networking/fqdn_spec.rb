@@ -3,6 +3,7 @@
 describe 'Macosx NetworkingFqdn' do
   describe '#call_the_resolver' do
     let(:value) { 'host.domain' }
+
     subject(:fact) { Facter::Macosx::NetworkingFqdn.new }
 
     before do

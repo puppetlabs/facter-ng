@@ -3,6 +3,7 @@
 describe 'Solaris OsFamily' do
   describe '#call_the_resolver' do
     let(:value) { 'Solaris' }
+
     subject(:fact) { Facter::Solaris::OsFamily.new }
 
     it 'returns os family fact' do

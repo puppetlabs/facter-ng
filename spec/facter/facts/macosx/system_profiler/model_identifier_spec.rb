@@ -6,6 +6,7 @@ describe 'Macosx SystemProfilerModelIdentifier' do
     let(:expected_resolved_fact) do
       double(Facter::ResolvedFact, name: 'system_profiler.model_identifier', value: value)
     end
+
     subject(:fact) { Facter::Macosx::SystemProfilerModelIdentifier.new }
 
     before do

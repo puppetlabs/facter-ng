@@ -9,6 +9,7 @@ describe 'Windows NetKVM' do
       allow(reg).to receive(:keys?)
       allow(reg).to receive(:close)
     end
+
     after do
       Facter::Resolvers::NetKVM.invalidate_cache
     end

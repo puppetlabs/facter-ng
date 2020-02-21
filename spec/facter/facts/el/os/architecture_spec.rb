@@ -3,6 +3,7 @@
 describe 'Fedora OsArchitecture' do
   describe '#call_the_resolver' do
     let(:value) { 'x86_64' }
+
     subject(:fact) { Facter::El::OsArchitecture.new }
 
     before do

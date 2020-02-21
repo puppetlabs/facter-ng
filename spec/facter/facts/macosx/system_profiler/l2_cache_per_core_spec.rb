@@ -6,6 +6,7 @@ describe 'Macosx SystemProfilerL2CachePerCore' do
     let(:expected_resolved_fact) do
       double(Facter::ResolvedFact, name: 'system_profiler.l2_cache_per_core', value: value)
     end
+
     subject(:fact) { Facter::Macosx::SystemProfilerL2CachePerCore.new }
 
     before do

@@ -13,6 +13,7 @@ describe 'ProcessorResolver' do
       .with('/proc/cpuinfo')
       .and_return(load_fixture('cpuinfo').read)
   end
+
   it 'returns number of processors' do
     result = Facter::Resolvers::Linux::Processors.resolve(:processors)
 

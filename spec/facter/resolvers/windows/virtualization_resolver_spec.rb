@@ -13,6 +13,7 @@ describe 'Windows VirtualizationResolver' do
     after do
       Facter::Resolvers::Virtualization.invalidate_cache
     end
+
     let(:comp) do
       [double('WIN32OLE', Model: model, Manufacturer: manufacturer, OEMStringArray: vbox_version),
        double('WIN32OLE', Model: model, Manufacturer: manufacturer, OEMStringArray: vbox_revision)]
@@ -25,6 +26,7 @@ describe 'Windows VirtualizationResolver' do
     it 'detects virtual machine model' do
       expect(Facter::Resolvers::Virtualization.resolve(:virtual)).to eql('virtualbox')
     end
+
     it 'detects that is virtual' do
       expect(Facter::Resolvers::Virtualization.resolve(:is_virtual)).to eql('true')
     end
@@ -38,6 +40,7 @@ describe 'Windows VirtualizationResolver' do
     after do
       Facter::Resolvers::Virtualization.invalidate_cache
     end
+
     let(:comp) { [double('WIN32OLE', Model: model, Manufacturer: manufacturer, OEMStringArray: '')] }
     let(:model) { 'VMware' }
     let(:manufacturer) {}
@@ -45,6 +48,7 @@ describe 'Windows VirtualizationResolver' do
     it 'detects virtual machine model' do
       expect(Facter::Resolvers::Virtualization.resolve(:virtual)).to eql('vmware')
     end
+
     it 'detects that is virtual' do
       expect(Facter::Resolvers::Virtualization.resolve(:is_virtual)).to eql('true')
     end
@@ -54,6 +58,7 @@ describe 'Windows VirtualizationResolver' do
     after do
       Facter::Resolvers::Virtualization.invalidate_cache
     end
+
     let(:comp) { [double('WIN32OLE', Model: model, Manufacturer: manufacturer, OEMStringArray: '')] }
     let(:model) { 'KVM10' }
     let(:manufacturer) {}
@@ -61,6 +66,7 @@ describe 'Windows VirtualizationResolver' do
     it 'detects virtual machine model' do
       expect(Facter::Resolvers::Virtualization.resolve(:virtual)).to eql('kvm')
     end
+
     it 'detects that is virtual' do
       expect(Facter::Resolvers::Virtualization.resolve(:is_virtual)).to eql('true')
     end
@@ -70,6 +76,7 @@ describe 'Windows VirtualizationResolver' do
     after do
       Facter::Resolvers::Virtualization.invalidate_cache
     end
+
     let(:comp) { [double('WIN32OLE', Model: model, Manufacturer: manufacturer, OEMStringArray: '')] }
     let(:model) { 'OpenStack' }
     let(:manufacturer) {}
@@ -77,6 +84,7 @@ describe 'Windows VirtualizationResolver' do
     it 'detects virtual machine model' do
       expect(Facter::Resolvers::Virtualization.resolve(:virtual)).to eql('openstack')
     end
+
     it 'detects that is virtual' do
       expect(Facter::Resolvers::Virtualization.resolve(:is_virtual)).to eql('true')
     end
@@ -86,6 +94,7 @@ describe 'Windows VirtualizationResolver' do
     after do
       Facter::Resolvers::Virtualization.invalidate_cache
     end
+
     let(:comp) { [double('WIN32OLE', Model: model, Manufacturer: manufacturer, OEMStringArray: '')] }
     let(:model) { 'Virtual Machine' }
     let(:manufacturer) { 'Microsoft' }
@@ -93,6 +102,7 @@ describe 'Windows VirtualizationResolver' do
     it 'detects virtual machine model' do
       expect(Facter::Resolvers::Virtualization.resolve(:virtual)).to eql('hyperv')
     end
+
     it 'detects that is virtual' do
       expect(Facter::Resolvers::Virtualization.resolve(:is_virtual)).to eql('true')
     end
@@ -102,6 +112,7 @@ describe 'Windows VirtualizationResolver' do
     after do
       Facter::Resolvers::Virtualization.invalidate_cache
     end
+
     let(:comp) { [double('WIN32OLE', Model: model, Manufacturer: manufacturer, OEMStringArray: '')] }
     let(:model) { '' }
     let(:manufacturer) { 'Xen' }
@@ -109,6 +120,7 @@ describe 'Windows VirtualizationResolver' do
     it 'detects virtual machine model' do
       expect(Facter::Resolvers::Virtualization.resolve(:virtual)).to eql('xen')
     end
+
     it 'detects that is virtual' do
       expect(Facter::Resolvers::Virtualization.resolve(:is_virtual)).to eql('true')
     end
@@ -118,6 +130,7 @@ describe 'Windows VirtualizationResolver' do
     after do
       Facter::Resolvers::Virtualization.invalidate_cache
     end
+
     let(:comp) { [double('WIN32OLE', Model: model, Manufacturer: manufacturer, OEMStringArray: '')] }
     let(:model) { '' }
     let(:manufacturer) { 'Amazon EC2' }
@@ -125,6 +138,7 @@ describe 'Windows VirtualizationResolver' do
     it 'detects virtual machine model' do
       expect(Facter::Resolvers::Virtualization.resolve(:virtual)).to eql('kvm')
     end
+
     it 'detects that is virtual' do
       expect(Facter::Resolvers::Virtualization.resolve(:is_virtual)).to eql('true')
     end
@@ -138,6 +152,7 @@ describe 'Windows VirtualizationResolver' do
     it 'detects virtual machine model' do
       expect(Facter::Resolvers::Virtualization.resolve(:virtual)).to eql('physical')
     end
+
     it 'detects that is not virtual' do
       expect(Facter::Resolvers::Virtualization.resolve(:is_virtual)).to eql('false')
     end
@@ -151,6 +166,7 @@ describe 'Windows VirtualizationResolver' do
     it 'detects virtual machine model' do
       expect(Facter::Resolvers::Virtualization.resolve(:virtual)).to eql('physical')
     end
+
     it 'detects that is virtual' do
       expect(Facter::Resolvers::Virtualization.resolve(:is_virtual)).to eql('false')
     end
@@ -160,6 +176,7 @@ describe 'Windows VirtualizationResolver' do
     before do
       Facter::Resolvers::Virtualization.invalidate_cache
     end
+
     let(:comp) { nil }
 
     it 'logs that query failed and virtual nil' do
@@ -168,6 +185,7 @@ describe 'Windows VirtualizationResolver' do
                                       ' for Win32_ComputerSystem with values Manufacturer, Model and OEMStringArray.')
       expect(Facter::Resolvers::Virtualization.resolve(:virtual)).to be(nil)
     end
+
     it 'detects that is_virtual nil' do
       expect(Facter::Resolvers::Virtualization.resolve(:is_virtual)).to be(nil)
     end
@@ -177,11 +195,13 @@ describe 'Windows VirtualizationResolver' do
     before do
       Facter::Resolvers::Virtualization.invalidate_cache
     end
+
     let(:comp) { [double('WIN32OLE', Model: nil, Manufacturer: nil, OEMStringArray: '')] }
 
     it 'detects that is physical' do
       expect(Facter::Resolvers::Virtualization.resolve(:virtual)).to eql('physical')
     end
+
     it 'detects that is_virtual is false' do
       expect(Facter::Resolvers::Virtualization.resolve(:is_virtual)).to eql('false')
     end

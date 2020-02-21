@@ -3,6 +3,7 @@
 describe 'Solaris NetworkingDomain' do
   describe '#call_the_resolver' do
     let(:value) { 'domain' }
+
     subject(:fact) { Facter::Solaris::NetworkingDomain.new }
 
     before do

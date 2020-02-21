@@ -30,9 +30,11 @@ describe Facter::El::Mountpoints do
                  used: '348.97 GiB',
                  used_bytes: 374_704_357_376 } }
       end
+
       before do
         allow(Facter::Resolvers::Linux::Mountpoints).to receive(:resolve).with(:mountpoints).and_return(resolver_output)
       end
+
       it 'calls Facter::Resolvers::Linux::Mountpoints' do
         expect(Facter::Resolvers::Linux::Mountpoints).to receive(:resolve).with(:mountpoints)
         fact.call_the_resolver

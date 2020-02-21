@@ -8,13 +8,16 @@ describe 'ZPool' do
       .ordered
       .and_return([output, status])
   end
+
   after do
     Facter::Resolvers::Solaris::ZPool.invalidate_cache
   end
+
   let(:st) { 'exit 0' }
 
   context 'Resolve ZPool facts' do
     let(:output) { load_fixture('zpool').read }
+
     it 'return zpool version fact' do
       result = Facter::Resolvers::Solaris::ZPool.resolve(:zpool_version)
       expect(result).to eq('34')
@@ -29,6 +32,7 @@ describe 'ZPool' do
 
   context 'Resolve ZPool facts if zpool command is not found' do
     let(:output) { 'zpool command not found' }
+
     it 'returns nil for zpool version fact' do
       result = Facter::Resolvers::Solaris::ZPool.resolve(:zpool_version)
       expect(result).to eq(nil)

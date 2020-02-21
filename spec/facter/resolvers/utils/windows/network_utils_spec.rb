@@ -21,6 +21,7 @@ describe 'NetworkUtils' do
     context 'when lpSockaddr is null' do
       let(:address) { FFI::Pointer::NULL }
       let(:error) { 0 }
+
       it 'returns nil' do
         expect(NetworkUtils.address_to_string(addr)).to be(nil)
       end
@@ -29,8 +30,10 @@ describe 'NetworkUtils' do
     context 'when error code is zero' do
       let(:address) { double(FFI::MemoryPointer) }
       let(:error) { 0 }
+
       before do
       end
+
       it 'returns an address' do
         expect(NetworkUtils.address_to_string(addr)).to eql('10.123.0.2')
       end
@@ -39,6 +42,7 @@ describe 'NetworkUtils' do
     context 'when error code is not zero' do
       let(:address) { double(FFI::MemoryPointer) }
       let(:error) { 1 }
+
       it 'returns nil and logs debug message' do
         allow_any_instance_of(Facter::Log).to receive(:debug).with('address to string translation failed!')
         expect(NetworkUtils.address_to_string(addr)).to be(nil)
@@ -89,6 +93,7 @@ describe 'NetworkUtils' do
       let(:netmask) { IPAddr.new('255.255.240.0/255.255.240.0') }
       let(:network) { IPAddr.new('10.16.112.0/255.255.240.0') }
       let(:addr) { '10.16.121.248' }
+
       it 'returns ipv4 binding' do
         expect(NetworkUtils.build_binding(addr, 20)).to eql(address: addr, netmask: netmask, network: network)
       end
@@ -98,6 +103,7 @@ describe 'NetworkUtils' do
       let(:network) { IPAddr.new('fe80:0000:0000:0000:0000:0000:0000:0000/ffff:ffff:ffff:ffff:0000:0000:0000:0000') }
       let(:netmask) { IPAddr.new('ffff:ffff:ffff:ffff:0000:0000:0000:0000/ffff:ffff:ffff:ffff:0000:0000:0000:0000') }
       let(:addr) { 'fe80::dc20:a2b9:5253:9b46' }
+
       it 'returns ipv6 binding' do
         expect(NetworkUtils.build_binding(addr, 64)).to eql(address: addr, netmask: netmask, network: network)
       end
@@ -108,6 +114,7 @@ describe 'NetworkUtils' do
     context 'when address is ipv6' do
       let(:addr) { 'fe80::38bf:8f11:6227:9e6b%6' }
       let(:input) { double(FFI::Pointer) }
+
       before do
         allow(input).to receive(:read_wide_string_without_length).and_return(addr)
       end
@@ -124,6 +131,7 @@ describe 'NetworkUtils' do
         Ps = Struct.new(:PhysicalAddress, :PhysicalAddressLength)
         Ps.new([0, 80, 86, 154, 248, 107, 0, 0], 6)
       end
+
       it 'returns mac address' do
         expect(NetworkUtils.find_mac_address(adapter)).to eql('00:50:56:9A:F8:6B')
       end

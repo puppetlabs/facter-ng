@@ -3,6 +3,7 @@
 describe 'El NetworkingDomain' do
   describe '#call_the_resolver' do
     let(:value) { 'domain' }
+
     subject(:fact) { Facter::El::NetworkingDomain.new }
 
     before do

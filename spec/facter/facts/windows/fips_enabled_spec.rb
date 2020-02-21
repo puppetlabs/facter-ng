@@ -3,6 +3,7 @@
 describe 'Windows FipsEnabled' do
   describe '#call_the_resolver' do
     let(:value) { true }
+
     subject(:fact) { Facter::Windows::FipsEnabled.new }
 
     before do

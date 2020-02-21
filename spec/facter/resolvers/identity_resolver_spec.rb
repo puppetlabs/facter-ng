@@ -26,6 +26,7 @@ describe 'IdentityResolver' do
 
   shared_examples_for 'a resolved fact' do |fact_name, value|
     subject { Facter::Resolvers::PosxIdentity.resolve(fact_name) }
+
     it { is_expected.to eql(value) }
   end
 

@@ -8,12 +8,15 @@ describe 'SolarisZone' do
       .ordered
       .and_return([output, status])
   end
+
   after do
     Facter::Resolvers::SolarisZone.invalidate_cache
   end
+
   context 'Resolve zone facts' do
     let(:output) { '0:global:running:/::solaris:shared:-:none:' }
     let(:st) { 'exit 0' }
+
     it 'returns zone fact' do
       hash_fact = [{ brand: 'solaris',
                      id: '0',

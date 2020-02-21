@@ -4,6 +4,7 @@ describe 'Macosx IdentityUser' do
   describe '#call_the_resolver' do
     let(:value) { 'testUser' }
     let(:expected_resolved_fact) { double(Facter::ResolvedFact, name: 'identity.user', value: value) }
+
     subject(:fact) { Facter::Macosx::IdentityUser.new }
 
     before do

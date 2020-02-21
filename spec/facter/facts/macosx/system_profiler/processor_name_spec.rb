@@ -4,6 +4,7 @@ describe 'Macosx SystemProfilerProcessorName' do
   describe '#call_the_resolver' do
     let(:value) { 'Intel Core i7' }
     let(:expected_resolved_fact) { double(Facter::ResolvedFact, name: 'system_profiler.processor_name', value: value) }
+
     subject(:fact) { Facter::Macosx::SystemProfilerProcessorName.new }
 
     before do

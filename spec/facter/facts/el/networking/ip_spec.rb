@@ -3,6 +3,7 @@
 describe 'El NetworkingIp' do
   describe '#call_the_resolver' do
     let(:value) { '10.16.122.163' }
+
     subject(:fact) { Facter::El::NetworkingIp.new }
 
     before do

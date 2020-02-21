@@ -3,6 +3,7 @@
 describe 'Windows SystemUptimeSeconds' do
   describe '#call_the_resolver' do
     let(:value) { '34974' }
+
     subject(:fact) { Facter::Windows::SystemUptimeSeconds.new }
 
     before do

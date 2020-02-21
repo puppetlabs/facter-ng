@@ -3,6 +3,7 @@
 describe 'El NetworkingPrimary' do
   describe '#call_the_resolver' do
     let(:value) { 'ens160' }
+
     subject(:fact) { Facter::El::NetworkingPrimary.new }
 
     before do

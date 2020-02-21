@@ -3,6 +3,7 @@
 describe 'Windows OsWindowsProductName' do
   describe '#call_the_resolver' do
     let(:value) { 'Windows Server 2016 Standard' }
+
     subject(:fact) { Facter::Windows::OsWindowsProductName.new }
 
     before do

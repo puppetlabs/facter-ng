@@ -3,6 +3,7 @@
 describe 'Macosx NetworkingDomain' do
   describe '#call_the_resolver' do
     let(:value) { 'domain' }
+
     subject(:fact) { Facter::Macosx::NetworkingDomain.new }
 
     before do

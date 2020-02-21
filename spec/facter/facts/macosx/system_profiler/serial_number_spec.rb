@@ -4,6 +4,7 @@ describe 'Macosx SystemProfilerSerialNumber' do
   describe '#call_the_resolver' do
     let(:value) { 'C02WW1LAG8WL' }
     let(:expected_resolved_fact) { double(Facter::ResolvedFact, name: 'system_profiler.serial_number', value: value) }
+
     subject(:fact) { Facter::Macosx::SystemProfilerSerialNumber.new }
 
     before do

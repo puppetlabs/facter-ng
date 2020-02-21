@@ -14,6 +14,7 @@ describe 'Windows HardwareArchitectureResolver' do
     allow(dummyunion).to receive(:[]).with(:dummystructname).and_return(dummystruct)
     allow(dummystruct).to receive(:[]).with(:wProcessorArchitecture).and_return(arch)
   end
+
   after do
     Facter::Resolvers::HardwareArchitecture.invalidate_cache
   end
@@ -24,6 +25,7 @@ describe 'Windows HardwareArchitectureResolver' do
     it 'detects hardware' do
       expect(Facter::Resolvers::HardwareArchitecture.resolve(:hardware)).to eql('x86_64')
     end
+
     it 'detects architecture' do
       expect(Facter::Resolvers::HardwareArchitecture.resolve(:architecture)).to eql('x64')
     end
@@ -35,6 +37,7 @@ describe 'Windows HardwareArchitectureResolver' do
     it 'detects hardware' do
       expect(Facter::Resolvers::HardwareArchitecture.resolve(:hardware)).to eql('arm')
     end
+
     it 'detects architecture' do
       expect(Facter::Resolvers::HardwareArchitecture.resolve(:architecture)).to eql('arm')
     end
@@ -46,6 +49,7 @@ describe 'Windows HardwareArchitectureResolver' do
     it 'detects hardware' do
       expect(Facter::Resolvers::HardwareArchitecture.resolve(:hardware)).to eql('ia64')
     end
+
     it 'detects architecture' do
       expect(Facter::Resolvers::HardwareArchitecture.resolve(:architecture)).to eql('ia64')
     end
@@ -55,12 +59,14 @@ describe 'Windows HardwareArchitectureResolver' do
     before do
       allow(sys_info).to receive(:[]).with(:wProcessorLevel).and_return(level)
     end
+
     let(:arch) { HardwareFFI::PROCESSOR_ARCHITECTURE_INTEL }
     let(:level) { 4 }
 
     it 'detects hardware' do
       expect(Facter::Resolvers::HardwareArchitecture.resolve(:hardware)).to eql("i#{level}86")
     end
+
     it 'detects architecture' do
       expect(Facter::Resolvers::HardwareArchitecture.resolve(:architecture)).to eql('x86')
     end
@@ -70,12 +76,14 @@ describe 'Windows HardwareArchitectureResolver' do
     before do
       allow(sys_info).to receive(:[]).with(:wProcessorLevel).and_return(level)
     end
+
     let(:arch) { HardwareFFI::PROCESSOR_ARCHITECTURE_INTEL }
     let(:level) { 8 }
 
     it 'detects hardware' do
       expect(Facter::Resolvers::HardwareArchitecture.resolve(:hardware)).to eql('i686')
     end
+
     it 'detects architecture' do
       expect(Facter::Resolvers::HardwareArchitecture.resolve(:architecture)).to eql('x86')
     end
@@ -87,6 +95,7 @@ describe 'Windows HardwareArchitectureResolver' do
     it 'detects hardware' do
       expect(Facter::Resolvers::HardwareArchitecture.resolve(:hardware)).to eql('unknown')
     end
+
     it 'detects architecture' do
       expect(Facter::Resolvers::HardwareArchitecture.resolve(:architecture)).to eql('unknown')
     end

@@ -120,11 +120,13 @@ describe 'Macosx System Profile Resolver' do
 
     expect(result).to eq('macOS 10.15.2 (19C57)')
   end
+
   it 'returns time_since_boot' do
     result = Facter::Resolvers::SystemProfiler.resolve(:time_since_boot)
 
     expect(result).to eq('3:28')
   end
+
   it 'returns username' do
     result = Facter::Resolvers::SystemProfiler.resolve(:user_name)
 

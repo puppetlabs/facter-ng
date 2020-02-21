@@ -5,6 +5,7 @@ describe 'FacterversionResolver' do
     let(:version) { '4.0.1' }
 
     before { allow(File).to receive(:read).with("#{ROOT_DIR}/VERSION").and_return(version) }
+
     after { Facter::Resolvers::Facterversion.invalidate_cache }
 
     it 'detects facter version' do

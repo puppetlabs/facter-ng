@@ -4,6 +4,7 @@ describe 'Macosx Filesystems' do
   describe '#call_the_resolver' do
     let(:value) { 'apfs,autofs,devfs' }
     let(:expected_resolved_fact) { double(Facter::ResolvedFact, name: 'filesystems', value: value) }
+
     subject(:fact) { Facter::Macosx::Filesystems.new }
 
     before do

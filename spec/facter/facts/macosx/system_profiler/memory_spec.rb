@@ -4,6 +4,7 @@ describe 'Macosx SystemProfilerMemory' do
   describe '#call_the_resolver' do
     let(:value) { '16 GB' }
     let(:expected_resolved_fact) { double(Facter::ResolvedFact, name: 'system_profiler.memory', value: value) }
+
     subject(:fact) { Facter::Macosx::SystemProfilerMemory.new }
 
     before do

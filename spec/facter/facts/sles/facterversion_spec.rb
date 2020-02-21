@@ -3,6 +3,7 @@
 describe 'Sles facterversion' do
   describe '#call_the_resolver' do
     let(:value) { '4.0.3' }
+
     subject(:fact) { Facter::Sles::Facterversion.new }
 
     before do

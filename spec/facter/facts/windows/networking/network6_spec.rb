@@ -3,6 +3,7 @@
 describe 'Windows NetworkingNetwork6' do
   describe '#call_the_resolver' do
     let(:value) { 'fe80::' }
+
     subject(:fact) { Facter::Windows::NetworkingNetwork6.new }
 
     before do

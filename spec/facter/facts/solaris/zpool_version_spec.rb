@@ -3,6 +3,7 @@
 describe 'Solaris ZPool version' do
   describe '#call_the_resolver' do
     subject(:fact) { Facter::Solaris::ZPoolVersion.new }
+
     let(:version) { '5' }
 
     before do

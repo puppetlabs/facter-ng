@@ -14,9 +14,11 @@ describe 'Windows ProductReleaseResolver' do
         allow(reg).to receive(:[]).with('ReleaseId').and_return(release)
         allow(reg).to receive(:close)
       end
+
       after do
         Facter::Resolvers::ProductRelease.invalidate_cache
       end
+
       let(:ed) { 'ServerStandard' }
       let(:install) { 'Server' }
       let(:prod) { 'Windows Server 2019 Standard' }
@@ -50,9 +52,11 @@ describe 'Windows ProductReleaseResolver' do
         allow(reg).to receive(:[]).with('ReleaseId').and_return(release)
         allow(reg).to receive(:close)
       end
+
       after do
         Facter::Resolvers::ProductRelease.invalidate_cache
       end
+
       let(:ed) { 'ServerStandard' }
       let(:prod) { 'Windows Server 2019 Standard' }
       let(:release) { '1809' }

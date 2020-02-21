@@ -4,6 +4,7 @@ describe 'Macosx IdentityGroup' do
   describe '#call_the_resolver' do
     let(:value) { 'staff' }
     let(:expected_resolved_fact) { double(Facter::ResolvedFact, name: 'identity.group', value: value) }
+
     subject(:fact) { Facter::Macosx::IdentityGroup.new }
 
     before do

@@ -4,6 +4,7 @@ describe 'Macosx SystemProfilerKernelVersion' do
   describe '#call_the_resolver' do
     let(:value) { 'Darwin 18.7.0' }
     let(:expected_resolved_fact) { double(Facter::ResolvedFact, name: 'system_profiler.kernel_version', value: value) }
+
     subject(:fact) { Facter::Macosx::SystemProfilerKernelVersion.new }
 
     before do

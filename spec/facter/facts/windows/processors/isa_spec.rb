@@ -3,6 +3,7 @@
 describe 'Windows ProcessorsIsa' do
   describe '#call_the_resolver' do
     let(:value) { 'x86_64' }
+
     subject(:fact) { Facter::Windows::ProcessorsIsa.new }
 
     before do

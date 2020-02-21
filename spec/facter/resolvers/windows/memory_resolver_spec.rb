@@ -14,6 +14,7 @@ describe 'Windows MemoryResolver' do
     allow(state).to receive(:[]).with(:PageSize).and_return(page_size)
     allow(state).to receive(:[]).with(:PhysicalAvailable).and_return(available)
   end
+
   after do
     Facter::Resolvers::Memory.invalidate_cache
   end
@@ -27,12 +28,15 @@ describe 'Windows MemoryResolver' do
     it 'detects total bytes' do
       expect(Facter::Resolvers::Memory.resolve(:total_bytes)).to be(4_293_890_048)
     end
+
     it 'detects available bytes' do
       expect(Facter::Resolvers::Memory.resolve(:available_bytes)).to be(3_375_230_976)
     end
+
     it 'determines used bytes' do
       expect(Facter::Resolvers::Memory.resolve(:used_bytes)).to be(918_659_072)
     end
+
     it 'determines capacity' do
       expect(Facter::Resolvers::Memory.resolve(:capacity)).to eql('21.39%')
     end
@@ -49,12 +53,15 @@ describe 'Windows MemoryResolver' do
         .with('Available or Total bytes are zero could not proceed further')
       expect(Facter::Resolvers::Memory.resolve(:total_bytes)).to be(nil)
     end
+
     it 'detects available bytes as nil' do
       expect(Facter::Resolvers::Memory.resolve(:available_bytes)).to be(nil)
     end
+
     it 'determines used bytes as nil' do
       expect(Facter::Resolvers::Memory.resolve(:used_bytes)).to be(nil)
     end
+
     it 'determines capacity as nil' do
       expect(Facter::Resolvers::Memory.resolve(:capacity)).to be(nil)
     end
@@ -71,12 +78,15 @@ describe 'Windows MemoryResolver' do
         .with('Available or Total bytes are zero could not proceed further')
       expect(Facter::Resolvers::Memory.resolve(:total_bytes)).to be(nil)
     end
+
     it 'detects available bytes as nil' do
       expect(Facter::Resolvers::Memory.resolve(:available_bytes)).to be(nil)
     end
+
     it 'determines used bytes as nil' do
       expect(Facter::Resolvers::Memory.resolve(:used_bytes)).to be(nil)
     end
+
     it 'determines capacity as nil' do
       expect(Facter::Resolvers::Memory.resolve(:capacity)).to be(nil)
     end
@@ -93,12 +103,15 @@ describe 'Windows MemoryResolver' do
         .with('Available or Total bytes are zero could not proceed further')
       expect(Facter::Resolvers::Memory.resolve(:total_bytes)).to be(nil)
     end
+
     it 'detects available bytes as nil' do
       expect(Facter::Resolvers::Memory.resolve(:available_bytes)).to be(nil)
     end
+
     it 'determines used bytes as nil' do
       expect(Facter::Resolvers::Memory.resolve(:used_bytes)).to be(nil)
     end
+
     it 'determines capacity as nil' do
       expect(Facter::Resolvers::Memory.resolve(:capacity)).to be(nil)
     end
@@ -114,12 +127,15 @@ describe 'Windows MemoryResolver' do
       allow_any_instance_of(Facter::Log).to receive(:debug).with('Resolving memory facts failed')
       expect(Facter::Resolvers::Memory.resolve(:total_bytes)).to be(nil)
     end
+
     it 'detects available bytes as nil' do
       expect(Facter::Resolvers::Memory.resolve(:available_bytes)).to be(nil)
     end
+
     it 'determines used bytes as nil' do
       expect(Facter::Resolvers::Memory.resolve(:used_bytes)).to be(nil)
     end
+
     it 'determines capacity as nil' do
       expect(Facter::Resolvers::Memory.resolve(:capacity)).to be(nil)
     end

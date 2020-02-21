@@ -3,6 +3,7 @@
 describe 'El OsRelease' do
   describe '#call_the_resolver' do
     let(:value) { '10.9' }
+
     subject(:fact) { Facter::El::OsRelease.new }
 
     before do

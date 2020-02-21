@@ -7,6 +7,7 @@ describe LegacyFacter::Util::DirectoryLoader do
   include PuppetlabsSpec::Files
 
   subject { LegacyFacter::Util::DirectoryLoader.new(tmpdir('directory_loader')) }
+
   let(:collection) { LegacyFacter::Util::Collection.new(double('internal loader'), subject) }
 
   it 'should make the directory available' do

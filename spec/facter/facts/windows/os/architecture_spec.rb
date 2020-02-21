@@ -3,6 +3,7 @@
 describe 'Windows OsArchitecture' do
   describe '#call_the_resolver' do
     let(:value) { 'x64' }
+
     subject(:fact) { Facter::Windows::OsArchitecture.new }
 
     before do

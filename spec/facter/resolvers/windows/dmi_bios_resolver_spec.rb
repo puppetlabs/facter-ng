@@ -7,6 +7,7 @@ describe 'Windows DMIBiosResolver' do
     allow(Win32Ole).to receive(:new).and_return(win)
     allow(win).to receive(:return_first).with('SELECT Manufacturer,SerialNumber from Win32_BIOS').and_return(comp)
   end
+
   after do
     Facter::Resolvers::DMIBios.invalidate_cache
   end
@@ -20,6 +21,7 @@ describe 'Windows DMIBiosResolver' do
     it 'detects virtual machine manufacturer' do
       expect(Facter::Resolvers::DMIBios.resolve(:manufacturer)).to eql('VMware, Inc.')
     end
+
     it 'detects virtual machine serial number' do
       expect(Facter::Resolvers::DMIBios.resolve(:serial_number))
         .to eql('VMware-42 1a 38 c5 9d 35 5b f1-7a 62 4b 6e cb a0 79 de')
@@ -34,6 +36,7 @@ describe 'Windows DMIBiosResolver' do
         .with('WMI query returned no results for Win32_BIOS with values Manufacturer and SerialNumber.')
       expect(Facter::Resolvers::DMIBios.resolve(:serial_number)).to be(nil)
     end
+
     it 'detects manufacturer as nil' do
       expect(Facter::Resolvers::DMIBios.resolve(:manufacturer)).to be(nil)
     end
@@ -48,6 +51,7 @@ describe 'Windows DMIBiosResolver' do
     it 'detects SerialNumber as nil' do
       expect(Facter::Resolvers::DMIBios.resolve(:serial_number)).to be(nil)
     end
+
     it 'detects manufacturer as nil' do
       expect(Facter::Resolvers::DMIBios.resolve(:manufacturer)).to be(nil)
     end

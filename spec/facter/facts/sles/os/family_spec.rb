@@ -3,6 +3,7 @@
 describe 'Sles OsFamily' do
   describe '#call_the_resolver' do
     let(:value) { 'RedHat' }
+
     subject(:fact) { Facter::Sles::OsFamily.new }
 
     it 'returns os family fact' do

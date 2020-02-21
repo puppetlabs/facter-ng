@@ -3,6 +3,7 @@
 describe 'Windows OsFamily' do
   describe '#call_the_resolver' do
     let(:value) { 'windows' }
+
     subject(:fact) { Facter::Windows::OsFamily.new }
 
     before do

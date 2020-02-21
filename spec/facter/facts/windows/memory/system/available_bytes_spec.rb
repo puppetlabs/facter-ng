@@ -2,6 +2,7 @@
 
 describe 'Windows MemorySystemAvailableBytes' do
   subject(:fact) { Facter::Windows::MemorySystemAvailableBytes.new }
+
   before do
     allow(Facter::Resolvers::Memory).to receive(:resolve).with(:available_bytes).and_return(value)
   end

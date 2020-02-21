@@ -9,6 +9,7 @@ describe 'Windows System32Resolver' do
     allow(System32FFI).to receive(:GetCurrentProcess).and_return(2)
     allow(System32FFI).to receive(:IsWow64Process).with(2, bool_ptr).and_return(bool)
   end
+
   after do
     Facter::Resolvers::System32.invalidate_cache
   end

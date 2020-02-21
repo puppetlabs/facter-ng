@@ -4,6 +4,7 @@ describe 'Macosx IdentityPrivileged' do
   describe '#call_the_resolver' do
     let(:value) { 'false' }
     let(:expected_resolved_fact) { double(Facter::ResolvedFact, name: 'identity.privileged', value: value) }
+
     subject(:fact) { Facter::Macosx::IdentityPrivileged.new }
 
     before do

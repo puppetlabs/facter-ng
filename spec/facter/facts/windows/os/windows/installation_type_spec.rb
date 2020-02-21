@@ -3,6 +3,7 @@
 describe 'Windows OsWindowsInstallationType' do
   describe '#call_the_resolver' do
     let(:value) { 'Server' }
+
     subject(:fact) { Facter::Windows::OsWindowsInstallationType.new }
 
     before do

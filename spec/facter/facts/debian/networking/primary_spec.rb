@@ -3,6 +3,7 @@
 describe 'Debian NetworkingPrimary' do
   describe '#call_the_resolver' do
     let(:value) { 'ens160' }
+
     subject(:fact) { Facter::Debian::NetworkingPrimary.new }
 
     before do

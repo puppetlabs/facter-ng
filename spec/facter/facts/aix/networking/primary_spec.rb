@@ -3,6 +3,7 @@
 describe 'Aix NetworkingPrimary' do
   describe '#call_the_resolver' do
     let(:value) { 'en0' }
+
     subject(:fact) { Facter::Aix::NetworkingPrimary.new }
 
     before do

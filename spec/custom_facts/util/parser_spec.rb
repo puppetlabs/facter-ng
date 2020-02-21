@@ -74,17 +74,20 @@ describe LegacyFacter::Util::Parser do
 
     context 'well formed data' do
       let(:data_in_txt) { "one=two\nthree=four\n" }
+
       it_behaves_like 'txt parser'
     end
 
     context 'extra equal sign' do
       let(:data_in_txt) { "one=two\nthree=four=five\n" }
       let(:data) { { 'one' => 'two', 'three' => 'four=five' } }
+
       it_behaves_like 'txt parser'
     end
 
     context 'extra data' do
       let(:data_in_txt) { "one=two\nfive\nthree=four\n" }
+
       it_behaves_like 'txt parser'
     end
   end

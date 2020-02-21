@@ -3,6 +3,7 @@
 describe 'El RubyVersion' do
   describe '#call_the_resolver' do
     let(:value) { '2.5.7' }
+
     subject(:fact) { Facter::El::RubyVersion.new }
 
     before do

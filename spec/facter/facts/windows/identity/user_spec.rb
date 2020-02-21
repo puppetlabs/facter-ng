@@ -3,6 +3,7 @@
 describe 'Windows IdentityUser' do
   describe '#call_the_resolver' do
     let(:value) { 'User\Administrator' }
+
     subject(:fact) { Facter::Windows::IdentityUser.new }
 
     before do

@@ -3,6 +3,7 @@
 describe 'Debian OsFamily' do
   describe '#call_the_resolver' do
     let(:value) { 'Debian' }
+
     subject(:fact) { Facter::Debian::OsFamily.new }
 
     context 'when OsRelease resolver returns id_like' do

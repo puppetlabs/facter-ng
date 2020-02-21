@@ -6,6 +6,7 @@ describe 'Macosx SystemProfilerBootRomVersion' do
     let(:expected_resolved_fact) do
       double(Facter::ResolvedFact, name: 'system_profiler.boot_rom_version', value: value)
     end
+
     subject(:fact) { Facter::Macosx::SystemProfilerBootRomVersion.new }
 
     before do

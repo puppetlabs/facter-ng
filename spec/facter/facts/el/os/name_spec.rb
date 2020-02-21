@@ -3,6 +3,7 @@
 describe 'El OsName' do
   describe '#call_the_resolver' do
     let(:value) { 'RedHat' }
+
     subject(:fact) { Facter::El::OsName.new }
 
     before do

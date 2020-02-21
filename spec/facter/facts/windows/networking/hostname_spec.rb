@@ -3,6 +3,7 @@
 describe 'Windows NetworkingHostname' do
   describe '#call_the_resolver' do
     let(:value) { 'hostname' }
+
     subject(:fact) { Facter::Windows::NetworkingHostname.new }
 
     before do

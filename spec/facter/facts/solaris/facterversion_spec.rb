@@ -3,6 +3,7 @@
 describe 'Solaris facterversion' do
   describe '#call_the_resolver' do
     let(:value) { '4.0.3' }
+
     subject(:fact) { Facter::Solaris::Facterversion.new }
 
     before do

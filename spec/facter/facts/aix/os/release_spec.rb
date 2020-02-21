@@ -3,6 +3,7 @@
 describe 'AIX OsRelease' do
   describe '#call_the_resolver' do
     let(:value) { '12.0.1 ' }
+
     subject(:fact) { Facter::Aix::OsRelease.new }
 
     before do

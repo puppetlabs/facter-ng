@@ -3,6 +3,7 @@
 describe 'SLES RubyVersion' do
   describe '#call_the_resolver' do
     let(:value) { '2.4.5' }
+
     subject(:fact) { Facter::Sles::RubyVersion.new }
 
     before do

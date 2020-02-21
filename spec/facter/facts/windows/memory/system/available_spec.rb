@@ -3,6 +3,7 @@
 describe 'Windows MemorySystemAvailable' do
   describe '#call_the_resolver' do
     let(:value) { '1.00 KiB' }
+
     subject(:fact) { Facter::Windows::MemorySystemAvailable.new }
 
     before do

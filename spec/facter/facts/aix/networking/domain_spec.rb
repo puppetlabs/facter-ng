@@ -3,6 +3,7 @@
 describe 'Aix NetworkingDomain' do
   describe '#call_the_resolver' do
     let(:value) { 'domain' }
+
     subject(:fact) { Facter::Aix::NetworkingDomain.new }
 
     before do

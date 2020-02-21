@@ -12,6 +12,7 @@ describe 'Windows IdentityResolver' do
     allow(IdentityFFI).to receive(:GetUserNameExW).with(2, name_ptr, size_ptr).and_return(error_geting_user?)
     allow(IdentityFFI).to receive(:IsUserAnAdmin).and_return(admin?)
   end
+
   after do
     Facter::Resolvers::Identity.invalidate_cache
   end
@@ -25,6 +26,7 @@ describe 'Windows IdentityResolver' do
     it 'detects user' do
       expect(Facter::Resolvers::Identity.resolve(:user)).to eql('MG93C9IN9WKOITF\Administrator')
     end
+
     it 'detects that user is administrator' do
       expect(Facter::Resolvers::Identity.resolve(:privileged)).to be(true)
     end
@@ -39,6 +41,7 @@ describe 'Windows IdentityResolver' do
     it 'detects user' do
       expect(Facter::Resolvers::Identity.resolve(:user)).to eql('MG93C9IN9WKOITF\User')
     end
+
     it 'detects that user is not administrator' do
       expect(Facter::Resolvers::Identity.resolve(:privileged)).to be(false)
     end
@@ -53,6 +56,7 @@ describe 'Windows IdentityResolver' do
     it 'detects user' do
       expect(Facter::Resolvers::Identity.resolve(:user)).to eql('MG93C9IN9WKOITF\User')
     end
+
     it 'could not determine if user is admin' do
       expect(Facter::Resolvers::Identity.resolve(:privileged)).to be(nil)
     end
@@ -69,6 +73,7 @@ describe 'Windows IdentityResolver' do
         .with("failure resolving identity facts: #{error_number}")
       expect(Facter::Resolvers::Identity.resolve(:user)).to be(nil)
     end
+
     it 'logs debug message when trying to find if user is privileged' do
       allow_any_instance_of(Facter::Log).to receive(:debug)
         .with("failure resolving identity facts: #{error_number}")
@@ -87,6 +92,7 @@ describe 'Windows IdentityResolver' do
         .with("failure resolving identity facts: #{error_number}")
       expect(Facter::Resolvers::Identity.resolve(:user)).to be(nil)
     end
+
     it 'logs debug message when trying to find if user is privileged' do
       allow_any_instance_of(Facter::Log).to receive(:debug)
         .with("failure resolving identity facts: #{error_number}")

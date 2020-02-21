@@ -8,6 +8,7 @@ describe 'Windows WinOsDescription' do
     allow(win).to receive(:return_first).with('SELECT ProductType,OtherTypeDescription FROM Win32_OperatingSystem')
                                         .and_return(comp)
   end
+
   after do
     Facter::Resolvers::WinOsDescription.invalidate_cache
   end

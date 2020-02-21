@@ -3,6 +3,7 @@
 describe 'Windows OsWindowsSystem32' do
   describe '#call_the_resolver' do
     let(:value) { 'C:\Windows\system32' }
+
     subject(:fact) { Facter::Windows::OsWindowsSystem32.new }
 
     before do

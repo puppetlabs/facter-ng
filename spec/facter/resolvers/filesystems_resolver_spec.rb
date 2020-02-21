@@ -8,6 +8,7 @@ describe 'FilesystemsResolver' do
       .with('/proc/filesystems')
       .and_return(load_fixture('filesystems').read)
   end
+
   it 'returns systems' do
     result = Facter::Resolvers::Linux::Filesystems.resolve(:systems)
 

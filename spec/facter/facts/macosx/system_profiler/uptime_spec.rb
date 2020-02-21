@@ -4,6 +4,7 @@ describe 'Macosx SystemProfilerUptime' do
   describe '#call_the_resolver' do
     let(:value) { '26 days 22:12' }
     let(:expected_resolved_fact) { double(Facter::ResolvedFact, name: 'system_profiler.uptime', value: value) }
+
     subject(:fact) { Facter::Macosx::SystemProfilerUptime.new }
 
     before do

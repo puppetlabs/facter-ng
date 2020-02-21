@@ -3,6 +3,7 @@
 describe 'Sles OsName' do
   describe '#call_the_resolver' do
     let(:value) { 'SLES' }
+
     subject(:fact) { Facter::Sles::OsName.new }
 
     before do

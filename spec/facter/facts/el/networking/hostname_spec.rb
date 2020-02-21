@@ -3,6 +3,7 @@
 describe 'El NetworkingHostname' do
   describe '#call_the_resolver' do
     let(:value) { 'host' }
+
     subject(:fact) { Facter::El::NetworkingHostname.new }
 
     before do

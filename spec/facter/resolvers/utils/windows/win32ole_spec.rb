@@ -13,6 +13,7 @@ describe 'Win32Ole' do
   describe '#return_first when query result is nil' do
     let(:query) { 'query' }
     let(:query_result) {}
+
     it 'returns nil' do
       win = Win32Ole.new
       output = win.return_first(query)
@@ -23,6 +24,7 @@ describe 'Win32Ole' do
   describe '#return_first' do
     let(:query) { 'query' }
     let(:query_result) { ['something'] }
+
     it 'returns first element' do
       win = Win32Ole.new
       output = win.return_first(query)

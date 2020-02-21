@@ -3,6 +3,7 @@
 describe 'Windows NetworkingIp' do
   describe '#call_the_resolver' do
     let(:value) { '0.16.121.255' }
+
     subject(:fact) { Facter::Windows::NetworkingIp.new }
 
     before do

@@ -282,6 +282,7 @@ describe 'Facter' do
 
   describe '#debug' do
     let(:message) { 'test' }
+
     before do
       allow(Facter::Options.instance).to receive(:[]).with(:debug).and_return(is_debug)
     end

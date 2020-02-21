@@ -3,6 +3,7 @@
 describe 'Sles NetworkingFqdn' do
   describe '#call_the_resolver' do
     let(:value) { 'host.domain' }
+
     subject(:fact) { Facter::Sles::NetworkingFqdn.new }
 
     before do

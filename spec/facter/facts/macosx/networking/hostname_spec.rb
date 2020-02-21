@@ -3,6 +3,7 @@
 describe 'Macosx NetworkingHostname' do
   describe '#call_the_resolver' do
     let(:value) { 'host' }
+
     subject(:fact) { Facter::Macosx::NetworkingHostname.new }
 
     before do

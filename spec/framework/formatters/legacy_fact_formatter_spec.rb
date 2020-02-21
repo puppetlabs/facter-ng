@@ -125,6 +125,7 @@ describe 'LegacyFactFormatter' do
           double(Facter::ResolvedFact, name: 'networking.ip6', value: 'fe80::7ca0:ab22:703a:b329',
                                        user_query: 'networking.ip6', filter_tokens: [])
         end
+
         it 'returns single value without replacing : with =>' do
           formatted_output = Facter::LegacyFactFormatter.new.format([resolved_fact])
 

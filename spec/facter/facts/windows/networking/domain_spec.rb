@@ -3,6 +3,7 @@
 describe 'Windows NetworkingDomain' do
   describe '#call_the_resolver' do
     let(:value) { 'domain.net' }
+
     subject(:fact) { Facter::Windows::NetworkingDomain.new }
 
     before do

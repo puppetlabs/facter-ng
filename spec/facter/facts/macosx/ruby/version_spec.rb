@@ -3,6 +3,7 @@
 describe 'Macosx RubyVersion' do
   describe '#call_the_resolver' do
     let(:value) { '2.4.5' }
+
     subject(:fact) { Facter::Macosx::RubyVersion.new }
 
     before do

@@ -3,6 +3,7 @@
 describe 'Windows MemorySystemTotal' do
   describe '#call_the_resolver' do
     let(:value) { '1.00 KiB' }
+
     subject(:fact) { Facter::Windows::MemorySystemTotal.new }
 
     before do

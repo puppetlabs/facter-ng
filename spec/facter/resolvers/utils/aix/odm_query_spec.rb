@@ -2,6 +2,7 @@
 
 describe 'ODMQuery' do
   let(:odm_query) { Facter::ODMQuery.new }
+
   before do
     stub_const('Facter::ODMQuery::REPOS', ['CuAt'])
   end

@@ -20,6 +20,7 @@ describe LegacyFacter::Core::Logging do
 
     describe 'and debugging is enabled' do
       before { subject.debugging(true) }
+
       it 'emits a warning when called with nil' do
         expect(subject).to receive(:warn).with(/invalid message nil:NilClass/)
         subject.debug(nil)

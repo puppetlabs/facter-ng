@@ -3,6 +3,7 @@
 describe 'Windows DmiManufacturer' do
   describe '#call_the_resolver' do
     let(:value) { 'VMware, Inc.' }
+
     subject(:fact) { Facter::Windows::DmiManufacturer.new }
 
     before do

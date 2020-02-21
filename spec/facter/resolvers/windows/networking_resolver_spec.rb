@@ -4,6 +4,7 @@ describe 'Windows Networking Resolver' do
   describe '#resolve' do
     let(:size_ptr) { double(FFI::MemoryPointer) }
     let(:adapter_address) { double(FFI::MemoryPointer) }
+
     before do
       allow(FFI::MemoryPointer).to receive(:new)
         .with(NetworkingFFI::BUFFER_LENGTH).and_return(size_ptr)
@@ -14,12 +15,14 @@ describe 'Windows Networking Resolver' do
         .with(NetworkingFFI::AF_UNSPEC, 14, FFI::Pointer::NULL, adapter_address, size_ptr)
         .and_return(error_code)
     end
+
     after do
       Facter::Resolvers::Networking.invalidate_cache
     end
 
     context 'when fails to retrieve networking information' do
       let(:error_code) { NetworkingFFI::ERROR_NO_DATA }
+
       it 'logs debug message and returns nil' do
         allow_any_instance_of(Facter::Log).to receive(:debug).with('Unable to retrieve networking facts!')
         expect(Facter::Resolvers::Networking.resolve(:interfaces)).to be(nil)
@@ -28,6 +31,7 @@ describe 'Windows Networking Resolver' do
 
     context 'when fails to retrieve networking information after 3 tries' do
       let(:error_code) { NetworkingFFI::ERROR_BUFFER_OVERFLOW }
+
       before do
         allow(FFI::MemoryPointer).to receive(:new).exactly(4).times
                                                   .with(IpAdapterAddressesLh.size, NetworkingFFI::BUFFER_LENGTH)
@@ -38,6 +42,7 @@ describe 'Windows Networking Resolver' do
           .with(NetworkingFFI::AF_UNSPEC, 14, FFI::Pointer::NULL, adapter_address, size_ptr)
           .and_return(error_code)
       end
+
       it 'returns nil' do
         expect(Facter::Resolvers::Networking.resolve(:interfaces)).to be(nil)
       end
@@ -47,6 +52,7 @@ describe 'Windows Networking Resolver' do
       let(:error_code) { NetworkingFFI::ERROR_SUCCES }
       let(:adapter) {  OpenStruct.new(OperStatus: NetworkingFFI::IF_OPER_STATUS_DOWN, Next: next_adapter) }
       let(:next_adapter) { double(FFI::Pointer) }
+
       before do
         allow(IpAdapterAddressesLh).to receive(:read_list).with(adapter_address).and_yield(adapter)
         allow(IpAdapterAddressesLh).to receive(:new).with(next_adapter).and_return(adapter)
@@ -69,6 +75,7 @@ describe 'Windows Networking Resolver' do
       let(:friendly_name_ptr) { double(FFI::Pointer, read_wide_string_without_length: 'Ethernet0') }
       let(:ptr) { double(FFI::Pointer) }
       let(:unicast) { OpenStruct.new(Address: ptr, Next: ptr, to_ptr: FFI::Pointer::NULL) }
+
       before do
         allow(IpAdapterAddressesLh).to receive(:read_list).with(adapter_address).and_yield(adapter)
         allow(IpAdapterUnicastAddressLH).to receive(:read_list).with(ptr).and_yield(unicast)
@@ -113,6 +120,7 @@ describe 'Windows Networking Resolver' do
           network: IPAddr.new('10.16.127.0/255.255.255.0')
         }
       end
+
       before do
         allow(IpAdapterAddressesLh).to receive(:read_list).with(adapter_address).and_yield(adapter)
         allow(IpAdapterUnicastAddressLH).to receive(:read_list).with(ptr).and_yield(unicast)
@@ -160,6 +168,7 @@ describe 'Windows Networking Resolver' do
           network: IPAddr.new('fe80:0000:0000:0000:0000:0000:0000:0000/ffff:ff00:0000:0000:0000:0000:0000:0000')
         }
       end
+
       before do
         allow(IpAdapterAddressesLh).to receive(:read_list).with(adapter_address).and_yield(adapter)
         allow(IpAdapterUnicastAddressLH).to receive(:read_list).with(ptr).and_yield(unicast)

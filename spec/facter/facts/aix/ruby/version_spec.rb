@@ -3,6 +3,7 @@
 describe 'Aix RubyVersion' do
   describe '#call_the_resolver' do
     let(:value) { '2.4.5' }
+
     subject(:fact) { Facter::Aix::RubyVersion.new }
 
     before do

@@ -3,6 +3,7 @@
 describe 'Macosx OsName' do
   describe '#call_the_resolver' do
     let(:value) { 'Darwin' }
+
     subject(:fact) { Facter::Macosx::OsName.new }
 
     before do

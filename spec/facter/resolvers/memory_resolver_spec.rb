@@ -10,6 +10,7 @@ describe 'MemoryResolver' do
   after do
     Facter::Resolvers::Linux::Memory.invalidate_cache
   end
+
   subject(:resolver) { Facter::Resolvers::Linux::Memory }
 
   context 'when there is swap memory' do

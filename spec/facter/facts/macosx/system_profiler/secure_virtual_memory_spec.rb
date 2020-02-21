@@ -6,6 +6,7 @@ describe 'Macosx SystemProfilerSecureVirtualMemory' do
     let(:expected_resolved_fact) do
       double(Facter::ResolvedFact, name: 'system_profiler.secure_virtual_memory', value: value)
     end
+
     subject(:fact) { Facter::Macosx::SystemProfilerSecureVirtualMemory.new }
 
     before do

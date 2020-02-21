@@ -3,6 +3,7 @@
 describe 'Solaris RubyPlatform' do
   describe '#call_the_resolver' do
     let(:value) { 'x86_64-linux' }
+
     subject(:fact) { Facter::Solaris::RubyPlatform.new }
 
     before do

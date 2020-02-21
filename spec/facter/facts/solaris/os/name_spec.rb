@@ -3,6 +3,7 @@
 describe 'Solaris OsName' do
   describe '#call_the_resolver' do
     let(:value) { 'Solaris' }
+
     subject(:fact) { Facter::Solaris::OsName.new }
 
     before do

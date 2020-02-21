@@ -3,6 +3,7 @@
 describe 'AIX OsFamily' do
   describe '#call_the_resolver' do
     let(:value) { 'Aix' }
+
     subject(:fact) { Facter::Aix::OsFamily.new }
 
     before do

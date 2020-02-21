@@ -3,6 +3,7 @@
 describe 'Windows ProcessorsCount' do
   describe '#call_the_resolver' do
     let(:value) { '2' }
+
     subject(:fact) { Facter::Windows::ProcessorsCount.new }
 
     before do

@@ -3,6 +3,7 @@
 describe 'Windows OsName' do
   describe '#call_the_resolver' do
     let(:value) { 'windows' }
+
     subject(:fact) { Facter::Windows::OsName.new }
 
     before do
