@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe Facter::Macosx::Mountpoints do
-  context '#call_the_resolver' do
+  describe '#call_the_resolver' do
     subject(:fact) { Facter::Macosx::Mountpoints.new }
 
     context 'when resolver returns hash' do

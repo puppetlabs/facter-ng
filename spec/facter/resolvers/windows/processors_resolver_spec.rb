@@ -12,7 +12,7 @@ describe 'Windows ProcessorsResolver' do
     Facter::Resolvers::Processors.invalidate_cache
   end
 
-  context '#resolve' do
+  describe '#resolve' do
     let(:proc) { [double('proc', Name: 'Pretty_Name', Architecture: 0, NumberOfLogicalProcessors: 2)] }
 
     it 'detects models of processors' do
@@ -29,7 +29,7 @@ describe 'Windows ProcessorsResolver' do
     end
   end
 
-  context '#resolve when number of logical processors is 0' do
+  describe '#resolve when number of logical processors is 0' do
     let(:proc) do
       [double('proc', Name: 'Pretty_Name', Architecture: 0, NumberOfLogicalProcessors: 0),
        double('proc', Name: 'Awesome_Name', Architecture: 10, NumberOfLogicalProcessors: 0)]
@@ -49,7 +49,7 @@ describe 'Windows ProcessorsResolver' do
     end
   end
 
-  context '#resolve logs a debug message when is an unknown architecture' do
+  describe '#resolve logs a debug message when is an unknown architecture' do
     let(:proc) { [double('proc', Name: 'Pretty_Name', Architecture: 10, NumberOfLogicalProcessors: 0)] }
 
     it 'logs that is unknown architecture' do
@@ -59,7 +59,7 @@ describe 'Windows ProcessorsResolver' do
     end
   end
 
-  context '#resolve when WMI query returns nil' do
+  describe '#resolve when WMI query returns nil' do
     let(:proc) { nil }
 
     it 'logs that query failed and isa nil' do
@@ -75,7 +75,7 @@ describe 'Windows ProcessorsResolver' do
     end
   end
 
-  context '#resolve when WMI query returns nil for Name, Architecture and NumberOfLogicalProcessors' do
+  describe '#resolve when WMI query returns nil for Name, Architecture and NumberOfLogicalProcessors' do
     let(:proc) { [double('proc', Name: nil, Architecture: nil, NumberOfLogicalProcessors: nil)] }
 
     it 'detects that isa is nil' do

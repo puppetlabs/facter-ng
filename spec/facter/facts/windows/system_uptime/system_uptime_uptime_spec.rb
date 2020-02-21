@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Windows SystemUptimeUptime' do
-  context '#call_the_resolver' do
+  describe '#call_the_resolver' do
     let(:value) { '9:42 hours' }
     subject(:fact) { Facter::Windows::SystemUptimeUptime.new }
 

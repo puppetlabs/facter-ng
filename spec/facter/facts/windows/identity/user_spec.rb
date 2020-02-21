@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Windows IdentityUser' do
-  context '#call_the_resolver' do
+  describe '#call_the_resolver' do
     let(:value) { 'User\Administrator' }
     subject(:fact) { Facter::Windows::IdentityUser.new }
 

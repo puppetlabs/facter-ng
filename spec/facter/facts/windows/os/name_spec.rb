@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Windows OsName' do
-  context '#call_the_resolver' do
+  describe '#call_the_resolver' do
     let(:value) { 'windows' }
     subject(:fact) { Facter::Windows::OsName.new }
 

@@ -18,7 +18,7 @@ describe 'Windows MemoryResolver' do
     Facter::Resolvers::Memory.invalidate_cache
   end
 
-  context '#resolve' do
+  describe '#resolve' do
     let(:status) { 1 }
     let(:total) { 1_048_313 }
     let(:page_size) { 4096 }
@@ -38,7 +38,7 @@ describe 'Windows MemoryResolver' do
     end
   end
 
-  context '#resolve when total bytes is 0' do
+  describe '#resolve when total bytes is 0' do
     let(:status) { 1 }
     let(:total) { 0 }
     let(:page_size) { 4096 }
@@ -60,7 +60,7 @@ describe 'Windows MemoryResolver' do
     end
   end
 
-  context '#resolve when available bytes is 0' do
+  describe '#resolve when available bytes is 0' do
     let(:status) { 1 }
     let(:total) { 3242 }
     let(:page_size) { 4096 }
@@ -82,7 +82,7 @@ describe 'Windows MemoryResolver' do
     end
   end
 
-  context '#resolve when page size is 0' do
+  describe '#resolve when page size is 0' do
     let(:status) { 1 }
     let(:total) { 3242 }
     let(:page_size) { 0 }
@@ -104,7 +104,7 @@ describe 'Windows MemoryResolver' do
     end
   end
 
-  context '#resolve when GetPerformanceInfo function fails' do
+  describe '#resolve when GetPerformanceInfo function fails' do
     let(:status) { FFI::WIN32FALSE }
     let(:total) { 1_048_313 }
     let(:page_size) { 4096 }

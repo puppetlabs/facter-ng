@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Windows NetworkingNetmask6' do
-  context '#call_the_resolver' do
+  describe '#call_the_resolver' do
     let(:value) { 'ffff:ffff:ffff:ffff::' }
     subject(:fact) { Facter::Windows::NetworkingNetmask6.new }
 

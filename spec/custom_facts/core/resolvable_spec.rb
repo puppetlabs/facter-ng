@@ -67,13 +67,13 @@ describe LegacyFacter::Core::Resolvable do
   describe 'callbacks when flushing facts' do
     class FlushFakeError < StandardError; end
 
-    context '#on_flush' do
+    describe '#on_flush' do
       it 'accepts a block with on_flush' do
         subject.on_flush { raise NotImplementedError }
       end
     end
 
-    context '#flush' do
+    describe '#flush' do
       it 'calls the block passed to on_flush' do
         subject.on_flush { raise FlushFakeError }
         expect { subject.flush }.to raise_error FlushFakeError

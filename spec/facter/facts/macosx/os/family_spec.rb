@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Macosx OsFamily' do
-  context '#call_the_resolver' do
+  describe '#call_the_resolver' do
     let(:value) { 'Darwin' }
     subject(:fact) { Facter::Macosx::OsFamily.new }
 

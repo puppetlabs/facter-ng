@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Windows NetworkingDomain' do
-  context '#call_the_resolver' do
+  describe '#call_the_resolver' do
     let(:value) { 'domain.net' }
     subject(:fact) { Facter::Windows::NetworkingDomain.new }
 

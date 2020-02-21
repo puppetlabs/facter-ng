@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Windows OsWindowsInstallationType' do
-  context '#call_the_resolver' do
+  describe '#call_the_resolver' do
     let(:value) { 'Server' }
     subject(:fact) { Facter::Windows::OsWindowsInstallationType.new }
 

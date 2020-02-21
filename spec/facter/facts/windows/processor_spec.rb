@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Windows Processor' do
-  context '#call_the_resolver' do
+  describe '#call_the_resolver' do
     let(:processor) { ['Intel(R) Xeon(R) Gold 6138 CPU @ 2.00GHz', 'Intel(R) Xeon(R) Gold 6138 CPU @ 2.00GHz'] }
     subject(:fact) { Facter::Windows::Processor.new }
 

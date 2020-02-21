@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Ip' do
-  context '#resolve' do
+  describe '#resolve' do
     before do
       allow(Open3).to receive(:capture2)
         .with('ip -o address')

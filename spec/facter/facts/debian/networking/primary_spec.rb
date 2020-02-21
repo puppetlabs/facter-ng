@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Debian NetworkingPrimary' do
-  context '#call_the_resolver' do
+  describe '#call_the_resolver' do
     let(:value) { 'ens160' }
     subject(:fact) { Facter::Debian::NetworkingPrimary.new }
 

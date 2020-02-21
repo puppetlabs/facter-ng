@@ -18,7 +18,7 @@ describe 'Windows HardwareArchitectureResolver' do
     Facter::Resolvers::HardwareArchitecture.invalidate_cache
   end
 
-  context '#resolve when processor is amd64' do
+  describe '#resolve when processor is amd64' do
     let(:arch) { HardwareFFI::PROCESSOR_ARCHITECTURE_AMD64 }
 
     it 'detects hardware' do
@@ -29,7 +29,7 @@ describe 'Windows HardwareArchitectureResolver' do
     end
   end
 
-  context '#resolve when processor is arm' do
+  describe '#resolve when processor is arm' do
     let(:arch) { HardwareFFI::PROCESSOR_ARCHITECTURE_ARM }
 
     it 'detects hardware' do
@@ -40,7 +40,7 @@ describe 'Windows HardwareArchitectureResolver' do
     end
   end
 
-  context '#resolve when processor is ia64' do
+  describe '#resolve when processor is ia64' do
     let(:arch) { HardwareFFI::PROCESSOR_ARCHITECTURE_IA64 }
 
     it 'detects hardware' do
@@ -51,7 +51,7 @@ describe 'Windows HardwareArchitectureResolver' do
     end
   end
 
-  context '#resolve when processor is intel and level below 5' do
+  describe '#resolve when processor is intel and level below 5' do
     before do
       allow(sys_info).to receive(:[]).with(:wProcessorLevel).and_return(level)
     end
@@ -66,7 +66,7 @@ describe 'Windows HardwareArchitectureResolver' do
     end
   end
 
-  context '#resolve when processor is intel and level above 5' do
+  describe '#resolve when processor is intel and level above 5' do
     before do
       allow(sys_info).to receive(:[]).with(:wProcessorLevel).and_return(level)
     end
@@ -81,7 +81,7 @@ describe 'Windows HardwareArchitectureResolver' do
     end
   end
 
-  context '#resolve when processor unknown' do
+  describe '#resolve when processor unknown' do
     let(:arch) { nil }
 
     it 'detects hardware' do

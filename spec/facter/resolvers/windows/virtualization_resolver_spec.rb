@@ -9,7 +9,7 @@ describe 'Windows VirtualizationResolver' do
                                       .and_return(comp)
   end
 
-  context '#resolve VirtualBox' do
+  describe '#resolve VirtualBox' do
     after do
       Facter::Resolvers::Virtualization.invalidate_cache
     end
@@ -34,7 +34,7 @@ describe 'Windows VirtualizationResolver' do
     end
   end
 
-  context '#resolve Vmware' do
+  describe '#resolve Vmware' do
     after do
       Facter::Resolvers::Virtualization.invalidate_cache
     end
@@ -50,7 +50,7 @@ describe 'Windows VirtualizationResolver' do
     end
   end
 
-  context '#resolve KVM' do
+  describe '#resolve KVM' do
     after do
       Facter::Resolvers::Virtualization.invalidate_cache
     end
@@ -66,7 +66,7 @@ describe 'Windows VirtualizationResolver' do
     end
   end
 
-  context '#resolve Openstack VM' do
+  describe '#resolve Openstack VM' do
     after do
       Facter::Resolvers::Virtualization.invalidate_cache
     end
@@ -82,7 +82,7 @@ describe 'Windows VirtualizationResolver' do
     end
   end
 
-  context '#resolve Microsoft VM' do
+  describe '#resolve Microsoft VM' do
     after do
       Facter::Resolvers::Virtualization.invalidate_cache
     end
@@ -98,7 +98,7 @@ describe 'Windows VirtualizationResolver' do
     end
   end
 
-  context '#resolve Xen VM' do
+  describe '#resolve Xen VM' do
     after do
       Facter::Resolvers::Virtualization.invalidate_cache
     end
@@ -114,7 +114,7 @@ describe 'Windows VirtualizationResolver' do
     end
   end
 
-  context '#resolve Amazon EC2 VM' do
+  describe '#resolve Amazon EC2 VM' do
     after do
       Facter::Resolvers::Virtualization.invalidate_cache
     end
@@ -130,7 +130,7 @@ describe 'Windows VirtualizationResolver' do
     end
   end
 
-  context '#resolve Physical Machine' do
+  describe '#resolve Physical Machine' do
     let(:comp) { [double('WIN32OLE', Model: model, Manufacturer: manufacturer, OEMStringArray: '')] }
     let(:model) { '' }
     let(:manufacturer) { '' }
@@ -143,7 +143,7 @@ describe 'Windows VirtualizationResolver' do
     end
   end
 
-  context '#resolve should cache facts in the same run' do
+  describe '#resolve should cache facts in the same run' do
     let(:comp) { [double('WIN32OLE', Model: model, Manufacturer: manufacturer, OEMStringArray: '')] }
     let(:model) { '' }
     let(:manufacturer) { 'Amazon EC2' }
@@ -156,7 +156,7 @@ describe 'Windows VirtualizationResolver' do
     end
   end
 
-  context '#resolve  when WMI query returns nil' do
+  describe '#resolve  when WMI query returns nil' do
     before do
       Facter::Resolvers::Virtualization.invalidate_cache
     end
@@ -173,7 +173,7 @@ describe 'Windows VirtualizationResolver' do
     end
   end
 
-  context '#resolve when WMI query returns nil for Model and Manufacturer' do
+  describe '#resolve when WMI query returns nil for Model and Manufacturer' do
     before do
       Facter::Resolvers::Virtualization.invalidate_cache
     end

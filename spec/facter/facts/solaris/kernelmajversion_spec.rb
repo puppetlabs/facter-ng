@@ -4,7 +4,7 @@ describe 'Solaris Kernelmajversion' do
   after do
     Facter::Resolvers::Uname.invalidate_cache
   end
-  context '#call_the_resolver' do
+  describe '#call_the_resolver' do
     it 'returns kernel major version by composing versions with the . delimiter' do
       expected_fact = double(Facter::ResolvedFact, name: 'kernelmajversion', value: '11.4')
       allow(Facter::Resolvers::Uname).to receive(:resolve).with(:kernelversion).and_return('11.4.0.15.0')

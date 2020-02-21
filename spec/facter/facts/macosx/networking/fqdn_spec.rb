@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Macosx NetworkingFqdn' do
-  context '#call_the_resolver' do
+  describe '#call_the_resolver' do
     let(:value) { 'host.domain' }
     subject(:fact) { Facter::Macosx::NetworkingFqdn.new }
 

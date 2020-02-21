@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Debian OsName' do
-  context '#call_the_resolver' do
+  describe '#call_the_resolver' do
     let(:value) { 'Debian' }
     subject(:fact) { Facter::Debian::OsName.new }
 

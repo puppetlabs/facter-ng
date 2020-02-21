@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Sles NetworkingPrimary' do
-  context '#call_the_resolver' do
+  describe '#call_the_resolver' do
     let(:value) { 'ens160' }
     subject(:fact) { Facter::Sles::NetworkingPrimary.new }
 

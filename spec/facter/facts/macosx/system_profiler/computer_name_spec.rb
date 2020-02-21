@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Macosx SystemProfilerComputerName' do
-  context '#call_the_resolver' do
+  describe '#call_the_resolver' do
     let(:value) { 'Test1’s MacBook Pro' }
     let(:expected_resolved_fact) { double(Facter::ResolvedFact, name: 'system_profiler.computer_name', value: value) }
     subject(:fact) { Facter::Macosx::SystemProfilerComputerName.new }

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Macosx SystemProfilerModelIdentifier' do
-  context '#call_the_resolver' do
+  describe '#call_the_resolver' do
     let(:value) { 'MacBookPro11,4' }
     let(:expected_resolved_fact) do
       double(Facter::ResolvedFact, name: 'system_profiler.model_identifier', value: value)

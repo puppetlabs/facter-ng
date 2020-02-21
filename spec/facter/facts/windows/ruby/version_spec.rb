@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Windows RubyVersion' do
-  context '#call_the_resolver' do
+  describe '#call_the_resolver' do
     let(:value) { '2.5.7' }
     subject(:fact) { Facter::Windows::RubyVersion.new }
 

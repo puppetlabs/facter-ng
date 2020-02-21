@@ -7,7 +7,7 @@ describe 'Windows NetworkInterfaces' do
     allow(Facter::Resolvers::Networking).to receive(:resolve).with(:interfaces).and_return(interfaces)
   end
 
-  context '#call_the_resolver' do
+  describe '#call_the_resolver' do
     let(:interfaces) { { 'eth0' => { network: '10.255.255.255' }, 'en1' => { network: '10.17.255.255' } } }
 
     it 'calls Facter::Resolvers::Networking' do
@@ -24,7 +24,7 @@ describe 'Windows NetworkInterfaces' do
     end
   end
 
-  context '#call_the_resolver when resolver returns nil' do
+  describe '#call_the_resolver when resolver returns nil' do
     let(:interfaces) { nil }
 
     it 'returns nil' do

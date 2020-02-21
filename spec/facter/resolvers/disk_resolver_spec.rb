@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'DiskResolver' do
-  context '#resolve' do
+  describe '#resolve' do
     let(:paths) { { model: '/device/model', size: '/size', vendor: '/device/vendor' } }
     let(:disks) { %w[sr0 sda] }
     let(:size) { '41943040' }

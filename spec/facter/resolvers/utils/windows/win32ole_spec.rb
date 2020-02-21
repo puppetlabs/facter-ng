@@ -10,7 +10,7 @@ describe 'Win32Ole' do
     allow(result).to receive(:execquery).with(query).and_return(query_result)
   end
 
-  context '#return_first when query result is nil' do
+  describe '#return_first when query result is nil' do
     let(:query) { 'query' }
     let(:query_result) {}
     it 'returns nil' do
@@ -20,7 +20,7 @@ describe 'Win32Ole' do
     end
   end
 
-  context '#return_first' do
+  describe '#return_first' do
     let(:query) { 'query' }
     let(:query_result) { ['something'] }
     it 'returns first element' do

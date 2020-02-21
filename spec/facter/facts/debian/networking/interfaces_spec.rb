@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Debian NetworkingInterfaces' do
-  context '#call_the_resolver' do
+  describe '#call_the_resolver' do
     let(:value) do
       {
         'ens160' => {

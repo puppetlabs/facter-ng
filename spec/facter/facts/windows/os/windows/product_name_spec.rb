@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Windows OsWindowsProductName' do
-  context '#call_the_resolver' do
+  describe '#call_the_resolver' do
     let(:value) { 'Windows Server 2016 Standard' }
     subject(:fact) { Facter::Windows::OsWindowsProductName.new }
 

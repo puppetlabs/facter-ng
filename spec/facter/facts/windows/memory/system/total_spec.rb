@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Windows MemorySystemTotal' do
-  context '#call_the_resolver' do
+  describe '#call_the_resolver' do
     let(:value) { '1.00 KiB' }
     subject(:fact) { Facter::Windows::MemorySystemTotal.new }
 

@@ -7,7 +7,7 @@ describe 'Windows MtuInterfaces' do
     allow(Facter::Resolvers::Networking).to receive(:resolve).with(:interfaces).and_return(interfaces)
   end
 
-  context '#call_the_resolver' do
+  describe '#call_the_resolver' do
     let(:interfaces) { { 'eth0' => { mtu: 1500 }, 'en1' => { mtu: 1500 } } }
 
     it 'calls Facter::Resolvers::Networking' do
@@ -22,7 +22,7 @@ describe 'Windows MtuInterfaces' do
     end
   end
 
-  context '#call_the_resolver when resolver reeturns nil' do
+  describe '#call_the_resolver when resolver reeturns nil' do
     let(:interfaces) { nil }
 
     it 'returns nil' do

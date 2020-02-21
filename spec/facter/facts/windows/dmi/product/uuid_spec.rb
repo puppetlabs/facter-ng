@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Windows DmiProductUUID' do
-  context '#call_the_resolver' do
+  describe '#call_the_resolver' do
     let(:value) { '030D1A42-B70A-2898-7898-5E85A0AD1847' }
     subject(:fact) { Facter::Windows::DmiProductUUID.new }
 

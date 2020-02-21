@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Macosx SystemProfilerProcessorSpeed' do
-  context '#call_the_resolver' do
+  describe '#call_the_resolver' do
     let(:value) { '2.8 GHz' }
     let(:expected_resolved_fact) { double(Facter::ResolvedFact, name: 'system_profiler.processor_speed', value: value) }
     subject(:fact) { Facter::Macosx::SystemProfilerProcessorSpeed.new }

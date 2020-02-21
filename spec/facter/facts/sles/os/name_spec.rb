@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Sles OsName' do
-  context '#call_the_resolver' do
+  describe '#call_the_resolver' do
     let(:value) { 'SLES' }
     subject(:fact) { Facter::Sles::OsName.new }
 

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'AIX OsFamily' do
-  context '#call_the_resolver' do
+  describe '#call_the_resolver' do
     let(:value) { 'Aix' }
     subject(:fact) { Facter::Aix::OsFamily.new }
 

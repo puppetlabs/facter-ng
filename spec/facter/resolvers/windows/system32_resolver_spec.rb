@@ -13,7 +13,7 @@ describe 'Windows System32Resolver' do
     Facter::Resolvers::System32.invalidate_cache
   end
 
-  context '#resolve when is wow 64 process' do
+  describe '#resolve when is wow 64 process' do
     let(:win_path) { 'C:\\Windows' }
     let(:bool) { 1 }
     let(:is_wow) { true }
@@ -23,7 +23,7 @@ describe 'Windows System32Resolver' do
     end
   end
 
-  context '#resolve when it is not wow 64 process' do
+  describe '#resolve when it is not wow 64 process' do
     let(:win_path) { 'C:\\Windows' }
     let(:bool) { 1 }
     let(:is_wow) { false }
@@ -33,7 +33,7 @@ describe 'Windows System32Resolver' do
     end
   end
 
-  context '#resolve when env variable is not set' do
+  describe '#resolve when env variable is not set' do
     let(:win_path) { '' }
     let(:bool) { 1 }
     let(:is_wow) { false }
@@ -45,7 +45,7 @@ describe 'Windows System32Resolver' do
     end
   end
 
-  context '#resolve when env variable is found as nil' do
+  describe '#resolve when env variable is found as nil' do
     let(:win_path) { nil }
     let(:bool) { 1 }
     let(:is_wow) { false }
@@ -57,7 +57,7 @@ describe 'Windows System32Resolver' do
     end
   end
 
-  context '#resolve when IsWow64Process fails' do
+  describe '#resolve when IsWow64Process fails' do
     let(:win_path) { 'C:\\Windows' }
     let(:bool) { 0 }
     let(:is_wow) { false }

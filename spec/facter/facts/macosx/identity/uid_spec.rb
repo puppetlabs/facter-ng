@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Macosx IdentityUid' do
-  context '#call_the_resolver' do
+  describe '#call_the_resolver' do
     let(:value) { '501' }
     let(:expected_resolved_fact) { double(Facter::ResolvedFact, name: 'identity.uid', value: value) }
     subject(:fact) { Facter::Macosx::IdentityUid.new }

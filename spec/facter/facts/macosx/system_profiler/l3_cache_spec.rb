@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Macosx SystemProfilerL3Cache' do
-  context '#call_the_resolver' do
+  describe '#call_the_resolver' do
     let(:value) { '6 MB' }
     let(:expected_resolved_fact) { double(Facter::ResolvedFact, name: 'system_profiler.l3_cache', value: value) }
     subject(:fact) { Facter::Macosx::SystemProfilerL3Cache.new }

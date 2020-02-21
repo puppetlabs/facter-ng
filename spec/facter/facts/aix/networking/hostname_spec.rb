@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Aix NetworkingHostname' do
-  context '#call_the_resolver' do
+  describe '#call_the_resolver' do
     let(:value) { 'host' }
     subject(:fact) { Facter::Aix::NetworkingHostname.new }
 

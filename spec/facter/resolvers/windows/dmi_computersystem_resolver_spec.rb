@@ -11,7 +11,7 @@ describe 'Windows DMIComputerSystemResolver' do
     Facter::Resolvers::DMIComputerSystem.invalidate_cache
   end
 
-  context '#resolve' do
+  describe '#resolve' do
     let(:comp) { double('WIN32OLE', Name: 'VMware7,1', UUID: 'C5381A42-359D-F15B-7A62-4B6ECBA079DE') }
     it 'detects virtual machine name' do
       expect(Facter::Resolvers::DMIComputerSystem.resolve(:name)).to eql('VMware7,1')
@@ -21,7 +21,7 @@ describe 'Windows DMIComputerSystemResolver' do
     end
   end
 
-  context '#resolve when WMI query returns nil' do
+  describe '#resolve when WMI query returns nil' do
     let(:comp) {}
 
     it 'logs debug message and name is nil' do
@@ -34,7 +34,7 @@ describe 'Windows DMIComputerSystemResolver' do
     end
   end
 
-  context '#resolve when WMI query returns nil for Name and UUID' do
+  describe '#resolve when WMI query returns nil for Name and UUID' do
     let(:comp) { double('WIN32OLE', Name: nil, UUID: nil) }
 
     it 'detects name as nil' do

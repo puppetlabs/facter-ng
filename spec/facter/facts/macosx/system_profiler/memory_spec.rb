@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Macosx SystemProfilerMemory' do
-  context '#call_the_resolver' do
+  describe '#call_the_resolver' do
     let(:value) { '16 GB' }
     let(:expected_resolved_fact) { double(Facter::ResolvedFact, name: 'system_profiler.memory', value: value) }
     subject(:fact) { Facter::Macosx::SystemProfilerMemory.new }

@@ -12,7 +12,7 @@ describe 'Windows WinOsDescription' do
     Facter::Resolvers::WinOsDescription.invalidate_cache
   end
 
-  context '#resolve when query fails' do
+  describe '#resolve when query fails' do
     let(:comp) { nil }
 
     it 'logs debug message and facts are nil' do
@@ -24,7 +24,7 @@ describe 'Windows WinOsDescription' do
     end
   end
 
-  context '#resolve' do
+  describe '#resolve' do
     let(:comp) { double('Win32Ole', ProductType: prod, OtherTypeDescription: type) }
     let(:prod) { 1 }
     let(:type) {}
@@ -38,7 +38,7 @@ describe 'Windows WinOsDescription' do
     end
   end
 
-  context '#resolve when product type is nil' do
+  describe '#resolve when product type is nil' do
     let(:comp) { double('Win32Ole', ProductType: prod, OtherTypeDescription: type) }
     let(:prod) { nil }
     let(:type) { 'description' }

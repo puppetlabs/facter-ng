@@ -19,7 +19,7 @@ describe 'Windows KernelResolver' do
     Facter::Resolvers::Kernel.invalidate_cache
   end
 
-  context '#resolve' do
+  describe '#resolve' do
     let(:status) { KernelFFI::STATUS_SUCCESS }
     let(:maj) { 10 }
     let(:min) { 0 }
@@ -36,7 +36,7 @@ describe 'Windows KernelResolver' do
     end
   end
 
-  context '#resolve when RtlGetVersion function fails to get os version information' do
+  describe '#resolve when RtlGetVersion function fails to get os version information' do
     let(:status) { 10 }
     let(:maj) { 10 }
     let(:min) { 0 }

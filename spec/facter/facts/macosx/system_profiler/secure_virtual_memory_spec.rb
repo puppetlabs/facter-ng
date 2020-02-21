@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Macosx SystemProfilerSecureVirtualMemory' do
-  context '#call_the_resolver' do
+  describe '#call_the_resolver' do
     let(:value) { 'Enabled' }
     let(:expected_resolved_fact) do
       double(Facter::ResolvedFact, name: 'system_profiler.secure_virtual_memory', value: value)

@@ -11,7 +11,7 @@ describe 'Windows DMIBiosResolver' do
     Facter::Resolvers::DMIBios.invalidate_cache
   end
 
-  context '#resolve' do
+  describe '#resolve' do
     let(:comp) do
       double('WIN32OLE', Manufacturer: 'VMware, Inc.',
                          SerialNumber: 'VMware-42 1a 38 c5 9d 35 5b f1-7a 62 4b 6e cb a0 79 de')
@@ -26,7 +26,7 @@ describe 'Windows DMIBiosResolver' do
     end
   end
 
-  context '#resolve when WMI query returns nil' do
+  describe '#resolve when WMI query returns nil' do
     let(:comp) {}
 
     it 'logs debug message and serial_number is nil' do
@@ -39,7 +39,7 @@ describe 'Windows DMIBiosResolver' do
     end
   end
 
-  context '#resolve when WMI query returns nil for Manufacturer and SerialNumber' do
+  describe '#resolve when WMI query returns nil for Manufacturer and SerialNumber' do
     let(:comp) do
       double('WIN32OLE', Manufacturer: nil,
                          SerialNumber: nil)

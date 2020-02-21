@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Solaris RubyVersion' do
-  context '#call_the_resolver' do
+  describe '#call_the_resolver' do
     let(:value) { '2.4.5' }
     subject(:fact) { Facter::Solaris::RubyVersion.new }
 

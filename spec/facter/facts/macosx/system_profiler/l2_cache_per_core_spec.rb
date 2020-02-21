@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Macosx SystemProfilerL2CachePerCore' do
-  context '#call_the_resolver' do
+  describe '#call_the_resolver' do
     let(:value) { '256 KB' }
     let(:expected_resolved_fact) do
       double(Facter::ResolvedFact, name: 'system_profiler.l2_cache_per_core', value: value)

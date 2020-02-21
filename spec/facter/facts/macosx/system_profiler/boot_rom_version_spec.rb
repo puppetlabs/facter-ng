@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Macosx SystemProfilerBootRomVersion' do
-  context '#call_the_resolver' do
+  describe '#call_the_resolver' do
     let(:value) { '194.0.0.0.0' }
     let(:expected_resolved_fact) do
       double(Facter::ResolvedFact, name: 'system_profiler.boot_rom_version', value: value)

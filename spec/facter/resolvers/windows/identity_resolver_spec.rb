@@ -16,7 +16,7 @@ describe 'Windows IdentityResolver' do
     Facter::Resolvers::Identity.invalidate_cache
   end
 
-  context '#resolve when user is administrator' do
+  describe '#resolve when user is administrator' do
     let(:user_name) { 'MG93C9IN9WKOITF\Administrator' }
     let(:error_number) { FFI::ERROR_MORE_DATA }
     let(:error_geting_user?) { 1 }
@@ -30,7 +30,7 @@ describe 'Windows IdentityResolver' do
     end
   end
 
-  context '#resolve when user is not administrator' do
+  describe '#resolve when user is not administrator' do
     let(:user_name) { 'MG93C9IN9WKOITF\User' }
     let(:error_number) { FFI::ERROR_MORE_DATA }
     let(:error_geting_user?) { 1 }
@@ -44,7 +44,7 @@ describe 'Windows IdentityResolver' do
     end
   end
 
-  context '#resolve when' do
+  describe '#resolve when' do
     let(:user_name) { 'MG93C9IN9WKOITF\User' }
     let(:error_number) { FFI::ERROR_MORE_DATA }
     let(:error_geting_user?) { 1 }
@@ -58,7 +58,7 @@ describe 'Windows IdentityResolver' do
     end
   end
 
-  context '#resolve when error code is different than ERROR_MORE_DATA' do
+  describe '#resolve when error code is different than ERROR_MORE_DATA' do
     let(:user_name) { '' }
     let(:error_number) { nil }
     let(:error_geting_user?) { 1 }
@@ -76,7 +76,7 @@ describe 'Windows IdentityResolver' do
     end
   end
 
-  context '#resolve when there is an error getting user name' do
+  describe '#resolve when there is an error getting user name' do
     let(:user_name) { '' }
     let(:error_number) { FFI::ERROR_MORE_DATA }
     let(:error_geting_user?) { 0 }

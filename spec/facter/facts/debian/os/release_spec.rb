@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Debian OsRelease' do
-  context '#call_the_resolver' do
+  describe '#call_the_resolver' do
     let(:value) { '10.9' }
     let(:value_final) {  { 'full' => '10.9', 'major' => '10', 'minor' => '9' } }
     subject(:fact) { Facter::Debian::OsRelease.new }

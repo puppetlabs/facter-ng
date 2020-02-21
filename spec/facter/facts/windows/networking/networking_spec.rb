@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Windows NetworkingIp' do
-  context '#call_the_resolver' do
+  describe '#call_the_resolver' do
     let(:value) { '0.16.121.255' }
     subject(:fact) { Facter::Windows::NetworkingIp.new }
 

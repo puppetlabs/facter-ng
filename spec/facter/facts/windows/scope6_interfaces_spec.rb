@@ -7,7 +7,7 @@ describe 'Windows Scope6Interfaces' do
     allow(Facter::Resolvers::Networking).to receive(:resolve).with(:interfaces).and_return(interfaces)
   end
 
-  context '#call_the_resolver' do
+  describe '#call_the_resolver' do
     let(:interfaces) { { 'eth0' => { scope6: 'link' }, 'en1' => { scope6: 'global' } } }
 
     it 'calls Facter::Resolvers::Networking' do
@@ -24,7 +24,7 @@ describe 'Windows Scope6Interfaces' do
     end
   end
 
-  context '#call_the_resolver when resolver returns nil' do
+  describe '#call_the_resolver when resolver returns nil' do
     let(:interfaces) { nil }
 
     it 'returns nil' do
