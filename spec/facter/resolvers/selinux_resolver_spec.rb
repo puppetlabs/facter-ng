@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'SELinuxResolver' do
-  after(:each) do
+  after do
     Facter::Resolvers::SELinux.invalidate_cache
   end
 

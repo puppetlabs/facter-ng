@@ -207,7 +207,7 @@ describe LegacyFacter::Util::Loader do
   describe 'when loading all facts' do
     let(:loader) { LegacyFacter::Util::Loader.new }
 
-    before :each do
+    before do
       allow(loader).to receive(:search_path).and_return([])
 
       allow(File).to receive(:directory?).and_return true

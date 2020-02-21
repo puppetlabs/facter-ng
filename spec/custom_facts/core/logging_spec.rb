@@ -5,7 +5,7 @@ require_relative '../../spec_helper_legacy'
 describe LegacyFacter::Core::Logging do
   subject { described_class }
 
-  after(:each) do
+  after do
     subject.debugging(false)
     subject.timing(false)
     subject.on_message
@@ -105,7 +105,7 @@ describe LegacyFacter::Core::Logging do
   end
 
   describe 'without a logging callback' do
-    before :each do
+    before do
       subject.timing(true)
       subject.debugging(true)
       subject.on_message
@@ -140,7 +140,7 @@ describe LegacyFacter::Core::Logging do
   end
 
   describe 'with a logging callback' do
-    before :each do
+    before do
       subject.debugging(true)
       subject.timing(true)
       subject.on_message

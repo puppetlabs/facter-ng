@@ -134,7 +134,7 @@ describe LegacyFacter::Util::Parser do
     context 'exe, bat, cmd, and com files' do
       let(:cmds) { ['/tmp/foo.bat', '/tmp/foo.cmd', '/tmp/foo.exe', '/tmp/foo.com'] }
 
-      before :each do
+      before do
         cmds.each do |cmd|
           allow(File).to receive(:executable?).with(cmd).and_return(true)
           allow(File).to receive(:file?).with(cmd).and_return(true)
@@ -161,7 +161,7 @@ describe LegacyFacter::Util::Parser do
     context 'exe, bat, cmd, and com files' do
       let(:cmds) { ['/tmp/foo.bat', '/tmp/foo.cmd', '/tmp/foo.exe', '/tmp/foo.com'] }
 
-      before :each do
+      before do
         cmds.each do |cmd|
           allow(File).to receive(:executable?).with(cmd).and_return(true)
           allow(File).to receive(:file?).with(cmd).and_return(true)

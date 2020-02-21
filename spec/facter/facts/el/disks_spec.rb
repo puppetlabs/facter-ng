@@ -17,7 +17,7 @@ describe 'El disks' do
   subject(:fact) { Facter::El::Disks.new }
 
   describe '#call_the_resolver' do
-    before(:each) do
+    before do
       allow(Facter::Resolvers::Linux::Disk).to receive(:resolve).with(:disks).and_return(disk)
     end
 

@@ -51,25 +51,6 @@ RSpec/ExpectInHook:
 RSpec/FilePath:
   Enabled: false
 
-# Offense count: 18
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: implicit, each, example
-RSpec/HookArgument:
-  Exclude:
-    - 'spec/custom_facts/core/execution/posix_spec.rb'
-    - 'spec/custom_facts/core/execution/windows_spec.rb'
-    - 'spec/custom_facts/core/logging_spec.rb'
-    - 'spec/custom_facts/shared_contexts/platform.rb'
-    - 'spec/custom_facts/util/config_spec.rb'
-    - 'spec/custom_facts/util/loader_spec.rb'
-    - 'spec/custom_facts/util/parser_spec.rb'
-    - 'spec/facter/facts/el/disks_spec.rb'
-    - 'spec/facter/resolvers/selinux_resolver_spec.rb'
-    - 'spec/framework/core/fact_loaders/fact_loader_spec.rb'
-    - 'spec/framework/formatters/legacy_fact_formatter_spec.rb'
-    - 'spec/spec_helper_legacy.rb'
-
 # Offense count: 15
 # Configuration parameters: AssignmentOnly.
 RSpec/InstanceVariable:

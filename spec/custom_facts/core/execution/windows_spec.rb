@@ -9,7 +9,7 @@ describe LegacyFacter::Core::Execution::Windows, as_platform: :windows do
   end
 
   describe '#which' do
-    before :each do
+    before do
       allow(subject)
         .to receive(:search_paths)
         .and_return ['C:\Windows\system32', 'C:\Windows', 'C:\Windows\System32\Wbem']

@@ -48,7 +48,7 @@ describe LegacyFacter::Util::Config do
   end
 
   describe 'external_facts_dirs' do
-    before :each do
+    before do
       allow(LegacyFacter::Util::Root).to receive(:root?).and_return(true)
     end
 

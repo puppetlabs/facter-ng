@@ -9,7 +9,7 @@ describe LegacyFacter::Core::Execution::Posix, unless: LegacyFacter::Util::Confi
   end
 
   describe '#which' do
-    before :each do
+    before do
       allow(subject).to receive(:search_paths).and_return ['/bin', '/sbin', '/usr/sbin']
     end
 

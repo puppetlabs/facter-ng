@@ -33,7 +33,7 @@ describe 'LegacyFactFormatter' do
     Facter::ResolvedFact.new('my.nested.fact2', nil)
   end
 
-  before(:each) do
+  before do
     resolved_fact1.user_query = 'resolved_fact1'
     resolved_fact1.filter_tokens = []
 
@@ -71,7 +71,7 @@ describe 'LegacyFactFormatter' do
     end
 
     context 'facts value is nil' do
-      before(:each) do
+      before do
         nil_resolved_fact1.user_query = ''
         nil_resolved_fact2.user_query = ''
         resolved_fact2.user_query = ''
