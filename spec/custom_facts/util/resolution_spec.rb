@@ -3,17 +3,17 @@
 
 require_relative '../../spec_helper_legacy'
 
-describe LegacyFacter::Util::Resolution do
-  subject(:resolution) { described_class.new(:foo, stub_fact) }
+describe Facter::Util::Resolution do
+  subject(:resolution) { Facter::Util::Resolution.new(:foo, stub_fact) }
 
   let(:stub_fact) { double('fact', name: :stubfact) }
 
   it 'requires a name' do
-    expect { LegacyFacter::Util::Resolution.new }.to raise_error(ArgumentError)
+    expect { Facter::Util::Resolution.new }.to raise_error(ArgumentError)
   end
 
   it 'requires a fact' do
-    expect { LegacyFacter::Util::Resolution.new('yay') }.to raise_error(ArgumentError)
+    expect { Facter::Util::Resolution.new('yay') }.to raise_error(ArgumentError)
   end
 
   it 'can return its name' do
@@ -48,7 +48,7 @@ describe LegacyFacter::Util::Resolution do
     it 'prefers a command over a block' do
       block = -> {}
       resolution.setcode('foo', &block)
-      expect(resolution.code).to_not eq block
+      expect(resolution.code).not_to eq block
     end
 
     it 'fails if neither a string nor block has been provided' do
