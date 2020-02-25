@@ -8,7 +8,12 @@ module Facter
     def initialize(name, value = '', type = :core)
       @name = name
       @value = value
-      type =~ /core|legacy/ ? @type = type : (raise ArgumentError, 'The type provided for fact is not legacy or core!')
+
+      unless type =~ /core|legacy|external|custom/
+        raise ArgumentError, 'The type provided for fact is not legacy, core or custom!'
+      end
+
+      @type = type
     end
 
     def legacy?

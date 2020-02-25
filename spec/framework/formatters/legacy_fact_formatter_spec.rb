@@ -123,7 +123,7 @@ describe Facter::LegacyFactFormatter do
       context 'formats to legacy for a single user query that contains :' do
         let(:resolved_fact) do
           double(Facter::ResolvedFact, name: 'networking.ip6', value: 'fe80::7ca0:ab22:703a:b329',
-                                       user_query: 'networking.ip6', filter_tokens: [])
+                                       user_query: 'networking.ip6', filter_tokens: [], type: :core)
         end
 
         it 'returns single value without replacing : with =>' do
