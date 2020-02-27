@@ -1,0 +1,17 @@
+---
+name: RuboCop TODO checker
+
+on: [push]
+
+jobs:
+  rtc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: install bundler and gems
+        run: |
+          gem install bundler
+          bundle install --jobs 3 --retry 3
+
+      - uses: gimmyxd/rtc-action@0.0.1.pre
