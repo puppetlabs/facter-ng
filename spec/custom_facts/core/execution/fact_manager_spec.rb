@@ -2,7 +2,7 @@
 
 require_relative '../../../spec_helper_legacy'
 
-describe LegacyFacter::Core::Execution::Base do
+describe Facter::Core::Execution::Base do
   describe '#with_env' do
     it "executes the caller's block with the specified env vars" do
       test_env = { 'LANG' => 'C', 'LC_ALL' => 'C', 'FOO' => 'BAR' }
@@ -76,7 +76,7 @@ describe LegacyFacter::Core::Execution::Base do
     describe 'and the command is not present' do
       it 'raises an error when the :on_fail behavior is :raise' do
         expect(subject).to receive(:expand_command).with('foo').and_return(nil)
-        expect { subject.execute('foo') }.to raise_error(LegacyFacter::Core::Execution::ExecutionFailure)
+        expect { subject.execute('foo') }.to raise_error(Facter::Core::Execution::ExecutionFailure)
       end
 
       it 'returns the given value when :on_fail is set to a value' do
@@ -92,7 +92,7 @@ describe LegacyFacter::Core::Execution::Base do
       end
 
       it 'raises an error when the :on_fail behavior is :raise' do
-        expect { subject.execute('foo') }.to raise_error(LegacyFacter::Core::Execution::ExecutionFailure)
+        expect { subject.execute('foo') }.to raise_error(Facter::Core::Execution::ExecutionFailure)
       end
 
       it 'returns the given value when :on_fail is set to a value' do

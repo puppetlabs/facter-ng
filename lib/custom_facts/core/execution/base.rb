@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module LegacyFacter
+module Facter
   module Core
     module Execution
       class Base
@@ -42,7 +42,7 @@ module LegacyFacter
 
             if expanded_command.nil?
               if on_fail == :raise
-                raise LegacyFacter::Core::Execution::ExecutionFailure.new,
+                raise Facter::Core::Execution::ExecutionFailure.new,
                       "Could not execute '#{command}': command not found"
               end
 
@@ -58,7 +58,7 @@ module LegacyFacter
             rescue StandardError => e
               return on_fail unless on_fail == :raise
 
-              raise LegacyFacter::Core::Execution::ExecutionFailure.new,
+              raise Facter::Core::Execution::ExecutionFailure.new,
                     "Failed while executing '#{expanded_command}': #{e.message}"
             ensure
               if wait_for_child

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module LegacyFacter
+module Facter
   module Core
     module Execution
       # require_relative 'execution/base'
@@ -8,9 +8,9 @@ module LegacyFacter
       # require_relative 'execution/posix'
 
       @@impl = if LegacyFacter::Util::Config.windows?
-                 LegacyFacter::Core::Execution::Windows.new
+                 Facter::Core::Execution::Windows.new
                else
-                 LegacyFacter::Core::Execution::Posix.new
+                 Facter::Core::Execution::Posix.new
                end
 
       def self.impl

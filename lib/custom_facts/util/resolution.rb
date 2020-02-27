@@ -18,7 +18,7 @@ module Facter
 
       attr_reader :weight
 
-      extend LegacyFacter::Core::Execution
+      extend Facter::Core::Execution
 
       class << self
         # Expose command execution methods that were extracted into
@@ -117,7 +117,7 @@ module Facter
       def setcode(string = nil, &block)
         if string
           @code = proc do
-            output = LegacyFacter::Core::Execution.execute(string, on_fail: nil)
+            output = Facter::Core::Execution.execute(string, on_fail: nil)
             if output.nil? || output.empty?
               nil
             else

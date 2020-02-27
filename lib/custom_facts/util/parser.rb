@@ -120,7 +120,7 @@ module LegacyFacter
 
       class ScriptParser < Base
         def parse_results
-          KeyValuePairOutputFormat.parse LegacyFacter::Core::Execution.exec(quote(filename))
+          KeyValuePairOutputFormat.parse Facter::Core::Execution.exec(quote(filename))
         end
 
         private
@@ -153,7 +153,7 @@ module LegacyFacter
 
           shell_command =
             "\"#{powershell}\" -NoProfile -NonInteractive -NoLogo -ExecutionPolicy Bypass -File \"#{filename}\""
-          output = LegacyFacter::Core::Execution.exec(shell_command)
+          output = Facter::Core::Execution.exec(shell_command)
           KeyValuePairOutputFormat.parse(output)
         end
       end
