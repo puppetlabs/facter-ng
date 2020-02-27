@@ -11,7 +11,7 @@
 #
 # @api public
 # @since 2.0.0
-module LegacyFacter
+module Facter
   module Core
     class Aggregate
       include LegacyFacter::Core::Suitable

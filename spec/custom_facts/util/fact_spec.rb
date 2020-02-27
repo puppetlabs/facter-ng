@@ -70,7 +70,7 @@ describe Facter::Util::Fact do
 
     it 'creates an aggregate resolution when the type is :aggregate' do
       fact.define_resolution('named', type: :aggregate)
-      expect(fact.resolution('named')).to be_a_kind_of LegacyFacter::Core::Aggregate
+      expect(fact.resolution('named')).to be_a_kind_of Facter::Core::Aggregate
     end
 
     # it "raises an error if there is an existing resolution with a different type" do
