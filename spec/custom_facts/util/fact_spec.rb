@@ -3,22 +3,22 @@
 
 require_relative '../../spec_helper_legacy'
 
-describe LegacyFacter::Util::Fact do
-  subject(:fact) { LegacyFacter::Util::Fact.new('yay') }
+describe Facter::Util::Fact do
+  subject(:fact) { Facter::Util::Fact.new('yay') }
 
   let(:resolution) { Facter::Util::Resolution.new('yay', fact) }
 
   it 'requires a name' do
-    expect { LegacyFacter::Util::Fact.new }.to raise_error(ArgumentError)
+    expect { Facter::Util::Fact.new }.to raise_error(ArgumentError)
   end
 
   it 'downcases and converts the name to a symbol' do
-    expect(LegacyFacter::Util::Fact.new('YayNess').name).to eq :yayness
+    expect(Facter::Util::Fact.new('YayNess').name).to eq :yayness
   end
 
   it 'issues a deprecation warning for use of ldapname' do
     expect(LegacyFacter).to receive(:warnonce).with('ldapname is deprecated and will be removed in a future version')
-    LegacyFacter::Util::Fact.new('YayNess', ldapname: 'fooness')
+    Facter::Util::Fact.new('YayNess', ldapname: 'fooness')
   end
 
   describe 'when adding resolution mechanisms using #add' do
@@ -29,7 +29,7 @@ describe LegacyFacter::Util::Fact do
   end
 
   describe 'looking up resolutions by name' do
-    subject(:fact) { LegacyFacter::Util::Fact.new('yay') }
+    subject(:fact) { Facter::Util::Fact.new('yay') }
 
     it 'returns nil if no such resolution exists' do
       expect(fact.resolution('nope')).to be_nil
@@ -92,7 +92,7 @@ describe LegacyFacter::Util::Fact do
 
   describe 'when returning a value' do
     it 'returns nil if there are no resolutions' do
-      expect(LegacyFacter::Util::Fact.new('yay').value).to be nil
+      expect(Facter::Util::Fact.new('yay').value).to be nil
     end
 
     it 'prefers the highest weight resolution' do
@@ -173,7 +173,7 @@ describe LegacyFacter::Util::Fact do
 
   describe '#flush' do
     subject do
-      LegacyFacter::Util::Fact.new(:foo)
+      Facter::Util::Fact.new(:foo)
     end
 
     it 'invokes #flush on all resolutions' do

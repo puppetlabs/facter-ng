@@ -40,7 +40,7 @@ module Facter
       attr_accessor :name
 
       # @!attribute [r] fact
-      # @return [LegacyFacter::Util::Fact]
+      # @return [Facter::Util::Fact]
       # @api private
       attr_reader :fact
 

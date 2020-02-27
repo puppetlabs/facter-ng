@@ -33,7 +33,7 @@ module LegacyFacter
       attr_reader :confines
 
       # @!attribute [r] fact
-      # @return [LegacyFacter::Util::Fact]
+      # @return [Facter::Util::Fact]
       # @api private
       attr_reader :fact
 

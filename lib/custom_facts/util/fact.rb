@@ -6,7 +6,7 @@
 # Create facts using {Facter.add}
 #
 # @api public
-module LegacyFacter
+module Facter
   module Util
     class Fact
       # The name of the fact
