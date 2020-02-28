@@ -32,7 +32,7 @@ module LegacyFacter
       def initialize(name, options = {})
         @name = name.to_s.downcase.intern
 
-        @options = ::Facter::Utils.deep_copy(options)
+        @options = Facter::Utils.deep_copy(options)
         extract_ldapname_option!(options)
 
         @ldapname ||= @name.to_s
@@ -53,7 +53,7 @@ module LegacyFacter
       #
       # @api private
       def add(options = {}, &block)
-        @options = ::Facter::Utils.deep_copy(@options.merge(options))
+        @options = Facter::Utils.deep_copy(@options.merge(options))
         define_resolution(nil, options, &block)
       end
 
