@@ -141,9 +141,7 @@ module LegacyFacter
         value, weight = extract_value_and_weight(fact)
         core_value = Facter.core_value(name) if weight <= 0
 
-        return core_value if weight <= 0 && core_value
-
-        value
+        core_value.nil? ? value : core_value
       end
 
       private
