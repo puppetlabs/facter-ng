@@ -132,7 +132,7 @@ describe LegacyFacter::Util::Collection do
     end
 
     it 'treats strings and symbols equivalently' do
-      expect(collection.value(:YayNess)).to eq 'result'
+      expect(collection.value(:yayness)).to eq 'result'
     end
 
     describe 'when the weight of the resolution is 0' do
