@@ -22,6 +22,13 @@ describe LegacyFacter::Util::Fact do
     end
   end
 
+  describe '#name' do
+    it 'changing the name raises error' do
+      fact.name
+      expect{fact.name = 'new name'}.to raise_error(NoMethodError)
+    end
+  end
+
   describe '#add' do
     it 'persists options' do
       fact.add(options) {}
