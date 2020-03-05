@@ -138,16 +138,22 @@ module LegacyFacter
 
         return Facter.core_value(name) if fact.nil? || fact.value.nil?
 
-        value = fact&.value
-        weight = fact&.used_resolution_weight || 0
+        value, weight = extract_value_and_weight(fact)
+        core_value = Facter.core_value(name) if weight <= 0
 
-        core_value = Facter.core_value(name)
         return core_value if weight <= 0 && core_value
 
         value
       end
 
       private
+
+      def extract_value_and_weight(fact)
+        value = fact&.value
+        weight = fact&.used_resolution_weight || 0
+
+        [value, weight]
+      end
 
       def create_or_return_fact(name, options)
         name = canonicalize(name)
