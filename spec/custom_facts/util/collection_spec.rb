@@ -120,6 +120,7 @@ describe LegacyFacter::Util::Collection do
     before do
       collection.add('YayNess', value: 'result', weight: 0)
       collection.add('my_fact', value: 'my_fact_value', weight: 0)
+      collection.add('nil_core_value_custom', value: 'custom_fact_value', weight: 0)
     end
 
     it 'returns the result of calling :value on the fact' do
@@ -139,6 +140,7 @@ describe LegacyFacter::Util::Collection do
         allow(Facter).to receive(:core_value).with('yayness').and_return('core_result')
         allow(Facter).to receive(:core_value).with('my_fact').and_return(nil)
         allow(Facter).to receive(:core_value).with('non_existing_fact')
+        allow(Facter).to receive(:core_value).with('nil_core_value_custom').and_return(nil)
       end
 
       context 'when there is a custom fact with the name in collection' do
@@ -162,6 +164,12 @@ describe LegacyFacter::Util::Collection do
 
         it 'returns custom facts value' do
           expect(collection.value('my_fact')).to eq('my_fact_value')
+        end
+      end
+
+      context 'when core fact is nil and custom fact has value' do
+        it 'returns custom fact' do
+          expect(collection.value('nil_core_value_custom')).to eq('custom_fact_value')
         end
       end
     end
