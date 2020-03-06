@@ -25,7 +25,7 @@ describe LegacyFacter::Util::Fact do
   describe '#name' do
     it 'changing the name raises error' do
       fact.name
-      expect{fact.name = 'new name'}.to raise_error(NoMethodError)
+      expect { fact.name = 'new name' }.to raise_error(NoMethodError)
     end
   end
 
@@ -169,6 +169,7 @@ describe LegacyFacter::Util::Fact do
         def suitable?
           false
         end
+
         has_weight 2
         setcode { 2 }
       end
