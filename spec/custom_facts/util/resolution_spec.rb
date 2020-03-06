@@ -108,6 +108,12 @@ describe Facter::Util::Resolution do
     end
   end
 
+  describe '#has_weight' do
+    it 'returns the class instance' do
+      expect(subject.has_weight(42)).to be(subject)
+    end
+  end
+
   describe 'evaluating' do
     it 'evaluates the block in the context of the given resolution' do
       expect(subject).to receive(:weight).with(5)

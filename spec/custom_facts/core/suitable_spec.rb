@@ -51,7 +51,7 @@ describe LegacyFacter::Core::Suitable do
     end
   end
 
-  describe 'determining weight' do
+  describe '#has_weight' do
     it 'is zero if no confines are set' do
       expect(subject.weight).to eq 0
     end
@@ -70,6 +70,10 @@ describe LegacyFacter::Core::Suitable do
       subject.confine kernel: 'Linux'
       subject.has_weight 11
       expect(subject.weight).to eq 11
+    end
+
+    it 'returns the class instance' do
+      expect(subject.has_weight(10)).to be(subject)
     end
   end
 
