@@ -13,10 +13,14 @@ module Facter
   @options = Options.instance
   Log.add_legacy_logger(STDOUT)
   @logger = Log.new(self)
+  @already_searched = {}
 
   class << self
     def [](name)
       fact(name)
+    end
+
+    def clear_messages
     end
 
     def add(name, options = {}, &block)
@@ -58,11 +62,10 @@ module Facter
       debug_bool
     end
 
-    def fact(name)
-      fact = Facter::Util::Fact.new(name)
-      val = value(name)
-      fact.add({}) { setcode { val } }
-      fact
+    def fact(user_query)
+      value(user_query)
+
+      @already_searched[user_query]
     end
 
     def log_errors(missing_names)
@@ -86,6 +89,7 @@ module Facter
 
     def reset
       LegacyFacter.reset
+      @already_searched = {}
     end
 
     def search(*dirs)
@@ -145,7 +149,11 @@ module Facter
       CacheManager.invalidate_all_caches
       fact_collection = FactCollection.new.build_fact_collection!(resolved_facts)
       splitted_user_query = Facter::Utils.split_user_query(user_query)
-      fact_collection.dig(*splitted_user_query)
+
+      value = fact_collection.dig(*splitted_user_query)
+      add_fact_to_searched_facts(user_query, value)
+
+      value
     end
 
     def version
@@ -154,6 +162,11 @@ module Facter
     end
 
     private
+
+    def add_fact_to_searched_facts(user_query, value)
+      @already_searched[user_query] = LegacyFacter::Util::Fact.new(user_query) unless @already_searched[user_query]
+      @already_searched[user_query].add({}) { setcode { value } }
+    end
 
     def log_blocked_facts
       block_list = BlockList.instance.block_list
