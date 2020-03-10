@@ -5,7 +5,7 @@ module Facts
     module Os
       class Hardware
         FACT_NAME = 'os.hardware'
-        ALIASES = 'hardwareisa'
+        ALIASES = 'hardwaremodel'
 
         def call_the_resolver
           fact_value = Facter::Resolvers::Uname.resolve(:machine)

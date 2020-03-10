@@ -6,13 +6,13 @@ module Facts
       FACT_NAME = 'sshfp_.*'
 
       def call_the_resolver
-        arr = []
+        facts = []
         result = Facter::Resolvers::SshResolver.resolve(:ssh)
         result.each do |ssh|
-          arr << Facter::ResolvedFact.new("sshfp_#{ssh.name.to_sym}",
-                                          "#{ssh.fingerprint.sha1}\n#{ssh.fingerprint.sha256}", :legacy)
+          facts << Facter::ResolvedFact.new("sshfp_#{ssh.name.to_sym}",
+                                            "#{ssh.fingerprint.sha1} \n #{ssh.fingerprint.sha256}", :legacy)
         end
-        arr
+        facts
       end
     end
   end
