@@ -19,7 +19,7 @@ describe Facts::Debian::Dmi::Board::Product do
     it 'returns a resolved fact' do
       expect(fact.call_the_resolver).to be_an_instance_of(Array).and \
         contain_exactly(an_object_having_attributes(name: 'dmi.board.product', value: product),
-                        an_object_having_attributes(name: 'boardproduct', value: product, type: :legacy))
+                        an_object_having_attributes(name: 'boardproductname', value: product, type: :legacy))
     end
   end
 end

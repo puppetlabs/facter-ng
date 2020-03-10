@@ -19,8 +19,9 @@ describe Facts::Debian::Memory::System::Total do
     end
 
     it 'returns a resolved fact' do
-      expect(fact.call_the_resolver).to be_an_instance_of(Facter::ResolvedFact).and \
-        have_attributes(name: 'memory.system.total', value: value)
+      expect(fact.call_the_resolver).to be_an_instance_of(Array).and \
+        contain_exactly(an_object_having_attributes(name: 'memory.system.total', value: value),
+                        an_object_having_attributes(name: 'memorysize', value: value, type: :legacy))
     end
   end
 end

@@ -19,8 +19,9 @@ describe Facts::Debian::Memory::Swap::Available do
     end
 
     it 'returns a resolved fact' do
-      expect(fact.call_the_resolver).to be_an_instance_of(Facter::ResolvedFact).and \
-        have_attributes(name: 'memory.swap.available', value: value)
+      expect(fact.call_the_resolver).to be_an_instance_of(Array).and \
+        contain_exactly(an_object_having_attributes(name: 'memory.swap.available', value: value),
+                        an_object_having_attributes(name: 'swapfree', value: value, type: :legacy))
     end
   end
 end

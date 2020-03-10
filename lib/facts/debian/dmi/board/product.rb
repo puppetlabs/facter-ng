@@ -6,7 +6,7 @@ module Facts
       module Board
         class Product
           FACT_NAME = 'dmi.board.product'
-          ALIASES = 'boardproduct'
+          ALIASES = 'boardproductname'
 
           def call_the_resolver
             fact_value = Facter::Resolvers::Linux::DmiBios.resolve(:board_name)
