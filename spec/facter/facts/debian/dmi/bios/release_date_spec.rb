@@ -18,8 +18,8 @@ describe Facts::Debian::Dmi::Bios::ReleaseDate do
 
     it 'returns a resolved fact' do
       expect(fact.call_the_resolver).to be_an_instance_of(Array).and \
-        contain_exactly(an_object_having_attributes(name: 'dmi.bios.release_date', value: value),
-                        an_object_having_attributes(name: 'bios_release_date', value: value, type: :legacy))
+        contain_exactly(an_object_having_attributes(name: 'dmi.bios.release_date', value: date),
+                        an_object_having_attributes(name: 'bios_release_date', value: date, type: :legacy))
     end
   end
 end
