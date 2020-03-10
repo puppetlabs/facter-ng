@@ -20,7 +20,10 @@ module Facter
       fact(name)
     end
 
-    def clear_messages
+    def clear_messages; end
+
+    def collection
+      LegacyFacter.collection
     end
 
     def add(name, options = {}, &block)
