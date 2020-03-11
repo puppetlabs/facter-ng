@@ -147,7 +147,7 @@ describe Facter do
         .and_return(fact_collection)
 
       result = Facter.fact(user_query)
-      expect(result).to be_instance_of(Facter::Util::Fact)
+      expect(result).to be_instance_of(Facter::ResolvedFact)
       expect(result.value).to eq('Ubuntu')
     end
 
@@ -161,7 +161,7 @@ describe Facter do
         .and_return(empty_fact_collection)
 
       result = Facter.fact(user_query)
-      expect(result).to be_instance_of(Facter::Util::Fact)
+      expect(result).to be_instance_of(Facter::ResolvedFact)
       expect(result.value).to eq(nil)
     end
   end
@@ -177,7 +177,7 @@ describe Facter do
         .and_return(fact_collection)
 
       result = Facter[user_query]
-      expect(result).to be_instance_of(Facter::Util::Fact)
+      expect(result).to be_instance_of(Facter::ResolvedFact)
       expect(result.value).to eq('Ubuntu')
     end
 
@@ -191,7 +191,7 @@ describe Facter do
         .and_return(empty_fact_collection)
 
       result = Facter[user_query]
-      expect(result).to be_instance_of(Facter::Util::Fact)
+      expect(result).to be_instance_of(Facter::ResolvedFact)
       expect(result.value).to eq(nil)
     end
   end

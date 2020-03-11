@@ -16,11 +16,12 @@ module Facter
   @already_searched = {}
 
   class << self
-
     def clear_messages
+      @logger.warn('clear_messages is not implemented')
     end
 
     def collection
+      @logger.warn('The collection API is deprecated!')
       LegacyFacter.collection
     end
 
@@ -179,7 +180,6 @@ module Facter
       value = fact_collection.dig(*splitted_user_query)
       add_fact_to_searched_facts(user_query, value)
     end
-
 
     def log_blocked_facts
       block_list = BlockList.instance.block_list
