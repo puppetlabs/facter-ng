@@ -2,7 +2,7 @@
 
 module Facts
   module Macosx
-    class Puppetversion
+    class PuppetVersion
       FACT_NAME = 'puppetversion'
 
       def call_the_resolver

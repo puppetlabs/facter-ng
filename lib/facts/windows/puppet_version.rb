@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Facts
-  module Aix
-    class Puppetversion
+  module Windows
+    class PuppetVersion
       FACT_NAME = 'puppetversion'
 
       def call_the_resolver
