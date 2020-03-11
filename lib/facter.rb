@@ -71,7 +71,7 @@ module Facter
     def fact(user_query)
       user_query = user_query.to_s
       resolve_fact(user_query)
-
+      return nil if resolve_fact(user_query).nil?
       @already_searched[user_query]
     end
 
@@ -164,9 +164,11 @@ module Facter
     private
 
     def add_fact_to_searched_facts(user_query, value)
-      @already_searched[user_query] = ResolvedFact.new(user_query, value) unless @already_searched[user_query]
+      if Facter::FactManager.instance.searched_facts([user_query])
+        @already_searched[user_query] = ResolvedFact.new(user_query, value) unless @already_searched[user_query]
 
-      @already_searched[user_query].value = value
+        @already_searched[user_query].value = value
+      end
     end
 
     def resolve_fact(user_query)
