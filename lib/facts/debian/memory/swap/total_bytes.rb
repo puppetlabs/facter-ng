@@ -11,7 +11,13 @@ module Facts
           def call_the_resolver
             fact_value = Facter::Resolvers::Linux::Memory.resolve(:swap_total)
             [Facter::ResolvedFact.new(FACT_NAME, fact_value),
-             Facter::ResolvedFact.new(ALIASES, fact_value ? (fact_value / (1024.0 * 1024.0)).round(2) : nil, :legacy)]
+             Facter::ResolvedFact.new(ALIASES, convert_to_mb(fact_value), :legacy)]
+          end
+
+          private
+
+          def convert_to_mb(fact_value)
+            fact_value ? (fact_value / (1024.0 * 1024.0)).round(2) : nil
           end
         end
       end
