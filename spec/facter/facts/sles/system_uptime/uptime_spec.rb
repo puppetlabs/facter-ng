@@ -1,14 +1,13 @@
 # frozen_string_literal: true
 
-describe Facts::Macosx::SystemUptime::Uptime do
+describe Facts::Sles::SystemUptime::Uptime do
   describe '#call_the_resolver' do
-    subject(:fact) { Facts::Macosx::SystemUptime::Uptime.new }
+    subject(:fact) { Facts::Sles::SystemUptime::Uptime.new }
 
-    let(:uptime) { '10 days' }
+    let(:value) { '6 days' }
 
     before do
-      allow(Facter::Resolvers::Uptime).to \
-        receive(:resolve).with(:uptime).and_return(uptime)
+      allow(Facter::Resolvers::Uptime).to receive(:resolve).with(:uptime).and_return(value)
     end
 
     it 'calls Facter::Resolvers::Uptime' do
@@ -16,9 +15,9 @@ describe Facts::Macosx::SystemUptime::Uptime do
       expect(Facter::Resolvers::Uptime).to have_received(:resolve).with(:uptime)
     end
 
-    it 'returns a resolved fact' do
+    it 'returns total uptime since last boot' do
       expect(fact.call_the_resolver).to be_an_instance_of(Facter::ResolvedFact).and \
-        have_attributes(name: 'system_uptime.uptime', value: uptime)
+        have_attributes(name: 'system_uptime.uptime', value: value)
     end
   end
 end
