@@ -131,7 +131,7 @@ module LegacyFacter
 
       class ScriptParser < Base
         def parse_results
-          parse_executable_output(LegacyFacter::Core::Execution.exec(quote(filename)))
+          parse_executable_output(Facter::Core::Execution.exec(quote(filename)))
         end
 
         private
@@ -164,7 +164,7 @@ module LegacyFacter
 
           shell_command =
             "\"#{powershell}\" -NoProfile -NonInteractive -NoLogo -ExecutionPolicy Bypass -File \"#{filename}\""
-          output = LegacyFacter::Core::Execution.exec(shell_command)
+          output = Facter::Core::Execution.exec(shell_command)
           parse_executable_output(output)
         end
       end

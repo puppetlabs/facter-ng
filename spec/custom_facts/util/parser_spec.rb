@@ -122,7 +122,7 @@ describe LegacyFacter::Util::Parser do
     let(:yaml_data) { "one: two\nthree: four\n" }
 
     def expects_script_to_return(path, content, result)
-      allow(LegacyFacter::Core::Execution).to receive(:exec).with(path).and_return(content)
+      allow(Facter::Core::Execution).to receive(:exec).with(path).and_return(content)
       allow(File).to receive(:executable?).with(path).and_return(true)
       allow(File).to receive(:file?).with(path).and_return(true)
 
@@ -154,7 +154,7 @@ describe LegacyFacter::Util::Parser do
     it 'quotes scripts with spaces' do
       path = "/h a s s p a c e s#{ext}"
 
-      expect(LegacyFacter::Core::Execution).to receive(:exec).with("\"#{path}\"").and_return(data_in_txt)
+      expect(Facter::Core::Execution).to receive(:exec).with("\"#{path}\"").and_return(data_in_txt)
 
       expects_script_to_return(path, data_in_txt, data)
     end
@@ -201,12 +201,12 @@ describe LegacyFacter::Util::Parser do
       end
 
       it 'parses output from powershell' do
-        allow(LegacyFacter::Core::Execution).to receive(:exec).and_return(data_in_txt)
+        allow(Facter::Core::Execution).to receive(:exec).and_return(data_in_txt)
         expects_to_parse_powershell(ps1, data)
       end
 
       it 'parses yaml output from powershell' do
-        allow(LegacyFacter::Core::Execution).to receive(:exec).and_return(yaml_data)
+        allow(Facter::Core::Execution).to receive(:exec).and_return(yaml_data)
         expects_to_parse_powershell(ps1, data)
       end
 
@@ -220,7 +220,7 @@ describe LegacyFacter::Util::Parser do
 
         it 'prefers the sysnative alias to resolve 64-bit powershell on 32-bit ruby' do
           File.expects(:exists?).with(sysnative_powershell).returns(true)
-          LegacyFacter::Core::Execution.expects(:exec).with(regexp_matches(sysnative_regexp)).returns(data_in_txt)
+          Facter::Core::Execution.expects(:exec).with(regexp_matches(sysnative_regexp)).returns(data_in_txt)
 
           expects_to_parse_powershell(ps1, data)
         end
@@ -228,7 +228,7 @@ describe LegacyFacter::Util::Parser do
         it "uses system32 if sysnative alias doesn't exist on 64-bit ruby" do
           File.expects(:exists?).with(sysnative_powershell).returns(false)
           File.expects(:exists?).with(system32_powershell).returns(true)
-          LegacyFacter::Core::Execution.expects(:exec).with(regexp_matches(system32_regexp)).returns(data_in_txt)
+          Facter::Core::Execution.expects(:exec).with(regexp_matches(system32_regexp)).returns(data_in_txt)
 
           expects_to_parse_powershell(ps1, data)
         end
@@ -236,7 +236,7 @@ describe LegacyFacter::Util::Parser do
         it "uses 'powershell' as a last resort" do
           File.expects(:exists?).with(sysnative_powershell).returns(false)
           File.expects(:exists?).with(system32_powershell).returns(false)
-          LegacyFacter::Core::Execution.expects(:exec).with(regexp_matches(powershell_regexp)).returns(data_in_txt)
+          Facter::Core::Execution.expects(:exec).with(regexp_matches(powershell_regexp)).returns(data_in_txt)
 
           expects_to_parse_powershell(ps1, data)
         end
