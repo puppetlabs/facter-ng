@@ -12,10 +12,10 @@ module Facter
         private
 
         def post_resolve(fact_name)
-          @fact_list.fetch(fact_name) { read_redhat_release(fact_name) }
+          @fact_list.fetch(fact_name) { puppet_version(fact_name) }
         end
 
-        def read_redhat_release(fact_name)
+        def puppet_version(fact_name)
           require 'puppet/version'
           @fact_list[:puppetversion] = Puppet.version.to_s
 
