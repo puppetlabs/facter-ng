@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Facts
-  module Macosx
+  module Sles
     class Puppetversion
       FACT_NAME = 'puppetversion'
 
