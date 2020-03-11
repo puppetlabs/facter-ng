@@ -17,11 +17,11 @@ module Facter
 
   class << self
     def clear_messages
-      @logger.warn('clear_messages is not implemented')
+      @logger.debug('clear_messages is not implemented')
     end
 
     def collection
-      @logger.warn('The collection API is deprecated!')
+      @logger.warn('The collection API is deprecated! It will be removed in the next version!')
       LegacyFacter.collection
     end
 

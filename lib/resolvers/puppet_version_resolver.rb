@@ -17,7 +17,7 @@ module Facter
 
         def puppet_version(fact_name)
           require 'puppet/version'
-          @fact_list[:puppetversion] = Puppet.version.to_s
+          @fact_list[:puppetversion] = Puppet.version
 
           @fact_list[fact_name]
         end
