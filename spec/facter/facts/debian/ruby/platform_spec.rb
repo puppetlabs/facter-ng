@@ -15,7 +15,7 @@ describe Facts::Debian::Ruby::Platform do
       expect(Facter::Resolvers::Ruby).to have_received(:resolve).with(:platform)
     end
 
-    it 'returns a fact' do
+    it 'returns ruby platform fact' do
       expect(fact.call_the_resolver).to be_an_instance_of(Array).and \
         contain_exactly(an_object_having_attributes(name: 'ruby.platform', value: value),
                         an_object_having_attributes(name: 'rubyplatform', value: value, type: :legacy))

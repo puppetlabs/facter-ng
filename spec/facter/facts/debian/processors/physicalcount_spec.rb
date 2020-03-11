@@ -16,7 +16,7 @@ describe Facts::Debian::Processors::Physicalcount do
       expect(Facter::Resolvers::Linux::Processors).to have_received(:resolve).with(:physical_count)
     end
 
-    it 'returns a resolved fact' do
+    it 'returns processors physical count fact' do
       expect(fact.call_the_resolver).to be_an_instance_of(Array).and \
         contain_exactly(an_object_having_attributes(name: 'processors.physicalcount', value: physical_count),
                         an_object_having_attributes(name: 'physicalprocessorcount',

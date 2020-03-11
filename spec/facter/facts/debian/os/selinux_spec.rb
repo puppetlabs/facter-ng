@@ -15,7 +15,7 @@ describe Facts::Debian::Os::Selinux do
       expect(Facter::Resolvers::SELinux).to have_received(:resolve).with(:enabled)
     end
 
-    it 'returns a fact' do
+    it 'returns selinux fact' do
       expect(fact.call_the_resolver).to be_an_instance_of(Array).and \
         contain_exactly(an_object_having_attributes(name: 'os.selinux', value: { 'enabled' => value }),
                         an_object_having_attributes(name: 'selinux', value: value, type: :legacy))

@@ -15,7 +15,7 @@ describe Facts::Debian::Os::Hardware do
       expect(Facter::Resolvers::Uname).to have_received(:resolve).with(:machine)
     end
 
-    it 'returns a fact' do
+    it 'returns hardware model fact' do
       expect(fact.call_the_resolver).to be_an_instance_of(Array).and \
         contain_exactly(an_object_having_attributes(name: 'os.hardware', value: value),
                         an_object_having_attributes(name: 'hardwaremodel', value: value, type: :legacy))

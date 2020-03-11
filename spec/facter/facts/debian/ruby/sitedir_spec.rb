@@ -15,7 +15,7 @@ describe Facts::Debian::Ruby::Sitedir do
       expect(Facter::Resolvers::Ruby).to have_received(:resolve).with(:sitedir)
     end
 
-    it 'returns a fact' do
+    it 'returns ruby site dir fact' do
       expect(fact.call_the_resolver).to be_an_instance_of(Array).and \
         contain_exactly(an_object_having_attributes(name: 'ruby.sitedir', value: value),
                         an_object_having_attributes(name: 'rubysitedir', value: value, type: :legacy))

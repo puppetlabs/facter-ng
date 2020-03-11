@@ -16,7 +16,7 @@ describe Facts::Debian::Dmi::Chassis::AssetTag do
       expect(Facter::Resolvers::Linux::DmiBios).to have_received(:resolve).with(:chassis_asset_tag)
     end
 
-    it 'returns a resolved fact' do
+    it 'returns chassis asset tag fact' do
       expect(fact.call_the_resolver).to be_an_instance_of(Array).and \
         contain_exactly(an_object_having_attributes(name: 'dmi.chassis.asset_tag', value: tag),
                         an_object_having_attributes(name: 'chassisassettag', value: tag, type: :legacy))
