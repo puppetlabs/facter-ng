@@ -84,7 +84,7 @@ describe LegacyFacter::Core::Execution::Base do
         allow(Facter::Log).to receive(:new).with('foo').and_return(logger)
 
         allow(File).to receive(:executable?).with(command).and_return(true)
-        allow(File).to receive(:file?).with(command).and_return(true)
+        allow(FileTest).to receive(:file?).with(command).and_return(true)
       end
 
       it 'loggs warning messages on stderr' do

@@ -124,13 +124,13 @@ describe LegacyFacter::Util::Parser do
     def expects_script_to_return(path, content, result)
       allow(Facter::Core::Execution).to receive(:exec).with(path).and_return(content)
       allow(File).to receive(:executable?).with(path).and_return(true)
-      allow(File).to receive(:file?).with(path).and_return(true)
+      allow(FileTest).to receive(:file?).with(path).and_return(true)
 
       expect(LegacyFacter::Util::Parser.parser_for(path).results).to eq result
     end
 
     def expects_parser_to_return_nil_for_directory(path)
-      allow(File).to receive(:file?).with(path).and_return(false)
+      allow(FileTest).to receive(:file?).with(path).and_return(false)
 
       expect(LegacyFacter::Util::Parser.parser_for(path).results).to be nil
     end
@@ -165,7 +165,7 @@ describe LegacyFacter::Util::Parser do
       before do
         cmds.each do |cmd|
           allow(File).to receive(:executable?).with(cmd).and_return(true)
-          allow(File).to receive(:file?).with(cmd).and_return(true)
+          allow(FileTest).to receive(:file?).with(cmd).and_return(true)
         end
       end
 
@@ -191,7 +191,7 @@ describe LegacyFacter::Util::Parser do
 
       def expects_to_parse_powershell(cmd, result)
         allow(LegacyFacter::Util::Config).to receive(:windows?).and_return(true)
-        allow(File).to receive(:file?).with(ps1).and_return(true)
+        allow(FileTest).to receive(:file?).with(ps1).and_return(true)
 
         expect(LegacyFacter::Util::Parser.parser_for(cmd).results).to eq result
       end
