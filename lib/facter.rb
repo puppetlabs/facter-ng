@@ -20,11 +20,6 @@ module Facter
       @logger.debug('clear_messages is not implemented')
     end
 
-    def collection
-      @logger.warn('The collection API is deprecated! It will be removed in the next version!')
-      LegacyFacter.collection
-    end
-
     def [](name)
       fact(name)
     end
@@ -72,6 +67,7 @@ module Facter
       user_query = user_query.to_s
       resolve_fact(user_query)
       return nil if resolve_fact(user_query).nil?
+
       @already_searched[user_query]
     end
 
