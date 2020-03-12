@@ -14,8 +14,8 @@ module Facter
       self
     end
 
-    def fetch_dig(*parts)
-      parts.reduce(self) do |memo, key|
+    def value(*keys)
+      keys.reduce(self) do |memo, key|
         memo.fetch(key.to_s)
       end
     end

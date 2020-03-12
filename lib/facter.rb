@@ -160,11 +160,8 @@ module Facter
     private
 
     def add_fact_to_searched_facts(user_query, value)
-      if Facter::FactManager.instance.searched_facts([user_query])
-        @already_searched[user_query] = ResolvedFact.new(user_query, value) unless @already_searched[user_query]
-
-        @already_searched[user_query].value = value
-      end
+      @already_searched[user_query] ||= ResolvedFact.new(user_query, value)
+      @already_searched[user_query].value = value
     end
 
     def resolve_fact(user_query)
@@ -176,14 +173,11 @@ module Facter
       splitted_user_query = Facter::Utils.split_user_query(user_query)
 
       begin
-        value = fact_collection.fetch_dig(*splitted_user_query)
+        value = fact_collection.value(*splitted_user_query)
         add_fact_to_searched_facts(user_query, value)
       rescue KeyError
         nil
       end
-
-
-      # add_fact_to_searched_facts(user_query, value)
     end
 
     def log_blocked_facts

@@ -22,7 +22,7 @@ describe Facter::FactCollection do
     resolved_fact.user_query = 'os'
 
     fact_collection.build_fact_collection!([resolved_fact])
-    expected_hash = { "os" => { "version" => nil } }
+    expected_hash = { 'os' => { 'version' => nil } }
 
     expect(fact_collection).to eq(expected_hash)
   end
