@@ -6,8 +6,12 @@ describe Facter do
   let(:os_fact) do
     double(Facter::ResolvedFact, name: fact_name, value: fact_value, user_query: fact_name, filter_tokens: [])
   end
-  let(:fact_collection) { { 'os' => { 'name' => 'Ubuntu' } } }
-  let(:empty_fact_collection) { {} }
+  let(:fact_collection) do
+    fact_collection = Facter::FactCollection.new
+    fact_collection ['os'] = Facter::FactCollection['name' => 'Ubuntu']
+    fact_collection
+  end
+  let(:empty_fact_collection) { Facter::FactCollection.new }
 
   before do
     allow(Facter::CacheManager).to receive(:invalidate_all_caches)

@@ -148,7 +148,7 @@ module Facter
     def value(user_query)
       user_query = user_query.to_s
       resolve_fact(user_query)
-      @already_searched[user_query].value
+      @already_searched[user_query]&.value
     end
 
     def version
