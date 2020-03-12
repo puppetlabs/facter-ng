@@ -30,6 +30,7 @@ module Facter
     end
 
     def clear
+      @already_searched = {}
       LegacyFacter.clear
     end
 
