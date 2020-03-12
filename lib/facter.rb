@@ -66,7 +66,6 @@ module Facter
     def fact(user_query)
       user_query = user_query.to_s
       resolve_fact(user_query)
-      return nil if resolve_fact(user_query).nil?
 
       @already_searched[user_query]
     end
@@ -175,8 +174,15 @@ module Facter
       fact_collection = FactCollection.new.build_fact_collection!(resolved_facts)
       splitted_user_query = Facter::Utils.split_user_query(user_query)
 
-      value = fact_collection.dig(*splitted_user_query)
-      add_fact_to_searched_facts(user_query, value)
+      begin
+        value = fact_collection.fetch_dig(*splitted_user_query)
+        add_fact_to_searched_facts(user_query, value)
+      rescue KeyError
+        nil
+      end
+
+
+      # add_fact_to_searched_facts(user_query, value)
     end
 
     def log_blocked_facts
