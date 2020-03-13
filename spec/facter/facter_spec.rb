@@ -16,7 +16,6 @@ describe Facter do
   before do
     Facter.clear
     allow(Facter::CacheManager).to receive(:invalidate_all_caches)
-    allow_any_instance_of(Facter::FactManager).to receive(:searched_facts).and_return(true)
   end
 
   describe '#to_hash' do
