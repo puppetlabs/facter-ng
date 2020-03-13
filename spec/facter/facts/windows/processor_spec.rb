@@ -11,8 +11,8 @@ describe Facts::Windows::Processor do
     end
 
     it 'calls Facter::Resolvers::Processors' do
-      expect(Facter::Resolvers::Processors).to receive(:resolve).with(:models)
       fact.call_the_resolver
+      expect(Facter::Resolvers::Processors).to have_received(:resolve).with(:models)
     end
 
     it 'returns legacy facts about each processor' do

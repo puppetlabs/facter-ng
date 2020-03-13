@@ -2,15 +2,24 @@
 
 describe Facts::Macosx::SystemUptime::Uptime do
   describe '#call_the_resolver' do
-    let(:value) { '10 days' }
+    subject(:fact) { Facts::Macosx::SystemUptime::Uptime.new }
 
-    it 'returns a fact' do
-      expected_fact = double(Facter::ResolvedFact, name: 'system_uptime.uptime', value: value)
-      allow(Facter::Resolvers::Uptime).to receive(:resolve).with(:uptime).and_return(value)
-      allow(Facter::ResolvedFact).to receive(:new).with('system_uptime.uptime', value).and_return(expected_fact)
+    let(:uptime) { '10 days' }
 
-      fact = Facts::Macosx::SystemUptime::Uptime.new
-      expect(fact.call_the_resolver).to eq(expected_fact)
+    before do
+      allow(Facter::Resolvers::Uptime).to \
+        receive(:resolve).with(:uptime).and_return(uptime)
+    end
+
+    it 'calls Facter::Resolvers::Uptime' do
+      fact.call_the_resolver
+      expect(Facter::Resolvers::Uptime).to have_received(:resolve).with(:uptime)
+    end
+
+    it 'returns a resolved fact' do
+      expect(fact.call_the_resolver).to be_an_instance_of(Array).and \
+        contain_exactly(an_object_having_attributes(name: 'system_uptime.uptime', value: uptime),
+                        an_object_having_attributes(name: 'uptime', value: uptime, type: :legacy))
     end
   end
 end
