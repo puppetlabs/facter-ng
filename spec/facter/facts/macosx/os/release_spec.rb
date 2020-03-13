@@ -12,8 +12,9 @@ describe Facts::Macosx::Os::Release do
     end
 
     it 'calls Facter::Resolvers::LsbRelease' do
-      expect(Facter::Resolvers::Uname).to receive(:resolve).with(:kernelrelease)
       fact.call_the_resolver
+
+      expect(Facter::Resolvers::Uname).to have_received(:resolve).with(:kernelrelease)
     end
 
     it 'returns release fact' do
