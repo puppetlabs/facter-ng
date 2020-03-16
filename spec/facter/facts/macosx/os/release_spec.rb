@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# fozen_string_literal: true
+
 describe Facts::Macosx::Os::Release do
   describe '#call_the_resolver' do
     subject(:fact) { Facts::Macosx::Os::Release.new }
