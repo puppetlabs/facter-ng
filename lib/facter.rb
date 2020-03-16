@@ -13,8 +13,13 @@ module Facter
   @options = Options.instance
   Log.add_legacy_logger(STDOUT)
   @logger = Log.new(self)
+  @already_searched = {}
 
   class << self
+    def clear_messages
+      @logger.debug('clear_messages is not implemented')
+    end
+
     # Alias method for Facter.fact()
     # @param name [string] fact name
     #
@@ -48,6 +53,7 @@ module Facter
     #
     # @api public
     def clear
+      @already_searched = {}
       LegacyFacter.clear
     end
 
@@ -108,11 +114,11 @@ module Facter
     #   is found.
     #
     # @api public
-    def fact(name)
-      fact = Facter::Util::Fact.new(name)
-      val = value(name)
-      fact.add({}) { setcode { val } }
-      fact
+    def fact(user_query)
+      user_query = user_query.to_s
+      resolve_fact(user_query)
+
+      @already_searched[user_query]
     end
 
     # Reset search paths for custom and external facts
@@ -128,10 +134,10 @@ module Facter
       nil
     end
 
-    # Register directories to be searched for facts. The registered directories
+    # Register directories to be searched for custom facts. The registered directories
     # must be absolute paths or they will be ignored.
     #
-    # @param dirs [String] directories to search
+    # @param dirs [Array<String>] An array of searched directories
     #
     # @return [void]
     #
@@ -151,7 +157,7 @@ module Facter
       LegacyFacter.search_external(dirs)
     end
 
-    # Returns the registered search directories.
+    # Returns the registered search directories.for external facts.
     #
     # @return [Array<String>] An array of searched directories
     #
@@ -160,7 +166,7 @@ module Facter
       LegacyFacter.search_external_path
     end
 
-    # Returns the registered search directories.
+    # Returns the registered search directories for custom facts.
     #
     # @return [Array<String>] An array of the directories searched
     #
@@ -170,6 +176,7 @@ module Facter
     end
 
     # Gets a hash mapping fact names to their values
+    # The hash contains core facts, legacy facts, custom facts and external facts (all facts that can be resolved).
     #
     # @return [FactCollection] the hash of fact names and values
     #
@@ -183,26 +190,6 @@ module Facter
       resolved_facts = Facter::FactManager.instance.resolve_facts
       CacheManager.invalidate_all_caches
       FactCollection.new.build_fact_collection!(resolved_facts)
-    end
-
-    # Gets a hash mapping fact names to their values
-    #
-    # @return [Array] the hash of fact names and values
-    #
-    # @api public
-    def to_user_output(cli_options, *args)
-      @options.priority_options = { is_cli: true }.merge!(cli_options.map { |(k, v)| [k.to_sym, v] }.to_h)
-      @options.refresh(args)
-      @logger.info("executed with command line: #{ARGV.drop(1).join(' ')}")
-      log_blocked_facts
-
-      resolved_facts = Facter::FactManager.instance.resolve_facts(args)
-      CacheManager.invalidate_all_caches
-      fact_formatter = Facter::FormatterFactory.build(@options)
-
-      status = error_check(args, resolved_facts)
-
-      [fact_formatter.format(resolved_facts), status || 0]
     end
 
     # Check whether printing stack trace is enabled
@@ -231,13 +218,9 @@ module Facter
     #
     # @api public
     def value(user_query)
-      @options.refresh([user_query])
       user_query = user_query.to_s
-      resolved_facts = Facter::FactManager.instance.resolve_facts([user_query])
-      CacheManager.invalidate_all_caches
-      fact_collection = FactCollection.new.build_fact_collection!(resolved_facts)
-      splitted_user_query = Facter::Utils.split_user_query(user_query)
-      fact_collection.dig(*splitted_user_query)
+      resolve_fact(user_query)
+      @already_searched[user_query]&.value
     end
 
     # Returns Facter version
@@ -250,7 +233,52 @@ module Facter
       ::File.read(version_file).strip
     end
 
+    # Gets a hash mapping fact names to their values
+    #
+    # @return [Array] the hash of fact names and values
+    #
+    # @api private
+    def to_user_output(cli_options, *args)
+      @options.priority_options = { is_cli: true }.merge!(cli_options.map { |(k, v)| [k.to_sym, v] }.to_h)
+      @options.refresh(args)
+      @logger.info("executed with command line: #{ARGV.drop(1).join(' ')}")
+      log_blocked_facts
+
+      resolved_facts = Facter::FactManager.instance.resolve_facts(args)
+      CacheManager.invalidate_all_caches
+      fact_formatter = Facter::FormatterFactory.build(@options)
+
+      status = error_check(args, resolved_facts)
+
+      [fact_formatter.format(resolved_facts), status || 0]
+    end
+
     private
+
+    def add_fact_to_searched_facts(user_query, value)
+      @already_searched[user_query] ||= ResolvedFact.new(user_query, value)
+      @already_searched[user_query].value = value
+    end
+
+    # Returns a ResolvedFact and saves the result in @already_searched array that is used as a global collection.
+    # @param user_query [String] Fact that needs resolution
+    #
+    # @return [ResolvedFact]
+    def resolve_fact(user_query)
+      @options.refresh([user_query])
+      user_query = user_query.to_s
+      resolved_facts = Facter::FactManager.instance.resolve_facts([user_query])
+      CacheManager.invalidate_all_caches
+      fact_collection = FactCollection.new.build_fact_collection!(resolved_facts)
+      splitted_user_query = Facter::Utils.split_user_query(user_query)
+
+      begin
+        value = fact_collection.value(*splitted_user_query)
+        add_fact_to_searched_facts(user_query, value)
+      rescue KeyError
+        nil
+      end
+    end
 
     # Returns exit status when user query contains facts that do
     #   not exist
@@ -286,7 +314,8 @@ module Facter
       @logger.debug("blocking collection of #{block_list.join("\s")} facts") if block_list.any? && Options[:block]
     end
 
-    # I think that Print an error message
+    # Used for printing errors regarding CLI user input validation
+    #
     # @param missing_names [Array] List of facts that were requested
     #  but not found
     #
