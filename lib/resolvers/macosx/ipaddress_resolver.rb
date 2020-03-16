@@ -38,12 +38,13 @@ module Facter
 
           def find_all_interfaces
             output, _status = Open3.capture2('ifconfig -a 2>/dev/null')
-            macaddress = output.match(
-              /#{@fact_list[:primary]}.*\n\tether.*/
-            ).to_s.match(/\tether.*/).to_s.gsub(/\tether\s+/, '')
-            @fact_list[:macaddress] = macaddress
-            output = output.scan(/^\S+/).collect { |i| i.sub(/:$/, '') }.uniq
-            @fact_list[:interfaces] = output.collect { |iface| iface.gsub(/[^a-z0-9_]/i, '_') }.join(',')
+
+            data_hash = Hash[*output.split(/^([A-Za-z0-9_]+): /)[1..-1]]
+
+            macaddress = */ether (([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2}))/.match(data_hash[@fact_list[:primary]])
+            @fact_list[:macaddress] = macaddress[1]
+
+            @fact_list[:interfaces] = data_hash.keys.join(',')
           end
         end
       end
