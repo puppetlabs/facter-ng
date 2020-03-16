@@ -22,7 +22,7 @@ describe LegacyFacter::Core::Aggregate do
     end
 
     it 'can set the weight' do
-      subject.options(has_weight: 27)
+      subject.options(weight: 27)
       expect(subject.weight).to eq 27
     end
 
