@@ -18,15 +18,16 @@ module Facter
             ip = nil
             primary_interface = read_primary_interface
             unless primary_interface.nil?
+              @fact_list[:primary] = primary_interface
               output, _status = Open3.capture2("ipconfig getifaddr #{primary_interface}")
               ip = output.strip
             end
+            find_all_interfaces
             @fact_list[:ip] = ip
             @fact_list[fact_name]
           end
 
           def read_primary_interface
-            find_all_interfaces
             iface = nil
             output, _status = Open3.capture2('route -n get default')
             output.split(/^\S/).each do |str|
@@ -37,6 +38,10 @@ module Facter
 
           def find_all_interfaces
             output, _status = Open3.capture2('ifconfig -a 2>/dev/null')
+            macaddress = output.match(
+              /#{@fact_list[:primary]}.*\n\tether.*/
+            ).to_s.match(/\tether.*/).to_s.gsub(/\tether\s+/, '')
+            @fact_list[:macaddress] = macaddress
             output = output.scan(/^\S+/).collect { |i| i.sub(/:$/, '') }.uniq
             @fact_list[:interfaces] = output.collect { |iface| iface.gsub(/[^a-z0-9_]/i, '_') }.join(',')
           end
