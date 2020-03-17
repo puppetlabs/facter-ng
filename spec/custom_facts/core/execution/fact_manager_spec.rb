@@ -74,7 +74,7 @@ describe Facter::Core::Execution::Base do
     end
 
     context 'when there are stderr messages from file' do
-      subject(:executor) { LegacyFacter::Core::Execution::Posix.new }
+      subject(:executor) { Facter::Core::Execution::Posix.new }
 
       let(:logger) { instance_spy(Facter::Log) }
       let(:command) { '/bin/foo' }

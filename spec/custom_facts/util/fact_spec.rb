@@ -15,7 +15,7 @@ describe Facter::Util::Fact do
 
   describe '#initialize' do
     it 'persists options' do
-      fact = LegacyFacter::Util::Fact.new('yay', options)
+      fact = Facter::Util::Fact.new('yay', options)
       options.delete(:fact_type)
 
       expect(fact.options).to eq(fact_type: :custom)

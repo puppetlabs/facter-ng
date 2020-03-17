@@ -3,7 +3,7 @@
 require_relative '../../spec_helper_legacy'
 
 describe Facter::Core::Aggregate do
-  subject { Facter::Core::Aggregate.new('aggregated', fact) }
+  subject(:resolution) { Facter::Core::Aggregate.new('aggregated', fact) }
 
   let(:fact) { double('stub_fact', name: 'stub_fact') }
 
