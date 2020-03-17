@@ -1,15 +1,29 @@
 # frozen_string_literal: true
 
-describe Facter::El::LoadAverages do
+describe Facts::El::LoadAverages do
+  subject(:fact) { Facts::El::LoadAverages.new }
+
+  let(:averages) do
+    {
+      '15m' => 0.0,
+      '10m' => 0.0,
+      '5m' => 0.0
+    }
+  end
+
   describe '#call_the_resolver' do
-    it 'returns a fact' do
-      expected_fact = double(Facter::ResolvedFact, name: 'load_averages', value: 'value')
+    before do
+      allow(Facter::Resolvers::Linux::LoadAverages).to receive(:resolve).with(:load_averages).and_return(averages)
+    end
 
-      allow(Facter::Resolvers::Linux::LoadAverages).to receive(:resolve).with(:load_averages).and_return('value')
-      allow(Facter::ResolvedFact).to receive(:new).with('load_averages', 'value').and_return(expected_fact)
+    it 'calls Facter::Resolvers::Linux::LoadAverages' do
+      fact.call_the_resolver
+      expect(Facter::Resolvers::Linux::LoadAverages).to have_received(:resolve).with(:load_averages)
+    end
 
-      fact = Facter::El::LoadAverages.new
-      expect(fact.call_the_resolver).to eq(expected_fact)
+    it 'returns resolved fact with name disk and value' do
+      expect(fact.call_the_resolver).to be_an_instance_of(Facter::ResolvedFact)
+        .and have_attributes(name: 'load_averages', value: averages)
     end
   end
 end

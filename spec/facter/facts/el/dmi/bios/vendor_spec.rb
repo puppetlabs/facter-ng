@@ -1,15 +1,25 @@
 # frozen_string_literal: true
 
-describe Facter::El::DmiBiosVendor do
+describe Facts::El::Dmi::Bios::Vendor do
   describe '#call_the_resolver' do
-    it 'returns a fact' do
-      value = 'Phoenix Technologies LTD'
-      expected_fact = double(Facter::ResolvedFact, name: 'dmi.bios.vendor', value: value)
-      allow(Facter::Resolvers::Linux::DmiBios).to receive(:resolve).with(:bios_vendor).and_return(value)
-      allow(Facter::ResolvedFact).to receive(:new).with('dmi.bios.vendor', value).and_return(expected_fact)
+    subject(:fact) { Facts::El::Dmi::Bios::Vendor.new }
 
-      fact = Facter::El::DmiBiosVendor.new
-      expect(fact.call_the_resolver).to eq(expected_fact)
+    let(:vendor) { 'Phoenix Technologies LTD' }
+
+    before do
+      allow(Facter::Resolvers::Linux::DmiBios).to \
+        receive(:resolve).with(:bios_vendor).and_return(vendor)
+    end
+
+    it 'calls Facter::Resolvers::Linux::DmiBios' do
+      fact.call_the_resolver
+      expect(Facter::Resolvers::Linux::DmiBios).to have_received(:resolve).with(:bios_vendor)
+    end
+
+    it 'returns a resolved fact' do
+      expect(fact.call_the_resolver).to be_an_instance_of(Array).and \
+        contain_exactly(an_object_having_attributes(name: 'dmi.bios.vendor', value: vendor),
+                        an_object_having_attributes(name: 'bios_vendor', value: vendor, type: :legacy))
     end
   end
 end

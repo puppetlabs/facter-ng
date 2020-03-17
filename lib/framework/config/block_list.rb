@@ -4,7 +4,7 @@ module Facter
   class BlockList
     include Singleton
 
-    attr_reader :block_groups
+    attr_reader :block_groups, :block_list
 
     def initialize(block_list_path = nil)
       @block_groups_file_path = block_list_path || File.join(ROOT_DIR, 'block_groups.conf')
@@ -27,7 +27,7 @@ module Facter
     private
 
     def load_block_groups
-      @block_groups = File.exist?(@block_groups_file_path) ? Hocon.load(@block_groups_file_path) : {}
+      @block_groups = File.readable?(@block_groups_file_path) ? Hocon.load(@block_groups_file_path) : {}
       options = Options.instance
       @block_list = ConfigReader.new(options[:config]).block_list || {}
     end

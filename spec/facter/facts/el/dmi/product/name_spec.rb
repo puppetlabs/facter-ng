@@ -1,15 +1,25 @@
 # frozen_string_literal: true
 
-describe Facter::El::DmiProductName do
+describe Facts::El::Dmi::Product::Name do
   describe '#call_the_resolver' do
-    it 'returns a fact' do
-      value = 'VMware Virtual Platform'
-      expected_fact = double(Facter::ResolvedFact, name: 'dmi.product.name', value: value)
-      allow(Facter::Resolvers::Linux::DmiBios).to receive(:resolve).with(:product_name).and_return(value)
-      allow(Facter::ResolvedFact).to receive(:new).with('dmi.product.name', value).and_return(expected_fact)
+    subject(:fact) { Facts::El::Dmi::Product::Name.new }
 
-      fact = Facter::El::DmiProductName.new
-      expect(fact.call_the_resolver).to eq(expected_fact)
+    let(:product_name) { 'VMware Virtual Platform' }
+
+    before do
+      allow(Facter::Resolvers::Linux::DmiBios).to \
+        receive(:resolve).with(:product_name).and_return(product_name)
+    end
+
+    it 'calls Facter::Resolvers::Linux::DmiBios' do
+      fact.call_the_resolver
+      expect(Facter::Resolvers::Linux::DmiBios).to have_received(:resolve).with(:product_name)
+    end
+
+    it 'returns a resolved fact' do
+      expect(fact.call_the_resolver).to be_an_instance_of(Array).and \
+        contain_exactly(an_object_having_attributes(name: 'dmi.product.name', value: product_name),
+                        an_object_having_attributes(name: 'productname', value: product_name, type: :legacy))
     end
   end
 end

@@ -1,14 +1,24 @@
 # frozen_string_literal: true
 
-describe Facter::El::ProcessorsModels do
+describe Facts::El::Processors::Models do
   describe '#call_the_resolver' do
-    it 'returns a fact' do
-      expected_fact = double(Facter::ResolvedFact, name: 'processors.models', value: 'value')
-      allow(Facter::Resolvers::Linux::Processors).to receive(:resolve).with(:models).and_return('value')
-      allow(Facter::ResolvedFact).to receive(:new).with('processors.models', 'value').and_return(expected_fact)
+    subject(:fact) { Facts::El::Processors::Models.new }
 
-      fact = Facter::El::ProcessorsModels.new
-      expect(fact.call_the_resolver).to eq(expected_fact)
+    let(:models) { ['Intel(R) Core(TM) i7-4980HQ CPU @ 2.80GHz', 'Intel(R) Core(TM) i7-4980HQ CPU @ 2.80GHz'] }
+
+    before do
+      allow(Facter::Resolvers::Linux::Processors).to \
+        receive(:resolve).with(:models).and_return(models)
+    end
+
+    it 'calls Facter::Resolvers::Linux::Processors' do
+      fact.call_the_resolver
+      expect(Facter::Resolvers::Linux::Processors).to have_received(:resolve).with(:models)
+    end
+
+    it 'returns a resolved fact' do
+      expect(fact.call_the_resolver).to be_an_instance_of(Facter::ResolvedFact).and \
+        have_attributes(name: 'processors.models', value: models)
     end
   end
 end

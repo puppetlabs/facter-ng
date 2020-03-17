@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-describe Facter::Solaris::RubyPlatform do
+describe Facts::Solaris::Ruby::Platform do
   describe '#call_the_resolver' do
-    subject(:fact) { Facter::Solaris::RubyPlatform.new }
+    subject(:fact) { Facts::Solaris::Ruby::Platform.new }
 
     let(:value) { 'x86_64-linux' }
 
@@ -16,9 +16,9 @@ describe Facter::Solaris::RubyPlatform do
     end
 
     it 'return ruby.platform fact' do
-      expect(fact.call_the_resolver)
-        .to be_an_instance_of(Facter::ResolvedFact)
-        .and have_attributes(name: 'ruby.platform', value: value)
+      expect(fact.call_the_resolver).to be_an_instance_of(Array).and \
+        contain_exactly(an_object_having_attributes(name: 'ruby.platform', value: value),
+                        an_object_having_attributes(name: 'rubyplatform', value: value, type: :legacy))
     end
   end
 end

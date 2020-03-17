@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-describe Facter::El::RubyVersion do
+describe Facts::El::Ruby::Version do
   describe '#call_the_resolver' do
-    subject(:fact) { Facter::El::RubyVersion.new }
+    subject(:fact) { Facts::El::Ruby::Version.new }
 
     let(:value) { '2.5.7' }
 
@@ -11,8 +11,8 @@ describe Facter::El::RubyVersion do
     end
 
     it 'calls Facter::Resolvers::Ruby' do
-      expect(Facter::Resolvers::Ruby).to receive(:resolve).with(:version)
       fact.call_the_resolver
+      expect(Facter::Resolvers::Ruby).to have_received(:resolve).with(:version)
     end
 
     it 'returns ruby version fact' do

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-describe Facter::El::Disks do
-  subject(:fact) { Facter::El::Disks.new }
+describe Facts::El::Disks do
+  subject(:fact) { Facts::El::Disks.new }
 
   let(:disk) do
     {
@@ -22,8 +22,8 @@ describe Facter::El::Disks do
     end
 
     it 'calls Facter::Resolvers::Linux::Disk' do
-      expect(Facter::Resolvers::Linux::Disk).to receive(:resolve).with(:disks)
       fact.call_the_resolver
+      expect(Facter::Resolvers::Linux::Disk).to have_received(:resolve).with(:disks)
     end
 
     it 'returns resolved fact with name disk and value' do

@@ -1,16 +1,25 @@
 # frozen_string_literal: true
 
-describe Facter::El::ProcessorsIsa do
+describe Facts::El::Processors::Isa do
   describe '#call_the_resolver' do
-    it 'returns a fact' do
-      value = 'x86_64'
+    subject(:fact) { Facts::El::Processors::Isa.new }
 
-      expected_fact = double(Facter::ResolvedFact, name: 'processors.isa', value: value)
-      allow(Facter::Resolvers::Uname).to receive(:resolve).with(:kernelrelease).and_return(value)
-      allow(Facter::ResolvedFact).to receive(:new).with('processors.isa', value).and_return(expected_fact)
+    let(:processors_arch) { 'x86_64' }
 
-      fact = Facter::El::ProcessorsIsa.new
-      expect(fact.call_the_resolver).to eq(expected_fact)
+    before do
+      allow(Facter::Resolvers::Uname).to \
+        receive(:resolve).with(:processor).and_return(processors_arch)
+    end
+
+    it 'calls Facter::Resolvers::Uname' do
+      fact.call_the_resolver
+      expect(Facter::Resolvers::Uname).to have_received(:resolve).with(:processor)
+    end
+
+    it 'returns a resolved fact' do
+      expect(fact.call_the_resolver).to be_an_instance_of(Array).and \
+        contain_exactly(an_object_having_attributes(name: 'processors.isa', value: processors_arch),
+                        an_object_having_attributes(name: 'hardwareisa', value: processors_arch, type: :legacy))
     end
   end
 end

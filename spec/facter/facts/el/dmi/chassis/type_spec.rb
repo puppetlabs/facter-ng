@@ -1,15 +1,25 @@
 # frozen_string_literal: true
 
-describe Facter::El::DmiChassisType do
+describe Facts::El::Dmi::Chassis::Type do
   describe '#call_the_resolver' do
-    it 'returns a fact' do
-      value = 'Low Profile Desktop'
-      expected_fact = double(Facter::ResolvedFact, name: 'dmi.chassis.type', value: value)
-      allow(Facter::Resolvers::Linux::DmiBios).to receive(:resolve).with(:chassis_type).and_return(value)
-      allow(Facter::ResolvedFact).to receive(:new).with('dmi.chassis.type', value).and_return(expected_fact)
+    subject(:fact) { Facts::El::Dmi::Chassis::Type.new }
 
-      fact = Facter::El::DmiChassisType.new
-      expect(fact.call_the_resolver).to eq(expected_fact)
+    let(:type) { 'Low Profile Desktop' }
+
+    before do
+      allow(Facter::Resolvers::Linux::DmiBios).to \
+        receive(:resolve).with(:chassis_type).and_return(type)
+    end
+
+    it 'calls Facter::Resolvers::Linux::DmiBios' do
+      fact.call_the_resolver
+      expect(Facter::Resolvers::Linux::DmiBios).to have_received(:resolve).with(:chassis_type)
+    end
+
+    it 'returns a resolved fact' do
+      expect(fact.call_the_resolver).to be_an_instance_of(Array).and \
+        contain_exactly(an_object_having_attributes(name: 'dmi.chassis.type', value: type),
+                        an_object_having_attributes(name: 'chassistype', value: type, type: :legacy))
     end
   end
 end

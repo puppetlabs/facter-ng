@@ -11,7 +11,7 @@ module Facter
     class Fact
       # The name of the fact
       # @return [String]
-      attr_accessor :name
+      attr_reader :name
 
       # @return [String]
       # @deprecated
@@ -20,6 +20,7 @@ module Facter
       # Fact options e.g. fact_type
       attr_accessor :options
 
+      # Weight of the resolution that was used to obtain the fact value
       attr_accessor :used_resolution_weight
 
       # Creates a new fact, with no resolution mechanisms. See {Facter.add}
@@ -32,12 +33,14 @@ module Facter
       def initialize(name, options = {})
         @name = name.to_s.downcase.intern
 
+        @options = Facter::Utils.deep_copy(options)
         extract_ldapname_option!(options)
 
         @ldapname ||= @name.to_s
 
         @resolves = []
         @searching = false
+        @used_resolution_weight = 0
 
         @value = nil
       end
@@ -52,7 +55,7 @@ module Facter
       #
       # @api private
       def add(options = {}, &block)
-        @options = options
+        @options = Facter::Utils.deep_copy(@options.merge(options))
         define_resolution(nil, options, &block)
       end
 

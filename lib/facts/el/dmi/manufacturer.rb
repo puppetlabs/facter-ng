@@ -1,13 +1,16 @@
 # frozen_string_literal: true
 
-module Facter
+module Facts
   module El
-    class DmiManufacturer
-      FACT_NAME = 'dmi.manufacturer'
+    module Dmi
+      class Manufacturer
+        FACT_NAME = 'dmi.manufacturer'
+        ALIASES = 'manufacturer'
 
-      def call_the_resolver
-        fact_value = Resolvers::Linux::DmiBios.resolve(:sys_vendor)
-        ResolvedFact.new(FACT_NAME, fact_value)
+        def call_the_resolver
+          fact_value = Facter::Resolvers::Linux::DmiBios.resolve(:sys_vendor)
+          [Facter::ResolvedFact.new(FACT_NAME, fact_value), Facter::ResolvedFact.new(ALIASES, fact_value, :legacy)]
+        end
       end
     end
   end

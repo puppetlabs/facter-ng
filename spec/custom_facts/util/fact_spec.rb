@@ -7,9 +7,34 @@ describe Facter::Util::Fact do
   subject(:fact) { Facter::Util::Fact.new('yay') }
 
   let(:resolution) { Facter::Util::Resolution.new('yay', fact) }
+  let(:options) { { fact_type: :custom } }
 
   it 'requires a name' do
     expect { Facter::Util::Fact.new }.to raise_error(ArgumentError)
+  end
+
+  describe '#initialize' do
+    it 'persists options' do
+      fact = LegacyFacter::Util::Fact.new('yay', options)
+      options.delete(:fact_type)
+
+      expect(fact.options).to eq(fact_type: :custom)
+    end
+  end
+
+  describe '#name' do
+    it 'changing the name raises error' do
+      expect { fact.name = 'new name' }.to raise_error(NoMethodError)
+    end
+  end
+
+  describe '#add' do
+    it 'persists options' do
+      fact.add(options) {}
+      options.delete(:fact_type)
+
+      expect(fact.options).to eq(fact_type: :custom)
+    end
   end
 
   it 'downcases and converts the name to a symbol' do
@@ -143,6 +168,7 @@ describe Facter::Util::Fact do
         def suitable?
           false
         end
+
         has_weight 2
         setcode { 2 }
       end

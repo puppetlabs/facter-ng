@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-describe Facter::El::OsName do
+describe Facts::El::Os::Name do
   describe '#call_the_resolver' do
-    subject(:fact) { Facter::El::OsName.new }
+    subject(:fact) { Facts::El::Os::Name.new }
 
     let(:value) { 'RedHat' }
 
@@ -11,8 +11,8 @@ describe Facter::El::OsName do
     end
 
     it 'calls Facter::Resolvers::OsRelease' do
-      expect(Facter::Resolvers::OsRelease).to receive(:resolve).with(:name)
       fact.call_the_resolver
+      expect(Facter::Resolvers::OsRelease).to have_received(:resolve).with(:name)
     end
 
     it 'returns operating system name fact' do

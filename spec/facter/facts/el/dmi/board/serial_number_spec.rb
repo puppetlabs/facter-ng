@@ -1,15 +1,25 @@
 # frozen_string_literal: true
 
-describe Facter::El::DmiBoardSerialNumber do
+describe Facts::El::Dmi::Board::SerialNumber do
   describe '#call_the_resolver' do
-    it 'returns a fact' do
-      value = 'None'
-      expected_fact = double(Facter::ResolvedFact, name: 'dmi.board.serial_number', value: value)
-      allow(Facter::Resolvers::Linux::DmiBios).to receive(:resolve).with(:board_serial).and_return(value)
-      allow(Facter::ResolvedFact).to receive(:new).with('dmi.board.serial_number', value).and_return(expected_fact)
+    subject(:fact) { Facts::El::Dmi::Board::SerialNumber.new }
 
-      fact = Facter::El::DmiBoardSerialNumber.new
-      expect(fact.call_the_resolver).to eq(expected_fact)
+    let(:serial_number) { 'None' }
+
+    before do
+      allow(Facter::Resolvers::Linux::DmiBios).to \
+        receive(:resolve).with(:board_serial).and_return(serial_number)
+    end
+
+    it 'calls Facter::Resolvers::Linux::DmiBios' do
+      fact.call_the_resolver
+      expect(Facter::Resolvers::Linux::DmiBios).to have_received(:resolve).with(:board_serial)
+    end
+
+    it 'returns a resolved fact' do
+      expect(fact.call_the_resolver).to be_an_instance_of(Array).and \
+        contain_exactly(an_object_having_attributes(name: 'dmi.board.serial_number', value: serial_number),
+                        an_object_having_attributes(name: 'boardserialnumber', value: serial_number, type: :legacy))
     end
   end
 end

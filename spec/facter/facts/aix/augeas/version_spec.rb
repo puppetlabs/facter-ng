@@ -1,14 +1,25 @@
 # frozen_string_literal: true
 
-describe Facter::Aix::AugeasVersion do
+describe Facts::Aix::Augeas::Version do
   describe '#call_the_resolver' do
-    it 'returns a fact' do
-      expected_fact = double(Facter::ResolvedFact, name: 'augeas.version', value: '1.12.0')
-      allow(Facter::Resolvers::Augeas).to receive(:resolve).with(:augeas_version).and_return('1.12.0')
-      allow(Facter::ResolvedFact).to receive(:new).with('augeas.version', '1.12.0').and_return(expected_fact)
+    subject(:fact) { Facts::Aix::Augeas::Version.new }
 
-      fact = Facter::Aix::AugeasVersion.new
-      expect(fact.call_the_resolver).to eq(expected_fact)
+    let(:version) { '1.12.0' }
+
+    before do
+      allow(Facter::Resolvers::Augeas).to \
+        receive(:resolve).with(:augeas_version).and_return(version)
+    end
+
+    it 'calls Facter::Resolvers::Augeas' do
+      fact.call_the_resolver
+      expect(Facter::Resolvers::Augeas).to have_received(:resolve).with(:augeas_version)
+    end
+
+    it 'returns a resolved fact' do
+      expect(fact.call_the_resolver).to be_an_instance_of(Array).and \
+        contain_exactly(an_object_having_attributes(name: 'augeas.version', value: version),
+                        an_object_having_attributes(name: 'augeasversion', value: version, type: :legacy))
     end
   end
 end

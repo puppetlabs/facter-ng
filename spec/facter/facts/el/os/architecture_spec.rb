@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-describe Facter::El::OsArchitecture do
+describe Facts::El::Os::Architecture do
   describe '#call_the_resolver' do
-    subject(:fact) { Facter::El::OsArchitecture.new }
+    subject(:fact) { Facts::El::Os::Architecture.new }
 
     let(:value) { 'x86_64' }
 
@@ -11,8 +11,8 @@ describe Facter::El::OsArchitecture do
     end
 
     it 'calls Facter::Resolvers::Uname' do
-      expect(Facter::Resolvers::Uname).to receive(:resolve).with(:machine)
       fact.call_the_resolver
+      expect(Facter::Resolvers::Uname).to have_received(:resolve).with(:machine)
     end
 
     it 'returns architecture fact' do

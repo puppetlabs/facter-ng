@@ -1,19 +1,24 @@
 # frozen_string_literal: true
 
-describe Facter::Macosx::IdentityGroup do
+describe Facts::Macosx::Identity::Group do
   describe '#call_the_resolver' do
-    subject(:fact) { Facter::Macosx::IdentityGroup.new }
+    subject(:fact) { Facts::Macosx::Identity::Group.new }
 
     let(:value) { 'staff' }
-    let(:expected_resolved_fact) { double(Facter::ResolvedFact, name: 'identity.group', value: value) }
 
     before do
-      expect(Facter::Resolvers::PosxIdentity).to receive(:resolve).with(:group).and_return(value)
-      expect(Facter::ResolvedFact).to receive(:new).with('identity.group', value).and_return(expected_resolved_fact)
+      allow(Facter::Resolvers::PosxIdentity).to receive(:resolve).with(:group).and_return(value)
+    end
+
+    it 'calls Facter::Resolvers::PosxIdentity' do
+      fact.call_the_resolver
+      expect(Facter::Resolvers::PosxIdentity).to have_received(:resolve).with(:group)
     end
 
     it 'returns identity.group fact' do
-      expect(fact.call_the_resolver).to eq(expected_resolved_fact)
+      expect(fact.call_the_resolver).to be_an_instance_of(Array).and \
+        contain_exactly(an_object_having_attributes(name: 'identity.group', value: value),
+                        an_object_having_attributes(name: 'gid', value: value, type: :legacy))
     end
   end
 end

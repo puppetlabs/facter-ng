@@ -1,13 +1,16 @@
 # frozen_string_literal: true
 
-module Facter
+module Facts
   module Macosx
-    class IdentityUser
-      FACT_NAME = 'identity.user'
+    module Identity
+      class User
+        FACT_NAME = 'identity.user'
+        ALIASES = 'id'
 
-      def call_the_resolver
-        fact_value = Facter::Resolvers::PosxIdentity.resolve(:user)
-        ResolvedFact.new(FACT_NAME, fact_value)
+        def call_the_resolver
+          fact_value = Facter::Resolvers::PosxIdentity.resolve(:user)
+          [Facter::ResolvedFact.new(FACT_NAME, fact_value), Facter::ResolvedFact.new(ALIASES, fact_value, :legacy)]
+        end
       end
     end
   end

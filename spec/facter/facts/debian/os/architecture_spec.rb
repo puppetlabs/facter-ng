@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-describe Facter::Debian::OsArchitecture do
+describe Facts::Debian::Os::Architecture do
   describe '#call_the_resolver' do
-    subject(:fact) { Facter::Debian::OsArchitecture.new }
+    subject(:fact) { Facts::Debian::Os::Architecture.new }
 
     context 'when resolver does not return x86_64' do
       let(:value) { 'i86pc' }
@@ -12,8 +12,8 @@ describe Facter::Debian::OsArchitecture do
       end
 
       it 'calls Facter::Resolvers::Uname' do
-        expect(Facter::Resolvers::Uname).to receive(:resolve).with(:machine)
         fact.call_the_resolver
+        expect(Facter::Resolvers::Uname).to have_received(:resolve).with(:machine)
       end
 
       it 'returns architecture fact' do
@@ -31,8 +31,8 @@ describe Facter::Debian::OsArchitecture do
       end
 
       it 'calls Facter::Resolvers::Uname' do
-        expect(Facter::Resolvers::Uname).to receive(:resolve).with(:machine)
         fact.call_the_resolver
+        expect(Facter::Resolvers::Uname).to have_received(:resolve).with(:machine)
       end
 
       it 'returns architecture fact' do

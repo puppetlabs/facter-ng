@@ -16,8 +16,6 @@ module Facter
       attr_accessor :code
       attr_writer :value
 
-      attr_reader :weight
-
       extend Facter::Core::Execution
 
       class << self

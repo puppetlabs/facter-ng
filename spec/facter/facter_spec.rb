@@ -6,10 +6,15 @@ describe Facter do
   let(:os_fact) do
     double(Facter::ResolvedFact, name: fact_name, value: fact_value, user_query: fact_name, filter_tokens: [])
   end
-  let(:fact_collection) { { 'os' => { 'name' => 'Ubuntu' } } }
-  let(:empty_fact_collection) { {} }
+  let(:fact_collection) do
+    fact_collection = Facter::FactCollection.new
+    fact_collection['os'] = Facter::FactCollection['name' => 'Ubuntu']
+    fact_collection
+  end
+  let(:empty_fact_collection) { Facter::FactCollection.new }
 
   before do
+    Facter.clear
     allow(Facter::CacheManager).to receive(:invalidate_all_caches)
   end
 
@@ -69,6 +74,10 @@ describe Facter do
     end
 
     context '--strict' do
+      before do
+        allow(Facter::Options).to receive(:[]).with(:config)
+      end
+
       it 'returns no fact and status 1' do
         user_query = 'os.name'
         expected_json_output = '{}'
@@ -143,7 +152,7 @@ describe Facter do
         .and_return(fact_collection)
 
       result = Facter.fact(user_query)
-      expect(result).to be_instance_of(Facter::Util::Fact)
+      expect(result).to be_instance_of(Facter::ResolvedFact)
       expect(result.value).to eq('Ubuntu')
     end
 
@@ -157,8 +166,7 @@ describe Facter do
         .and_return(empty_fact_collection)
 
       result = Facter.fact(user_query)
-      expect(result).to be_instance_of(Facter::Util::Fact)
-      expect(result.value).to eq(nil)
+      expect(result).to be_nil
     end
   end
 
@@ -173,7 +181,7 @@ describe Facter do
         .and_return(fact_collection)
 
       result = Facter[user_query]
-      expect(result).to be_instance_of(Facter::Util::Fact)
+      expect(result).to be_instance_of(Facter::ResolvedFact)
       expect(result.value).to eq('Ubuntu')
     end
 
@@ -187,8 +195,7 @@ describe Facter do
         .and_return(empty_fact_collection)
 
       result = Facter[user_query]
-      expect(result).to be_instance_of(Facter::Util::Fact)
-      expect(result.value).to eq(nil)
+      expect(result).to be_nil
     end
   end
 
@@ -261,8 +268,21 @@ describe Facter do
 
   describe '#reset' do
     it 'sends call to LegacyFacter' do
-      expect(LegacyFacter).to receive(:reset).once
+      allow(LegacyFacter).to receive(:reset)
       Facter.reset
+      expect(LegacyFacter).to have_received(:reset).once
+    end
+
+    it 'adds custom facts dirs' do
+      allow(LegacyFacter).to receive(:search)
+      Facter.reset
+      expect(LegacyFacter).to have_received(:search).once
+    end
+
+    it 'add external facts dirs' do
+      allow(LegacyFacter).to receive(:search_external)
+      Facter.reset
+      expect(LegacyFacter).to have_received(:search_external).once
     end
   end
 
@@ -307,8 +327,14 @@ describe Facter do
   end
 
   describe '#debugging' do
+    let(:priority_options) { {} }
+
+    before do
+      allow(Facter::Options.instance).to receive(:priority_options).and_return(priority_options)
+    end
+
     it 'sets log level to debug' do
-      expect(Facter::Options.instance).to receive(:priority_options=).with(debug: true)
+      expect(priority_options).to receive(:[]=).with(:debug, true)
       Facter.debugging(true)
     end
   end

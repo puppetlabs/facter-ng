@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-describe Facter::Solaris::RubySitedir do
+describe Facts::Solaris::Ruby::Sitedir do
   describe '#call_the_resolver' do
-    subject(:fact) { Facter::Solaris::RubySitedir.new }
+    subject(:fact) { Facts::Solaris::Ruby::Sitedir.new }
 
     let(:value) { '/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.5.0' }
 
@@ -16,9 +16,9 @@ describe Facter::Solaris::RubySitedir do
     end
 
     it 'return ruby sitedir fact' do
-      expect(fact.call_the_resolver)
-        .to be_an_instance_of(Facter::ResolvedFact)
-        .and have_attributes(name: 'ruby.sitedir', value: value)
+      expect(fact.call_the_resolver).to be_an_instance_of(Array).and \
+        contain_exactly(an_object_having_attributes(name: 'ruby.sitedir', value: value),
+                        an_object_having_attributes(name: 'rubysitedir', value: value, type: :legacy))
     end
   end
 end

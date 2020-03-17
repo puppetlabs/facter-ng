@@ -1,19 +1,24 @@
 # frozen_string_literal: true
 
-describe Facter::Macosx::IdentityUser do
+describe Facts::Macosx::Identity::User do
   describe '#call_the_resolver' do
-    subject(:fact) { Facter::Macosx::IdentityUser.new }
+    subject(:fact) { Facts::Macosx::Identity::User.new }
 
     let(:value) { 'testUser' }
-    let(:expected_resolved_fact) { double(Facter::ResolvedFact, name: 'identity.user', value: value) }
 
     before do
-      expect(Facter::Resolvers::PosxIdentity).to receive(:resolve).with(:user).and_return(value)
-      expect(Facter::ResolvedFact).to receive(:new).with('identity.user', value).and_return(expected_resolved_fact)
+      allow(Facter::Resolvers::PosxIdentity).to receive(:resolve).with(:user).and_return(value)
     end
 
-    it 'returns identity.user fact' do
-      expect(fact.call_the_resolver).to eq(expected_resolved_fact)
+    it 'calls Facter::Resolvers::PosxIdentity' do
+      fact.call_the_resolver
+      expect(Facter::Resolvers::PosxIdentity).to have_received(:resolve).with(:user)
+    end
+
+    it 'returns a fact' do
+      expect(fact.call_the_resolver).to be_an_instance_of(Array).and \
+        contain_exactly(an_object_having_attributes(name: 'identity.user', value: value),
+                        an_object_having_attributes(name: 'id', value: value, type: :legacy))
     end
   end
 end

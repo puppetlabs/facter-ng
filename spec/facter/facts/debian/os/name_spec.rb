@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-describe Facter::Debian::OsName do
+describe Facts::Debian::Os::Name do
   describe '#call_the_resolver' do
-    subject(:fact) { Facter::Debian::OsName.new }
+    subject(:fact) { Facts::Debian::Os::Name.new }
 
     let(:value) { 'Debian' }
 
@@ -11,8 +11,8 @@ describe Facter::Debian::OsName do
     end
 
     it 'calls Facter::Resolvers::LsbRelease' do
-      expect(Facter::Resolvers::LsbRelease).to receive(:resolve).with(:distributor_id)
       fact.call_the_resolver
+      expect(Facter::Resolvers::LsbRelease).to have_received(:resolve).with(:distributor_id)
     end
 
     it 'returns operating system name fact' do

@@ -1,16 +1,24 @@
 # frozen_string_literal: true
 
-describe Facter::El::FipsEnabled do
+describe Facts::El::FipsEnabled do
   describe '#call_the_resolver' do
-    let(:value) { false }
+    subject(:fact) { Facts::El::FipsEnabled.new }
 
-    it 'returns a fact' do
-      expected_fact = double(Facter::ResolvedFact, name: 'fips_enabled', value: value)
-      allow(Facter::Resolvers::Linux::FipsEnabled).to receive(:resolve).with(:fips_enabled).and_return(value)
-      allow(Facter::ResolvedFact).to receive(:new).with('fips_enabled', value).and_return(expected_fact)
+    let(:value) { true }
 
-      fact = Facter::El::FipsEnabled.new
-      expect(fact.call_the_resolver).to eq(expected_fact)
+    before do
+      allow(Facter::Resolvers::Linux::FipsEnabled).to \
+        receive(:resolve).with(:fips_enabled).and_return(value)
+    end
+
+    it 'calls Facter::Resolvers::Linux::FipsEnabled' do
+      fact.call_the_resolver
+      expect(Facter::Resolvers::Linux::FipsEnabled).to have_received(:resolve).with(:fips_enabled)
+    end
+
+    it 'returns a resolved fact' do
+      expect(fact.call_the_resolver).to be_an_instance_of(Facter::ResolvedFact).and \
+        have_attributes(name: 'fips_enabled', value: value)
     end
   end
 end

@@ -1,22 +1,26 @@
 # frozen_string_literal: true
 
-module Facter
+module Facts
   module El
-    class ProcessorsIsa
-      FACT_NAME = 'processors.isa'
+    module Processors
+      class Isa
+        FACT_NAME = 'processors.isa'
+        ALIASES = 'hardwareisa'
 
-      def call_the_resolver
-        fact_value = Resolvers::Uname.resolve(:kernelrelease)
+        def call_the_resolver
+          fact_value = Facter::Resolvers::Uname.resolve(:processor)
+          fact_value = get_isa(fact_value)
 
-        ResolvedFact.new(FACT_NAME, get_isa(fact_value))
-      end
+          [Facter::ResolvedFact.new(FACT_NAME, fact_value), Facter::ResolvedFact.new(ALIASES, fact_value, :legacy)]
+        end
 
-      private
+        private
 
-      def get_isa(fact_value)
-        value_split = fact_value.split('.')
+        def get_isa(fact_value)
+          value_split = fact_value.split('.')
 
-        value_split.last
+          value_split.last
+        end
       end
     end
   end

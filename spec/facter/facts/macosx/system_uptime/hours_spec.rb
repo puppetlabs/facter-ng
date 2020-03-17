@@ -1,16 +1,25 @@
 # frozen_string_literal: true
 
-describe Facter::Macosx::SystemUptimeHours do
+describe Facts::Macosx::SystemUptime::Hours do
   describe '#call_the_resolver' do
-    let(:value) { '2' }
+    subject(:fact) { Facts::Macosx::SystemUptime::Hours.new }
 
-    it 'returns a fact' do
-      expected_fact = double(Facter::ResolvedFact, name: 'system_uptime.hours', value: value)
-      allow(Facter::Resolvers::Uptime).to receive(:resolve).with(:hours).and_return(value)
-      allow(Facter::ResolvedFact).to receive(:new).with('system_uptime.hours', value).and_return(expected_fact)
+    let(:hours) { '2' }
 
-      fact = Facter::Macosx::SystemUptimeHours.new
-      expect(fact.call_the_resolver).to eq(expected_fact)
+    before do
+      allow(Facter::Resolvers::Uptime).to \
+        receive(:resolve).with(:hours).and_return(hours)
+    end
+
+    it 'calls Facter::Resolvers::Uptime' do
+      fact.call_the_resolver
+      expect(Facter::Resolvers::Uptime).to have_received(:resolve).with(:hours)
+    end
+
+    it 'returns a resolved fact' do
+      expect(fact.call_the_resolver).to be_an_instance_of(Array).and \
+        contain_exactly(an_object_having_attributes(name: 'system_uptime.hours', value: hours),
+                        an_object_having_attributes(name: 'uptime_hours', value: hours, type: :legacy))
     end
   end
 end

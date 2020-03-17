@@ -1,17 +1,25 @@
 # frozen_string_literal: true
 
-module Facter
+module Facts
   module Macosx
-    class OsRelease
-      FACT_NAME = 'os.release'
+    module Os
+      class Release
+        FACT_NAME = 'os.release'
+        ALIASES = %w[operatingsystemmajrelease operatingsystemrelease].freeze
 
-      def call_the_resolver
-        fact_value = Resolvers::Uname.resolve(:kernelrelease)
-        release_strings = fact_value.split('.')
-        ResolvedFact.new(FACT_NAME,
-                         full: fact_value,
-                         major: release_strings[0],
-                         minor: release_strings[1])
+        def call_the_resolver
+          fact_value = Facter::Resolvers::Uname.resolve(:kernelrelease)
+          versions = fact_value.split('.')
+          release = {
+            'full' => fact_value,
+            'major' => versions[0],
+            'minor' => versions[1]
+          }
+
+          [Facter::ResolvedFact.new(FACT_NAME, release),
+           Facter::ResolvedFact.new(ALIASES.first, versions[0], :legacy),
+           Facter::ResolvedFact.new(ALIASES.last, fact_value, :legacy)]
+        end
       end
     end
   end

@@ -34,6 +34,29 @@ describe LegacyFacter::Util::Parser do
     end
   end
 
+  describe 'parse_executable_output' do
+    subject(:parser) { LegacyFacter::Util::Parser::Base.new('myfile.sh') }
+
+    let(:yaml_data) { "one: two\nthree: four\n" }
+    let(:keyvalue) { "one=two\nthree=four\n" }
+
+    it 'receives yaml and returns hash' do
+      expect(parser.parse_executable_output(yaml_data)).to eq data
+    end
+
+    it 'receives keyvalue and returns hash' do
+      expect(parser.parse_executable_output(keyvalue)).to eq data
+    end
+
+    it 'raises no exception on nil' do
+      expect(parser.parse_executable_output(nil)).to be_empty
+    end
+
+    it 'returns {} on invalid data' do
+      expect(parser.parse_executable_output('random')).to be_empty
+    end
+  end
+
   describe 'yaml' do
     let(:data_in_yaml) { YAML.dump(data) }
     let(:data_file) { '/tmp/foo.yaml' }
@@ -96,17 +119,18 @@ describe LegacyFacter::Util::Parser do
     let(:ext) { LegacyFacter::Util::Config.windows? ? '.bat' : '.sh' }
     let(:cmd) { "/tmp/foo#{ext}" }
     let(:data_in_txt) { "one=two\nthree=four\n" }
+    let(:yaml_data) { "one: two\nthree: four\n" }
 
     def expects_script_to_return(path, content, result)
       allow(Facter::Core::Execution).to receive(:exec).with(path).and_return(content)
       allow(File).to receive(:executable?).with(path).and_return(true)
-      allow(File).to receive(:file?).with(path).and_return(true)
+      allow(FileTest).to receive(:file?).with(path).and_return(true)
 
       expect(LegacyFacter::Util::Parser.parser_for(path).results).to eq result
     end
 
     def expects_parser_to_return_nil_for_directory(path)
-      allow(File).to receive(:file?).with(path).and_return(false)
+      allow(FileTest).to receive(:file?).with(path).and_return(false)
 
       expect(LegacyFacter::Util::Parser.parser_for(path).results).to be nil
     end
@@ -117,6 +141,10 @@ describe LegacyFacter::Util::Parser do
 
     it 'does not parse a directory' do
       expects_parser_to_return_nil_for_directory(cmd)
+    end
+
+    it 'returns structured data' do
+      expects_script_to_return(cmd, yaml_data, data)
     end
 
     it 'returns an empty hash when the script returns nil' do
@@ -137,34 +165,7 @@ describe LegacyFacter::Util::Parser do
       before do
         cmds.each do |cmd|
           allow(File).to receive(:executable?).with(cmd).and_return(true)
-          allow(File).to receive(:file?).with(cmd).and_return(true)
-        end
-      end
-
-      it 'returns nothing parser if not on windows' do
-        allow(LegacyFacter::Util::Config).to receive(:windows?).and_return(false)
-        cmds.each do |cmd|
-          expect(LegacyFacter::Util::Parser.parser_for(cmd))
-            .to be_an_instance_of(LegacyFacter::Util::Parser::NothingParser)
-        end
-      end
-
-      it 'returns script parser if on windows' do
-        expect(LegacyFacter::Util::Config).to receive(:windows?).and_return(true).at_least(:once)
-        cmds.each do |cmd|
-          expect(LegacyFacter::Util::Parser.parser_for(cmd))
-            .to be_an_instance_of(LegacyFacter::Util::Parser::ScriptParser)
-        end
-      end
-    end
-
-    context 'exe, bat, cmd, and com files' do
-      let(:cmds) { ['/tmp/foo.bat', '/tmp/foo.cmd', '/tmp/foo.exe', '/tmp/foo.com'] }
-
-      before do
-        cmds.each do |cmd|
-          allow(File).to receive(:executable?).with(cmd).and_return(true)
-          allow(File).to receive(:file?).with(cmd).and_return(true)
+          allow(FileTest).to receive(:file?).with(cmd).and_return(true)
         end
       end
 
@@ -190,7 +191,7 @@ describe LegacyFacter::Util::Parser do
 
       def expects_to_parse_powershell(cmd, result)
         allow(LegacyFacter::Util::Config).to receive(:windows?).and_return(true)
-        allow(File).to receive(:file?).with(ps1).and_return(true)
+        allow(FileTest).to receive(:file?).with(ps1).and_return(true)
 
         expect(LegacyFacter::Util::Parser.parser_for(cmd).results).to eq result
       end
@@ -201,6 +202,11 @@ describe LegacyFacter::Util::Parser do
 
       it 'parses output from powershell' do
         allow(Facter::Core::Execution).to receive(:exec).and_return(data_in_txt)
+        expects_to_parse_powershell(ps1, data)
+      end
+
+      it 'parses yaml output from powershell' do
+        allow(Facter::Core::Execution).to receive(:exec).and_return(yaml_data)
         expects_to_parse_powershell(ps1, data)
       end
 

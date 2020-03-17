@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-describe Facter::Windows::Processor do
+describe Facts::Windows::Processor do
   describe '#call_the_resolver' do
-    subject(:fact) { Facter::Windows::Processor.new }
+    subject(:fact) { Facts::Windows::Processor.new }
 
     let(:processor) { ['Intel(R) Xeon(R) Gold 6138 CPU @ 2.00GHz', 'Intel(R) Xeon(R) Gold 6138 CPU @ 2.00GHz'] }
 
@@ -11,8 +11,8 @@ describe Facter::Windows::Processor do
     end
 
     it 'calls Facter::Resolvers::Processors' do
-      expect(Facter::Resolvers::Processors).to receive(:resolve).with(:models)
       fact.call_the_resolver
+      expect(Facter::Resolvers::Processors).to have_received(:resolve).with(:models)
     end
 
     it 'returns legacy facts about each processor' do

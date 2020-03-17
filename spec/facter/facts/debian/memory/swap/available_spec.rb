@@ -1,17 +1,27 @@
 # frozen_string_literal: true
 
-describe Facter::Debian::MemorySwapAvailable do
+describe Facts::Debian::Memory::Swap::Available do
   describe '#call_the_resolver' do
-    let(:value) { '1.00 KiB' }
+    subject(:fact) { Facts::Debian::Memory::Swap::Available.new }
 
-    it 'returns a fact' do
-      expected_fact = double(Facter::ResolvedFact, name: 'memory.swap.available', value: value)
-      allow(Facter::Resolvers::Linux::Memory).to receive(:resolve).with(:swap_free).and_return(1024)
-      allow(Facter::ResolvedFact).to receive(:new).with('memory.swap.available', value).and_return(expected_fact)
+    let(:resolver_value) { 1024 }
+    let(:value) { '1.0 Kib' }
 
-      fact = Facter::Debian::MemorySwapAvailable.new
-      expect(Facter::BytesToHumanReadable.convert(1024)).to eq(value)
-      expect(fact.call_the_resolver).to eq(expected_fact)
+    before do
+      allow(Facter::Resolvers::Linux::Memory).to \
+        receive(:resolve).with(:swap_free).and_return(resolver_value)
+      allow(Facter::BytesToHumanReadable).to receive(:convert).with(resolver_value).and_return(value)
+    end
+
+    it 'calls Facter::Resolvers::Linux::Memory' do
+      fact.call_the_resolver
+      expect(Facter::Resolvers::Linux::Memory).to have_received(:resolve).with(:swap_free)
+    end
+
+    it 'returns swap available memory fact' do
+      expect(fact.call_the_resolver).to be_an_instance_of(Array).and \
+        contain_exactly(an_object_having_attributes(name: 'memory.swap.available', value: value),
+                        an_object_having_attributes(name: 'swapfree', value: value, type: :legacy))
     end
   end
 end
