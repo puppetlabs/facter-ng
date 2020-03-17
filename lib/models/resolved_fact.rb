@@ -8,7 +8,9 @@ module Facter
     def initialize(name, value = '', type = :core)
       @name = name
       @value = Utils.deep_stringify_keys(value)
-      type =~ /core|legacy/ ? @type = type : (raise ArgumentError, 'The type provided for fact is not legacy or core!')
+
+      @type = type if type =~ /core|legacy|custom/
+      raise ArgumentError, 'The type provided for fact is not legacy or core!' unless type =~ /core|legacy|custom/
     end
 
     def legacy?
