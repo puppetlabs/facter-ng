@@ -15,7 +15,7 @@ describe Facts::Macosx::Identity::Gid do
       expect(Facter::Resolvers::PosxIdentity).to have_received(:resolve).with(:gid)
     end
 
-    it 'returns a fact' do
+    it 'returns identity gid fact' do
       expect(fact.call_the_resolver).to be_an_instance_of(Facter::ResolvedFact).and \
         have_attributes(name: 'identity.gid', value: value)
     end

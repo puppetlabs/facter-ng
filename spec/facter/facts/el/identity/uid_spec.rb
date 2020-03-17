@@ -15,7 +15,7 @@ describe Facts::El::Identity::Uid do
       expect(Facter::Resolvers::PosxIdentity).to have_received(:resolve).with(:uid)
     end
 
-    it 'returns a fact' do
+    it 'returns identity uid fact' do
       expect(fact.call_the_resolver).to be_an_instance_of(Facter::ResolvedFact).and \
         have_attributes(name: 'identity.uid', value: value)
     end

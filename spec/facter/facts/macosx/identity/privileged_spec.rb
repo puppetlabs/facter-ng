@@ -15,7 +15,7 @@ describe Facts::Macosx::Identity::Privileged do
       expect(Facter::Resolvers::PosxIdentity).to have_received(:resolve).with(:privileged)
     end
 
-    it 'returns a fact' do
+    it 'returns identity privileged fact' do
       expect(fact.call_the_resolver).to be_an_instance_of(Facter::ResolvedFact).and \
         have_attributes(name: 'identity.privileged', value: value)
     end

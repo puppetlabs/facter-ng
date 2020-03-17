@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-describe Facts::Debian::Identity::Privileged do
+describe Facts::Aix::Identity::Privileged do
   describe '#call_the_resolver' do
-    subject(:fact) { Facts::Debian::Identity::Privileged.new }
+    subject(:fact) { Facts::Aix::Identity::Privileged.new }
 
     let(:value) { 'false' }
 
