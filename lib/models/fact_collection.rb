@@ -18,10 +18,6 @@ module Facter
       self
     end
 
-    def bury_fact(fact)
-      bury(*fact.name.split('.') + fact.filter_tokens << fact.value)
-    end
-
     def value(*keys)
       keys.reduce(self) do |memo, key|
         memo.fetch(key.to_s)
@@ -40,6 +36,12 @@ module Facter
       end
 
       self
+    end
+
+    private
+
+    def bury_fact(fact)
+      bury(*fact.name.split('.') + fact.filter_tokens << fact.value)
     end
   end
 end
