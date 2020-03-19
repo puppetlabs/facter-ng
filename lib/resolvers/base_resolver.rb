@@ -17,7 +17,7 @@ module Facter
 
       def self.resolve(fact_name)
         @semaphore.synchronize do
-          subscribe_to_manager
+          subscribe_t o_manager
           post_resolve(fact_name)
         end
       rescue LoadError => e
