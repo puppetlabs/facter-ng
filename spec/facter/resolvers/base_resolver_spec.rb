@@ -1,27 +1,20 @@
+# frozen_string_literal: true
+
 describe Facter::Resolvers::BaseResolver do
-  class TestResolver < Facter::Resolvers::BaseResolver
-    @semaphore = Mutex.new
-    @fact_list ||= {}
-    class << self
-      attr_accessor :fact_list
-
-      def logger
-        @log
-      end
-
-      def reset_logger
-        @log = nil
+  let(:fact) { 'fact' }
+  let(:resolver) do
+    Class.new(Facter::Resolvers::BaseResolver) do
+      @fact_list = {}
+      @semaphore = Mutex.new
+      def self.post_resolve(fact_name)
+        @fact_list[fact_name] = 'value'
+        @fact_list
       end
     end
   end
 
-  subject(:resolver) { TestResolver }
-
-  let(:fact) { 'fact' }
-
   describe '#log' do
     before do
-      resolver.reset_logger
       allow(Facter::Log).to receive(:new).with(resolver).and_return('logger')
     end
 
@@ -41,11 +34,11 @@ describe Facter::Resolvers::BaseResolver do
 
   describe '#invalidate_cache' do
     it 'clears the facts_list' do
-      resolver.fact_list = { fact => 'fact value' }
+      resolver.resolve(fact)
 
       resolver.invalidate_cache
 
-      expect(resolver.fact_list).to be_empty
+      expect(resolver.resolve('fact2')).to eq('fact2' => 'value')
     end
   end
 
@@ -60,10 +53,10 @@ describe Facter::Resolvers::BaseResolver do
   end
 
   describe '#resolve' do
-    context 'fact is resolved successfully' do
+    context 'when fact is resolved successfully' do
       before do
-        allow(Facter::CacheManager).to receive(:subscribe).with(resolver)
         allow(resolver).to receive(:post_resolve)
+        allow(Facter::CacheManager).to receive(:subscribe).with(resolver)
       end
 
       it 'calls the CacheManager subscribe method' do
@@ -79,32 +72,31 @@ describe Facter::Resolvers::BaseResolver do
       end
     end
 
-    context 'exception Load Error is raised when resolve is called' do
+    context 'when Load Error is raised' do
       before do
-        resolver.reset_logger
         allow(resolver).to receive(:post_resolve).and_raise(LoadError)
-        allow(Facter::Log).to receive(:new).with(resolver).and_return(double(Facter::Log, :debug => nil))
+        allow(Facter::Log).to receive(:new).with(resolver).and_return(instance_double(Facter::Log, debug: nil))
       end
 
       it 'logs the Load Error exception' do
         resolver.resolve(fact)
 
-        expect(resolver.logger).to have_received(:debug).with("resolving fact #{fact}, but LoadError")
+        expect(resolver.log).to have_received(:debug).with("resolving fact #{fact}, but LoadError")
       end
 
       it 'sets the fact to nil' do
-        resolver.resolve(fact)
-
-        expect(resolver.fact_list).to match({ fact => nil })
+        expect(resolver.resolve(fact)).to eq(nil)
       end
     end
   end
 
   describe '#post_resolve' do
+    let(:resolver) { Class.new(Facter::Resolvers::BaseResolver) }
+
     it 'raises NotImplementedError error' do
       expect { resolver.post_resolve(fact) }.to \
         raise_error(NotImplementedError,
-                    "You must implement post_resolve(fact_name) method in #{resolver}")
+                    'You must implement post_resolve(fact_name) method in ')
     end
   end
 end
