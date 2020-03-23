@@ -30,14 +30,13 @@ module Facter
 
       @log = Facter::Log.new(self)
       @semaphore = Mutex.new
+      @fact_list = {}
 
       class << self
         private
 
         def post_resolve(fact_name)
-          retrieve_system_profiler(fact_name) if @fact_list.nil?
-
-          @fact_list[fact_name]
+          @fact_list.fetch(fact_name) { retrieve_system_profiler(fact_name) }
         end
 
         def retrieve_system_profiler(fact_name)
