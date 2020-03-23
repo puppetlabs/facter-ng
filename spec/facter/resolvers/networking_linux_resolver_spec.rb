@@ -63,7 +63,7 @@ describe Facter::Resolvers::NetworkingLinux do
     end
 
     context 'when invalidate caching' do
-      it 'it resolved again the fact' do
+      it 'resolved again the fact' do
         Facter::Resolvers::NetworkingLinux.resolve(:ip)
         Facter::Resolvers::NetworkingLinux.invalidate_cache
         Facter::Resolvers::NetworkingLinux.resolve(:ip)
@@ -72,6 +72,4 @@ describe Facter::Resolvers::NetworkingLinux do
       end
     end
   end
-
-
 end
