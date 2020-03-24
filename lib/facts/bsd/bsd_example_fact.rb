@@ -2,7 +2,7 @@
 
 module Facts
   module Bsd
-    class Kernel
+    class ExampleFact
       FACT_NAME = 'example.fact'
 
       def call_the_resolver
