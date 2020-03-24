@@ -9,7 +9,7 @@ require "#{ROOT_DIR}/lib/facter"
 require "#{ROOT_DIR}/lib/framework/cli/cli"
 
 logger = Facter::Log.new(self)
-logger.info("executed with command line: #{ARGV.drop(1).join(' ')}")
+logger.info("executed with command line: #{ARGV.join(' ')}")
 
 Facter::OptionsValidator.validate(ARGV)
 ARGV.unshift(Facter::Cli.default_task) unless
