@@ -130,6 +130,10 @@ Naming/FileName:
     - 'lib/facter.rb'
     - 'agent/lib/facter-ng.rb'
 
+Style/TrivialAccessors:
+  Exclude:
+    - 'lib/facter.rb'
+
 RSpec/ExampleLength:
   Enabled: false
 
