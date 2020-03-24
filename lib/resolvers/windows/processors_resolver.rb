@@ -3,9 +3,8 @@
 module Facter
   module Resolvers
     class Processors < BaseResolver
-      @log = Facter::Log.new(self)
       @semaphore = Mutex.new
-      @fact_list ||= {}
+      @fact_list = {}
       class << self
         # Count
         # Isa

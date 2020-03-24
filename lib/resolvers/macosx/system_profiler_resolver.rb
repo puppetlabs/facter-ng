@@ -28,7 +28,6 @@ module Facter
       # time_since_boot
       # smc_version_system
 
-      @log = Facter::Log.new(self)
       @semaphore = Mutex.new
       @fact_list = {}
 
