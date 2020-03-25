@@ -29,7 +29,7 @@ describe Facter::BlockList do
       before do
         allow(File).to receive(:readable?).and_return(true)
         allow(Hocon).to receive(:load)
-          .with(File.join(ROOT_DIR, 'block_groups.conf'))
+          .with(File.join(ROOT_DIR, 'fact_groups.conf'))
           .and_return('blocked_group' => %w[fact1 fact2])
         allow(config_reader).to receive(:block_list).and_return(%w[blocked_group blocked_fact])
       end

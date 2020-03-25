@@ -5,7 +5,7 @@ module Facter
     attr_reader :block_groups, :block_list
 
     def initialize(block_list_path = nil)
-      @block_groups_file_path = block_list_path || File.join(ROOT_DIR, 'block_groups.conf')
+      @block_groups_file_path = block_list_path || File.join(ROOT_DIR, 'fact_groups.conf')
       load_block_groups
     end
 

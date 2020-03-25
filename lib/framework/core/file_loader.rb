@@ -31,7 +31,9 @@ require "#{ROOT_DIR}/lib/resolvers/base_resolver"
 require "#{ROOT_DIR}/lib/framework/detector/os_detector"
 
 require "#{ROOT_DIR}/lib/framework/config/config_reader"
+require "#{ROOT_DIR}/lib/framework/config/group_list"
 require "#{ROOT_DIR}/lib/framework/config/block_list"
+require "#{ROOT_DIR}/lib/framework/config/cache_list"
 
 load_dir(['config'])
 
