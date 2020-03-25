@@ -46,7 +46,6 @@ describe Facter do
 
   describe '#to_user_output' do
     it 'returns one fact and status 0' do
-      allow(logger).to receive(:info).with('executed with command line: ')
       user_query = 'os.name'
       expected_json_output = '{"os" : {"name": "ubuntu"}'
 
@@ -62,8 +61,6 @@ describe Facter do
     end
 
     it 'returns no facts and status 0' do
-      allow(logger).to receive(:info).with('executed with command line: ')
-
       user_query = 'os.name'
       expected_json_output = '{}'
 
@@ -85,7 +82,6 @@ describe Facter do
 
       it 'returns no fact and status 1' do
         allow(logger).to receive(:error).with('fact "os.name" does not exist.', true)
-        allow(logger).to receive(:info).with('executed with command line: ')
 
         user_query = 'os.name'
         expected_json_output = '{}'
@@ -104,8 +100,6 @@ describe Facter do
       end
 
       it 'returns one fact and status 0' do
-        allow(logger).to receive(:info).with('executed with command line: ')
-
         user_query = 'os.name'
         expected_json_output = '{"os" : {"name": "ubuntu"}'
 
@@ -361,7 +355,11 @@ describe Facter do
   describe '#log_exception' do
     context 'when trace options is true' do
       before do
-        Facter.instance_variable_set(:@trace, true)
+        Facter.trace(true)
+      end
+
+      after do
+        Facter.trace(false)
       end
 
       let(:message) { 'Some error message' }
