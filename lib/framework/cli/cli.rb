@@ -125,6 +125,12 @@ module Facter
       puts Facter::BlockList.instance.block_groups.to_yaml.lines[1..-1].join
     end
 
+    desc '--list-cache-groups', 'List cache groups'
+    map ['--list-cache-groups'] => :list_cache_groups
+    def list_cache_groups(*_args)
+      puts Facter::CacheList.instance.cache_groups.to_yaml.lines[1..-1].join
+    end
+
     def self.exit_on_failure?
       true
     end

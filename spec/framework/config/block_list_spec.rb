@@ -2,6 +2,7 @@
 
 describe Facter::BlockList do
   before do
+    Singleton.__init__(Facter::GroupList)
     Singleton.__init__(Facter::BlockList)
   end
 
@@ -9,7 +10,7 @@ describe Facter::BlockList do
     it 'converts block to facts' do
       expect(File).to receive(:readable?).and_return(true)
       expect(Hocon).to receive(:load)
-        .with(File.join(ROOT_DIR, 'block_groups.conf'))
+        .with(File.join(ROOT_DIR, 'fact_groups.conf'))
         .and_return('blocked_group' => %w[fact1 fact2])
 
       config_reader = double(Facter::ConfigReader)

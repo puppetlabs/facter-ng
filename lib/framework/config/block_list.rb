@@ -7,7 +7,7 @@ module Facter
     attr_reader :block_groups, :block_list
 
     def initialize(block_list_path = nil)
-      @block_groups_file_path = block_list_path || File.join(ROOT_DIR, 'block_groups.conf')
+      @block_groups_file_path = block_list_path || File.join(ROOT_DIR, 'fact_groups.conf')
       load_block_groups
     end
 
@@ -27,7 +27,7 @@ module Facter
     private
 
     def load_block_groups
-      @block_groups = File.readable?(@block_groups_file_path) ? Hocon.load(@block_groups_file_path) : {}
+      @block_groups = Facter::GroupList.instance.groups
       options = Options.instance
       @block_list = ConfigReader.new(options[:config]).block_list || {}
     end
