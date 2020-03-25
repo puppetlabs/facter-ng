@@ -39,6 +39,7 @@ module Facter
 
           fill_fact_list(pairs)
           process_name
+          find_debian_release if @fact_list[:name].match?(/Debian/)
 
           @fact_list[fact_name]
         end
@@ -48,6 +49,7 @@ module Facter
           result.each { |k, v| @fact_list[k.downcase.to_sym] = v }
 
           @fact_list[:identifier] = @fact_list[:id]
+          @fact_list[:release] = @fact_list[:version_id]
         end
 
         def process_name
@@ -58,6 +60,13 @@ module Facter
                               else
                                 @fact_list[:name].split(' ')[0].strip
                               end
+        end
+
+        def find_debian_release
+          return unless File.readable?('/etc/debian_version')
+
+          version = File.read('/etc/debian_version')
+          @fact_list[:release] = version.strip
         end
       end
     end

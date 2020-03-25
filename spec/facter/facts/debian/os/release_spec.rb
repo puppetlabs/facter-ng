@@ -5,16 +5,16 @@ describe Facts::Debian::Os::Release do
     subject(:fact) { Facts::Debian::Os::Release.new }
 
     before do
-      allow(Facter::Resolvers::LsbRelease).to receive(:resolve).with(:release).and_return(value)
+      allow(Facter::Resolvers::OsRelease).to receive(:resolve).with(:release).and_return(value)
     end
 
     context 'when lsb_release installed' do
-      let(:value) { '10.9' }
-      let(:value_final) { { 'full' => '10.9', 'major' => '10', 'minor' => '9' } }
+      let(:value) { '10.09' }
+      let(:value_final) { { 'full' => '10.09', 'major' => '10', 'minor' => '9' } }
 
-      it 'calls Facter::Resolvers::LsbRelease' do
+      it 'calls Facter::Resolvers::OsRelease' do
         fact.call_the_resolver
-        expect(Facter::Resolvers::LsbRelease).to have_received(:resolve).with(:release)
+        expect(Facter::Resolvers::OsRelease).to have_received(:resolve).with(:release)
       end
 
       it 'returns release fact' do
