@@ -44,13 +44,13 @@ describe Facter::Resolvers::BaseResolver do
 
   describe '#subscribe_to_manager' do
     before do
-      allow(Facter::CacheManager).to receive(:subscribe).with(resolver)
+      allow(Facter::SessionCache).to receive(:subscribe).with(resolver)
     end
 
     it 'calls the CacheManager subscribe method' do
       resolver.subscribe_to_manager
 
-      expect(Facter::CacheManager).to have_received(:subscribe).with(resolver)
+      expect(Facter::SessionCache).to have_received(:subscribe).with(resolver)
     end
   end
 
@@ -58,13 +58,13 @@ describe Facter::Resolvers::BaseResolver do
     context 'when fact is resolved successfully' do
       before do
         allow(resolver).to receive(:post_resolve)
-        allow(Facter::CacheManager).to receive(:subscribe).with(resolver)
+        allow(Facter::SessionCache).to receive(:subscribe).with(resolver)
       end
 
       it 'calls the CacheManager subscribe method' do
         resolver.resolve(fact)
 
-        expect(Facter::CacheManager).to have_received(:subscribe).with(resolver)
+        expect(Facter::SessionCache).to have_received(:subscribe).with(resolver)
       end
 
       it 'calls the post_resolve method' do
