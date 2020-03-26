@@ -21,7 +21,9 @@ class OsDetector
                     :macosx
                   when /linux/
                     detect_distro
-                  when /solaris|bsd/
+                  when /bsd/
+                    :bsd
+                  when /solaris/
                     :solaris
                   when /aix/
                     :aix
@@ -44,11 +46,13 @@ class OsDetector
     @identifier
   end
 
-  def create_hierarchy(operating_system) # rubocop:disable Metrics/CyclomaticComplexity:
+  def create_hierarchy(operating_system)
     return [] unless operating_system
 
     case operating_system.to_sym
     when :ubuntu
+      %w[Debian]
+    when :elementary
       %w[Debian]
     when :fedora
       %w[El]
@@ -60,6 +64,8 @@ class OsDetector
       %w[El]
     when :opensuse
       %w[Sles]
+    when :bsd
+      %w[Solaris Bsd]
     else
       [operating_system.to_s.capitalize]
     end

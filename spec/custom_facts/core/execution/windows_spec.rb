@@ -1,10 +1,22 @@
 require_relative '../../../spec_helper_legacy'
 
-describe LegacyFacter::Core::Execution::Windows, as_platform: :windows do
+describe Facter::Core::Execution::Windows, as_platform: :windows do
   describe '#search_paths' do
     it 'uses the PATH environment variable to determine locations' do
       allow(ENV).to receive(:[]).with('PATH').and_return 'C:\Windows;C:\Windows\System32'
       expect(subject.search_paths).to eq %w[C:\Windows C:\Windows\System32]
+    end
+  end
+
+  describe '#execute' do
+    context 'with expand false' do
+      subject(:executor) { Facter::Core::Execution::Windows.new }
+
+      it 'raises exception' do
+        expect { executor.execute('c:\foo.exe', expand: false) }
+          .to raise_error(ArgumentError,
+                          'Unsupported argument on Windows expand with value false')
+      end
     end
   end
 

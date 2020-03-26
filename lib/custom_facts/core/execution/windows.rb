@@ -1,7 +1,7 @@
-module LegacyFacter
+module Facter
   module Core
     module Execution
-      class Windows < LegacyFacter::Core::Execution::Base
+      class Windows < Facter::Core::Execution::Base
         def search_paths
           ENV['PATH'].split(File::PATH_SEPARATOR)
         end
@@ -56,6 +56,13 @@ module LegacyFacter
           expanded << " #{args}" if args
 
           expanded
+        end
+
+        def execute(command, options = {})
+          expand = options.fetch(:expand, true)
+          raise ArgumentError.new, 'Unsupported argument on Windows expand with value false' unless expand
+
+          super(command, options)
         end
       end
     end

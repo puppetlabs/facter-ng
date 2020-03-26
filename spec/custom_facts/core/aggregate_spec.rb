@@ -2,8 +2,8 @@
 
 require_relative '../../spec_helper_legacy'
 
-describe LegacyFacter::Core::Aggregate do
-  subject(:aggregate_res) { LegacyFacter::Core::Aggregate.new('aggregated', fact) }
+describe Facter::Core::Aggregate do
+  subject(:aggregate_res) { Facter::Core::Aggregate.new('aggregated', fact) }
 
   let(:fact) { double('stub_fact', name: 'stub_fact') }
 
@@ -69,8 +69,7 @@ describe LegacyFacter::Core::Aggregate do
       aggregate_res.chunk(:first, require: [:second]) {}
       aggregate_res.chunk(:second, require: [:first]) {}
 
-      expect(LegacyFacter).to receive(:warn).with(/dependency cycles: .*[:first, :second]/)
-
+      expect_any_instance_of(Facter::Log).to receive(:error).with(/dependency cycles: .*[:first, :second]/)
       expect { aggregate_res.value }.to raise_error(Facter::ResolveCustomFactError)
     end
 
