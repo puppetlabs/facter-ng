@@ -43,9 +43,11 @@ describe Facter::Resolvers::BaseResolver do
   end
 
   describe '#subscribe_to_manager' do
-    it 'calls the CacheManager subscribe method' do
+    before do
       allow(Facter::CacheManager).to receive(:subscribe).with(resolver)
+    end
 
+    it 'calls the CacheManager subscribe method' do
       resolver.subscribe_to_manager
 
       expect(Facter::CacheManager).to have_received(:subscribe).with(resolver)
