@@ -2,11 +2,13 @@
 
 module Facter
   module ConfigFileOptions
-    def augment_with_config_file_options!(config_path)
+    def augment_with_config_file_options!
+      # config_path = @options[:cofig]
+      config_path = '/Users/sebastian.miclea/projects/ghost/facter.conf'
       conf_reader = Facter::ConfigReader.new(config_path)
 
       augment_config_path(config_path)
-      if @priority_options[:is_cli]
+      if @options[:is_cli]
         augment_cli(conf_reader.cli)
         augment_ruby(conf_reader.global)
       end
@@ -34,7 +36,7 @@ module Facter
     def augment_custom(file_global_conf)
       return unless file_global_conf
 
-      if @priority_options[:is_cli]
+      if @options[:is_cli]
         @options[:custom_facts] = !file_global_conf['no-custom-facts'] unless file_global_conf['no-custom-facts'].nil?
       end
       @options[:custom_dir] = [file_global_conf['custom-dir']].flatten unless file_global_conf['custom-dir'].nil?
@@ -43,7 +45,7 @@ module Facter
     def augment_external(global_conf)
       return unless global_conf
 
-      if @priority_options[:is_cli]
+      if @options[:is_cli]
         @options[:external_facts] = !global_conf['no-external-facts'] unless global_conf['no-external-facts'].nil?
       end
       @options[:external_dir] = [global_conf['external-dir']].flatten unless global_conf['external-dir'].nil?

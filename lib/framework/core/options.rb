@@ -1,35 +1,27 @@
 # frozen_string_literal: true
 
 module Facter
-  class Options
-    include Facter::DefaultOptions
-    include Facter::ConfigFileOptions
-    include Facter::PriorityOptions
-    include Facter::HelperOptions
-    include Facter::ValidateOptions
+  module Options
+    extend self
 
-    include Singleton
+    extend Facter::DefaultOptions
+    extend Facter::ConfigFileOptions
+    extend Facter::HelperOptions
+    extend Facter::ValidateOptions
 
-    attr_accessor :priority_options
+    attr_accessor :options
+    attr_reader :user_query, :cli
 
-    def initialize
-      @options = {}
-      @priority_options = {}
-    end
-
-    def refresh(user_query = [])
-      @user_query = user_query
-      initialize_options
-
-      @options
+    def cli?
+      @cli
     end
 
     def get
       @options
     end
 
-    def [](option)
-      @options.fetch(option, nil)
+    def [](key)
+      @options.fetch(key, nil)
     end
 
     def custom_dir?
@@ -48,24 +40,30 @@ module Facter
       @options[:external_dir]
     end
 
-    def self.method_missing(name, *args, &block)
-      Facter::Options.instance.send(name.to_s, *args, &block)
-    rescue NoMethodError
-      super
+    def user_query=(*value)
+      @user_query = value
     end
 
-    def self.respond_to_missing?(name, include_private) end
-
-    private
+    # private
 
     def initialize_options
-      @options = { config: @priority_options[:config] }
+      @options = {}
+      @cli = false
       augment_with_defaults!
-      augment_with_to_hash_defaults! if @priority_options[:to_hash]
-      augment_with_config_file_options!(@options[:config])
-      augment_with_priority_options!(@priority_options)
-      validate_configs
-      augment_with_helper_options!(@user_query)
+      augment_with_to_hash_defaults!
+      augment_with_config_file_options!
+    end
+
+    def initialize_options_from_cli(cli_options)
+      @cli = true
+      cli_options.each do |key, val|
+        @options[key.to_sym] = val
+        @options[key.to_sym] = '' if key == 'log_level' && val == 'log_level'
+      end
+
+      # TODO: find a better way than calling this method twice
+      augment_with_config_file_options!
+      augment_with_helper_options!
     end
   end
 end
