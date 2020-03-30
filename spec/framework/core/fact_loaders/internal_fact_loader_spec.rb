@@ -210,5 +210,39 @@ describe Facter::InternalFactLoader do
         expect(internal_fact_loader.legacy_facts.first.name).to eq('operatingsystem')
       end
     end
+
+    context 'when loading wildcard facts' do
+      before do
+        allow(os_detector_mock).to receive(:hierarchy).and_return([:Windows])
+        allow(OsDetector).to receive(:instance).and_return(os_detector_mock)
+
+        class_discoverer_mock = instance_spy(Facter::ClassDiscoverer)
+        allow(class_discoverer_mock)
+          .to receive(:discover_classes)
+          .with(:Windows)
+          .and_return([Facts::Windows::NetworkInterfaces])
+        allow(Facter::ClassDiscoverer).to receive(:instance).and_return(class_discoverer_mock)
+
+        stub_const('Facts::Windows::NetworkInterfaces::FACT_NAME', 'network_.*')
+      end
+
+      it 'loads one fact' do
+        internal_fact_loader = Facter::InternalFactLoader.new
+
+        expect(internal_fact_loader.facts.size).to eq(1)
+      end
+
+      it 'loads one legacy fact' do
+        internal_fact_loader = Facter::InternalFactLoader.new
+
+        expect(internal_fact_loader.legacy_facts.size).to eq(1)
+      end
+
+      it 'loads no core facts' do
+        internal_fact_loader = Facter::InternalFactLoader.new
+
+        expect(internal_fact_loader.core_facts).to be_empty
+      end
+    end
   end
 end
