@@ -2,17 +2,24 @@
 
 describe Facter::InternalFactLoader do
   before do
-    allow_any_instance_of(OsDetector).to receive(:hierarchy).and_return([:Debian])
+    os_detector_mock = instance_double(OsDetector)
+    allow(os_detector_mock).to receive(:hierarchy).and_return([:Debian])
+    allow(OsDetector).to receive(:instance).and_return(os_detector_mock)
   end
 
   describe '#initialize' do
-    context 'load facts' do
+    context 'when loading facts' do
       it 'loads one legacy fact' do
-        allow_any_instance_of(OsDetector).to receive(:hierarchy).and_return([:Windows])
-        allow_any_instance_of(Facter::ClassDiscoverer)
+        os_detector_mock = instance_double(OsDetector)
+        allow(os_detector_mock).to receive(:hierarchy).and_return([:Windows])
+        allow(OsDetector).to receive(:instance).and_return(os_detector_mock)
+
+        class_discoverer_mock = instance_double(Facter::ClassDiscoverer)
+        allow(class_discoverer_mock)
           .to receive(:discover_classes)
           .with(:Windows)
           .and_return([Facts::Windows::NetworkInterfaces])
+        allow(Facter::ClassDiscoverer).to receive(:instance).and_return(class_discoverer_mock)
 
         stub_const('Facts::Windows::NetworkInterfaces::FACT_NAME', 'network_.*')
 
@@ -26,10 +33,12 @@ describe Facter::InternalFactLoader do
       end
 
       it 'loads one core fact' do
-        allow_any_instance_of(Facter::ClassDiscoverer)
+        class_discoverer_mock = instance_double(Facter::ClassDiscoverer)
+        allow(class_discoverer_mock)
           .to receive(:discover_classes)
           .with(:Debian)
           .and_return([Facts::Debian::Os::Name])
+        allow(Facter::ClassDiscoverer).to receive(:instance).and_return(class_discoverer_mock)
 
         stub_const('Facts::Debian::OsName::FACT_NAME', 'os.name')
 
@@ -41,12 +50,16 @@ describe Facter::InternalFactLoader do
       end
 
       it 'loads one legacy fact and one core fact' do
-        allow_any_instance_of(OsDetector).to receive(:hierarchy).and_return([:Windows])
+        os_detector_mock = instance_double(OsDetector)
+        allow(os_detector_mock).to receive(:hierarchy).and_return([:Windows])
+        allow(OsDetector).to receive(:instance).and_return(os_detector_mock)
 
-        allow_any_instance_of(Facter::ClassDiscoverer)
+        class_discoverer_mock = instance_double(Facter::ClassDiscoverer)
+        allow(class_discoverer_mock)
           .to receive(:discover_classes)
           .with(:Windows)
           .and_return([Facts::Windows::NetworkInterfaces, Facts::Windows::Path])
+        allow(Facter::ClassDiscoverer).to receive(:instance).and_return(class_discoverer_mock)
 
         stub_const('Facts::Windows::NetworkInterface::FACT_NAME', 'network_.*')
         stub_const('Facts::Windows::OsName::FACT_NAME', 'path')
@@ -60,10 +73,13 @@ describe Facter::InternalFactLoader do
       end
 
       it 'loads no facts' do
-        allow_any_instance_of(Facter::ClassDiscoverer)
+        class_discoverer_mock = instance_double(Facter::ClassDiscoverer)
+        allow(class_discoverer_mock)
           .to receive(:discover_classes)
           .with(:Debian)
           .and_return([])
+        allow(Facter::ClassDiscoverer).to receive(:instance).and_return(class_discoverer_mock)
+
         internal_fact_loader = Facter::InternalFactLoader.new
         all_facts_hash = internal_fact_loader.facts
 
@@ -71,19 +87,22 @@ describe Facter::InternalFactLoader do
       end
     end
 
-    context 'load hierarchy of facts' do
+    context 'when loading hierarchy of facts' do
       before do
-        allow_any_instance_of(OsDetector).to receive(:hierarchy).and_return(%i[Debian El])
+        os_detector_mock = instance_double(OsDetector)
+        allow(os_detector_mock).to receive(:hierarchy).and_return(%i[Debian El])
+        allow(OsDetector).to receive(:instance).and_return(os_detector_mock)
 
-        allow_any_instance_of(Facter::ClassDiscoverer)
+        class_discoverer_mock = instance_double(Facter::ClassDiscoverer)
+        allow(class_discoverer_mock)
           .to receive(:discover_classes)
           .with(:Debian)
           .and_return([Facts::Debian::Path])
-
-        allow_any_instance_of(Facter::ClassDiscoverer)
+        allow(class_discoverer_mock)
           .to receive(:discover_classes)
           .with(:El)
           .and_return([Facts::El::Path])
+        allow(Facter::ClassDiscoverer).to receive(:instance).and_return(class_discoverer_mock)
 
         stub_const('Facts::Debian::Path::FACT_NAME', 'path')
         stub_const('Facts::El::Path::FACT_NAME', 'path')
