@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'pathname'
+require_relative 'util/api_debugger' if ENV['API_DEBUG']
 
 ROOT_DIR = Pathname.new(File.expand_path('..', __dir__)) unless defined?(ROOT_DIR)
 
@@ -14,6 +15,7 @@ module Facter
   Log.add_legacy_logger(STDOUT)
   @logger = Log.new(self)
   @already_searched = {}
+  @trace = false
 
   class << self
     def clear_messages
@@ -23,7 +25,7 @@ module Facter
     # Alias method for Facter.fact()
     # @param name [string] fact name
     #
-    # @return [LegacyFacter::Util::Fact, nil] The fact object, or nil if no fact
+    # @return [Facter::Util::Fact, nil] The fact object, or nil if no fact
     #   is found.
     #
     # @api public
@@ -38,7 +40,7 @@ module Facter
     #   supplied here
     # @param block [Proc] a block defining a fact resolution
     #
-    # @return [LegacyFacter::Util::Fact] the fact object, which includes any previously
+    # @return [Facter::Util::Fact] the fact object, which includes any previously
     #   defined resolutions
     #
     # @api public
@@ -113,7 +115,7 @@ module Facter
     #
     # @param name [String] the name of the fact
     #
-    # @return [LegacyFacter::Util::Fact, nil] The fact object, or nil if no fact
+    # @return [Facter::Util::Fact, nil] The fact object, or nil if no fact
     #   is found.
     #
     # @api public
@@ -191,7 +193,7 @@ module Facter
       log_blocked_facts
 
       resolved_facts = Facter::FactManager.instance.resolve_facts
-      CacheManager.invalidate_all_caches
+      SessionCache.invalidate_all_caches
       FactCollection.new.build_fact_collection!(resolved_facts)
     end
 
@@ -201,7 +203,7 @@ module Facter
     #
     # @api public
     def trace?
-      LegacyFacter.trace?
+      @trace
     end
 
     # Enable or disable trace
@@ -212,6 +214,7 @@ module Facter
     # @api public
     def trace(bool)
       LegacyFacter.trace(bool)
+      @trace = bool
     end
 
     # Gets the value for a fact. Returns `nil` if no such fact exists.
@@ -248,12 +251,27 @@ module Facter
       log_blocked_facts
 
       resolved_facts = Facter::FactManager.instance.resolve_facts(args)
-      CacheManager.invalidate_all_caches
+      SessionCache.invalidate_all_caches
       fact_formatter = Facter::FormatterFactory.build(@options)
 
       status = error_check(args, resolved_facts)
 
       [fact_formatter.format(resolved_facts), status || 0]
+    end
+
+    def log_exception(exception, message = :default)
+      arr = []
+      if message == :default
+        arr << exception.message
+      elsif message
+        arr << message
+      end
+      if @trace
+        arr << 'backtrace:'
+        arr.concat(exception.backtrace)
+      end
+
+      @logger.error(arr.flatten.join("\n"))
     end
 
     private
@@ -271,7 +289,7 @@ module Facter
       @options.refresh([user_query])
       user_query = user_query.to_s
       resolved_facts = Facter::FactManager.instance.resolve_facts([user_query])
-      CacheManager.invalidate_all_caches
+      SessionCache.invalidate_all_caches
       fact_collection = FactCollection.new.build_fact_collection!(resolved_facts)
       splitted_user_query = Facter::Utils.split_user_query(user_query)
 
@@ -352,5 +370,7 @@ module Facter
       )
       nil
     end
+
+    prepend ApiDebugger if ENV['API_DEBUG']
   end
 end
