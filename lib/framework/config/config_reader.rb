@@ -5,8 +5,7 @@ module Facter
     attr_accessor :conf
 
     def initialize(config_path = nil)
-      @config_file_path = config_path || default_path
-      refresh_config
+      load_config(config_path)
     end
 
     def block_list
@@ -25,8 +24,9 @@ module Facter
       @conf['cli']
     end
 
-    def refresh_config
-      @conf = File.readable?(@config_file_path) ? Hocon.load(@config_file_path) : {}
+    def load_config(config_path)
+      config_file_path = config_path || default_path
+      @conf = File.readable?(config_file_path) ? Hocon.load(config_file_path) : {}
     end
 
     private

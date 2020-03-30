@@ -187,6 +187,7 @@ module Facter
     # @api public
     def to_hash
       log_blocked_facts
+      Options[:show_legacy] = true
 
       resolved_facts = Facter::FactManager.instance.resolve_facts
       SessionCache.invalidate_all_caches
@@ -244,7 +245,7 @@ module Facter
       # Options.priority_options =
       cli_options.map! { |(k, v)| [k.to_sym, v] }.to_h
       Options.initialize_options_from_cli(cli_options)
-      Options.user_query = args
+      Options[:user_query] = args
       @logger.info("executed with command line: #{ARGV.drop(1).join(' ')}")
       log_blocked_facts
       resolved_facts = Facter::FactManager.instance.resolve_facts(args)

@@ -2,18 +2,18 @@
 
 module Facter
   module Options
-    extend self
-
     extend Facter::DefaultOptions
     extend Facter::ConfigFileOptions
     extend Facter::HelperOptions
     extend Facter::ValidateOptions
 
     attr_accessor :options
-    attr_reader :user_query, :cli
+    attr_reader :config, :user_query
+
+    module_function
 
     def cli?
-      @cli
+      @options[:cli]
     end
 
     def get
@@ -22,6 +22,10 @@ module Facter
 
     def [](key)
       @options.fetch(key, nil)
+    end
+
+    def []=(key, value)
+      @options[key.to_sym] = value
     end
 
     def custom_dir?
@@ -40,30 +44,23 @@ module Facter
       @options[:external_dir]
     end
 
-    def user_query=(*value)
-      @user_query = value
-    end
-
-    # private
-
     def initialize_options
       @options = {}
       @cli = false
       augment_with_defaults!
-      augment_with_to_hash_defaults!
       augment_with_config_file_options!
     end
 
-    def initialize_options_from_cli(cli_options)
+    def initialize_options_from_cli(cli_options = {}, user_query = '')
       @cli = true
+      # TODO: find a better way than calling this method twice
+      augment_with_config_file_options!(cli_options[:config])
+      augment_with_helper_options!
+      @options[:user_query] = user_query
       cli_options.each do |key, val|
         @options[key.to_sym] = val
         @options[key.to_sym] = '' if key == 'log_level' && val == 'log_level'
       end
-
-      # TODO: find a better way than calling this method twice
-      augment_with_config_file_options!
-      augment_with_helper_options!
     end
   end
 end

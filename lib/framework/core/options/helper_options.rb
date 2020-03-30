@@ -3,8 +3,6 @@
 module Facter
   module HelperOptions
     def augment_with_helper_options!
-      options[:user_query] = true if Options.user_query
-
       no_ruby
 
       # convert array or string to array

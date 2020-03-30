@@ -1,68 +1,47 @@
 # frozen_string_literal: true
 
 describe Facter::Options do
-  before do
-    Singleton.__init__(Facter::ConfigReader)
-    Singleton.__init__(Facter::BlockList)
-    Singleton.__init__(Facter::Options)
-  end
+  let(:options) { Facter::Options.get }
 
-  let(:options) { Facter::Options.instance.get }
-  let(:priority_options) { Facter::Options.instance.priority_options }
+  before do
+    # Facter::Options.initialize_options
+  end
 
   describe '#augment_with_defaults!' do
     before do
-      Facter::Options.instance.augment_with_defaults!
+      Facter::Options.augment_with_defaults!
     end
 
     it 'sets debug to false' do
-      expect(options[:debug]).to be_falsey
+      expect(Facter::Options[:debug]).to be_falsey
     end
 
     it 'sets trace to false' do
-      expect(options[:trace]).to be_falsey
+      expect(Facter::Options[:trace]).to be_falsey
     end
 
     it 'sets verbose to false' do
-      expect(options[:verbose]).to be_falsey
+      expect(Facter::Options[:verbose]).to be_falsey
     end
 
     it 'sets log_level to warn' do
-      expect(options[:log_level]).to eq(:warn)
+      expect(Facter::Options[:log_level]).to eq(:warn)
     end
 
     it 'sets show_legacy to false' do
-      expect(options[:show_legacy]).to be_falsey
-    end
-
-    it 'sets custom_facts to true' do
-      expect(options[:custom_facts]).to be_truthy
+      expect(Facter::Options[:show_legacy]).to be_falsey
     end
 
     it 'set custom-dir with empty array' do
-      expect(options[:custom_dir].size).to eq(0)
-    end
-
-    it 'sets external_facts to true' do
-      expect(options[:external_facts]).to be_truthy
+      expect(Facter::Options[:custom_dir].size).to eq(0)
     end
 
     it 'sets external-dir with empty array' do
-      expect(options[:external_dir].size).to eq(0)
+      expect(Facter::Options[:external_dir].size).to eq(0)
     end
 
     it 'sets ruby to true' do
-      expect(options[:ruby]).to be_truthy
-    end
-  end
-
-  describe '#augment_with_to_hash_defaults!' do
-    before do
-      Facter::Options.instance.augment_with_to_hash_defaults!
-    end
-
-    it 'sets show_legacy to true' do
-      expect(options[:show_legacy]).to be_truthy
+      expect(Facter::Options[:ruby]).to be_truthy
     end
   end
 
@@ -72,6 +51,7 @@ describe Facter::Options do
       let(:block_list_double) { double(Facter::BlockList) }
 
       before do
+        Facter::Options[:cli] = true
         allow(Facter::ConfigReader).to receive(:new).with('config_path').and_return(config_reader_double)
         allow(config_reader_double).to receive(:cli).and_return(
           'debug' => false, 'trace' => true, 'verbose' => true, 'log-level' => :warn
@@ -87,56 +67,55 @@ describe Facter::Options do
         allow(Facter::BlockList).to receive(:instance).and_return(block_list_double)
         allow(block_list_double).to receive(:blocked_facts).and_return(%w[block_fact1 blocked_fact2])
 
-        priority_options[:is_cli] = true
-        Facter::Options.instance.augment_with_config_file_options!('config_path')
+        Facter::Options.augment_with_config_file_options!('config_path')
       end
 
       it 'sets debug to true' do
-        expect(options[:debug]).to be_falsey
+        expect(Facter::Options[:debug]).to be_falsey
       end
 
       it 'sets trace to true' do
-        expect(options[:trace]).to be_truthy
+        expect(Facter::Options[:trace]).to be_truthy
       end
 
       it 'sets verbose to true' do
-        expect(options[:verbose]).to be_truthy
+        expect(Facter::Options[:verbose]).to be_truthy
       end
 
       it 'sets logs level to error' do
-        expect(options[:log_level]).to eq(:warn)
+        expect(Facter::Options[:log_level]).to eq(:warn)
       end
 
       it 'sets custom-facts to true' do
-        expect(options[:custom_facts]).to be_truthy
+        expect(Facter::Options[:custom_facts]).to be_truthy
       end
 
       it 'sets custom-dir' do
-        expect(options[:custom_dir]).to eq(%w[custom_dir1 custom_dir2])
+        expect(Facter::Options[:custom_dir]).to eq(%w[custom_dir1 custom_dir2])
       end
 
       it 'sets external-facts to true' do
-        expect(options[:external_facts]).to be_truthy
+        expect(Facter::Options[:external_facts]).to be_truthy
       end
 
       it 'sets external-dir' do
-        expect(options[:external_dir]).to eq(%w[external_dir1 external_dir2])
+        expect(Facter::Options[:external_dir]).to eq(%w[external_dir1 external_dir2])
       end
 
       it 'sets ruby to true' do
-        expect(options[:ruby]).to be_truthy
+        expect(Facter::Options[:ruby]).to be_truthy
       end
 
       it 'sets show_legacy to true' do
-        expect(options[:show_legacy]).to be_truthy
+        expect(Facter::Options[:show_legacy]).to be_truthy
       end
 
       it 'sets blocked_facts' do
-        expect(options[:blocked_facts]).to eq(%w[block_fact1 blocked_fact2])
+        expect(Facter::Options[:blocked_facts]).to eq(%w[block_fact1 blocked_fact2])
       end
 
       it 'sets ttls' do
-        expect(options[:ttls]).to eq([{ 'timezone' => '30 days' }])
+        expect(Facter::Options[:ttls]).to eq([{ 'timezone' => '30 days' }])
       end
     end
 
@@ -160,56 +139,55 @@ describe Facter::Options do
         allow(Facter::BlockList).to receive(:instance).and_return(block_list_double)
         allow(block_list_double).to receive(:blocked_facts).and_return(%w[block_fact1 blocked_fact2])
 
-        priority_options[:is_cli] = false
-        Facter::Options.instance.augment_with_config_file_options!('config_path')
+        Facter::Options.augment_with_config_file_options!('config_path')
       end
 
       it 'sets debug to nil' do
-        expect(options[:debug]).to be_nil
+        expect(Facter::Options[:debug]).to be_falsey
       end
 
       it 'sets trace to nil' do
-        expect(options[:trace]).to be_nil
+        expect(Facter::Options[:trace]).to be_falsey
       end
 
       it 'sets verbose to nil' do
-        expect(options[:verbose]).to be_nil
+        expect(Facter::Options[:verbose]).to be_falsey
       end
 
       it 'sets logs level to nil' do
-        expect(options[:log_level]).to be_nil
+        expect(Facter::Options[:log_level]).to eq(:warn)
       end
 
       it 'sets custom-facts to nil' do
-        expect(options[:custom_facts]).to be_nil
+        expect(Facter::Options[:custom_facts]).to be_nil
       end
 
       it 'sets custom-dir' do
-        expect(options[:custom_dir]).to eq(%w[custom_dir1 custom_dir2])
+        expect(Facter::Options[:custom_dir]).to eq(%w[custom_dir1 custom_dir2])
       end
 
       it 'sets external-facts to nil' do
-        expect(options[:external_facts]).to be_nil
+        expect(Facter::Options[:external_facts]).to be_nil
       end
 
       it 'sets external-dir' do
-        expect(options[:external_dir]).to eq(%w[external_dir1 external_dir2])
+        expect(Facter::Options[:external_dir]).to eq(%w[external_dir1 external_dir2])
       end
 
       it 'sets ruby to nil' do
-        expect(options[:ruby]).to be_nil
+        expect(Facter::Options[:ruby]).to be_nil
       end
 
       it 'sets show_legacy to true' do
-        expect(options[:show_legacy]).to be_truthy
+        expect(Facter::Options[:show_legacy]).to be_truthy
       end
 
       it 'sets blocked_facts' do
-        expect(options[:blocked_facts]).to eq(%w[block_fact1 blocked_fact2])
+        expect(Facter::Options[:blocked_facts]).to eq(%w[block_fact1 blocked_fact2])
       end
 
       it 'sets ttls' do
-        expect(options[:ttls]).to eq([{ 'timezone' => '30 days' }])
+        expect(Facter::Options[:ttls]).to eq([{ 'timezone' => '30 days' }])
       end
     end
 
@@ -232,37 +210,35 @@ describe Facter::Options do
         allow(Facter::BlockList).to receive(:instance).and_return(block_list_double)
         allow(block_list_double).to receive(:blocked_facts).and_return(%w[block_fact1 blocked_fact2])
 
-        priority_options[:is_cli] = true
-        Facter::Options.instance.augment_with_defaults!
-        Facter::Options.instance.augment_with_config_file_options!('config_path')
+        Facter::Options.augment_with_config_file_options!('config_path')
       end
 
       it 'sets debug to true' do
-        expect(options[:debug]).to be_truthy
+        expect(Facter::Options[:debug]).to be_truthy
       end
 
       it 'sets trace to true' do
-        expect(options[:trace]).to be_truthy
+        expect(Facter::Options[:trace]).to be_truthy
       end
 
       it 'sets custom-facts to true' do
-        expect(options[:custom_facts]).to be_falsey
+        expect(Facter::Options[:custom_facts]).to be_falsey
       end
 
       it 'sets external-facts to true' do
-        expect(options[:external_facts]).to be_falsey
+        expect(Facter::Options[:external_facts]).to be_falsey
       end
 
       it 'sets ruby to true' do
-        expect(options[:ruby]).to be_falsey
+        expect(Facter::Options[:ruby]).to be_falsey
       end
 
       it 'sets blocked_facts' do
-        expect(options[:blocked_facts]).to eq(%w[block_fact1 blocked_fact2])
+        expect(Facter::Options[:blocked_facts]).to eq(%w[block_fact1 blocked_fact2])
       end
 
       it 'sets ttls' do
-        expect(options[:ttls]).to eq([{ 'timezone' => '30 days' }])
+        expect(Facter::Options[:ttls]).to eq([{ 'timezone' => '30 days' }])
       end
     end
   end
@@ -282,25 +258,25 @@ describe Facter::Options do
 
       allow(Facter::BlockList).to receive(:instance).and_return(block_list_double)
       allow(block_list_double).to receive(:blocked_facts).and_return(%w[block_fact1 blocked_fact2])
-      priority_options[:is_cli] = true
-      Facter::Options.instance.augment_with_defaults!
-      Facter::Options.instance.augment_with_config_file_options!('config_path')
+
+      Facter::Options.augment_with_defaults!
+      Facter::Options.augment_with_config_file_options!('config_path')
     end
 
     it 'sets debug to true' do
-      expect(options[:debug]).to be_falsey
+      expect(Facter::Options[:debug]).to be_falsey
     end
 
     it 'sets trace to true' do
-      expect(options[:trace]).to be_falsey
+      expect(Facter::Options[:trace]).to be_falsey
     end
 
     it 'sets verbose to true' do
-      expect(options[:verbose]).to be_falsey
+      expect(Facter::Options[:verbose]).to be_falsey
     end
 
     it 'sets logs level to error' do
-      expect(options[:log_level]).to eq(:err)
+      expect(Facter::Options[:log_level]).to eq(:err)
     end
   end
 
@@ -320,8 +296,6 @@ describe Facter::Options do
 
       allow(Facter::BlockList).to receive(:instance).and_return(block_list_double)
       allow(block_list_double).to receive(:blocked_facts).and_return(%w[block_fact1 blocked_fact2])
-      priority_options[:config] = 'config_path'
-      priority_options[:is_cli] = true
 
       allow(Facter::Log).to receive(:new).and_return(log)
       allow(log).to receive(:error).with(
@@ -331,15 +305,15 @@ describe Facter::Options do
     end
 
     it 'prints help and exit' do
-      expect { Facter::Options.instance.refresh }.to raise_error(SystemExit)
+      expect { Facter::Options.initialize_options_from_cli(config: 'config_path') }.to raise_error(SystemExit)
     end
   end
 
   describe '#augment_with_cli_options!' do
     before do
-      Facter::Options.instance.augment_with_defaults!
+      Facter::Options.augment_with_defaults!
       cli_options = { 'ruby' => false, 'external_facts' => false, 'custom_dir' => ['custom_dir'] }
-      Facter::Options.instance.augment_with_priority_options!(cli_options)
+      Facter::Options.initialize_options_from_cli(cli_options)
     end
 
     context 'override default with cli facts' do
@@ -359,37 +333,37 @@ describe Facter::Options do
 
   describe '#augment_with_helper_options!' do
     before do
+      Facter::Options.augment_with_defaults!
       cli_options = { 'ruby' => false, 'external_dir' => 'external_dir' }
-      Facter::Options.instance.augment_with_defaults!
-      Facter::Options.instance.augment_with_priority_options!(cli_options)
-      Facter::Options.instance.augment_with_helper_options!(%w[first_user_query second_user_query])
+      Facter::Options.initialize_options_from_cli(cli_options)
+      Facter::Options[:user_query] = %w[first_user_query second_user_query]
     end
 
     it 'sets user_query to true' do
-      expect(options[:user_query]).to be_truthy
+      expect(Facter::Options[:user_query]).to be_truthy
     end
 
     it 'sets custom_facts to false' do
-      expect(options[:custom_facts]).to be_falsey
+      expect(Facter::Options[:custom_facts]).to be_falsey
     end
 
     it 'adds ruby to block list' do
-      expect(options[:blocked_facts]).to include('ruby')
+      expect(Facter::Options[:blocked_facts]).to include('ruby')
     end
 
     it 'converts external dir string to array' do
-      expect(options[:external_dir]).to eq(['external_dir'])
+      expect(Facter::Options[:external_dir]).to eq(['external_dir'])
     end
   end
 
   describe '#get' do
     before do
       cli_options = { 'ruby' => true }
-      Facter::Options.instance.augment_with_priority_options!(cli_options)
+      Facter::Options.initialize_options_from_cli(cli_options)
     end
 
     it 'sets ruby option' do
-      expect(Facter::Options.instance.get).to eq(ruby: true)
+      expect(Facter::Options.get).to include(ruby: true)
     end
   end
 
@@ -397,22 +371,22 @@ describe Facter::Options do
     context 'custom dir is true' do
       before do
         cli_options = { 'custom_facts' => true, 'custom_dir' => %w[custom_dir1 custom_dir2] }
-        Facter::Options.instance.augment_with_priority_options!(cli_options)
+        Facter::Options.initialize_options_from_cli(cli_options)
       end
 
       it 'returns that custom dir exists' do
-        expect(Facter::Options.instance).to be_custom_dir
+        expect(Facter::Options).to be_custom_dir
       end
     end
 
     context 'custom dir is false' do
       before do
         cli_options = { 'custom_facts' => false, 'custom_dir' => %w[custom_dir1 custom_dir2] }
-        Facter::Options.instance.augment_with_priority_options!(cli_options)
+        Facter::Options.initialize_options_from_cli(cli_options)
       end
 
       it 'returns that custom dir dos not exists' do
-        expect(Facter::Options.instance).not_to be_custom_dir
+        expect(Facter::Options).not_to be_custom_dir
       end
     end
   end
@@ -420,11 +394,11 @@ describe Facter::Options do
   describe '#customn_dir' do
     before do
       cli_options = { 'custom_dir' => %w[custom_dir1 custom_dir2] }
-      Facter::Options.instance.augment_with_priority_options!(cli_options)
+      Facter::Options.initialize_options_from_cli(cli_options)
     end
 
     it 'returns custom dirs' do
-      expect(Facter::Options.instance.custom_dir).to eq(%w[custom_dir1 custom_dir2])
+      expect(Facter::Options.custom_dir).to eq(%w[custom_dir1 custom_dir2])
     end
   end
 
@@ -432,22 +406,22 @@ describe Facter::Options do
     context 'external dir is true' do
       before do
         cli_options = { 'external_facts' => true, 'external_dir' => %w[external_dir1 external_dir2] }
-        Facter::Options.instance.augment_with_priority_options!(cli_options)
+        Facter::Options.initialize_options_from_cli(cli_options)
       end
 
       it 'returns that external dir exists' do
-        expect(Facter::Options.instance).to be_external_dir
+        expect(Facter::Options).to be_external_dir
       end
     end
 
     context 'external dir is false' do
       before do
         cli_options = { 'external_facts' => false, 'external_dir' => %w[external_dir1 external_dir2] }
-        Facter::Options.instance.augment_with_priority_options!(cli_options)
+        Facter::Options.initialize_options_from_cli(cli_options)
       end
 
       it 'returns that external dir does not exists' do
-        expect(Facter::Options.instance).not_to be_external_dir
+        expect(Facter::Options).not_to be_external_dir
       end
     end
   end
@@ -455,59 +429,61 @@ describe Facter::Options do
   describe '#external_dir' do
     before do
       cli_options = { 'external_dir' => %w[external_dir1 external_dir2] }
-      Facter::Options.instance.augment_with_priority_options!(cli_options)
+      Facter::Options.initialize_options_from_cli(cli_options)
     end
 
     it 'returns external dirs' do
-      expect(Facter::Options.instance.external_dir).to eq(%w[external_dir1 external_dir2])
+      expect(Facter::Options.external_dir).to eq(%w[external_dir1 external_dir2])
     end
   end
 
   describe '#verbose' do
     before do
       cli_options = { 'verbose' => true }
-      Facter::Options.instance.augment_with_priority_options!(cli_options)
-      Facter::Options.instance.augment_with_helper_options!([])
+      Facter::Options.initialize_options_from_cli(cli_options)
+
+      Facter::Options.augment_with_helper_options!([])
     end
 
     it 'returns log_level info' do
-      expect(options[:log_level]).to eq(:info)
+      expect(Facter::Options[:log_level]).to eq(:info)
     end
   end
 
-  describe '#refresh' do
-    subject(:options) { Facter::Options.instance }
+  # describe '#refresh' do
+  #   before do
+  #     cli_options = { 'external_dir' => %w[external_dir1 external_dir2] }
+  #   end
 
-    before do
-      cli_options = { 'external_dir' => %w[external_dir1 external_dir2] }
-      Facter::Options.instance.augment_with_priority_options!(cli_options)
-    end
+  #   let(:subject) { Facter::Options }
 
-    context 'with persistent options' do
-      it 'sets debug to true' do
-        options.priority_options = { debug: true }
-        expect(options.refresh[:debug]).to eq(true)
-      end
+  #   context 'with persistent options' do
+  #     it 'sets debug to true' do
+  #       subject.priority_options = { debug: true }
+  #       expect(subject.refresh[:debug]).to eq(true)
+  #     end
 
-      it 'sets debug to false' do
-        options.priority_options = { debug: false }
-        expect(options.refresh[:debug]).to eq(false)
-      end
-    end
+  #     it 'sets debug to false' do
+  #       subject.priority_options = { debug: false }
+  #       expect(subject.refresh[:debug]).to eq(false)
+  #     end
+  #   end
 
-    context 'priority options have the highest priority' do
-      before do
-        Facter::Options.instance.augment_with_defaults!
-      end
+  #   context 'priority options have the highest priority' do
+  #     before do
+  #       Facter::Options.augment_with_defaults!
+  #     end
 
-      it 'sets debug to true' do
-        expect(options.refresh[:debug]).to eq(false)
-      end
+  #     let(:subject) { Facter::Options }
 
-      it 'sets debug to false' do
-        options.priority_options = { debug: false }
-        expect(options.refresh[:debug]).to eq(false)
-      end
-    end
-  end
+  #     it 'sets debug to true' do
+  #       expect(subject.refresh[:debug]).to eq(false)
+  #     end
+
+  #     it 'sets debug to false' do
+  #       subject.priority_options = { debug: false }
+  #       expect(subject.refresh[:debug]).to eq(false)
+  #     end
+  #   end
+  # end
 end
