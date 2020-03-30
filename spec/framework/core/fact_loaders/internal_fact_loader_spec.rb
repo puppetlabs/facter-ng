@@ -166,5 +166,49 @@ describe Facter::InternalFactLoader do
         expect(internal_fact_loader.facts.first.klass).to eq(Facts::El::Path)
       end
     end
+
+    context 'when loading fact with aliases' do
+      before do
+        class_discoverer_mock = instance_spy(Facter::ClassDiscoverer)
+        allow(class_discoverer_mock)
+          .to receive(:discover_classes)
+          .with(:Debian)
+          .and_return([Facts::Debian::Os::Name])
+        allow(Facter::ClassDiscoverer).to receive(:instance).and_return(class_discoverer_mock)
+
+        stub_const('Facts::Debian::Os::Name::FACT_NAME', 'os.name')
+        stub_const('Facts::Debian::Os::Name::ALIASES', 'operatingsystem')
+      end
+
+      it 'loads two facts' do
+        internal_fact_loader = Facter::InternalFactLoader.new
+
+        expect(internal_fact_loader.facts.size).to eq(2)
+      end
+
+      it 'loads one core fact' do
+        internal_fact_loader = Facter::InternalFactLoader.new
+
+        expect(internal_fact_loader.core_facts.size).to eq(1)
+      end
+
+      it 'loads one legacy fact' do
+        internal_fact_loader = Facter::InternalFactLoader.new
+
+        expect(internal_fact_loader.legacy_facts.size).to eq(1)
+      end
+
+      it 'loads a core fact with the fact name' do
+        internal_fact_loader = Facter::InternalFactLoader.new
+
+        expect(internal_fact_loader.core_facts.first.name).to eq('os.name')
+      end
+
+      it 'loads a legacy fact with the alias name' do
+        internal_fact_loader = Facter::InternalFactLoader.new
+
+        expect(internal_fact_loader.legacy_facts.first.name).to eq('operatingsystem')
+      end
+    end
   end
 end
