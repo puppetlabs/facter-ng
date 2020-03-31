@@ -2,6 +2,8 @@
 
 describe Facter::InternalFactLoader do
   describe '#initialize' do
+    subject(:internal_fact_loader) { Facter::InternalFactLoader.new }
+
     let(:os_detector_mock) { instance_spy(OsDetector) }
     let(:class_discoverer_mock) { instance_spy(Facter::ClassDiscoverer) }
 
@@ -25,20 +27,14 @@ describe Facter::InternalFactLoader do
       end
 
       it 'loads no core facts' do
-        internal_fact_loader = Facter::InternalFactLoader.new
-
         expect(internal_fact_loader.core_facts).to be_empty
       end
 
       it 'loads one legacy fact' do
-        internal_fact_loader = Facter::InternalFactLoader.new
-
         expect(internal_fact_loader.legacy_facts.size).to eq(1)
       end
 
       it 'loads one fact with :legacy type' do
-        internal_fact_loader = Facter::InternalFactLoader.new
-
         expect(internal_fact_loader.legacy_facts.first.type).to eq(:legacy)
       end
     end
@@ -55,20 +51,14 @@ describe Facter::InternalFactLoader do
       end
 
       it 'loads no legacy facts' do
-        internal_fact_loader = Facter::InternalFactLoader.new
-
         expect(internal_fact_loader.legacy_facts).to be_empty
       end
 
       it 'loads one core fact' do
-        internal_fact_loader = Facter::InternalFactLoader.new
-
         expect(internal_fact_loader.core_facts.size).to eq(1)
       end
 
       it 'loads one fact with :core type' do
-        internal_fact_loader = Facter::InternalFactLoader.new
-
         expect(internal_fact_loader.core_facts.first.type).to eq(:core)
       end
     end
@@ -89,20 +79,14 @@ describe Facter::InternalFactLoader do
       end
 
       it 'loads two facts' do
-        internal_fact_loader = Facter::InternalFactLoader.new
-
         expect(internal_fact_loader.facts.size).to eq(2)
       end
 
       it 'loads one legacy fact' do
-        internal_fact_loader = Facter::InternalFactLoader.new
-
         expect(internal_fact_loader.facts.count { |lf| lf.type == :legacy }).to eq(1)
       end
 
       it 'loads one core fact' do
-        internal_fact_loader = Facter::InternalFactLoader.new
-
         expect(internal_fact_loader.facts.count { |lf| lf.type == :core }).to eq(1)
       end
     end
@@ -117,8 +101,6 @@ describe Facter::InternalFactLoader do
       end
 
       it 'loads no facts' do
-        internal_fact_loader = Facter::InternalFactLoader.new
-
         expect(internal_fact_loader.facts).to be_empty
       end
     end
@@ -142,23 +124,15 @@ describe Facter::InternalFactLoader do
         stub_const('Facts::El::Path::FACT_NAME', 'path')
       end
 
-      let(:internal_fact_loader) { Facter::InternalFactLoader.new }
-
       it 'loads one fact' do
-        internal_fact_loader = Facter::InternalFactLoader.new
-
         expect(internal_fact_loader.facts.size).to eq(1)
       end
 
       it 'loads path fact' do
-        internal_fact_loader = Facter::InternalFactLoader.new
-
         expect(internal_fact_loader.facts.first.name).to eq('path')
       end
 
       it 'loads only el path' do
-        internal_fact_loader = Facter::InternalFactLoader.new
-
         expect(internal_fact_loader.facts.first.klass).to eq(Facts::El::Path)
       end
     end
@@ -176,32 +150,22 @@ describe Facter::InternalFactLoader do
       end
 
       it 'loads two facts' do
-        internal_fact_loader = Facter::InternalFactLoader.new
-
         expect(internal_fact_loader.facts.size).to eq(2)
       end
 
       it 'loads one core fact' do
-        internal_fact_loader = Facter::InternalFactLoader.new
-
         expect(internal_fact_loader.core_facts.size).to eq(1)
       end
 
       it 'loads one legacy fact' do
-        internal_fact_loader = Facter::InternalFactLoader.new
-
         expect(internal_fact_loader.legacy_facts.size).to eq(1)
       end
 
       it 'loads a core fact with the fact name' do
-        internal_fact_loader = Facter::InternalFactLoader.new
-
         expect(internal_fact_loader.core_facts.first.name).to eq('os.name')
       end
 
       it 'loads a legacy fact with the alias name' do
-        internal_fact_loader = Facter::InternalFactLoader.new
-
         expect(internal_fact_loader.legacy_facts.first.name).to eq('operatingsystem')
       end
     end
@@ -221,26 +185,18 @@ describe Facter::InternalFactLoader do
       end
 
       it 'loads one fact' do
-        internal_fact_loader = Facter::InternalFactLoader.new
-
         expect(internal_fact_loader.facts.size).to eq(1)
       end
 
       it 'loads one legacy fact' do
-        internal_fact_loader = Facter::InternalFactLoader.new
-
         expect(internal_fact_loader.legacy_facts.size).to eq(1)
       end
 
       it 'contains a wildcard at the end' do
-        internal_fact_loader = Facter::InternalFactLoader.new
-
         expect(internal_fact_loader.legacy_facts.first.name).to end_with('.*')
       end
 
       it 'loads no core facts' do
-        internal_fact_loader = Facter::InternalFactLoader.new
-
         expect(internal_fact_loader.core_facts).to be_empty
       end
     end
