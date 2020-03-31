@@ -3,18 +3,18 @@
 describe Facter::InternalFactLoader do
   describe '#initialize' do
     let(:os_detector_mock) { instance_spy(OsDetector) }
+    let(:class_discoverer_mock) { instance_spy(Facter::ClassDiscoverer) }
 
     before do
       allow(os_detector_mock).to receive(:hierarchy).and_return([:Debian])
       allow(OsDetector).to receive(:instance).and_return(os_detector_mock)
     end
 
-    context 'when loading one legacy facts' do
+    context 'when loading one legacy fact' do
       before do
         allow(os_detector_mock).to receive(:hierarchy).and_return([:Windows])
         allow(OsDetector).to receive(:instance).and_return(os_detector_mock)
 
-        class_discoverer_mock = instance_spy(Facter::ClassDiscoverer)
         allow(class_discoverer_mock)
           .to receive(:discover_classes)
           .with(:Windows)
@@ -45,7 +45,6 @@ describe Facter::InternalFactLoader do
 
     context 'when loading one core fact' do
       before do
-        class_discoverer_mock = instance_spy(Facter::ClassDiscoverer)
         allow(class_discoverer_mock)
           .to receive(:discover_classes)
           .with(:Debian)
@@ -79,7 +78,6 @@ describe Facter::InternalFactLoader do
         allow(os_detector_mock).to receive(:hierarchy).and_return([:Windows])
         allow(OsDetector).to receive(:instance).and_return(os_detector_mock)
 
-        class_discoverer_mock = instance_spy(Facter::ClassDiscoverer)
         allow(class_discoverer_mock)
           .to receive(:discover_classes)
           .with(:Windows)
@@ -111,7 +109,6 @@ describe Facter::InternalFactLoader do
 
     context 'when loading no facts' do
       before do
-        class_discoverer_mock = instance_spy(Facter::ClassDiscoverer)
         allow(class_discoverer_mock)
           .to receive(:discover_classes)
           .with(:Debian)
@@ -131,7 +128,6 @@ describe Facter::InternalFactLoader do
         allow(os_detector_mock).to receive(:hierarchy).and_return(%i[Debian El])
         allow(OsDetector).to receive(:instance).and_return(os_detector_mock)
 
-        class_discoverer_mock = instance_spy(Facter::ClassDiscoverer)
         allow(class_discoverer_mock)
           .to receive(:discover_classes)
           .with(:Debian)
@@ -169,7 +165,6 @@ describe Facter::InternalFactLoader do
 
     context 'when loading fact with aliases' do
       before do
-        class_discoverer_mock = instance_spy(Facter::ClassDiscoverer)
         allow(class_discoverer_mock)
           .to receive(:discover_classes)
           .with(:Debian)
@@ -216,7 +211,6 @@ describe Facter::InternalFactLoader do
         allow(os_detector_mock).to receive(:hierarchy).and_return([:Windows])
         allow(OsDetector).to receive(:instance).and_return(os_detector_mock)
 
-        class_discoverer_mock = instance_spy(Facter::ClassDiscoverer)
         allow(class_discoverer_mock)
           .to receive(:discover_classes)
           .with(:Windows)
