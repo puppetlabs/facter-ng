@@ -90,7 +90,7 @@ describe Facter::InternalFactLoader do
         stub_const('Facts::Windows::OsName::FACT_NAME', 'path')
       end
 
-      it 'loads two fact' do
+      it 'loads two facts' do
         internal_fact_loader = Facter::InternalFactLoader.new
 
         expect(internal_fact_loader.facts.size).to eq(2)
