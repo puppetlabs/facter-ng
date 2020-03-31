@@ -232,6 +232,12 @@ describe Facter::InternalFactLoader do
         expect(internal_fact_loader.legacy_facts.size).to eq(1)
       end
 
+      it 'contains a wildcard at the end' do
+        internal_fact_loader = Facter::InternalFactLoader.new
+
+        expect(internal_fact_loader.legacy_facts.first.name).to end_with('.*')
+      end
+
       it 'loads no core facts' do
         internal_fact_loader = Facter::InternalFactLoader.new
 
