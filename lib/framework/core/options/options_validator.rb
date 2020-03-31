@@ -33,14 +33,11 @@ module Facter
     end
 
     def self.write_error_and_exit(message)
-      # Options.augment_with_priority_options!(is_cli: true)
       log = Facter::Log.new(self)
       log.error(message, true)
-      # Facter::Cli.start(['--help'])
-# require 'pry-byebug'; binding.pry
+      Facter::Cli.start(['--help'])
 
-      a=1
-      # exit 1
+      exit 1
     end
 
     def self.validate_configs(options)

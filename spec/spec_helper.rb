@@ -53,4 +53,12 @@ RSpec.configure do |config|
     # exist to raise, protecting against incorrectly spelt names.
     mocks.verify_doubled_constant_names = true
   end
+
+  config.before do
+    allow(Hocon).to receive(:load).and_return(nil)
+  end
+
+  config.after do
+    Facter::Options.reset!
+  end
 end

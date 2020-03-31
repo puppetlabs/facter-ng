@@ -102,7 +102,7 @@ module Facter
     #
     # @api public
     def debugging(debug_bool)
-      Options.options[:debug] = debug_bool
+      Options[:debug] = debug_bool
 
       debug_bool
     end
@@ -241,15 +241,14 @@ module Facter
     #
     # @api private
     def to_user_output(cli_options, *args)
-      # Options.priority_options =
-      cli_options.map! { |(k, v)| [k.to_sym, v] }.to_h
-      Options.initialize_options_from_cli(cli_options)
+      cli_options = cli_options.map { |(k, v)| [k.to_sym, v] }.to_h
+      Options.init_from_cli(cli_options)
       Options[:user_query] = args
       @logger.info("executed with command line: #{ARGV.drop(1).join(' ')}")
       log_blocked_facts
       resolved_facts = Facter::FactManager.instance.resolve_facts(args)
-      CacheManager.invalidate_all_caches
-      fact_formatter = Facter::FormatterFactory.build(@options)
+
+      fact_formatter = Facter::FormatterFactory.build(Options.get)
 
       status = error_check(args, resolved_facts)
 
@@ -283,7 +282,6 @@ module Facter
     #
     # @return [ResolvedFact]
     def resolve_fact(user_query)
-      # Options.refresh([user_query])
       user_query = user_query.to_s
       resolved_facts = Facter::FactManager.instance.resolve_facts([user_query])
       SessionCache.invalidate_all_caches

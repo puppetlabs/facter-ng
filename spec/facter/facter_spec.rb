@@ -81,13 +81,12 @@ describe Facter do
       end
 
       it 'returns no fact and status 1' do
-        allow(logger).to receive(:error).with('fact "os.name" does not exist.', true)
-
-        user_query = 'os.name'
+        user_query = ['os.name', 'missing_fact']
         expected_json_output = '{}'
 
-        allow_any_instance_of(Facter::FactManager).to receive(:resolve_facts).and_return([])
-        allow_any_instance_of(Facter::Options).to receive(:[]).with(:strict).and_return(true)
+        allow(Facter::FactManager).to receive(:resolve_facts).and_return([])
+        allow(Facter::Options).to receive(:[]).and_call_original
+        allow(Facter::Options).to receive(:[]).with(:strict).and_return(true)
         allow(OsDetector).to receive(:detect).and_return(:solaris)
 
         json_fact_formatter = double(Facter::JsonFactFormatter)
@@ -95,7 +94,7 @@ describe Facter do
 
         allow(Facter::FormatterFactory).to receive(:build).and_return(json_fact_formatter)
 
-        formatted_facts = Facter.to_user_output({}, user_query)
+        formatted_facts = Facter.to_user_output({}, *user_query)
         expect(formatted_facts).to eq([expected_json_output, 1])
       end
 
@@ -103,7 +102,8 @@ describe Facter do
         user_query = 'os.name'
         expected_json_output = '{"os" : {"name": "ubuntu"}'
 
-        allow_any_instance_of(Facter::Options).to receive(:[]).with(:strict).and_return(true)
+        allow(Facter::Options).to receive(:[]).with(:anything)
+        allow(Facter::Options).to receive(:[]).with(:strict).and_return(true)
         allow_any_instance_of(Facter::FactManager).to receive(:resolve_facts).and_return([os_fact])
 
         json_fact_formatter = double(Facter::JsonFactFormatter)
@@ -310,7 +310,7 @@ describe Facter do
     let(:message) { 'test' }
 
     before do
-      allow(Facter::Options.instance).to receive(:[]).with(:debug).and_return(is_debug)
+      allow(Facter::Options).to receive(:[]).with(:debug).and_return(is_debug)
     end
 
     context 'when log level is debug' do
@@ -333,21 +333,15 @@ describe Facter do
   end
 
   describe '#debugging' do
-    let(:priority_options) { {} }
-
-    before do
-      allow(Facter::Options.instance).to receive(:priority_options).and_return(priority_options)
-    end
-
     it 'sets log level to debug' do
-      expect(priority_options).to receive(:[]=).with(:debug, true)
+      expect(Facter::Options).to receive(:[]=).with(:debug, true)
       Facter.debugging(true)
     end
   end
 
   describe '#debugging?' do
     it 'returns that log_level is not debug' do
-      expect(Facter::Options.instance).to receive(:[]).with(:debug).and_return(false)
+      expect(Facter::Options).to receive(:[]).with(:debug).and_return(false)
       Facter.debugging?
     end
   end
