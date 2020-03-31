@@ -9,24 +9,33 @@ module Facter
     end
 
     def block_list
-      @conf['facts'] && @conf['facts']['blocklist']
+      @conf.facts && @conf.facts['blocklist']
     end
 
     def ttls
-      @conf['facts'] && @conf['facts']['ttls']
+      @conf.facts && @conf.facts['ttls']
     end
 
     def global
-      @conf['global']
+      @conf.global
     end
 
     def cli
-      @conf['cli']
+      @conf.cli
+    end
+
+    def ruby
+      !global['no-ruby'] unless global['no-ruby'].nil?
+    end
+
+    def trace
+      cli['trace'] if Options[:cli]
     end
 
     def load_config(config_path)
       config_file_path = config_path || default_path
-      @conf = File.readable?(config_file_path) ? Hocon.load(config_file_path) : {}
+      conf = File.readable?(config_file_path) ? Hocon.load(config_file_path) : {facts: '', global: '', cli: ''}
+      @conf = OpenStruct.new(conf)
     end
 
     private

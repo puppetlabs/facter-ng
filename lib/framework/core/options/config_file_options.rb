@@ -2,6 +2,8 @@
 
 module Facter
   module ConfigFileOptions
+    private
+
     def augment_with_config_file_options!(config_path = nil)
       # config_path = @options[:cofig]
       # config_path = '/Users/sebastian.miclea/projects/ghost/facter.conf'
@@ -11,15 +13,15 @@ module Facter
 
       if @options[:cli]
         augment_cli(conf_reader.cli)
-        augment_ruby(conf_reader.global)
       end
+      augment_ruby(conf_reader.global)
       augment_custom(conf_reader.global)
       augment_external(conf_reader.global)
       augment_show_legacy(conf_reader.global)
       augment_facts(conf_reader.ttls)
-    end
 
-    private
+      Facter::OptionsValidator.validate_configs(@options) unless @options[:cli].nil?
+    end
 
     def augment_config_path(config_path)
       @options[:config] = config_path
@@ -55,7 +57,7 @@ module Facter
     def augment_ruby(global_conf)
       return unless global_conf
 
-      @options[:ruby] = !global_conf['no-ruby'] unless global_conf['no-ruby'].nil?
+      @options[:ruby] = global_conf['no-ruby'].nil? ? nil : !global_conf['no-ruby']
     end
 
     def augment_show_legacy(global_conf)

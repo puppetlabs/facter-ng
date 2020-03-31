@@ -5,10 +5,12 @@ module Facter
     extend Facter::DefaultOptions
     extend Facter::ConfigFileOptions
     extend Facter::HelperOptions
-    extend Facter::ValidateOptions
 
-    attr_accessor :options
+    attr_writer :options
     attr_reader :config, :user_query
+
+    @options = {}
+    augment_with_defaults!
 
     module_function
 
@@ -44,23 +46,26 @@ module Facter
       @options[:external_dir]
     end
 
-    def initialize_options
-      @options = {}
-      @cli = false
-      augment_with_defaults!
-      augment_with_config_file_options!
+    def init_from_api
+      @options[:cli] = false
+      send(:augment_with_config_file_options!)
     end
 
-    def initialize_options_from_cli(cli_options = {}, user_query = '')
-      @cli = true
-      # TODO: find a better way than calling this method twice
-      augment_with_config_file_options!(cli_options[:config])
-      augment_with_helper_options!
+    def init_from_cli(cli_options = {}, user_query = '')
+      @options[:cli] = true
+
+      send(:augment_with_config_file_options!, cli_options[:config])
+      send(:augment_with_helper_options!)
       @options[:user_query] = user_query
       cli_options.each do |key, val|
         @options[key.to_sym] = val
         @options[key.to_sym] = '' if key == 'log_level' && val == 'log_level'
       end
+    end
+
+    def reset!
+      @options = {}
+      augment_with_defaults!
     end
   end
 end

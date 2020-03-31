@@ -11,7 +11,6 @@ require "#{ROOT_DIR}/lib/framework/core/options/options_validator"
 module Facter
   class ResolveCustomFactError < StandardError; end
 
-  Options.initialize_options
   Log.add_legacy_logger(STDOUT)
   @logger = Log.new(self)
   @already_searched = {}
@@ -103,7 +102,7 @@ module Facter
     #
     # @api public
     def debugging(debug_bool)
-      Options.priority_options[:debug] = debug_bool
+      Options.options[:debug] = debug_bool
 
       debug_bool
     end

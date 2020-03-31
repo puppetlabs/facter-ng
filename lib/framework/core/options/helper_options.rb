@@ -2,6 +2,8 @@
 
 module Facter
   module HelperOptions
+    private
+
     def augment_with_helper_options!
       no_ruby
 
@@ -16,8 +18,6 @@ module Facter
       Log.level = @options[:log_level]
       Facter.trace(@options[:trace])
     end
-
-    private
 
     def no_ruby
       return if @options[:ruby]

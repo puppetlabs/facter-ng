@@ -3,8 +3,8 @@
 describe Facter::Options do
   let(:options) { Facter::Options.get }
 
-  before do
-    # Facter::Options.initialize_options
+  after do
+    Facter::Options.reset!
   end
 
   describe '#augment_with_defaults!' do
@@ -51,10 +51,9 @@ describe Facter::Options do
       let(:block_list_double) { double(Facter::BlockList) }
 
       before do
-        Facter::Options[:cli] = true
         allow(Facter::ConfigReader).to receive(:new).with('config_path').and_return(config_reader_double)
         allow(config_reader_double).to receive(:cli).and_return(
-          'debug' => false, 'trace' => true, 'verbose' => true, 'log-level' => :warn
+          'debug' => true, 'trace' => true, 'verbose' => true, 'log-level' => :warn
         )
 
         allow(config_reader_double).to receive(:global).and_return(
@@ -67,11 +66,11 @@ describe Facter::Options do
         allow(Facter::BlockList).to receive(:instance).and_return(block_list_double)
         allow(block_list_double).to receive(:blocked_facts).and_return(%w[block_fact1 blocked_fact2])
 
-        Facter::Options.augment_with_config_file_options!('config_path')
+        Facter::Options.init_from_cli(config: 'config_path')
       end
 
       it 'sets debug to true' do
-        expect(Facter::Options[:debug]).to be_falsey
+        expect(Facter::Options[:debug]).to be_truthy
       end
 
       it 'sets trace to true' do
@@ -124,7 +123,7 @@ describe Facter::Options do
       let(:block_list_double) { double(Facter::BlockList) }
 
       before do
-        allow(Facter::ConfigReader).to receive(:new).with('config_path').and_return(config_reader_double)
+        allow(Facter::ConfigReader).to receive(:new).and_return(config_reader_double)
         allow(config_reader_double).to receive(:cli).and_return(
           'debug' => false, 'trace' => true, 'verbose' => true, 'log-level' => :warn
         )
@@ -139,7 +138,7 @@ describe Facter::Options do
         allow(Facter::BlockList).to receive(:instance).and_return(block_list_double)
         allow(block_list_double).to receive(:blocked_facts).and_return(%w[block_fact1 blocked_fact2])
 
-        Facter::Options.augment_with_config_file_options!('config_path')
+        Facter::Options.init_from_api
       end
 
       it 'sets debug to nil' do
@@ -175,7 +174,7 @@ describe Facter::Options do
       end
 
       it 'sets ruby to nil' do
-        expect(Facter::Options[:ruby]).to be_nil
+        expect(Facter::Options[:ruby]).to be_truthy
       end
 
       it 'sets show_legacy to true' do
@@ -210,7 +209,7 @@ describe Facter::Options do
         allow(Facter::BlockList).to receive(:instance).and_return(block_list_double)
         allow(block_list_double).to receive(:blocked_facts).and_return(%w[block_fact1 blocked_fact2])
 
-        Facter::Options.augment_with_config_file_options!('config_path')
+        Facter::Options.init_from_cli(config: 'config_path')
       end
 
       it 'sets debug to true' do
@@ -234,7 +233,7 @@ describe Facter::Options do
       end
 
       it 'sets blocked_facts' do
-        expect(Facter::Options[:blocked_facts]).to eq(%w[block_fact1 blocked_fact2])
+        expect(Facter::Options[:blocked_facts]).to eq(%w[ruby block_fact1 blocked_fact2])
       end
 
       it 'sets ttls' do
@@ -248,7 +247,7 @@ describe Facter::Options do
     let(:block_list_double) { double(Facter::BlockList) }
 
     before do
-      allow(Facter::ConfigReader).to receive(:new).with('config_path').and_return(config_reader_double)
+      allow(Facter::ConfigReader).to receive(:new).and_return(config_reader_double)
       allow(config_reader_double).to receive(:cli).and_return('log-level' => :err)
       allow(config_reader_double).to receive(:global).and_return(
         'no-custom-facts' => true, 'no-external-facts' => true, 'no-ruby' => true
@@ -258,9 +257,7 @@ describe Facter::Options do
 
       allow(Facter::BlockList).to receive(:instance).and_return(block_list_double)
       allow(block_list_double).to receive(:blocked_facts).and_return(%w[block_fact1 blocked_fact2])
-
-      Facter::Options.augment_with_defaults!
-      Facter::Options.augment_with_config_file_options!('config_path')
+      Facter::Options.init_from_api
     end
 
     it 'sets debug to true' do
@@ -284,6 +281,7 @@ describe Facter::Options do
     let(:config_reader_double) { double(Facter::ConfigReader) }
     let(:block_list_double) { double(Facter::BlockList) }
     let(:log) { instance_spy(Facter::Log) }
+    # let(:options_validator) { instance_spy(Facter::OptionsValidator) }
 
     before do
       allow(Facter::ConfigReader).to receive(:new).with('config_path').and_return(config_reader_double)
@@ -296,8 +294,10 @@ describe Facter::Options do
 
       allow(Facter::BlockList).to receive(:instance).and_return(block_list_double)
       allow(block_list_double).to receive(:blocked_facts).and_return(%w[block_fact1 blocked_fact2])
-
+      allow(Facter::OptionsValidator).to receive(:write_error_and_exit)
+        .with('options conflict: please specify only one').and_raise(SystemExit)
       allow(Facter::Log).to receive(:new).and_return(log)
+
       allow(log).to receive(:error).with(
         'debug, verbose, and log-level options conflict: please specify only one.', true
       )
@@ -305,15 +305,14 @@ describe Facter::Options do
     end
 
     it 'prints help and exit' do
-      expect { Facter::Options.initialize_options_from_cli(config: 'config_path') }.to raise_error(SystemExit)
+      expect { Facter::Options.init_from_cli(config: 'config_path') }.to raise_error(SystemExit)
     end
   end
 
   describe '#augment_with_cli_options!' do
     before do
-      Facter::Options.augment_with_defaults!
       cli_options = { 'ruby' => false, 'external_facts' => false, 'custom_dir' => ['custom_dir'] }
-      Facter::Options.initialize_options_from_cli(cli_options)
+      Facter::Options.init_from_cli(cli_options)
     end
 
     context 'override default with cli facts' do
@@ -335,7 +334,7 @@ describe Facter::Options do
     before do
       Facter::Options.augment_with_defaults!
       cli_options = { 'ruby' => false, 'external_dir' => 'external_dir' }
-      Facter::Options.initialize_options_from_cli(cli_options)
+      Facter::Options.init_from_cli(cli_options)
       Facter::Options[:user_query] = %w[first_user_query second_user_query]
     end
 
@@ -359,7 +358,7 @@ describe Facter::Options do
   describe '#get' do
     before do
       cli_options = { 'ruby' => true }
-      Facter::Options.initialize_options_from_cli(cli_options)
+      Facter::Options.init_from_cli(cli_options)
     end
 
     it 'sets ruby option' do
@@ -371,7 +370,7 @@ describe Facter::Options do
     context 'custom dir is true' do
       before do
         cli_options = { 'custom_facts' => true, 'custom_dir' => %w[custom_dir1 custom_dir2] }
-        Facter::Options.initialize_options_from_cli(cli_options)
+        Facter::Options.init_from_cli(cli_options)
       end
 
       it 'returns that custom dir exists' do
@@ -382,7 +381,7 @@ describe Facter::Options do
     context 'custom dir is false' do
       before do
         cli_options = { 'custom_facts' => false, 'custom_dir' => %w[custom_dir1 custom_dir2] }
-        Facter::Options.initialize_options_from_cli(cli_options)
+        Facter::Options.init_from_cli(cli_options)
       end
 
       it 'returns that custom dir dos not exists' do
@@ -391,10 +390,10 @@ describe Facter::Options do
     end
   end
 
-  describe '#customn_dir' do
+  describe '#custom_dir' do
     before do
       cli_options = { 'custom_dir' => %w[custom_dir1 custom_dir2] }
-      Facter::Options.initialize_options_from_cli(cli_options)
+      Facter::Options.init_from_cli(cli_options)
     end
 
     it 'returns custom dirs' do
@@ -406,7 +405,7 @@ describe Facter::Options do
     context 'external dir is true' do
       before do
         cli_options = { 'external_facts' => true, 'external_dir' => %w[external_dir1 external_dir2] }
-        Facter::Options.initialize_options_from_cli(cli_options)
+        Facter::Options.init_from_cli(cli_options)
       end
 
       it 'returns that external dir exists' do
@@ -417,7 +416,7 @@ describe Facter::Options do
     context 'external dir is false' do
       before do
         cli_options = { 'external_facts' => false, 'external_dir' => %w[external_dir1 external_dir2] }
-        Facter::Options.initialize_options_from_cli(cli_options)
+        Facter::Options.init_from_cli(cli_options)
       end
 
       it 'returns that external dir does not exists' do
@@ -429,7 +428,7 @@ describe Facter::Options do
   describe '#external_dir' do
     before do
       cli_options = { 'external_dir' => %w[external_dir1 external_dir2] }
-      Facter::Options.initialize_options_from_cli(cli_options)
+      Facter::Options.init_from_cli(cli_options)
     end
 
     it 'returns external dirs' do
@@ -440,9 +439,7 @@ describe Facter::Options do
   describe '#verbose' do
     before do
       cli_options = { 'verbose' => true }
-      Facter::Options.initialize_options_from_cli(cli_options)
-
-      Facter::Options.augment_with_helper_options!([])
+      Facter::Options.init_from_cli(cli_options)
     end
 
     it 'returns log_level info' do
