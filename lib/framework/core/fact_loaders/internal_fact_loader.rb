@@ -35,7 +35,7 @@ module Facter
         fact_name = class_name::FACT_NAME
 
         # if fact is already loaded, skip it
-        next if @facts.select { |fact| fact.name == fact_name }.any?
+        next if @facts.any? { |fact| fact.name == fact_name }
 
         type = fact_name.end_with?('.*') ? :legacy : :core
         load_fact(fact_name, class_name, type)
