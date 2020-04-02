@@ -4,9 +4,8 @@ describe Facter::Resolvers::Linux::Memory do
   subject(:resolver) { Facter::Resolvers::Linux::Memory }
 
   before do
-    allow(File).to receive(:readable?).with('/proc/meminfo').and_return(true)
-    allow(File).to receive(:read)
-      .with('/proc/meminfo')
+    allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+      .with('/proc/meminfo', nil)
       .and_return(load_fixture(fixture_name).read)
   end
 

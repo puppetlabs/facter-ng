@@ -56,10 +56,10 @@ describe Facter::Resolvers::SELinux do
       allow(File).to receive(:readlines)
         .with('/etc/selinux/config')
         .and_return(load_fixture('selinux_config').read.split("\n"))
-      allow(File).to receive(:readable?).with('/sys/fs/selinux/policyvers').and_return(true)
-      allow(File).to receive(:read).with('/sys/fs/selinux/policyvers').and_return('31')
-      allow(File).to receive(:readable?).with('/sys/fs/selinux/enforce').and_return(true)
-      allow(File).to receive(:read).with('/sys/fs/selinux/enforce').and_return('1')
+      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+        .with('/sys/fs/selinux/policyvers').and_return('31')
+      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+        .with('/sys/fs/selinux/enforce').and_return('1')
     end
 
     it 'returns enabled true' do

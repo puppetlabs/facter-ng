@@ -46,10 +46,10 @@ describe Facter::Resolvers::Partitions do
         allow(File).to receive(:directory?).with("#{sys_block_path}/sda/device").and_return(true)
         allow(Dir).to receive(:[]).with("#{sys_block_path}/sda/**/*").and_return(sda_subdirs)
         sda_subdirs.each { |subdir| allow(File).to receive(:directory?).with(subdir).and_return(true) }
-        allow(File).to receive(:readable?).with("#{sys_block_path}/sda/sda2/size").and_return(true)
-        allow(File).to receive(:read).with("#{sys_block_path}/sda/sda2/size").and_return('201213')
-        allow(File).to receive(:readable?).with("#{sys_block_path}/sda/sda1/size").and_return(true)
-        allow(File).to receive(:read).with("#{sys_block_path}/sda/sda1/size").and_return('234')
+        allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+          .with("#{sys_block_path}/sda/sda2/size", '0').and_return('201213')
+        allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+          .with("#{sys_block_path}/sda/sda1/size", '0').and_return('234')
         allow(Open3).to receive(:capture3).with('which blkid').and_return('/usr/bin/blkid')
         allow(Open3).to receive(:capture3).with('blkid').and_return(load_fixture('blkid_output').read)
       end
@@ -68,11 +68,10 @@ describe Facter::Resolvers::Partitions do
       before do
         allow(File).to receive(:directory?).with("#{sys_block_path}/sda/device").and_return(false)
         allow(File).to receive(:directory?).with("#{sys_block_path}/sda/dm").and_return(true)
-        allow(File).to receive(:readable?).with("#{sys_block_path}/sda/dm/name").and_return(true)
-        allow(File).to receive(:read).with("#{sys_block_path}/sda/dm/name").and_return('VolGroup00-LogVol00')
-
-        allow(File).to receive(:readable?).with("#{sys_block_path}/sda/size").and_return(true)
-        allow(File).to receive(:read).with("#{sys_block_path}/sda/size").and_return('201213')
+        allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+          .with("#{sys_block_path}/sda/dm/name").and_return('VolGroup00-LogVol00')
+        allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+          .with("#{sys_block_path}/sda/size", '0').and_return('201213')
         allow(Open3).to receive(:capture3).with('which blkid').and_return('/usr/bin/blkid')
         allow(Open3).to receive(:capture3).with('blkid').and_return(load_fixture('blkid_output').read)
       end
@@ -91,11 +90,11 @@ describe Facter::Resolvers::Partitions do
         allow(File).to receive(:directory?).with("#{sys_block_path}/sda/device").and_return(false)
         allow(File).to receive(:directory?).with("#{sys_block_path}/sda/dm").and_return(false)
         allow(File).to receive(:directory?).with("#{sys_block_path}/sda/loop").and_return(true)
-        allow(File).to receive(:readable?).with("#{sys_block_path}/sda/loop/backing_file").and_return(true)
-        allow(File).to receive(:read).with("#{sys_block_path}/sda/loop/backing_file").and_return('some_path')
+        allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+          .with("#{sys_block_path}/sda/loop/backing_file").and_return('some_path')
 
-        allow(File).to receive(:readable?).with("#{sys_block_path}/sda/size").and_return(true)
-        allow(File).to receive(:read).with("#{sys_block_path}/sda/size").and_return('201213')
+        allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+          .with("#{sys_block_path}/sda/size", '0').and_return('201213')
         allow(Open3).to receive(:capture3).with('which blkid').and_return('/usr/bin/blkid')
         allow(Open3).to receive(:capture3).with('blkid').and_return(load_fixture('blkid_output').read)
       end

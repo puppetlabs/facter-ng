@@ -41,7 +41,7 @@ module Facter
         end
 
         def extract_from_dm(block_path)
-          map_name = File.readable?("#{block_path}/dm/name") ? File.read("#{block_path}/dm/name").chomp : ''
+          map_name = Facter::Resolvers::Utils::FileHelper.safe_read("#{block_path}/dm/name").chomp
           if map_name.empty?
             populate_partitions("/dev/#{block_path}", block_path)
           else
@@ -50,14 +50,15 @@ module Facter
         end
 
         def extract_from_loop(block_path)
-          populate_partitions("/dev/#{block_path}", block_path) if File.readable?("#{block_path}/loop/backing_file")
-          backing_file = File.read("#{block_path}/loop/backing_file").chomp
+          backing_file = Facter::Resolvers::Utils::FileHelper.safe_read("#{block_path}/loop/backing_file").chomp
+          populate_partitions("/dev/#{block_path}", block_path) unless backing_file.empty?
           populate_partitions("/dev/#{block_path}", block_path, backing_file)
         end
 
         def populate_partitions(partition_name, block_path, backing_file = nil)
           @fact_list[:partitions][partition_name] = {}
-          size_bytes = File.readable?("#{block_path}/size") ? File.read("#{block_path}/size").chomp.to_i * 512 : 0
+          size_bytes = Facter::Resolvers::Utils::FileHelper.safe_read("#{block_path}/size", '0')
+                                                           .chomp.to_i * 512
           info_hash = { size_bytes: size_bytes,
                         size: Facter::BytesToHumanReadable.convert(size_bytes), backing_file: backing_file }
           info_hash.merge!(populate_from_blkid(partition_name))

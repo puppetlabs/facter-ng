@@ -8,8 +8,9 @@ describe Facter::Resolvers::Linux::DmiBios do
 
     before do
       allow(File).to receive(:directory?).with(test_dir).and_return(true)
-      allow(File).to receive(:readable?).with("/sys/class/dmi/id/#{file}").and_return(true)
-      allow(File).to receive(:read).with("/sys/class/dmi/id/#{file}").and_return(file_content)
+      # allow(File).to receive(:readable?).with("/sys/class/dmi/id/#{file}").and_return(true)
+      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+        .with("/sys/class/dmi/id/#{file}", nil).and_return(file_content)
     end
 
     context 'when bios_date file exists' do

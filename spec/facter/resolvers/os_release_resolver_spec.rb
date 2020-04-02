@@ -2,13 +2,9 @@
 
 describe Facter::Resolvers::OsRelease do
   before do
-    allow(File).to receive(:readable?)
+    allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_readlines)
       .with('/etc/os-release')
-      .and_return(true)
-
-    allow(File).to receive(:read)
-      .with('/etc/os-release')
-      .and_return(load_fixture('os_release').read)
+      .and_return(load_fixture('os_release').readlines)
   end
 
   after do

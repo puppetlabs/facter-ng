@@ -45,9 +45,9 @@ module Facter
           enforce_file = "#{mountpoint}/enforce"
           policy_file = "#{mountpoint}/policyvers"
 
-          @fact_list[:policy_version] = File.read(policy_file) if File.readable?(policy_file)
+          @fact_list[:policy_version] = Facter::Resolvers::Utils::FileHelper.safe_read(policy_file)
 
-          enforce = File.read(enforce_file) if File.readable?(enforce_file)
+          enforce = Facter::Resolvers::Utils::FileHelper.safe_read(enforce_file)
           if enforce.eql?('1')
             @fact_list[:enforced] = true
             @fact_list[:current_mode] = 'enforcing'

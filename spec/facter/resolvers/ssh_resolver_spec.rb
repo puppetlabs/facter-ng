@@ -9,19 +9,14 @@ describe Facter::Resolvers::SshResolver do
       paths.each { |path| allow(File).to receive(:directory?).with(path).and_return(false) unless path == '/etc' }
       allow(File).to receive(:directory?).with('/etc').and_return(true)
 
-      file_names.each do |file_name|
-        unless file_name == 'ssh_host_rsa_key.pub'
-          allow(FileTest).to receive(:file?).with('/etc/' + file_name)
-                                            .and_return(false)
-        end
-      end
-
-      allow(FileTest).to receive(:file?).with('/etc/ssh_host_ecdsa_key.pub').and_return(true)
-      allow(FileTest).to receive(:file?).with('/etc/ssh_host_rsa_key.pub').and_return(true)
-      allow(FileTest).to receive(:file?).with('/etc/ssh_host_ed25519_key.pub').and_return(true)
-      allow(File).to receive(:read).with('/etc/ssh_host_ecdsa_key.pub').and_return(ecdsa_content)
-      allow(File).to receive(:read).with('/etc/ssh_host_rsa_key.pub').and_return(rsa_content)
-      allow(File).to receive(:read).with('/etc/ssh_host_ed25519_key.pub').and_return(ed25519_content)
+      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+        .with('/etc/ssh_host_ecdsa_key.pub', nil).and_return(ecdsa_content)
+      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+        .with('/etc/ssh_host_dsa_key.pub', nil).and_return(nil)
+      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+        .with('/etc/ssh_host_rsa_key.pub', nil).and_return(rsa_content)
+      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+        .with('/etc/ssh_host_ed25519_key.pub', nil).and_return(ed25519_content)
 
       allow(Facter::FingerPrint)
         .to receive(:new)

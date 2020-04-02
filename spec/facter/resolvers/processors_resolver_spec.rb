@@ -9,10 +9,9 @@ describe Facter::Resolvers::Linux::Processors do
   let(:physical_processors) { 1 }
 
   before do
-    allow(File).to receive(:readable?).with('/proc/cpuinfo').and_return(true)
-    allow(File).to receive(:read)
+    allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_readlines)
       .with('/proc/cpuinfo')
-      .and_return(load_fixture('cpuinfo').read)
+      .and_return(load_fixture('cpuinfo').readlines)
   end
 
   it 'returns number of processors' do

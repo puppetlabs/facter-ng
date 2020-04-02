@@ -18,12 +18,7 @@ module Facter
         end
 
         def read_debian_version(fact_name)
-          return unless File.readable?('/etc/debian_version')
-
-          verion = File.read('/etc/debian_version')
-
-          @fact_list[:version] = verion.strip
-
+          @fact_list[:version] = Facter::Resolvers::Utils::FileHelper.safe_read('/etc/debian_version').strip
           @fact_list[fact_name]
         end
       end

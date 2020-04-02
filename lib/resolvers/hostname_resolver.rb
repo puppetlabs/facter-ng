@@ -30,8 +30,8 @@ module Facter
         def read_domain(output)
           if output =~ /.*?\.(.+$)/
             domain = Regexp.last_match(1)
-          elsif File.readable?('/etc/resolv.conf')
-            file = File.read('/etc/resolv.conf')
+          else
+            file = Facter::Resolvers::Utils::FileHelper.safe_read('/etc/resolv.conf')
             if file =~ /^search\s+(\S+)/
               domain = Regexp.last_match(1)
             elsif file =~ /^domain\s+(\S+)/

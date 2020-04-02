@@ -9,20 +9,12 @@ describe Facter::Resolvers::Linux::Disk do
     context 'when device dir for blocks are missing' do
       subject(:resolver) { Facter::Resolvers::Linux::Disk }
 
-      let(:paths) { { model: '/device/model', size: '/size', vendor: '/device/vendor' } }
-      let(:disks) { %w[sr0 sda] }
-      let(:size) { '41943040' }
-      let(:expected_output) { nil }
-
       before do
         allow(Dir).to receive(:entries).with('/sys/block').and_return(['.', '..', 'sr0', 'sda'])
-        allow(File).to receive(:readable?).with('/sys/block/sr0/device').and_return(false)
-        allow(File).to receive(:readable?).with('/sys/block/sda/device').and_return(false)
-        allow(File).to receive(:read).and_return(size)
       end
 
       it 'returns disks fact as nil' do
-        expect(resolver.resolve(:disks)).to eql(expected_output)
+        expect(resolver.resolve(:disks)).to be(nil)
       end
     end
 
@@ -45,10 +37,10 @@ describe Facter::Resolvers::Linux::Disk do
         allow(File).to receive(:readable?).with('/sys/block/sda/size').and_return(true)
         paths.each do |_key, value|
           disks.each do |disk|
-            allow(File).to receive(:readable?).with("/sys/block/#{disk}#{value}").and_return(true)
+            allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+              .with("/sys/block/#{disk}#{value}", nil).and_return(size)
           end
         end
-        allow(File).to receive(:read).and_return(size)
       end
 
       it 'returns disks fact as nil' do
