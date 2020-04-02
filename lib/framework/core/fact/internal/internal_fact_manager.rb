@@ -25,14 +25,8 @@ module Facter
         .uniq { |searched_fact| searched_fact.fact_class.name }
         .each do |searched_fact|
         threads << Thread.new do
-          begin
-            fact = CoreFact.new(searched_fact)
-            fact.create
-          rescue StandardError => e
-            @log.error("Error while resolving fact: #{searched_fact.name}, #{e.backtrace}")
-
-            nil
-          end
+          fact = CoreFact.new(searched_fact)
+          fact.create
         end
       end
 
