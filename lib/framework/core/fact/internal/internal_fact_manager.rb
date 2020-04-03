@@ -21,7 +21,6 @@ module Facter
 
       # only resolve a fact once, even if multiple search facts depend on that fact
       searched_facts
-        .reject { |elem| elem.fact_class.nil? }
         .uniq { |searched_fact| searched_fact.fact_class.name }
         .each do |searched_fact|
         threads << Thread.new do
