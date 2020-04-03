@@ -78,7 +78,7 @@ describe Facter do
       expect(formatted_facts).to eq([expected_json_output, 0])
     end
 
-    context '--strict' do
+    context 'when provided with --strict option' do
       before do
         allow(Facter::Options).to receive(:[]).with(:config)
       end
@@ -162,8 +162,7 @@ describe Facter do
       allow(fact_collection_spy).to receive(:value).with('os', 'name').and_return('Ubuntu')
 
       result = Facter.fact(user_query)
-      expect(result).to be_instance_of(Facter::ResolvedFact)
-      expect(result.value).to eq('Ubuntu')
+      expect(result).to be_instance_of(Facter::ResolvedFact).and(having_attributes(value: 'Ubuntu'))
     end
 
     it 'return no value' do
@@ -193,8 +192,7 @@ describe Facter do
       allow(fact_collection_spy).to receive(:value).with('os', 'name').and_return('Ubuntu')
 
       result = Facter[user_query]
-      expect(result).to be_instance_of(Facter::ResolvedFact)
-      expect(result.value).to eq('Ubuntu')
+      expect(result).to be_instance_of(Facter::ResolvedFact).and(having_attributes(value: 'Ubuntu'))
     end
 
     it 'return no value' do
@@ -337,8 +335,9 @@ describe Facter do
       let(:is_debug) { false }
 
       it "doesn't log anything" do
-        expect(logger).not_to receive(:debug).with(message)
-        expect(Facter.debug(message)).to be(nil)
+        Facter.debug(message)
+
+        expect(logger).not_to have_received(:debug).with(message)
       end
     end
   end
