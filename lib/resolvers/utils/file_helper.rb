@@ -5,16 +5,21 @@ module Facter
     module Utils
       module FileHelper
         class << self
-          def safe_read(path, return_if_not_readable = '')
-            return return_if_not_readable unless File.readable?(path)
+          @log = Log.new(self)
+          DEBUG_MESSAGE = 'File at: %s is not accessible.'
 
-            File.read(path)
+          def safe_read(path, result_if_not_readable = '')
+            return File.read(path) if File.readable?(path)
+
+            @log.debug(DEBUG_MESSAGE % path)
+            result_if_not_readable
           end
 
-          def safe_readlines(path, return_if_not_readable = [])
-            return return_if_not_readable unless File.readable?(path)
+          def safe_readlines(path, result_if_not_readable = [])
+            return File.readlines(path) if File.readable?(path)
 
-            File.readlines(path)
+            @log.debug(DEBUG_MESSAGE % path)
+            result_if_not_readable
           end
         end
       end

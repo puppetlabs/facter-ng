@@ -43,7 +43,7 @@ module Facter
         def extract_from_dm(block_path)
           map_name = Facter::Resolvers::Utils::FileHelper.safe_read("#{block_path}/dm/name").chomp
           if map_name.empty?
-            populate_partitions("/dev/#{block_path}", block_path)
+            populate_partitions("/dev#{block_path}", block_path)
           else
             populate_partitions("/dev/mapper/#{map_name}", block_path)
           end
@@ -51,8 +51,11 @@ module Facter
 
         def extract_from_loop(block_path)
           backing_file = Facter::Resolvers::Utils::FileHelper.safe_read("#{block_path}/loop/backing_file").chomp
-          populate_partitions("/dev/#{block_path}", block_path) unless backing_file.empty?
-          populate_partitions("/dev/#{block_path}", block_path, backing_file)
+          if backing_file.empty?
+            populate_partitions("/dev#{block_path}", block_path)
+          else
+            populate_partitions("/dev#{block_path}", block_path, backing_file)
+          end
         end
 
         def populate_partitions(partition_name, block_path, backing_file = nil)

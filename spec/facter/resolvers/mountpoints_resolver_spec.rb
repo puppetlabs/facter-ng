@@ -77,7 +77,7 @@ describe Facter::Resolvers::Linux::Mountpoints do
           .and_return('')
       end
 
-      it 'returs device as nil' do
+      it 'returns device as nil' do
         result = Facter::Resolvers::Linux::Mountpoints.resolve(:mountpoints)
         expect(result.first[:device]).to be(nil)
       end

@@ -28,7 +28,6 @@ module Facter
             @fact_list.fetch(fact_name) { read_facts(fact_name) }
           end
 
-          # File.read("/sys/class/dmi/id/#{file}")
           def read_facts(fact_name)
             files = %w[bios_date bios_vendor bios_version board_vendor board_name board_serial
                        chassis_asset_tag chassis_type sys_vendor product_name product_serial

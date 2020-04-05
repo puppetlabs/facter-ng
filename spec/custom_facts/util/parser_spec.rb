@@ -57,21 +57,36 @@ describe LegacyFacter::Util::Parser do
     end
   end
 
+  shared_examples_for 'handling a not readable file' do
+    before do
+      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read).with(data_file, nil).and_return(nil)
+      allow(LegacyFacter).to receive(:warn).at_least(:one)
+    end
+
+    it 'handles not readable file' do
+      expect { LegacyFacter::Util::Parser.parser_for(data_file).results }.not_to raise_error
+    end
+  end
+
   describe 'yaml' do
     let(:data_in_yaml) { YAML.dump(data) }
     let(:data_file) { '/tmp/foo.yaml' }
 
     it 'returns a hash of whatever is stored on disk' do
-      allow(File).to receive(:read).with(data_file).and_return(data_in_yaml)
+      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read).with(data_file, nil).and_return(data_in_yaml)
+
       expect(LegacyFacter::Util::Parser.parser_for(data_file).results).to eq data
     end
 
     it 'handles exceptions and warn' do
       # YAML data with an error
-      allow(File).to receive(:read).with(data_file).and_return(data_in_yaml + '}')
+      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read).with(data_file, nil).and_return(data_in_yaml + '}')
       allow(LegacyFacter).to receive(:warn).at_least(:one)
+
       expect { LegacyFacter::Util::Parser.parser_for(data_file).results }.not_to raise_error
     end
+
+    it_behaves_like 'handling a not readable file'
   end
 
   describe 'json' do
@@ -80,9 +95,12 @@ describe LegacyFacter::Util::Parser do
 
     it 'returns a hash of whatever is stored on disk' do
       pending('this test requires the json library') unless LegacyFacter.json?
-      allow(File).to receive(:read).with(data_file).and_return(data_in_json)
+      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read).with(data_file, nil).and_return(data_in_json)
+
       expect(LegacyFacter::Util::Parser.parser_for(data_file).results).to eq data
     end
+
+    it_behaves_like 'handling a not readable file'
   end
 
   describe 'txt' do
@@ -90,7 +108,8 @@ describe LegacyFacter::Util::Parser do
 
     shared_examples_for 'txt parser' do
       it 'returns a hash of whatever is stored on disk' do
-        allow(File).to receive(:read).with(data_file).and_return(data_in_txt)
+        allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read).with(data_file, nil).and_return(data_in_txt)
+
         expect(LegacyFacter::Util::Parser.parser_for(data_file).results).to eq data
       end
     end
@@ -113,6 +132,8 @@ describe LegacyFacter::Util::Parser do
 
       it_behaves_like 'txt parser'
     end
+
+    it_behaves_like 'handling a not readable file'
   end
 
   describe 'scripts' do
@@ -155,7 +176,6 @@ describe LegacyFacter::Util::Parser do
       path = "/h a s s p a c e s#{ext}"
 
       expect(Facter::Core::Execution).to receive(:exec).with("\"#{path}\"").and_return(data_in_txt)
-
       expects_script_to_return(path, data_in_txt, data)
     end
 
@@ -171,6 +191,7 @@ describe LegacyFacter::Util::Parser do
 
       it 'returns nothing parser if not on windows' do
         allow(LegacyFacter::Util::Config).to receive(:windows?).and_return(false)
+
         cmds.each do |cmd|
           expect(LegacyFacter::Util::Parser.parser_for(cmd))
             .to be_an_instance_of(LegacyFacter::Util::Parser::NothingParser)
@@ -179,6 +200,7 @@ describe LegacyFacter::Util::Parser do
 
       it 'returns script parser if on windows' do
         allow(LegacyFacter::Util::Config).to receive(:windows?).and_return(true)
+
         cmds.each do |cmd|
           expect(LegacyFacter::Util::Parser.parser_for(cmd))
             .to be_an_instance_of(LegacyFacter::Util::Parser::ScriptParser)
@@ -202,11 +224,13 @@ describe LegacyFacter::Util::Parser do
 
       it 'parses output from powershell' do
         allow(Facter::Core::Execution).to receive(:exec).and_return(data_in_txt)
+
         expects_to_parse_powershell(ps1, data)
       end
 
       it 'parses yaml output from powershell' do
         allow(Facter::Core::Execution).to receive(:exec).and_return(yaml_data)
+
         expects_to_parse_powershell(ps1, data)
       end
 

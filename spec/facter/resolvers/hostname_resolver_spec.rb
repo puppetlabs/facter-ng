@@ -60,7 +60,7 @@ describe Facter::Resolvers::Hostname do
     end
 
     context 'when /etc/resolve.conf is inaccessible' do
-      let(:host) { nil }
+      let(:host) { 'foo' }
 
       before do
         allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read).with('/etc/resolv.conf').and_return('')
