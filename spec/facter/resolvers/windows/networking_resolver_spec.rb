@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
 describe Facter::Resolvers::Networking do
+  subject(:resolver) { Facter::Resolvers::Networking }
+
   describe '#resolve' do
+    let(:logger) { instance_spy(Facter::Log) }
     let(:size_ptr) { double(FFI::MemoryPointer) }
     let(:adapter_address) { double(FFI::MemoryPointer) }
 
@@ -14,18 +17,29 @@ describe Facter::Resolvers::Networking do
       allow(NetworkingFFI).to receive(:GetAdaptersAddresses)
         .with(NetworkingFFI::AF_UNSPEC, 14, FFI::Pointer::NULL, adapter_address, size_ptr)
         .and_return(error_code)
+
+      resolver.instance_variable_set(:@log, logger)
     end
 
     after do
-      Facter::Resolvers::Networking.invalidate_cache
+      resolver.invalidate_cache
     end
 
     context 'when fails to retrieve networking information' do
       let(:error_code) { NetworkingFFI::ERROR_NO_DATA }
 
-      it 'logs debug message and returns nil' do
-        allow_any_instance_of(Facter::Log).to receive(:debug).with('Unable to retrieve networking facts!')
-        expect(Facter::Resolvers::Networking.resolve(:interfaces)).to be(nil)
+      before do
+        allow(logger).to receive(:debug).with('Unable to retrieve networking facts!')
+      end
+
+      it 'returns interfaces fact as nil' do
+        expect(resolver.resolve(:interfaces)).to be(nil)
+      end
+
+      it 'logs debug message' do
+        resolver.resolve(:interfaces)
+
+        expect(logger).to have_received(:debug).with('Unable to retrieve networking facts!')
       end
     end
 
@@ -44,7 +58,7 @@ describe Facter::Resolvers::Networking do
       end
 
       it 'returns nil' do
-        expect(Facter::Resolvers::Networking.resolve(:interfaces)).to be(nil)
+        expect(resolver.resolve(:interfaces)).to be(nil)
       end
     end
 
@@ -60,7 +74,7 @@ describe Facter::Resolvers::Networking do
       end
 
       it 'returns nil' do
-        expect(Facter::Resolvers::Networking.resolve(:interfaces)).to be(nil)
+        expect(resolver.resolve(:interfaces)).to be(nil)
       end
     end
 
@@ -85,7 +99,7 @@ describe Facter::Resolvers::Networking do
       end
 
       it 'returns interfaces' do
-        expect(Facter::Resolvers::Networking.resolve(:interfaces)).to eql(Ethernet0:
+        expect(resolver.resolve(:interfaces)).to eql(Ethernet0:
                                                                               {
                                                                                 dhcp: nil,
                                                                                 mac: '00:50:56:9A:F8:6B',
@@ -93,10 +107,16 @@ describe Facter::Resolvers::Networking do
                                                                               })
       end
 
-      it 'returns nil for mtu and other networking facts as primary interface is nil' do
-        expect(Facter::Resolvers::Networking.resolve(:mtu)).to be(nil)
-        expect(Facter::Resolvers::Networking.resolve(:dhcp)).to be(nil)
-        expect(Facter::Resolvers::Networking.resolve(:mac)).to be(nil)
+      it 'returns nil for mtu fact as primary interface is nil' do
+        expect(resolver.resolve(:mtu)).to be(nil)
+      end
+
+      it 'returns nil for dhcp fact as primary interface is nil' do
+        expect(resolver.resolve(:dhcp)).to be(nil)
+      end
+
+      it 'returns nil for mac fact as primary interface is nil' do
+        expect(resolver.resolve(:mac)).to be(nil)
       end
     end
 
@@ -144,7 +164,7 @@ describe Facter::Resolvers::Networking do
             network: IPAddr.new('10.16.127.0/255.255.255.0')
           }
         }
-        expect(Facter::Resolvers::Networking.resolve(:interfaces)).to eql(result)
+        expect(resolver.resolve(:interfaces)).to eql(result)
       end
     end
 
@@ -193,7 +213,7 @@ describe Facter::Resolvers::Networking do
             scope6: 'link'
           }
         }
-        expect(Facter::Resolvers::Networking.resolve(:interfaces)).to eql(result)
+        expect(resolver.resolve(:interfaces)).to eql(result)
       end
     end
   end

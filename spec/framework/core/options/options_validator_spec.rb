@@ -2,18 +2,21 @@
 
 describe Facter::OptionsValidator do
   describe '#validate' do
+    let(:logger) { instance_spy(Facter::Log) }
+
     context 'when options are invalid pairs' do
       let(:options) { ['--puppet', '--no-ruby'] }
       let(:error_code) { 1 }
 
       it 'writes message and exit' do
-        allow_any_instance_of(Facter::Log).to receive(:error).with('--puppet and --no-ruby options conflict:'\
+        allow(logger).to receive(:error).with('--puppet and --no-ruby options conflict:'\
                                                                                     ' please specify only one.', true)
         allow(Facter::Cli).to receive(:start).with(['--help'])
 
-        expect { Facter::OptionsValidator.validate(options) }.to raise_error(SystemExit) do |error|
-          expect(error.status).to eql(error_code)
-        end
+        expect { Facter::OptionsValidator.validate(options) }.to raise_error(
+          an_instance_of(SystemExit)
+              .and(having_attributes(status: error_code))
+        )
       end
     end
 
@@ -22,13 +25,14 @@ describe Facter::OptionsValidator do
       let(:error_code) { 1 }
 
       it 'writes message and exit' do
-        allow_any_instance_of(Facter::Log).to receive(:error).with('option --puppet '\
+        allow(logger).to receive(:error).with('option --puppet '\
                                                                          'cannot be specified more than once.', true)
         allow(Facter::Cli).to receive(:start).with(['--help'])
 
-        expect { Facter::OptionsValidator.validate(options) }.to raise_error(SystemExit) do |error|
-          expect(error.status).to eql(error_code)
-        end
+        expect { Facter::OptionsValidator.validate(options) }.to raise_error(
+          an_instance_of(SystemExit)
+              .and(having_attributes(status: error_code))
+        )
       end
     end
 

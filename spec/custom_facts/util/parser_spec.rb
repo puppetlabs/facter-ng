@@ -10,31 +10,25 @@ describe LegacyFacter::Util::Parser do
 
   let(:data) { { 'one' => 'two', 'three' => 'four' } }
 
-  describe 'extension_matches? function' do
+  describe '#extension_matches?' do
     it 'matches extensions when subclass uses match_extension' do
       expect(LegacyFacter::Util::Parser.extension_matches?('myfile.foobar', 'foobar')).to be true
     end
 
     it 'matches extensions when subclass uses match_extension with an array' do
-      expect(LegacyFacter::Util::Parser.extension_matches?('myfile.ext1', %w[ext1 ext2 ext3])).to be true
-      expect(LegacyFacter::Util::Parser.extension_matches?('myfile.ext2', %w[ext1 ext2 ext3])).to be true
       expect(LegacyFacter::Util::Parser.extension_matches?('myfile.ext3', %w[ext1 ext2 ext3])).to be true
     end
 
     it 'matches extension ignoring case on file' do
-      expect(LegacyFacter::Util::Parser.extension_matches?('myfile.EXT1', 'ext1')).to be true
       expect(LegacyFacter::Util::Parser.extension_matches?('myfile.ExT1', 'ext1')).to be true
-      expect(LegacyFacter::Util::Parser.extension_matches?('myfile.exT1', 'ext1')).to be true
     end
 
     it 'matches extension ignoring case for match_extension' do
-      expect(LegacyFacter::Util::Parser.extension_matches?('myfile.EXT1', 'EXT1')).to be true
-      expect(LegacyFacter::Util::Parser.extension_matches?('myfile.ExT1', 'EXT1')).to be true
       expect(LegacyFacter::Util::Parser.extension_matches?('myfile.exT1', 'EXT1')).to be true
     end
   end
 
-  describe 'parse_executable_output' do
+  describe '#parse_executable_output' do
     subject(:parser) { LegacyFacter::Util::Parser::Base.new('myfile.sh') }
 
     let(:yaml_data) { "one: two\nthree: four\n" }
@@ -114,20 +108,20 @@ describe LegacyFacter::Util::Parser do
       end
     end
 
-    context 'well formed data' do
+    context 'when is well formed data' do
       let(:data_in_txt) { "one=two\nthree=four\n" }
 
       it_behaves_like 'txt parser'
     end
 
-    context 'extra equal sign' do
+    context 'when there is an extra equal sign' do
       let(:data_in_txt) { "one=two\nthree=four=five\n" }
       let(:data) { { 'one' => 'two', 'three' => 'four=five' } }
 
       it_behaves_like 'txt parser'
     end
 
-    context 'extra data' do
+    context 'when there is extra data' do
       let(:data_in_txt) { "one=two\nfive\nthree=four\n" }
 
       it_behaves_like 'txt parser'
@@ -179,7 +173,7 @@ describe LegacyFacter::Util::Parser do
       expects_script_to_return(path, data_in_txt, data)
     end
 
-    context 'exe, bat, cmd, and com files' do
+    describe 'exe, bat, cmd, and com files' do
       let(:cmds) { ['/tmp/foo.bat', '/tmp/foo.cmd', '/tmp/foo.exe', '/tmp/foo.com'] }
 
       before do
@@ -208,7 +202,7 @@ describe LegacyFacter::Util::Parser do
       end
     end
 
-    describe 'powershell parser' do
+    describe 'powershell' do
       let(:ps1) { '/tmp/foo.ps1' }
 
       def expects_to_parse_powershell(cmd, result)
@@ -234,7 +228,7 @@ describe LegacyFacter::Util::Parser do
         expects_to_parse_powershell(ps1, data)
       end
 
-      describe 'when executing powershell', if: LegacyFacter::Util::Config.windows? do
+      context 'when executing powershell', if: LegacyFacter::Util::Config.windows? do
         let(:sysnative_powershell) { "#{ENV['SYSTEMROOT']}\\sysnative\\WindowsPowershell\\v1.0\\powershell.exe" }
         let(:system32_powershell)  { "#{ENV['SYSTEMROOT']}\\system32\\WindowsPowershell\\v1.0\\powershell.exe" }
 
