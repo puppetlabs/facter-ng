@@ -2,40 +2,32 @@
 
 describe Facter::Resolvers::Linux::Disk do
   describe '#resolve' do
+    subject(:resolver) { Facter::Resolvers::Linux::Disk }
+
+    let(:disk_files) { %w[sr0/device sr0/size sda/device sda/size] }
+    let(:paths) { { model: '/device/model', size: '/size', vendor: '/device/vendor' } }
+    let(:disks) { %w[sr0 sda] }
+    let(:size) { '12' }
+    let(:model) { 'test' }
+
+    before do
+      allow(Dir).to receive(:entries).with('/sys/block').and_return(['.', '..', 'sr0', 'sda'])
+    end
+
     after do
       Facter::Resolvers::Linux::Disk.invalidate_cache
     end
 
-    context 'when all files inside device dir for blocks are missing' do
-      subject(:resolver) { Facter::Resolvers::Linux::Disk }
-
-      before do
-        allow(Dir).to receive(:entries).with('/sys/block').and_return(['.', '..', 'sr0', 'sda'])
-      end
-
-      it 'returns disks fact as nil' do
-        expect(resolver.resolve(:disks)).to be(nil)
-      end
-    end
-
     context 'when device dir for blocks exists' do
-      subject(:resolver) { Facter::Resolvers::Linux::Disk }
-
-      let(:paths) { { model: '/device/model', size: '/size', vendor: '/device/vendor' } }
-      let(:disks) { %w[sr0 sda] }
-      let(:size) { '12' }
-      let(:model) { 'test' }
       let(:expected_output) do
         { 'sda' => { model: 'test', size: '6.00 KiB', size_bytes: 6144, vendor: 'test' },
           'sr0' => { model: 'test', size: '6.00 KiB', size_bytes: 6144, vendor: 'test' } }
       end
 
       before do
-        allow(Dir).to receive(:entries).with('/sys/block').and_return(['.', '..', 'sr0', 'sda'])
-        allow(File).to receive(:readable?).with('/sys/block/sr0/device').and_return(true)
-        allow(File).to receive(:readable?).with('/sys/block/sda/device').and_return(true)
-        allow(File).to receive(:readable?).with('/sys/block/sr0/size').and_return(true)
-        allow(File).to receive(:readable?).with('/sys/block/sda/size').and_return(true)
+        disk_files.each do |disk_file|
+          allow(File).to receive(:readable?).with("/sys/block/#{disk_file}").and_return(true)
+        end
         paths.each do |_key, value|
           disks.each do |disk|
             if value == '/size'
@@ -97,6 +89,18 @@ describe Facter::Resolvers::Linux::Disk do
         it 'returns disks fact' do
           expect(resolver.resolve(:disks)).to eql(expected_output)
         end
+      end
+    end
+
+    context 'when all files inside device dir for blocks are missing' do
+      before do
+        disk_files.each do |disk_file|
+          allow(File).to receive(:readable?).with("/sys/block/#{disk_file}").and_return(false)
+        end
+      end
+
+      it 'returns disks fact as nil' do
+        expect(resolver.resolve(:disks)).to be(nil)
       end
     end
   end
