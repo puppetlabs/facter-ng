@@ -37,6 +37,7 @@ require "#{ROOT_DIR}/lib/resolvers/utils/filesystem_helper.rb"
 load_dir(['config'])
 
 load_lib_dirs('resolvers')
+load_lib_dirs('resolvers', 'utils')
 load_lib_dirs('facts_utils')
 load_lib_dirs('framework', 'core')
 load_lib_dirs('models')
