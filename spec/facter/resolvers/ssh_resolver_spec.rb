@@ -2,58 +2,6 @@
 
 describe Facter::Resolvers::SshResolver do
   describe '#folders' do
-    let(:paths) { %w[/etc/ssh /usr/local/etc/ssh /etc /usr/local/etc /etc/opt/ssh] }
-    let(:file_names) { %w[ssh_host_rsa_key.pub  ssh_host_ecdsa_key.pub ssh_host_ed25519_key.pub] }
-
-    before do
-      paths.each { |path| allow(File).to receive(:directory?).with(path).and_return(false) unless path == '/etc' }
-      allow(File).to receive(:directory?).with('/etc').and_return(true)
-
-      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
-                                                         .with('/etc/ssh_host_ecdsa_key.pub', nil).and_return(ecdsa_content)
-      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
-                                                         .with('/etc/ssh_host_dsa_key.pub', nil).and_return(nil)
-      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
-                                                         .with('/etc/ssh_host_rsa_key.pub', nil).and_return(rsa_content)
-      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
-                                                         .with('/etc/ssh_host_ed25519_key.pub', nil).and_return(ed25519_content)
-
-      allow(Facter::FingerPrint)
-        .to receive(:new)
-        .with('SSHFP 3 1 fd92cf867fac0042d491eb1067e4f3cabf54039a',
-              'SSHFP 3 2 a51271a67987d7bbd685fa6d7cdd2823a30373ab01420b094480523fabff2a05')
-        .and_return(ecdsa_fingerprint)
-
-      allow(Facter::FingerPrint)
-        .to receive(:new)
-        .with('SSHFP 1 1 90134f93fec6ab5e22bdd88fc4d7cd6e9dca4a07',
-              'SSHFP 1 2 efaa26ff8169f5ffc372ebcad17aef886f4ccaa727169acdd0379b51c6c77e99')
-        .and_return(rsa_fingerprint)
-
-      allow(Facter::FingerPrint)
-        .to receive(:new)
-        .with('SSHFP 4 1 1c02084d251368b98a3af97820d9fbf2b8dc9558',
-              'SSHFP 4 2 656bd7aa3f8ad4703bd581888231f822cb8cd4a2a258584469551d2c2c9f6b62')
-        .and_return(ed25519_fingerprint)
-
-      allow(Facter::Ssh)
-        .to receive(:new).with(ecdsa_fingerprint, 'ecdsa-sha2-nistp256', load_fixture('ecdsa_key').read.strip!,
-                               'ecdsa')
-                         .and_return(ecdsa_result)
-
-      allow(Facter::Ssh)
-        .to receive(:new).with(rsa_fingerprint, 'ssh-rsa', load_fixture('rsa_key').read.strip!, 'rsa')
-                         .and_return(rsa_result)
-
-      allow(Facter::Ssh)
-        .to receive(:new).with(ed25519_fingerprint, 'ssh-ed25519', load_fixture('ed25519_key').read.strip!, 'ed25519')
-                         .and_return(ed25519_result)
-    end
-
-    after do
-      Facter::Resolvers::SshResolver.invalidate_cache
-    end
-
     let(:ecdsa_content) { load_fixture('ecdsa').read.strip! }
     let(:rsa_content) { load_fixture('rsa').read.strip! }
     let(:ed25519_content) { load_fixture('ed25519').read.strip! }
@@ -78,17 +26,71 @@ describe Facter::Resolvers::SshResolver do
 
     let(:ecdsa_result) do
       double(Facter::Ssh, fingerprint: ecdsa_fingerprint, type: 'ecdsa-sha2-nistp256',
-             key: load_fixture('ecdsa_key').read.strip!, name: 'ecdsa')
+                          key: load_fixture('ecdsa_key').read.strip!, name: 'ecdsa')
     end
 
     let(:rsa_result) do
       double(Facter::Ssh, fingerprint: rsa_fingerprint, type: 'ssh-rsa',
-             key: load_fixture('rsa_key').read.strip!, name: 'rsa')
+                          key: load_fixture('rsa_key').read.strip!, name: 'rsa')
     end
 
     let(:ed25519_result) do
       double(Facter::Ssh, fingerpint: ed25519_fingerprint, type: 'ssh-ed22519',
-             key: load_fixture('ed25519_key').read.strip!, name: 'ed25519')
+                          key: load_fixture('ed25519_key').read.strip!, name: 'ed25519')
+    end
+
+    let(:paths) { %w[/etc/ssh /usr/local/etc/ssh /etc /usr/local/etc /etc/opt/ssh] }
+    let(:file_names) { %w[ssh_host_rsa_key.pub ssh_host_ecdsa_key.pub ssh_host_ed25519_key.pub] }
+
+    before do
+      paths.each { |path| allow(File).to receive(:directory?).with(path).and_return(false) unless path == '/etc' }
+      allow(File).to receive(:directory?).with('/etc').and_return(true)
+
+      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+        .with('/etc/ssh_host_ecdsa_key.pub', nil).and_return(ecdsa_content)
+      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+        .with('/etc/ssh_host_dsa_key.pub', nil).and_return(nil)
+      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+        .with('/etc/ssh_host_rsa_key.pub', nil).and_return(rsa_content)
+      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+        .with('/etc/ssh_host_ed25519_key.pub', nil).and_return(ed25519_content)
+
+      allow(Facter::FingerPrint)
+        .to receive(:new)
+        .with('SSHFP 3 1 fd92cf867fac0042d491eb1067e4f3cabf54039a',
+              'SSHFP 3 2 a51271a67987d7bbd685fa6d7cdd2823a30373ab01420b094480523fabff2a05')
+        .and_return(ecdsa_fingerprint)
+
+      allow(Facter::FingerPrint)
+        .to receive(:new)
+        .with('SSHFP 1 1 90134f93fec6ab5e22bdd88fc4d7cd6e9dca4a07',
+              'SSHFP 1 2 efaa26ff8169f5ffc372ebcad17aef886f4ccaa727169acdd0379b51c6c77e99')
+        .and_return(rsa_fingerprint)
+
+      allow(Facter::FingerPrint)
+        .to receive(:new)
+        .with('SSHFP 4 1 1c02084d251368b98a3af97820d9fbf2b8dc9558',
+              'SSHFP 4 2 656bd7aa3f8ad4703bd581888231f822cb8cd4a2a258584469551d2c2c9f6b62')
+        .and_return(ed25519_fingerprint)
+
+      allow(Facter::Ssh)
+        .to receive(:new)
+        .with(ecdsa_fingerprint, 'ecdsa-sha2-nistp256', load_fixture('ecdsa_key').read.strip!, 'ecdsa')
+        .and_return(ecdsa_result)
+
+      allow(Facter::Ssh)
+        .to receive(:new)
+        .with(rsa_fingerprint, 'ssh-rsa', load_fixture('rsa_key').read.strip!, 'rsa')
+        .and_return(rsa_result)
+
+      allow(Facter::Ssh)
+        .to receive(:new)
+        .with(ed25519_fingerprint, 'ssh-ed25519', load_fixture('ed25519_key').read.strip!, 'ed25519')
+        .and_return(ed25519_result)
+    end
+
+    after do
+      Facter::Resolvers::SshResolver.invalidate_cache
     end
 
     context 'when ssh_host_dsa_key.pub file is not readable' do
@@ -100,7 +102,7 @@ describe Facter::Resolvers::SshResolver do
     context 'when ssh_host_ecdsa_key.pub file is also not readable' do
       before do
         allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
-                                                           .with('/etc/ssh_host_ecdsa_key.pub', nil).and_return(nil)
+          .with('/etc/ssh_host_ecdsa_key.pub', nil).and_return(nil)
       end
 
       it 'returns resolved ssh' do

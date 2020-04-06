@@ -74,7 +74,8 @@ describe LegacyFacter::Util::Parser do
 
     it 'handles exceptions and warn' do
       # YAML data with an error
-      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read).with(data_file, nil).and_return(data_in_yaml + '}')
+      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+        .with(data_file, nil).and_return(data_in_yaml + '}')
       allow(LegacyFacter).to receive(:warn).at_least(:one)
 
       expect { LegacyFacter::Util::Parser.parser_for(data_file).results }.not_to raise_error

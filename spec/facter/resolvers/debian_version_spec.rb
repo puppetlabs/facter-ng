@@ -7,7 +7,8 @@ describe Facter::Resolvers::DebianVersion do
 
   context 'when file debian_version is readable' do
     before do
-      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read).with('/etc/debian_version').and_return("10.01\n")
+      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+        .with('/etc/debian_version').and_return("10.01\n")
     end
 
     it 'returns version' do

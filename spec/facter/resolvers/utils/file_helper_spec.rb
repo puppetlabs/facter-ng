@@ -53,7 +53,7 @@ describe Facter::Resolvers::Utils::FileHelper do
       it "doesn't log anything" do
         file_helper.safe_read(path)
 
-        expect(File).to have_received(:read).with(path)
+        expect(logger).not_to have_received(:debug)
       end
     end
 
@@ -110,6 +110,12 @@ describe Facter::Resolvers::Utils::FileHelper do
         file_helper.safe_readlines(path)
 
         expect(File).to have_received(:readlines).with(path)
+      end
+
+      it "doesn't log anything" do
+        file_helper.safe_readlines(path)
+
+        expect(logger).not_to have_received(:debug)
       end
     end
 

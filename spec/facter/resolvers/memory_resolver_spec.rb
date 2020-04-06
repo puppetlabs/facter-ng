@@ -10,8 +10,8 @@ describe Facter::Resolvers::Linux::Memory do
   context 'when file /proc/meminfo is readable' do
     before do
       allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
-                                                         .with('/proc/meminfo', nil)
-                                                         .and_return(load_fixture(fixture_name).read)
+        .with('/proc/meminfo', nil)
+        .and_return(load_fixture(fixture_name).read)
     end
 
     context 'when there is swap memory' do
@@ -105,9 +105,10 @@ describe Facter::Resolvers::Linux::Memory do
   context 'when file /proc/meminfo is not readable' do
     before do
       allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
-                                                         .with('/proc/meminfo', nil)
-                                                         .and_return(nil)
+        .with('/proc/meminfo', nil)
+        .and_return(nil)
     end
+
     it 'returns swap available as nil' do
       expect(resolver.resolve(:swap_free)).to be(nil)
     end

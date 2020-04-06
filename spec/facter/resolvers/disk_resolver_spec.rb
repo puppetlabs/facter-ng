@@ -39,11 +39,11 @@ describe Facter::Resolvers::Linux::Disk do
         paths.each do |_key, value|
           disks.each do |disk|
             if value == '/size'
-            allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
-                                                               .with("/sys/block/#{disk}#{value}").and_return(size)
+              allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+                .with("/sys/block/#{disk}#{value}").and_return(size)
             else
               allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
-                                                                 .with("/sys/block/#{disk}#{value}").and_return(model)
+                .with("/sys/block/#{disk}#{value}").and_return(model)
             end
           end
         end
@@ -66,7 +66,7 @@ describe Facter::Resolvers::Linux::Disk do
             disks.each do |disk|
               if value == '/size'
                 allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
-                                                                   .with("/sys/block/#{disk}#{value}").and_return('')
+                  .with("/sys/block/#{disk}#{value}").and_return('')
               end
             end
           end
@@ -86,9 +86,9 @@ describe Facter::Resolvers::Linux::Disk do
         before do
           paths.each do |_key, value|
             disks.each do |disk|
-              if value == '/device/model' || value == '/device/vendor'
+              if value != '/size'
                 allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
-                                                                   .with("/sys/block/#{disk}#{value}").and_return('')
+                  .with("/sys/block/#{disk}#{value}").and_return('')
               end
             end
           end

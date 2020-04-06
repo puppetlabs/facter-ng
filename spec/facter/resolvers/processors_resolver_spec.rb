@@ -9,11 +9,10 @@ describe Facter::Resolvers::Linux::Processors do
   let(:physical_processors) { 1 }
 
   context 'when cpuingo file is readable' do
-
     before do
       allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_readlines)
-                                                         .with('/proc/cpuinfo')
-                                                         .and_return(load_fixture('cpuinfo').readlines)
+        .with('/proc/cpuinfo')
+        .and_return(load_fixture('cpuinfo').readlines)
     end
 
     after do
@@ -42,8 +41,8 @@ describe Facter::Resolvers::Linux::Processors do
   context 'when cpuinfo is not readable' do
     before do
       allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_readlines)
-                                                         .with('/proc/cpuinfo')
-                                                         .and_return([])
+        .with('/proc/cpuinfo')
+        .and_return([])
     end
 
     it 'returns nil' do

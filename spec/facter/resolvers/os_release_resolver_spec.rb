@@ -2,11 +2,10 @@
 
 describe Facter::Resolvers::OsRelease do
   context 'when /etc/os-release file is readable' do
-
     before do
       allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_readlines)
-                                                         .with('/etc/os-release')
-                                                         .and_return(load_fixture('os_release').readlines)
+        .with('/etc/os-release')
+        .and_return(load_fixture('os_release').readlines)
     end
 
     after do
@@ -41,8 +40,8 @@ describe Facter::Resolvers::OsRelease do
   context 'when /etc/os-release file is not readable' do
     before do
       allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_readlines)
-                                                         .with('/etc/os-release')
-                                                         .and_return([])
+        .with('/etc/os-release')
+        .and_return([])
     end
 
     it 'returns nil' do
