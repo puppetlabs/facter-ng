@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 my_options = {
   user: 'puppetlabs',
   project: 'facter-ng',
@@ -28,7 +30,7 @@ my_options = {
 
 desc 'Create changelog'
 task :changelog, [:future_release] do |_, args|
-  require "github_changelog_generator"
+  require 'github_changelog_generator'
 
   options = GitHubChangelogGenerator::Parser.default_options
 
@@ -39,17 +41,18 @@ task :changelog, [:future_release] do |_, args|
     options[k.to_sym] = v unless v.nil?
   end
 
-  abort "user and project are required." unless options[:user] && options[:project]
+  abort 'user and project are required.' unless options[:user] && options[:project]
   generator = GitHubChangelogGenerator::Generator.new options
 
   log = generator.compound_changelog
 
   output_filename = (options[:output]).to_s
-  File.open(output_filename, "w") { |file| file.write(log) }
-  puts "Done!"
+  File.open(output_filename, 'w') { |file| file.write(log) }
+  puts 'Done!'
   puts "Generated log placed in #{Dir.pwd}/#{output_filename}"
 end
 
 def validate_release(future_release_version)
-  /[0-9]+\.[0-9]+\.[0-9]+/.match?(future_release_version) ? future_release_version : raise(ArgumentError, " The string that you entered is invalid!")
+  future_release_version if /[0-9]+\.[0-9]+\.[0-9]+/.match?(future_release_version)
+  raise(ArgumentError, ' The string that you entered is invalid!')
 end
