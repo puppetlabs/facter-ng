@@ -30,9 +30,6 @@ require "#{ROOT_DIR}/lib/framework/detector/os_detector"
 
 require "#{ROOT_DIR}/lib/framework/config/config_reader"
 require "#{ROOT_DIR}/lib/framework/config/block_list"
-require "#{ROOT_DIR}/lib/resolvers/utils/fingerprint.rb"
-require "#{ROOT_DIR}/lib/resolvers/utils/ssh.rb"
-require "#{ROOT_DIR}/lib/resolvers/utils/filesystem_helper.rb"
 
 load_dir(['config'])
 
