@@ -19,7 +19,7 @@ module Facter
           end
 
           def read_cpuinfo(fact_name)
-            cpuinfo_output = Facter::Resolvers::Utils::FileHelper.safe_readlines('/proc/cpuinfo')
+            cpuinfo_output = Facter::Util::FileHelper.safe_readlines('/proc/cpuinfo')
             return if cpuinfo_output.empty?
 
             read_processors(cpuinfo_output) # + model names

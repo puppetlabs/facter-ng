@@ -15,7 +15,7 @@ module Facter
           end
 
           def read_sysdef_file(fact_name)
-            file_content = Facter::Resolvers::Utils::FileHelper.safe_readlines('/usr/sbin/sysdef', nil)
+            file_content = Facter::Util::FileHelper.safe_readlines('/usr/sbin/sysdef', nil)
             return unless file_content
 
             files = file_content.map do |line|

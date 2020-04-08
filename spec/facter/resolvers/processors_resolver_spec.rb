@@ -10,7 +10,7 @@ describe Facter::Resolvers::Linux::Processors do
 
   context 'when cpuingo file is readable' do
     before do
-      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_readlines)
+      allow(Facter::Util::FileHelper).to receive(:safe_readlines)
         .with('/proc/cpuinfo')
         .and_return(load_fixture('cpuinfo').readlines)
     end
@@ -40,7 +40,7 @@ describe Facter::Resolvers::Linux::Processors do
 
   context 'when cpuinfo is not readable' do
     before do
-      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_readlines)
+      allow(Facter::Util::FileHelper).to receive(:safe_readlines)
         .with('/proc/cpuinfo')
         .and_return([])
     end

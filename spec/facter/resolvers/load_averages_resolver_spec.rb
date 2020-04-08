@@ -10,7 +10,7 @@ describe Facter::Resolvers::Linux::LoadAverages do
 
   context 'when /proc/loadavg is accessible' do
     before do
-      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+      allow(Facter::Util::FileHelper).to receive(:safe_read)
         .with('/proc/loadavg')
         .and_return(load_fixture('loadavg').read)
     end
@@ -24,7 +24,7 @@ describe Facter::Resolvers::Linux::LoadAverages do
 
   context 'when /proc/loadavg is not accessible' do
     before do
-      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+      allow(Facter::Util::FileHelper).to receive(:safe_read)
         .with('/proc/loadavg')
         .and_return('')
     end

@@ -41,9 +41,9 @@ module Facter
           enforce_file = "#{mountpoint}/enforce"
           policy_file = "#{mountpoint}/policyvers"
 
-          @fact_list[:policy_version] = Facter::Resolvers::Utils::FileHelper.safe_read(policy_file, nil)
+          @fact_list[:policy_version] = Facter::Util::FileHelper.safe_read(policy_file, nil)
 
-          enforce = Facter::Resolvers::Utils::FileHelper.safe_read(enforce_file)
+          enforce = Facter::Util::FileHelper.safe_read(enforce_file)
           if enforce.eql?('1')
             @fact_list[:enforced] = true
             @fact_list[:current_mode] = 'enforcing'
@@ -54,7 +54,7 @@ module Facter
         end
 
         def read_selinux_config
-          file_lines = Facter::Resolvers::Utils::FileHelper.safe_readlines('/etc/selinux/config')
+          file_lines = Facter::Util::FileHelper.safe_readlines('/etc/selinux/config')
 
           file_lines.map do |line|
             @fact_list[:config_mode] = line.split('=').last.strip if line =~ /^SELINUX=/

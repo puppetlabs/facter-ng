@@ -9,7 +9,7 @@ describe Facter::Resolvers::Aix::Filesystem do
 
   context 'when vfs file is readable' do
     before do
-      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_readlines)
+      allow(Facter::Util::FileHelper).to receive(:safe_readlines)
         .with('/etc/vfs')
         .and_return(load_fixture('aix_filesystems').readlines)
     end
@@ -23,7 +23,7 @@ describe Facter::Resolvers::Aix::Filesystem do
 
   context 'when vfs file is not readable' do
     before do
-      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_readlines)
+      allow(Facter::Util::FileHelper).to receive(:safe_readlines)
         .with('/etc/vfs')
         .and_return([])
     end

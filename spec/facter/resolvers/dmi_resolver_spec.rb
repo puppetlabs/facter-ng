@@ -8,7 +8,7 @@ describe Facter::Resolvers::Linux::DmiBios do
 
     before do
       allow(File).to receive(:directory?).with(test_dir).and_return(true)
-      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+      allow(Facter::Util::FileHelper).to receive(:safe_read)
         .with("/sys/class/dmi/id/#{file}", nil).and_return(file_content)
     end
 

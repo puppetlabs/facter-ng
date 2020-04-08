@@ -30,7 +30,7 @@ describe Facter::Resolvers::SELinux do
       allow(Open3).to receive(:capture2)
         .with('cat /proc/self/mounts')
         .and_return(load_fixture('proc_self_mounts_selinux').read)
-      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_readlines).with('/etc/selinux/config').and_return([])
+      allow(Facter::Util::FileHelper).to receive(:safe_readlines).with('/etc/selinux/config').and_return([])
     end
 
     it 'returns true when selinux is enabled' do
@@ -50,11 +50,11 @@ describe Facter::Resolvers::SELinux do
     before do
       allow(Open3).to receive(:capture2)
         .with('cat /proc/self/mounts').and_return(load_fixture('proc_self_mounts_selinux').read)
-      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_readlines)
+      allow(Facter::Util::FileHelper).to receive(:safe_readlines)
         .with('/etc/selinux/config').and_return(load_fixture('selinux_config').readlines)
-      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+      allow(Facter::Util::FileHelper).to receive(:safe_read)
         .with('/sys/fs/selinux/policyvers', nil).and_return('31')
-      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+      allow(Facter::Util::FileHelper).to receive(:safe_read)
         .with('/sys/fs/selinux/enforce').and_return('1')
     end
 
@@ -99,11 +99,11 @@ describe Facter::Resolvers::SELinux do
     before do
       allow(Open3).to receive(:capture2)
         .with('cat /proc/self/mounts').and_return(load_fixture('proc_self_mounts_selinux').read)
-      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_readlines)
+      allow(Facter::Util::FileHelper).to receive(:safe_readlines)
         .with('/etc/selinux/config').and_return(load_fixture('selinux_config').read.split("\n"))
-      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+      allow(Facter::Util::FileHelper).to receive(:safe_read)
         .with('/sys/fs/selinux/policyvers', nil).and_return(nil)
-      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+      allow(Facter::Util::FileHelper).to receive(:safe_read)
         .with('/sys/fs/selinux/enforce').and_return('')
     end
 

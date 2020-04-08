@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-describe Facter::Resolvers::Utils::FileHelper do
-  subject(:file_helper) { Facter::Resolvers::Utils::FileHelper }
+describe Facter::Util::FileHelper do
+  subject(:file_helper) { Facter::Util::FileHelper }
 
   let(:logger) { instance_spy(Facter::Log) }
   let(:path) { '/Users/admin/file.txt' }

@@ -46,13 +46,13 @@ describe Facter::Resolvers::SshResolver do
       paths.each { |path| allow(File).to receive(:directory?).with(path).and_return(false) unless path == '/etc' }
       allow(File).to receive(:directory?).with('/etc').and_return(true)
 
-      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+      allow(Facter::Util::FileHelper).to receive(:safe_read)
         .with('/etc/ssh_host_ecdsa_key.pub', nil).and_return(ecdsa_content)
-      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+      allow(Facter::Util::FileHelper).to receive(:safe_read)
         .with('/etc/ssh_host_dsa_key.pub', nil).and_return(nil)
-      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+      allow(Facter::Util::FileHelper).to receive(:safe_read)
         .with('/etc/ssh_host_rsa_key.pub', nil).and_return(rsa_content)
-      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+      allow(Facter::Util::FileHelper).to receive(:safe_read)
         .with('/etc/ssh_host_ed25519_key.pub', nil).and_return(ed25519_content)
 
       allow(Facter::FingerPrint)
@@ -101,7 +101,7 @@ describe Facter::Resolvers::SshResolver do
 
     context 'when ssh_host_ecdsa_key.pub file is also not readable' do
       before do
-        allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+        allow(Facter::Util::FileHelper).to receive(:safe_read)
           .with('/etc/ssh_host_ecdsa_key.pub', nil).and_return(nil)
       end
 

@@ -9,7 +9,7 @@ describe Facter::Resolvers::Linux::Memory do
 
   context 'when file /proc/meminfo is readable' do
     before do
-      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+      allow(Facter::Util::FileHelper).to receive(:safe_read)
         .with('/proc/meminfo', nil)
         .and_return(load_fixture(fixture_name).read)
     end
@@ -104,7 +104,7 @@ describe Facter::Resolvers::Linux::Memory do
 
   context 'when file /proc/meminfo is not readable' do
     before do
-      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+      allow(Facter::Util::FileHelper).to receive(:safe_read)
         .with('/proc/meminfo', nil)
         .and_return(nil)
     end

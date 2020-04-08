@@ -4,7 +4,7 @@ describe Facter::Resolvers::Hostname do
   describe '#resolve' do
     before do
       allow(Open3).to receive(:capture2).with('hostname').and_return(host)
-      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+      allow(Facter::Util::FileHelper).to receive(:safe_read)
         .with('/etc/resolv.conf')
         .and_return("nameserver 10.10.0.10\nnameserver 10.10.1.10\nsearch baz\ndomain baz\n")
     end
@@ -63,7 +63,7 @@ describe Facter::Resolvers::Hostname do
       let(:host) { 'foo' }
 
       before do
-        allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read).with('/etc/resolv.conf').and_return('')
+        allow(Facter::Util::FileHelper).to receive(:safe_read).with('/etc/resolv.conf').and_return('')
       end
 
       it 'detects that domain is nil' do

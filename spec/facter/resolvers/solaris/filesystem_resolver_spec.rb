@@ -11,7 +11,7 @@ describe Facter::Resolvers::Solaris::Filesystem do
 
   context 'when /usr/sbin/sysdef file is readable' do
     before do
-      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_readlines)
+      allow(Facter::Util::FileHelper).to receive(:safe_readlines)
         .with('/usr/sbin/sysdef', nil).and_return(load_fixture('solaris_filesystems').readlines)
     end
 
@@ -24,7 +24,7 @@ describe Facter::Resolvers::Solaris::Filesystem do
 
   context 'when /usr/sbin/sysdef file is not readable' do
     before do
-      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_readlines)
+      allow(Facter::Util::FileHelper).to receive(:safe_readlines)
         .with('/usr/sbin/sysdef', nil).and_return(nil)
     end
 

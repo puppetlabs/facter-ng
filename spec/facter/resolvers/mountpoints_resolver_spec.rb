@@ -34,7 +34,7 @@ describe Facter::Resolvers::Linux::Mountpoints do
   end
 
   before do
-    allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+    allow(Facter::Util::FileHelper).to receive(:safe_read)
       .with('/proc/cmdline')
       .and_return(load_fixture('cmdline_root_device').read)
     allow(Sys::Filesystem).to receive(:mounts).and_return([mount])
@@ -72,7 +72,7 @@ describe Facter::Resolvers::Linux::Mountpoints do
 
     context 'when /proc/cmdline is not accessible' do
       before do
-        allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+        allow(Facter::Util::FileHelper).to receive(:safe_read)
           .with('/proc/cmdline')
           .and_return('')
       end

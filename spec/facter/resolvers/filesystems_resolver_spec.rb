@@ -9,7 +9,7 @@ describe Facter::Resolvers::Linux::Filesystems do
 
   context 'when filesystems is readable' do
     before do
-      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_readlines)
+      allow(Facter::Util::FileHelper).to receive(:safe_readlines)
         .with('/proc/filesystems', nil)
         .and_return(load_fixture('filesystems').readlines)
     end
@@ -23,7 +23,7 @@ describe Facter::Resolvers::Linux::Filesystems do
 
   context 'when filesystems is not readable' do
     before do
-      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_readlines)
+      allow(Facter::Util::FileHelper).to receive(:safe_readlines)
         .with('/proc/filesystems', nil).and_return(nil)
     end
 

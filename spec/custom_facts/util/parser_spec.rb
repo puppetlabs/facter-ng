@@ -53,7 +53,7 @@ describe LegacyFacter::Util::Parser do
 
   shared_examples_for 'handling a not readable file' do
     before do
-      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read).with(data_file, nil).and_return(nil)
+      allow(Facter::Util::FileHelper).to receive(:safe_read).with(data_file, nil).and_return(nil)
       allow(LegacyFacter).to receive(:warn).at_least(:one)
     end
 
@@ -67,14 +67,14 @@ describe LegacyFacter::Util::Parser do
     let(:data_file) { '/tmp/foo.yaml' }
 
     it 'returns a hash of whatever is stored on disk' do
-      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read).with(data_file, nil).and_return(data_in_yaml)
+      allow(Facter::Util::FileHelper).to receive(:safe_read).with(data_file, nil).and_return(data_in_yaml)
 
       expect(LegacyFacter::Util::Parser.parser_for(data_file).results).to eq data
     end
 
     it 'handles exceptions and warn' do
       # YAML data with an error
-      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+      allow(Facter::Util::FileHelper).to receive(:safe_read)
         .with(data_file, nil).and_return(data_in_yaml + '}')
       allow(LegacyFacter).to receive(:warn).at_least(:one)
 
@@ -90,7 +90,7 @@ describe LegacyFacter::Util::Parser do
 
     it 'returns a hash of whatever is stored on disk' do
       pending('this test requires the json library') unless LegacyFacter.json?
-      allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read).with(data_file, nil).and_return(data_in_json)
+      allow(Facter::Util::FileHelper).to receive(:safe_read).with(data_file, nil).and_return(data_in_json)
 
       expect(LegacyFacter::Util::Parser.parser_for(data_file).results).to eq data
     end
@@ -103,7 +103,7 @@ describe LegacyFacter::Util::Parser do
 
     shared_examples_for 'txt parser' do
       it 'returns a hash of whatever is stored on disk' do
-        allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read).with(data_file, nil).and_return(data_in_txt)
+        allow(Facter::Util::FileHelper).to receive(:safe_read).with(data_file, nil).and_return(data_in_txt)
 
         expect(LegacyFacter::Util::Parser.parser_for(data_file).results).to eq data
       end

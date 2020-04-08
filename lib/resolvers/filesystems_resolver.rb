@@ -16,7 +16,7 @@ module Facter
           end
 
           def read_filesystems(fact_name)
-            output = Facter::Resolvers::Utils::FileHelper.safe_readlines('/proc/filesystems', nil)
+            output = Facter::Util::FileHelper.safe_readlines('/proc/filesystems', nil)
             return unless output
 
             filesystems = []

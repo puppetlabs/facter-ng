@@ -31,10 +31,10 @@ describe Facter::Resolvers::Linux::Disk do
         paths.each do |_key, value|
           disks.each do |disk|
             if value == '/size'
-              allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+              allow(Facter::Util::FileHelper).to receive(:safe_read)
                 .with("/sys/block/#{disk}#{value}").and_return(size)
             else
-              allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+              allow(Facter::Util::FileHelper).to receive(:safe_read)
                 .with("/sys/block/#{disk}#{value}").and_return(model)
             end
           end
@@ -57,7 +57,7 @@ describe Facter::Resolvers::Linux::Disk do
           paths.each do |_key, value|
             disks.each do |disk|
               if value == '/size'
-                allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+                allow(Facter::Util::FileHelper).to receive(:safe_read)
                   .with("/sys/block/#{disk}#{value}").and_return('')
               end
             end
@@ -79,7 +79,7 @@ describe Facter::Resolvers::Linux::Disk do
           paths.each do |_key, value|
             disks.each do |disk|
               if value != '/size'
-                allow(Facter::Resolvers::Utils::FileHelper).to receive(:safe_read)
+                allow(Facter::Util::FileHelper).to receive(:safe_read)
                   .with("/sys/block/#{disk}#{value}").and_return('')
               end
             end
