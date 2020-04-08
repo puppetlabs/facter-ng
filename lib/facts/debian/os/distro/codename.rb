@@ -14,7 +14,7 @@ module Facts
             Facter::ResolvedFact.new(FACT_NAME, fact_value)
           end
 
-          def retreieve_from_version
+          def retrieve_from_version
             version = Facter::Resolvers::OsRelease.resolve(:version)
             return unless version
 
