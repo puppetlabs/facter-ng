@@ -25,6 +25,8 @@ require "#{ROOT_DIR}/lib/framework/core/options"
 require "#{ROOT_DIR}/lib/framework/logging/multilogger"
 require "#{ROOT_DIR}/lib/framework/logging/logger"
 
+require "#{ROOT_DIR}/lib/util/file_helper"
+
 require "#{ROOT_DIR}/lib/resolvers/base_resolver"
 require "#{ROOT_DIR}/lib/framework/detector/os_detector"
 
