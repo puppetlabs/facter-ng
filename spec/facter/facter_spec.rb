@@ -10,6 +10,7 @@ describe Facter do
   let(:logger) { instance_spy(Facter::Log) }
   let(:fact_manager_spy) { instance_spy(Facter::FactManager) }
   let(:fact_collection_spy) { instance_spy(Facter::FactCollection) }
+  let(:key_error) { KeyError.new('key error') }
 
   before do
     Facter.instance_variable_set(:@logger, logger)
@@ -165,6 +166,20 @@ describe Facter do
       expect(result).to be_instance_of(Facter::ResolvedFact).and(having_attributes(value: 'Ubuntu'))
     end
 
+    it 'can be interpolated' do
+      user_query = 'os.name'
+
+      allow(fact_manager_spy).to receive(:resolve_facts).and_return([os_fact])
+      allow(fact_collection_spy)
+        .to receive(:build_fact_collection!)
+        .with([os_fact])
+        .and_return(fact_collection_spy)
+      allow(fact_collection_spy).to receive(:value).with('os', 'name').and_return('Ubuntu')
+      # rubocop:disable Style/UnneededInterpolation
+      expect("#{Facter.fact(user_query)}").to eq('Ubuntu')
+      # rubocop:enable Style/UnneededInterpolation
+    end
+
     it 'return no value' do
       user_query = 'os.name'
 
@@ -173,7 +188,8 @@ describe Facter do
         .to receive(:build_fact_collection!)
         .with([])
         .and_return(fact_collection_spy)
-      allow(fact_collection_spy).to receive(:value).with('os', 'name').and_raise(KeyError)
+
+      allow(fact_collection_spy).to receive(:value).with('os', 'name').and_raise(key_error)
 
       result = Facter.fact(user_query)
       expect(result).to be_nil
@@ -203,7 +219,7 @@ describe Facter do
         .to receive(:build_fact_collection!)
         .with([])
         .and_return(fact_collection_spy)
-      allow(fact_collection_spy).to receive(:value).with('os', 'name').and_raise(KeyError)
+      allow(fact_collection_spy).to receive(:value).with('os', 'name').and_raise(key_error)
 
       result = Facter[user_query]
       expect(result).to be_nil
