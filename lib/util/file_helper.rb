@@ -2,7 +2,7 @@
 
 module Facter
   module Util
-    module FileHelper
+    class FileHelper
       class << self
         @log = Log.new(self)
         DEBUG_MESSAGE = 'File at: %s is not accessible.'
