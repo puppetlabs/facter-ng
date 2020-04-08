@@ -31,10 +31,10 @@ module Facter
           if output =~ /.*?\.(.+$)/
             domain = Regexp.last_match(1)
           else
-            file = Facter::Resolvers::Utils::FileHelper.safe_read('/etc/resolv.conf')
-            if file =~ /^search\s+(\S+)/
+            file_content = Facter::Resolvers::Utils::FileHelper.safe_read('/etc/resolv.conf')
+            if file_content =~ /^search\s+(\S+)/
               domain = Regexp.last_match(1)
-            elsif file =~ /^domain\s+(\S+)/
+            elsif file_content =~ /^domain\s+(\S+)/
               domain = Regexp.last_match(1)
             end
           end

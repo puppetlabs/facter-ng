@@ -33,8 +33,8 @@ require "#{ROOT_DIR}/lib/framework/config/block_list"
 
 load_dir(['config'])
 
-load_lib_dirs('resolvers')
 load_lib_dirs('resolvers', 'utils')
+load_lib_dirs('resolvers')
 load_lib_dirs('facts_utils')
 load_lib_dirs('framework', 'core')
 load_lib_dirs('models')

@@ -6,6 +6,7 @@ module Facter
       @semaphore = Mutex.new
       @fact_list ||= {}
       BLOCK_PATH = '/sys/block'
+      BLOCK_SIZE = 512
 
       class << self
         private
@@ -61,7 +62,7 @@ module Facter
         def populate_partitions(partition_name, block_path, backing_file = nil)
           @fact_list[:partitions][partition_name] = {}
           size_bytes = Facter::Resolvers::Utils::FileHelper.safe_read("#{block_path}/size", '0')
-                                                           .chomp.to_i * 512
+                                                           .chomp.to_i * BLOCK_SIZE
           info_hash = { size_bytes: size_bytes,
                         size: Facter::BytesToHumanReadable.convert(size_bytes), backing_file: backing_file }
           info_hash.merge!(populate_from_blkid(partition_name))
