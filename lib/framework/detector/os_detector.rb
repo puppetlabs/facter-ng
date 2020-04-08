@@ -27,8 +27,6 @@ class OsDetector
                     :solaris
                   when /aix/
                     :aix
-                  when /arch/
-                    :arch
                   else
                     raise "unknown os: #{host_os.inspect}"
                   end
