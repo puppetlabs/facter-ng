@@ -55,7 +55,7 @@ describe Facter::FactCollection do
       end
 
       context 'when fact type is :custom' do
-        let(:resolved_fact) { Facter::ResolvedFact.new('os.version', nil, :custom) }
+        let(:resolved_fact) { Facter::ResolvedFact.new('operatingsystem', nil, :custom) }
 
         before do
           resolved_fact.filter_tokens = []
@@ -64,7 +64,7 @@ describe Facter::FactCollection do
 
         it 'adds fact to collection' do
           fact_collection.build_fact_collection!([resolved_fact])
-          expected_hash = { 'os' => { 'version' => nil } }
+          expected_hash = { 'operatingsystem' => nil }
 
           expect(fact_collection).to eq(expected_hash)
         end
