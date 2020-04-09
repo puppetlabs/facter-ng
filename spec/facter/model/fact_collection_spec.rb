@@ -1,29 +1,74 @@
 # frozen_string_literal: true
 
 describe Facter::FactCollection do
-  it 'adds elements to fact collection' do
-    fact_value = '1.2.3'
+  subject(:fact_collection) { Facter::FactCollection.new }
 
-    fact_collection = Facter::FactCollection.new
-    resolved_fact = Facter::ResolvedFact.new('os.version', fact_value)
-    resolved_fact.filter_tokens = []
-    resolved_fact.user_query = 'os'
+  describe '#build_fact_collection!' do
+    context 'when fact has some value' do
+      let(:fact_value) { '1.2.3' }
+      let(:resolved_fact) { Facter::ResolvedFact.new('os.version', fact_value, :core) }
 
-    fact_collection.build_fact_collection!([resolved_fact])
-    expected_hash = { 'os' => { 'version' => fact_value } }
+      before do
+        resolved_fact.filter_tokens = []
+        resolved_fact.user_query = 'os'
+      end
 
-    expect(fact_collection).to eq(expected_hash)
-  end
+      it 'adds fact to collection' do
+        fact_collection.build_fact_collection!([resolved_fact])
+        expected_hash = { 'os' => { 'version' => fact_value } }
 
-  it 'does not add elements to fact collection if fact value is nil' do
-    fact_collection = Facter::FactCollection.new
-    resolved_fact = Facter::ResolvedFact.new('os.version', nil)
-    resolved_fact.filter_tokens = []
-    resolved_fact.user_query = 'os'
+        expect(fact_collection).to eq(expected_hash)
+      end
+    end
 
-    fact_collection.build_fact_collection!([resolved_fact])
-    expected_hash = {}
+    context 'when fact value is nil' do
+      context 'when fact type is legacy' do
+        let(:resolved_fact) { Facter::ResolvedFact.new('os.version', nil, :legacy) }
 
-    expect(fact_collection).to eq(expected_hash)
+        before do
+          resolved_fact.filter_tokens = []
+          resolved_fact.user_query = 'os'
+        end
+
+        it 'does not add fact to collection' do
+          fact_collection.build_fact_collection!([resolved_fact])
+          expected_hash = {}
+
+          expect(fact_collection).to eq(expected_hash)
+        end
+      end
+
+      context 'when fact type is core' do
+        let(:resolved_fact) { Facter::ResolvedFact.new('os.version', nil, :core) }
+
+        before do
+          resolved_fact.filter_tokens = []
+          resolved_fact.user_query = 'os'
+        end
+
+        it 'does not add fact to collection' do
+          fact_collection.build_fact_collection!([resolved_fact])
+          expected_hash = {}
+
+          expect(fact_collection).to eq(expected_hash)
+        end
+      end
+
+      context 'when fact type is :custom' do
+        let(:resolved_fact) { Facter::ResolvedFact.new('os.version', nil, :custom) }
+
+        before do
+          resolved_fact.filter_tokens = []
+          resolved_fact.user_query = 'operatingsystem'
+        end
+
+        it 'adds fact to collection' do
+          fact_collection.build_fact_collection!([resolved_fact])
+          expected_hash = { 'os' => { 'version' => nil } }
+
+          expect(fact_collection).to eq(expected_hash)
+        end
+      end
+    end
   end
 end
