@@ -4,14 +4,18 @@ describe Facter::FactCollection do
   subject(:fact_collection) { Facter::FactCollection.new }
 
   describe '#build_fact_collection!' do
-    context 'when fact has some value' do
-      let(:fact_value) { '1.2.3' }
-      let(:resolved_fact) { Facter::ResolvedFact.new('os.version', fact_value, :core) }
+    let(:user_query) { 'os' }
+    let(:resolved_fact) { Facter::ResolvedFact.new(fact_name, fact_value, type) }
 
-      before do
-        resolved_fact.filter_tokens = []
-        resolved_fact.user_query = 'os'
-      end
+    before do
+      resolved_fact.filter_tokens = []
+      resolved_fact.user_query = user_query
+    end
+
+    context 'when fact has some value' do
+      let(:fact_name) { 'os.version' }
+      let(:fact_value) { '1.2.3' }
+      let(:type) { :core }
 
       it 'adds fact to collection' do
         fact_collection.build_fact_collection!([resolved_fact])
@@ -23,12 +27,10 @@ describe Facter::FactCollection do
 
     context 'when fact value is nil' do
       context 'when fact type is legacy' do
-        let(:resolved_fact) { Facter::ResolvedFact.new('os.version', nil, :legacy) }
-
-        before do
-          resolved_fact.filter_tokens = []
-          resolved_fact.user_query = 'os'
-        end
+        let(:fact_name) { 'os.version' }
+        let(:fact_value) { nil }
+        let(:type) { :legacy }
+        # let(:resolved_fact) { Facter::ResolvedFact.new('os.version', nil, :legacy) }
 
         it 'does not add fact to collection' do
           fact_collection.build_fact_collection!([resolved_fact])
@@ -39,12 +41,9 @@ describe Facter::FactCollection do
       end
 
       context 'when fact type is core' do
-        let(:resolved_fact) { Facter::ResolvedFact.new('os.version', nil, :core) }
-
-        before do
-          resolved_fact.filter_tokens = []
-          resolved_fact.user_query = 'os'
-        end
+        let(:fact_name) { 'os.version' }
+        let(:fact_value) { nil }
+        let(:type) { :core }
 
         it 'does not add fact to collection' do
           fact_collection.build_fact_collection!([resolved_fact])
@@ -55,12 +54,9 @@ describe Facter::FactCollection do
       end
 
       context 'when fact type is :custom' do
-        let(:resolved_fact) { Facter::ResolvedFact.new('operatingsystem', nil, :custom) }
-
-        before do
-          resolved_fact.filter_tokens = []
-          resolved_fact.user_query = 'operatingsystem'
-        end
+        let(:fact_name) { 'operatingsystem' }
+        let(:fact_value) { nil }
+        let(:type) { :custom }
 
         it 'adds fact to collection' do
           fact_collection.build_fact_collection!([resolved_fact])
