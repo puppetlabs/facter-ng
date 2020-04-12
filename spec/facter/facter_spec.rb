@@ -24,27 +24,33 @@ describe Facter do
     Facter.remove_instance_variable(:@logger)
   end
 
+  def mock_fact_manager(method, return_value)
+    allow(fact_manager_spy).to receive(method).and_return(return_value)
+    allow(fact_collection_spy)
+      .to receive(:build_fact_collection!)
+      .with(return_value)
+      .and_return(return_value.empty? ? empty_fact_collection : fact_collection_spy)
+  end
+
+  def mock_collection(method, os = nil, error = nil)
+    if error
+      allow(fact_collection_spy).to receive(method).with('os', 'name').and_raise(error)
+    else
+      allow(fact_collection_spy).to receive(method).with('os', 'name').and_return(os)
+    end
+  end
+
   describe '#to_hash' do
     it 'returns one resolved fact' do
-      allow(fact_manager_spy).to receive(:resolve_facts).and_return([os_fact])
-      allow(fact_collection_spy)
-        .to receive(:build_fact_collection!)
-        .with([os_fact])
-        .and_return(fact_collection_spy)
+      mock_fact_manager(:resolve_facts, [os_fact])
 
-      resolved_facts_hash = Facter.to_hash
-      expect(resolved_facts_hash).to eq(fact_collection_spy)
+      expect(Facter.to_hash).to eq(fact_collection_spy)
     end
 
     it 'return no resolved facts' do
-      allow(fact_manager_spy).to receive(:resolve_facts).and_return([])
-      allow(fact_collection_spy)
-        .to receive(:build_fact_collection!)
-        .with([])
-        .and_return(empty_fact_collection)
+      mock_fact_manager(:resolve_facts, [])
 
-      resolved_facts_hash = Facter.to_hash
-      expect(resolved_facts_hash).to eq(empty_fact_collection)
+      expect(Facter.to_hash).to eq(empty_fact_collection)
     end
   end
 
@@ -121,197 +127,153 @@ describe Facter do
     end
   end
 
+
+
   describe '#value' do
     it 'returns a value' do
-      user_query = 'os.name'
+      mock_fact_manager(:resolve_facts, [os_fact])
+      mock_collection(:value,'Ubuntu')
 
-      allow(fact_manager_spy).to receive(:resolve_facts).and_return([os_fact])
-      allow(fact_collection_spy)
-        .to receive(:build_fact_collection!)
-        .with([os_fact])
-        .and_return(fact_collection_spy)
-      allow(fact_collection_spy).to receive(:value).with('os', 'name').and_return('Ubuntu')
-
-      resolved_facts_hash = Facter.value(user_query)
-      expect(resolved_facts_hash).to eq('Ubuntu')
+      expect(Facter.value('os.name')).to eq('Ubuntu')
     end
 
     it 'return no value' do
-      user_query = 'os.name'
+      mock_fact_manager(:resolve_facts, [])
+      mock_collection(:value, nil)
 
-      allow(fact_manager_spy).to receive(:resolve_facts).and_return([])
-      allow(fact_collection_spy)
-        .to receive(:build_fact_collection!)
-        .with([])
-        .and_return(empty_fact_collection)
-      allow(fact_collection_spy).to receive(:value).with('os', 'name').and_return(nil)
-
-      resolved_facts_hash = Facter.value(user_query)
-      expect(resolved_facts_hash).to be nil
+      expect(Facter.value('os.name')).to be nil
     end
   end
 
   describe '#fact' do
     it 'returns a fact' do
-      user_query = 'os.name'
+      mock_fact_manager(:resolve_facts, [os_fact])
+      mock_collection(:value,'Ubuntu')
 
-      allow(fact_manager_spy).to receive(:resolve_facts).and_return([os_fact])
-      allow(fact_collection_spy)
-        .to receive(:build_fact_collection!)
-        .with([os_fact])
-        .and_return(fact_collection_spy)
-      allow(fact_collection_spy).to receive(:value).with('os', 'name').and_return('Ubuntu')
-
-      result = Facter.fact(user_query)
-      expect(result).to be_instance_of(Facter::ResolvedFact).and(having_attributes(value: 'Ubuntu'))
+      expect(Facter.fact('os.name')).to be_instance_of(Facter::ResolvedFact).and have_attributes(value: 'Ubuntu')
     end
 
     it 'can be interpolated' do
-      user_query = 'os.name'
+      mock_fact_manager(:resolve_facts, [os_fact])
+      mock_collection(:value,'Ubuntu')
 
-      allow(fact_manager_spy).to receive(:resolve_facts).and_return([os_fact])
-      allow(fact_collection_spy)
-        .to receive(:build_fact_collection!)
-        .with([os_fact])
-        .and_return(fact_collection_spy)
-      allow(fact_collection_spy).to receive(:value).with('os', 'name').and_return('Ubuntu')
       # rubocop:disable Style/UnneededInterpolation
-      expect("#{Facter.fact(user_query)}").to eq('Ubuntu')
+      expect("#{Facter.fact('os.name')}").to eq('Ubuntu')
       # rubocop:enable Style/UnneededInterpolation
     end
 
     it 'return no value' do
-      user_query = 'os.name'
+      mock_fact_manager(:resolve_facts, [])
+      mock_collection(:value,nil, key_error)
 
-      allow(fact_manager_spy).to receive(:resolve_facts).and_return([])
-      allow(fact_collection_spy)
-        .to receive(:build_fact_collection!)
-        .with([])
-        .and_return(fact_collection_spy)
-
-      allow(fact_collection_spy).to receive(:value).with('os', 'name').and_raise(key_error)
-
-      result = Facter.fact(user_query)
-      expect(result).to be_nil
+      expect(Facter.fact('os.name')).to be_nil
     end
   end
 
+
   describe '#[]' do
     it 'returns a fact' do
-      user_query = 'os.name'
+      mock_fact_manager(:resolve_facts, [os_fact])
+      mock_collection(:value,'Ubuntu')
 
-      allow(fact_manager_spy).to receive(:resolve_facts).and_return([os_fact])
-      allow(fact_collection_spy)
-        .to receive(:build_fact_collection!)
-        .with([os_fact])
-        .and_return(fact_collection_spy)
-      allow(fact_collection_spy).to receive(:value).with('os', 'name').and_return('Ubuntu')
-
-      result = Facter[user_query]
-      expect(result).to be_instance_of(Facter::ResolvedFact).and(having_attributes(value: 'Ubuntu'))
+      expect(Facter['os.name']).to be_instance_of(Facter::ResolvedFact).and(having_attributes(value: 'Ubuntu'))
     end
 
     it 'return no value' do
-      user_query = 'os.name'
+      mock_fact_manager(:resolve_facts, [])
+      mock_collection(:value,nil, key_error)
 
-      allow(fact_manager_spy).to receive(:resolve_facts).and_return([])
-      allow(fact_collection_spy)
-        .to receive(:build_fact_collection!)
-        .with([])
-        .and_return(fact_collection_spy)
-      allow(fact_collection_spy).to receive(:value).with('os', 'name').and_raise(key_error)
-
-      result = Facter[user_query]
-      expect(result).to be_nil
+      expect(Facter['os.name']).to be_nil
     end
   end
 
   describe '#core_value' do
     it 'searched in core facts and returns a value' do
-      user_query = 'os.name'
+      mock_fact_manager(:resolve_core, [os_fact])
+      mock_collection(:dig,'Ubuntu')
 
-      allow(fact_manager_spy).to receive(:resolve_core).and_return([os_fact])
-      allow(fact_collection_spy)
-        .to receive(:build_fact_collection!)
-        .with([os_fact])
-        .and_return(fact_collection_spy)
-      allow(fact_collection_spy).to receive(:dig).with('os', 'name').and_return('Ubuntu')
-
-      resolved_facts_hash = Facter.core_value(user_query)
-      expect(resolved_facts_hash).to eq('Ubuntu')
+      expect(Facter.core_value('os.name')).to eq('Ubuntu')
     end
 
     it 'searches ion core facts and return no value' do
-      user_query = 'os.name'
+      mock_fact_manager(:resolve_core, [])
+      mock_collection(:dig,nil)
 
-      allow(fact_manager_spy).to receive(:resolve_core).and_return([])
-      allow(fact_collection_spy)
-        .to receive(:build_fact_collection!)
-        .with([])
-        .and_return(fact_collection_spy)
-      allow(fact_collection_spy).to receive(:dig).with('os', 'name').and_return(nil)
-
-      resolved_facts_hash = Facter.core_value(user_query)
-      expect(resolved_facts_hash).to be nil
+      expect(Facter.core_value('os.name')).to be nil
     end
   end
 
-  describe '#clear' do
-    it 'sends call to LegacyFacter' do
-      expect(LegacyFacter).to receive(:clear).once
-      Facter.clear
-    end
-  end
-
-  describe '#search' do
-    it 'sends call to LegacyFacter' do
-      dirs = ['/dir1', '/dir2']
-
-      expect(LegacyFacter).to receive(:search).with(dirs)
-      Facter.search(dirs)
-    end
-  end
-
-  describe '#search_path' do
-    it 'sends call to LegacyFacter' do
-      expect(LegacyFacter).to receive(:search_path).once
-      Facter.search_path
-    end
-  end
-
-  describe '#search_external' do
-    it 'sends call to LegacyFacter' do
-      dirs = ['/dir1', '/dir2']
-
-      expect(LegacyFacter).to receive(:search_external).with(dirs)
-      Facter.search_external(dirs)
-    end
-  end
-
-  describe '#search_external_path' do
-    it 'sends call to LegacyFacter' do
-      expect(LegacyFacter).to receive(:search_external_path).once
-      Facter.search_external_path
-    end
-  end
-
-  describe '#reset' do
-    it 'sends call to LegacyFacter' do
-      allow(LegacyFacter).to receive(:reset)
-      Facter.reset
-      expect(LegacyFacter).to have_received(:reset).once
-    end
-
-    it 'adds custom facts dirs' do
+  describe 'LegacyFacter methods' do
+    let(:legacy_facter) { class_spy(LegacyFacter)}
+    before do
+      allow(LegacyFacter).to receive(:clear)
       allow(LegacyFacter).to receive(:search)
-      Facter.reset
-      expect(LegacyFacter).to have_received(:search).once
+
+    end
+    describe '#clear' do
+      it 'sends call to LegacyFacter' do
+        Facter.clear
+        expect(legacy_facter).to have_received(:clear).once
+      end
     end
 
-    it 'add external facts dirs' do
-      allow(LegacyFacter).to receive(:search_external)
-      Facter.reset
-      expect(LegacyFacter).to have_received(:search_external).once
+    describe '#search' do
+      it 'sends call to LegacyFacter' do
+        dirs = ['/dir1', '/dir2']
+
+        Facter.search(dirs)
+        expect(LegacyFacter).to have_received(:search).with(dirs)
+      end
+    end
+
+    describe '#search_path' do
+      it 'sends call to LegacyFacter' do
+        expect(LegacyFacter).to receive(:search_path).once
+        Facter.search_path
+      end
+    end
+
+    describe '#search_external' do
+      it 'sends call to LegacyFacter' do
+        dirs = ['/dir1', '/dir2']
+
+        expect(LegacyFacter).to receive(:search_external).with(dirs)
+        Facter.search_external(dirs)
+      end
+    end
+
+    describe '#search_external_path' do
+      it 'sends call to LegacyFacter' do
+        allow(LegacyFacter).to receive(:search_external_path)
+        Facter.search_external_path
+        expect(LegacyFacter).to have_received(:search_external_path).once
+      end
+    end
+
+    describe '#reset' do
+      it 'sends call to LegacyFacter' do
+        allow(LegacyFacter).to receive(:reset)
+
+        Facter.reset
+
+        expect(LegacyFacter).to have_received(:reset).once
+      end
+
+      it 'adds custom facts dirs' do
+        allow(LegacyFacter).to receive(:search)
+
+        Facter.reset
+
+        expect(LegacyFacter).to have_received(:search).once
+      end
+
+      it 'add external facts dirs' do
+        allow(LegacyFacter).to receive(:search_external)
+
+        Facter.reset
+
+        expect(LegacyFacter).to have_received(:search_external).once
+      end
     end
   end
 
@@ -343,6 +305,7 @@ describe Facter do
 
       it 'logs a debug message' do
         allow(logger).to receive(:debug).with('test')
+
         expect(Facter.debug(message)).to be(nil)
       end
     end
@@ -394,7 +357,9 @@ describe Facter do
 
       it 'format exception to display backtrace' do
         exception.set_backtrace("prog.rb:2:in `a'")
+
         Facter.log_exception(exception, message)
+
         expect(logger).to have_received(:error).with(expected_message)
       end
     end
