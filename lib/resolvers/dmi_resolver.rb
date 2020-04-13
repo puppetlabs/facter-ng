@@ -34,7 +34,7 @@ module Facter
                        product_uuid]
             return unless File.directory?('/sys/class/dmi')
 
-            file_content = Facter::Util::FileHelper.safe_read("/sys/class/dmi/id/#{fact_name}", nil)
+            file_content = Util::FileHelper.safe_read("/sys/class/dmi/id/#{fact_name}", nil)
             if files.include?(fact_name.to_s) && file_content
               @fact_list[fact_name] = file_content.strip
               chassis_to_name(@fact_list[fact_name]) if fact_name == :chassis_type

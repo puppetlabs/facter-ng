@@ -24,7 +24,7 @@ module Facter
             next unless File.directory?(file_path)
 
             @file_names.each do |file_name|
-              file_content = Facter::Util::FileHelper.safe_read(File.join(file_path, file_name), nil)
+              file_content = Util::FileHelper.safe_read(File.join(file_path, file_name), nil)
               next unless file_content
 
               key_type, key = file_content.split(' ')

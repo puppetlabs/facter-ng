@@ -15,7 +15,7 @@ module Facter
           end
 
           def read_load_averages_file(fact_name)
-            output = Facter::Util::FileHelper.safe_read('/proc/loadavg')
+            output = Util::FileHelper.safe_read('/proc/loadavg')
             @fact_list[:load_averages] = {}.tap { |h| h['1m'], h['5m'], h['15m'], = output.split.map(&:to_f) }
 
             @fact_list[fact_name]

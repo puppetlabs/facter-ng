@@ -15,11 +15,11 @@ module Facter
           end
 
           def read_sysdef_file(fact_name)
-            file_content = Facter::Util::FileHelper.safe_readlines('/usr/sbin/sysdef', nil)
-            return unless file_content
+            return unless File.executable?('/usr/sbin/sysdef')
 
-            files = file_content.map do |line|
-              line.split('/').last.strip if line =~ /^fs\.*/
+            file_content, _status = Open3.capture2('/usr/sbin/sysdef')
+            files = file_content.split("\n").map do |line|
+              line.split('/').last if line =~ /^fs\.*/
             end
 
             @fact_list[:file_systems] = files.compact.sort.join(',')

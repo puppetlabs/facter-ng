@@ -31,7 +31,7 @@ module Facter
           if output =~ /.*?\.(.+$)/
             domain = Regexp.last_match(1)
           else
-            file_content = Facter::Util::FileHelper.safe_read('/etc/resolv.conf')
+            file_content = Util::FileHelper.safe_read('/etc/resolv.conf')
             if file_content =~ /^search\s+(\S+)/
               domain = Regexp.last_match(1)
             elsif file_content =~ /^domain\s+(\S+)/
