@@ -5,11 +5,17 @@ require 'rbconfig'
 class OsDetector
   include Singleton
 
-  attr_reader :identifier, :version, :hierarchy
+  attr_reader :identifier, :version
 
   def initialize(*_args)
     @identifier = detect
-    @hierarchy = create_hierarchy(@identifier)
+    # @hierarchy = create_hierarchy(@identifier)
+    @hierarchy
+  end
+
+  def hierarchy
+    @hierarchy = custom_hierarchy(@identifier)
+    @hierarchy || [@identifier.to_s.capitalize]
   end
 
   def detect
@@ -20,7 +26,10 @@ class OsDetector
                   when /darwin|mac os/
                     :macosx
                   when /linux/
-                    detect_distro
+                    distro = detect_distro
+                    @hierarchy = ['Linux', distro.to_s.capitalize]
+
+                    distro
                   when /bsd/
                     :bsd
                   when /solaris/
@@ -46,16 +55,10 @@ class OsDetector
     @identifier
   end
 
-  def create_hierarchy(operating_system)
+  def custom_hierarchy(operating_system)
     return [] unless operating_system
 
     case operating_system.to_sym
-    when :ubuntu
-      %w[Linux]
-    when :elementary
-      %w[Linux]
-    when :raspbian
-      %w[Linux]
     when :fedora
       %w[El]
     when :amzn
@@ -69,7 +72,7 @@ class OsDetector
     when :bsd
       %w[Solaris Bsd]
     else
-      [operating_system.to_s.capitalize]
+      nil
     end
   end
 end
