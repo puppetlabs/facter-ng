@@ -30,7 +30,6 @@ describe Facter::FactCollection do
         let(:fact_name) { 'os.version' }
         let(:fact_value) { nil }
         let(:type) { :legacy }
-        # let(:resolved_fact) { Facter::ResolvedFact.new('os.version', nil, :legacy) }
 
         it 'does not add fact to collection' do
           fact_collection.build_fact_collection!([resolved_fact])
