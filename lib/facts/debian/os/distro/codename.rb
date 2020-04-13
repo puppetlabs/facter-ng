@@ -9,7 +9,7 @@ module Facts
 
           def call_the_resolver
             fact_value = Facter::Resolvers::OsRelease.resolve(:version_codename)
-            fact_value ||= retreieve_from_version
+            fact_value ||= retrieve_from_version
 
             Facter::ResolvedFact.new(FACT_NAME, fact_value)
           end

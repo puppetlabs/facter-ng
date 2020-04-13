@@ -32,11 +32,11 @@ describe Facter do
       .and_return(return_value.empty? ? empty_fact_collection : fact_collection_spy)
   end
 
-  def mock_collection(method, os = nil, error = nil)
+  def mock_collection(method, os_name = nil, error = nil)
     if error
       allow(fact_collection_spy).to receive(method).with('os', 'name').and_raise(error)
     else
-      allow(fact_collection_spy).to receive(method).with('os', 'name').and_return(os)
+      allow(fact_collection_spy).to receive(method).with('os', 'name').and_return(os_name)
     end
   end
 
@@ -56,8 +56,8 @@ describe Facter do
 
   describe '#to_user_output' do
     before do |example|
-      resolved_fact = example.metadata[:resolved_fact] ? [os_fact]: []
-      expected_json_output = example.metadata[:resolved_fact] ? '{"os" : {"name": "ubuntu"}': '{}'
+      resolved_fact = example.metadata[:resolved_fact] ? [os_fact] : []
+      expected_json_output = example.metadata[:resolved_fact] ? '{"os" : {"name": "ubuntu"}' : '{}'
 
       allow(fact_manager_spy).to receive(:resolve_facts).and_return(resolved_fact)
       json_fact_formatter = double(Facter::JsonFactFormatter)
@@ -65,7 +65,7 @@ describe Facter do
       allow(Facter::FormatterFactory).to receive(:build).and_return(json_fact_formatter)
     end
 
-    it 'returns one fact and status 0', :resolved_fact => true do
+    it 'returns one fact and status 0', resolved_fact: true do
       user_query = 'os.name'
       expected_json_output = '{"os" : {"name": "ubuntu"}'
 
@@ -74,7 +74,7 @@ describe Facter do
       expect(formated_facts).to eq([expected_json_output, 0])
     end
 
-    it 'returns no facts and status 0', :resolved_fact => false do
+    it 'returns no facts and status 0', resolved_fact: false do
       user_query = 'os.name'
       expected_json_output = '{}'
 
@@ -89,7 +89,7 @@ describe Facter do
         allow(Facter::Options.instance).to receive(:[]).with(:strict).and_return(true)
       end
 
-      it 'returns no fact and status 1', :resolved_fact => false do
+      it 'returns no fact and status 1', resolved_fact: false do
         user_query = 'os.name'
         expected_json_output = '{}'
         allow(logger).to receive(:error).with('fact "os.name" does not exist.', true)
@@ -100,7 +100,7 @@ describe Facter do
         expect(formatted_facts).to eq([expected_json_output, 1])
       end
 
-      it 'returns one fact and status 0', :resolved_fact => true do
+      it 'returns one fact and status 0', resolved_fact: true do
         user_query = 'os.name'
         expected_json_output = '{"os" : {"name": "ubuntu"}'
 
@@ -114,7 +114,7 @@ describe Facter do
   describe '#value' do
     it 'returns a value' do
       mock_fact_manager(:resolve_facts, [os_fact])
-      mock_collection(:value,'Ubuntu')
+      mock_collection(:value, 'Ubuntu')
 
       expect(Facter.value('os.name')).to eq('Ubuntu')
     end
@@ -130,14 +130,14 @@ describe Facter do
   describe '#fact' do
     it 'returns a fact' do
       mock_fact_manager(:resolve_facts, [os_fact])
-      mock_collection(:value,'Ubuntu')
+      mock_collection(:value, 'Ubuntu')
 
       expect(Facter.fact('os.name')).to be_instance_of(Facter::ResolvedFact).and have_attributes(value: 'Ubuntu')
     end
 
     it 'can be interpolated' do
       mock_fact_manager(:resolve_facts, [os_fact])
-      mock_collection(:value,'Ubuntu')
+      mock_collection(:value, 'Ubuntu')
 
       # rubocop:disable Style/UnneededInterpolation
       expect("#{Facter.fact('os.name')}").to eq('Ubuntu')
@@ -146,24 +146,23 @@ describe Facter do
 
     it 'return no value' do
       mock_fact_manager(:resolve_facts, [])
-      mock_collection(:value,nil, key_error)
+      mock_collection(:value, nil, key_error)
 
       expect(Facter.fact('os.name')).to be_nil
     end
   end
 
-
   describe '#[]' do
     it 'returns a fact' do
       mock_fact_manager(:resolve_facts, [os_fact])
-      mock_collection(:value,'Ubuntu')
+      mock_collection(:value, 'Ubuntu')
 
       expect(Facter['os.name']).to be_instance_of(Facter::ResolvedFact).and(having_attributes(value: 'Ubuntu'))
     end
 
     it 'return no value' do
       mock_fact_manager(:resolve_facts, [])
-      mock_collection(:value,nil, key_error)
+      mock_collection(:value, nil, key_error)
 
       expect(Facter['os.name']).to be_nil
     end
@@ -172,26 +171,25 @@ describe Facter do
   describe '#core_value' do
     it 'searched in core facts and returns a value' do
       mock_fact_manager(:resolve_core, [os_fact])
-      mock_collection(:dig,'Ubuntu')
+      mock_collection(:dig, 'Ubuntu')
 
       expect(Facter.core_value('os.name')).to eq('Ubuntu')
     end
 
     it 'searches ion core facts and return no value' do
       mock_fact_manager(:resolve_core, [])
-      mock_collection(:dig,nil)
+      mock_collection(:dig, nil)
 
       expect(Facter.core_value('os.name')).to be nil
     end
   end
 
   describe 'LegacyFacter methods' do
-    let(:legacy_facter) { class_spy(LegacyFacter)}
     before do
       allow(LegacyFacter).to receive(:clear)
       allow(LegacyFacter).to receive(:search)
-
     end
+
     describe '#clear' do
       it 'sends call to LegacyFacter' do
         Facter.clear
