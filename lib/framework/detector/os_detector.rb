@@ -37,6 +37,7 @@ class OsDetector
                   end
 
     @hierarchy = @os_hierarchy.construct_hierarchy(@identifier.to_s.capitalize)
+    @hierarchy = ['Linux'] if @hierarchy.empty?
 
     @identifier
   end
