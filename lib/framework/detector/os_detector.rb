@@ -8,14 +8,13 @@ class OsDetector
   attr_reader :identifier, :version
 
   def initialize(*_args)
+    @os_hierarchy = Facter::OsHierarchy.new
     @identifier = detect
     # @hierarchy = create_hierarchy(@identifier)
-    @hierarchy
   end
 
   def hierarchy
-    @hierarchy = custom_hierarchy(@identifier)
-    @hierarchy || [@identifier.to_s.capitalize]
+    @hierarchy
   end
 
   def detect
@@ -26,10 +25,7 @@ class OsDetector
                   when /darwin|mac os/
                     :macosx
                   when /linux/
-                    distro = detect_distro
-                    @hierarchy = ['Linux', distro.to_s.capitalize]
-
-                    distro
+                    detect_distro
                   when /bsd/
                     :bsd
                   when /solaris/
@@ -39,6 +35,10 @@ class OsDetector
                   else
                     raise "unknown os: #{host_os.inspect}"
                   end
+
+    @hierarchy = @os_hierarchy.construct_hierarchy(@identifier.to_s.capitalize)
+
+    @identifier
   end
 
   private
@@ -53,26 +53,5 @@ class OsDetector
     end
 
     @identifier
-  end
-
-  def custom_hierarchy(operating_system)
-    return [] unless operating_system
-
-    case operating_system.to_sym
-    when :fedora
-      %w[El]
-    when :amzn
-      %w[El]
-    when :rhel
-      %w[El]
-    when :centos
-      %w[El]
-    when :opensuse
-      %w[Sles]
-    when :bsd
-      %w[Solaris Bsd]
-    else
-      nil
-    end
   end
 end
