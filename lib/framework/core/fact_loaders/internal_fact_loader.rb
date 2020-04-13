@@ -29,7 +29,7 @@ module Facter
 
     def load_for_os(operating_system)
       # select only classes
-      classes = ClassDiscoverer.instance.discover_classes(operating_system)
+      classes = ClassDiscoverer.instance.discover_classes_from_file(operating_system)
 
       classes.each do |class_name|
         fact_name = class_name::FACT_NAME

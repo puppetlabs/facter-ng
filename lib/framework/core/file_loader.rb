@@ -8,6 +8,24 @@ require 'hocon/config_value_factory'
 require 'singleton'
 require 'logger'
 
+def load_files(folder, os_name)
+  folder_path = File.join(ROOT_DIR, 'lib', folder)
+  files_to_load_config_path = File.join(folder_path, os_name,  'files_to_load.rb')
+  return unless File.readable?(files_to_load_config_path)
+
+  require files_to_load_config_path
+
+  paths_to_load = Module.const_get("#{folder.capitalize}::#{os_name.capitalize}::Load").files
+  paths_to_load.each do |path_to_load|
+    path = File.join(folder_path, path_to_load)
+    if File.file?(path)
+      require path
+    else
+      load_lib_dirs(folder, path_to_load)
+    end
+  end
+end
+
 def load_dir(*dirs)
   folder_path = File.join(ROOT_DIR, dirs)
   return unless Dir.exist?(folder_path.tr('*', ''))
@@ -46,8 +64,12 @@ load_lib_dirs('framework', 'core', 'fact', 'external')
 load_lib_dirs('framework', 'formatters')
 
 os_hierarchy = OsDetector.instance.hierarchy
-os_hierarchy.each { |operating_system| load_lib_dirs('facts', operating_system.downcase, '**') }
-os_hierarchy.each { |operating_system| load_lib_dirs('resolvers', operating_system.downcase, '**') }
+
+os_hierarchy.each { |operating_system| load_files('facts', operating_system.downcase) }
+os_hierarchy.each { |operating_system| load_files('resolvers', operating_system.downcase) }
+
+# os_hierarchy.each { |operating_system| load_lib_dirs('facts', operating_system.downcase, '**') }
+# os_hierarchy.each { |operating_system| load_lib_dirs('resolvers', operating_system.downcase, '**') }
 
 require "#{ROOT_DIR}/lib/custom_facts/core/legacy_facter"
 load_lib_dirs('framework', 'utils')

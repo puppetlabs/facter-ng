@@ -28,5 +28,35 @@ module Facter
         end
       end
     end
+
+    def discover_classes_from_file(operating_system)
+      discovered_classes = []
+
+      classes_to_load_config = Module.const_get("Facts::#{operating_system}::Load")
+      module_names_to_load = classes_to_load_config.modules
+
+      module_names_to_load.each do |module_name|
+        module_to_search = Module.const_get(module_name)
+        find_nested_classes_2(module_to_search, discovered_classes)
+      end
+      discovered_classes
+    rescue NameError
+      @log.error("There is no module named #{operating_system}")
+      []
+    end
+
+    def find_nested_classes_2(module_to_search, discovered_classes)
+      if module_to_search.instance_of? Class
+        discovered_classes << module_to_search unless module_to_search.name.include?('Load')
+      elsif module_to_search.instance_of? Module
+        module_to_search.constants.each do |constant_name|
+          constant = module_to_search.const_get(constant_name)
+          if (constant.instance_of? Module) || (constant.instance_of? Class)
+            find_nested_classes_2(constant, discovered_classes)
+          end
+        end
+      end
+    end
   end
+
 end
