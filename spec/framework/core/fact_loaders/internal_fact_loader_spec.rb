@@ -8,7 +8,7 @@ describe Facter::InternalFactLoader do
     let(:class_discoverer_mock) { instance_spy(Facter::ClassDiscoverer) }
 
     before do
-      allow(os_detector_mock).to receive(:hierarchy).and_return([:Debian])
+      allow(os_detector_mock).to receive(:hierarchy).and_return([:Linux])
       allow(OsDetector).to receive(:instance).and_return(os_detector_mock)
     end
 
@@ -43,8 +43,8 @@ describe Facter::InternalFactLoader do
       before do
         allow(class_discoverer_mock)
           .to receive(:discover_classes)
-          .with(:Debian)
-          .and_return([Facts::Debian::Path])
+          .with(:Linux)
+          .and_return([Facts::Linux::Path])
         allow(Facter::ClassDiscoverer).to receive(:instance).and_return(class_discoverer_mock)
 
         stub_const('Facts::Debian::Path::FACT_NAME', 'path')
@@ -95,7 +95,7 @@ describe Facter::InternalFactLoader do
       before do
         allow(class_discoverer_mock)
           .to receive(:discover_classes)
-          .with(:Debian)
+          .with(:Linux)
           .and_return([])
         allow(Facter::ClassDiscoverer).to receive(:instance).and_return(class_discoverer_mock)
       end
@@ -107,20 +107,20 @@ describe Facter::InternalFactLoader do
 
     context 'when loading hierarchy of facts' do
       before do
-        allow(os_detector_mock).to receive(:hierarchy).and_return(%i[Debian El])
+        allow(os_detector_mock).to receive(:hierarchy).and_return(%i[Linux El])
         allow(OsDetector).to receive(:instance).and_return(os_detector_mock)
 
         allow(class_discoverer_mock)
           .to receive(:discover_classes)
-          .with(:Debian)
-          .and_return([Facts::Debian::Path])
+          .with(:Linux)
+          .and_return([Facts::Linux::Path])
         allow(class_discoverer_mock)
           .to receive(:discover_classes)
           .with(:El)
           .and_return([Facts::El::Path])
         allow(Facter::ClassDiscoverer).to receive(:instance).and_return(class_discoverer_mock)
 
-        stub_const('Facts::Debian::Path::FACT_NAME', 'path')
+        stub_const('Facts::Linux::Path::FACT_NAME', 'path')
         stub_const('Facts::El::Path::FACT_NAME', 'path')
       end
 
@@ -141,8 +141,8 @@ describe Facter::InternalFactLoader do
       before do
         allow(class_discoverer_mock)
           .to receive(:discover_classes)
-          .with(:Debian)
-          .and_return([Facts::Debian::Os::Name])
+          .with(:Linux)
+          .and_return([Facts::Linux::Os::Name])
         allow(Facter::ClassDiscoverer).to receive(:instance).and_return(class_discoverer_mock)
 
         stub_const('Facts::Debian::Os::Name::FACT_NAME', 'os.name')
@@ -205,8 +205,8 @@ describe Facter::InternalFactLoader do
       before do
         allow(class_discoverer_mock)
           .to receive(:discover_classes)
-          .with(:Debian)
-          .and_return([Facts::Debian::Lsbdistid])
+          .with(:Linux)
+          .and_return([Facts::Linux::Lsbdistid])
         allow(Facter::ClassDiscoverer).to receive(:instance).and_return(class_discoverer_mock)
 
         stub_const('Facts::Debian::Lsbdistid::FACT_NAME', 'lsbdistid')

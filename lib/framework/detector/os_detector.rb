@@ -51,11 +51,11 @@ class OsDetector
 
     case operating_system.to_sym
     when :ubuntu
-      %w[Debian]
+      %w[Linux]
     when :elementary
-      %w[Debian]
+      %w[Linux]
     when :raspbian
-      %w[Debian]
+      %w[Linux]
     when :fedora
       %w[El]
     when :amzn
