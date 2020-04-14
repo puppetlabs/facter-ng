@@ -15,8 +15,10 @@ module Facter
     def initialize
       @facts = []
 
-      os_descendents = OsDetector.instance.hierarchy
-      load_all_oses_in_descending_order(os_descendents)
+      running_os = OsDetector.instance.identifier
+      load_for_os(running_os)
+      # os_descendents = OsDetector.instance.hierarchy
+      # load_all_oses_in_descending_order(os_descendents)
     end
 
     private
@@ -49,5 +51,25 @@ module Facter
       loaded_fact = LoadedFact.new(fact_name, klass, type)
       @facts << loaded_fact
     end
+
+    def load_for_os(running_os)
+      running_os = running_os.to_s.capitalize
+      jsonFile = File.open("#{ROOT_DIR}/os_facts.json")
+      @json_data = JSON.load(jsonFile)
+
+      @json_data.each do |os|
+        os_name = os['os_name']
+        if running_os == os_name
+          facts = os['facts']
+          facts.each do |fact|
+            fact.each do |k, v|
+              klass = Module.const_get(v)
+              load_fact(k, klass, :core)
+            end
+          end
+        end
+      end
+    end
+
   end
 end
