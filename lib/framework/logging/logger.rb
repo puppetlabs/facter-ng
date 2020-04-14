@@ -63,7 +63,6 @@ module Facter
     end
 
     def debug(msg)
-      return unless Facter.debugging?
 
       if msg.nil? || msg.empty?
         invoker = caller(1..1).first.slice(/.*:\d+/)
