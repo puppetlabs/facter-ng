@@ -1,0 +1,20 @@
+[
+  {
+    "os_name": "Ubuntu",
+    "facts": [
+      { "os.name": "Facts::Debian::Os::Name" },
+      { "os.family": "Facts::Debian::Os::Family" },
+      { "os.release": "Facts::Debian::Os::Release" },
+      { "os.architecture": "Facts::Debian::Os::Architecture" }
+    ]
+  },
+  {
+    "os_name": "Macosx",
+    "facts": [
+      { "os.name": "Facts::Macosx::Os::Name" },
+      { "os.family": "Facts::Macosx::Os::Family" },
+      { "os.release": "Facts::Macosx::Os::Release" },
+      { "os.architecture": "Facts::Macosx::Os::Architecture" }
+    ]
+  }
+]
