@@ -20,7 +20,7 @@ class OsDetector
                   when /darwin|mac os/
                     :macosx
                   when /linux/
-                    detect_distro
+                    detect_distro || :linux
                   when /bsd/
                     :bsd
                   when /solaris/
