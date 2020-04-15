@@ -19,14 +19,17 @@ module Facter
     private
 
     def search(json_data, searched_element, path)
+      # we hit a dead end, the os was not found on this branch
+      # and we cannot go deeper
       return unless json_data
 
-      json_data.each do |os|
-        @searched_path = path.dup << os if os == searched_element
+      json_data.each do |tree_node|
+        # we found the searched OS, so save the path from the tree
+        @searched_path = path.dup << tree_node if tree_node == searched_element
 
-        next unless os.is_a?(Hash)
+        next unless tree_node.is_a?(Hash)
 
-        os.each do |k, v|
+        tree_node.each do |k, v|
           search(v, searched_element, path << k)
           path.pop
         end
