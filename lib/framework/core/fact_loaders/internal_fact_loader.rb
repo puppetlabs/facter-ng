@@ -12,7 +12,7 @@ module Facter
       @facts.select { |fact| fact.type == :legacy }
     end
 
-    def initialize(os_hierarchy = nil)
+    def initialize(os_descendents = nil)
       @facts = []
 
       os_descendents ||= OsDetector.instance.hierarchy
