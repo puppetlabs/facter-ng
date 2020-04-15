@@ -1,0 +1,30 @@
+[
+  {
+    "Linux": [
+      {
+        "Debian": [
+          "Elementary",
+          "Ubuntu"
+        ]
+      },
+      {
+        "El": [
+          "Fedora",
+          "Amzn",
+          "Centos"
+        ]
+      },
+      {
+        "Opensuse": [
+          "Sles"
+        ]
+      }
+    ]
+  },
+  {
+    "Solaris": [
+      "Bsd"
+    ]
+  },
+  "Macosx"
+]
