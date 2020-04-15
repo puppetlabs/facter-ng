@@ -3,77 +3,75 @@
 describe Logger do
   subject(:log) { Facter::Log.new(Class) }
 
-  let(:file_logger_double) { instance_spy(Logger) }
   let(:multi_logger_double) { instance_spy(Facter::MultiLogger, level: :warn) }
 
   before do
-    Facter::Log.class_variable_set(:@@file_logger, file_logger_double)
     Facter::Log.class_variable_set(:@@logger, multi_logger_double)
-
-    allow(file_logger_double).to receive(:formatter=)
   end
 
   describe '#debug' do
-    context 'when Facter.debugging? is accessible' do
-      before do
-        allow(Facter).to receive(:debugging?).and_return(true)
-      end
+    before do
+      allow(Facter).to receive(:debugging?).and_return(true)
+    end
 
+    it 'no debug messages are sent if debugging is set to false' do
+      allow(Facter).to receive(:debugging?).and_return(false)
 
-      it 'noops of debugging is not set' do
-        allow(Facter).to receive(:debugging?).and_return(false)
+      log.debug('info_message')
 
-        log.debug('info_message')
+      expect(multi_logger_double).not_to have_received(:debug)
+    end
 
-        expect(multi_logger_double).not_to have_received(:debug)
-      end
+    it 'logs a warn if message is nil' do
+      log.debug(nil)
 
+      expect(multi_logger_double).to have_received(:warn).with(/debug invoked with invalid message/)
+    end
 
-      it 'logs a warn if message is nil' do
-        log.debug(nil)
+    it 'logs a warn if message is empty' do
+      log.debug('')
 
-        expect(multi_logger_double).to have_received(:warn).with(/debug invoked with invalid message/)
-      end
+      expect(multi_logger_double).to have_received(:warn).with(/debug invoked with invalid message/)
+    end
 
-      it 'logs a warn if message is empty' do
-        log.debug('')
+    shared_examples 'writes debug message' do
+      it 'calls debug on multi_logger' do
+        log.debug('debug_message')
 
-        expect(multi_logger_double).to have_received(:warn).with(/debug invoked with invalid message/)
-      end
-
-      shared_examples 'writes debug message' do
-        it 'calls multi_logger with :debug' do
-          log.debug('debug_message')
-
-          expect(multi_logger_double).to have_received(:debug).with('Class - debug_message')
-        end
-      end
-
-      it_behaves_like 'writes debug message'
-
-      context 'when strange things happen' do
-        let(:handler) { instance_spy(Logger) }
-        it 'provides on_message hook' do
-          Facter.on_message do |level, message|
-            handler.debug("on_message called with level: #{level}, message: #{message}")
-          end
-
-          log.debug('test')
-
-          expect(handler).to have_received(:debug).with('on_message called with level: debug, message: test')
-        end
+        expect(multi_logger_double).to have_received(:debug).with('Class - debug_message')
       end
     end
 
-    context 'when #debug is called during os detection in os_detector.rb' do
+    it_behaves_like 'writes debug message'
+
+    context 'when message callback is provided' do
+      after do
+        Facter::Log.class_variable_set(:@@message_callback, nil)
+      end
+
+      it 'provides on_message hook' do
+        logger_double = instance_spy(Logger)
+        Facter.on_message do |level, message|
+          logger_double.debug("on_message called with level: #{level}, message: #{message}")
+        end
+
+        log.debug('test')
+
+        expect(logger_double).to have_received(:debug).with('on_message called with level: debug, message: test')
+      end
+    end
+
+    context 'when call is made during os detection in os_detector.rb and facter.rb is not fully loaded' do
       before do
         allow(Facter).to receive(:respond_to?).with(:debugging?).and_return(false)
       end
 
-      it 'calls multi_logger with :debug' do
+      it_behaves_like 'writes debug message'
+
+      it 'does not call Facter.debugging?' do
         log.debug('debug_message')
 
-        expect(multi_logger_double).to have_received(:debug).with('Class - debug_message')
+        expect(Facter).not_to have_received(:debugging?)
       end
     end
   end
