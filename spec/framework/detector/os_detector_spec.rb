@@ -12,29 +12,54 @@ describe OsDetector do
   end
 
   describe 'initialize' do
-    it 'detects os as macosx' do
-      RbConfig::CONFIG['host_os'] = 'darwin'
-      expect(OsDetector.instance.identifier).to eq(:macosx)
+    context 'when os is macosx' do
+      before do
+        RbConfig::CONFIG['host_os'] = 'darwin'
+      end
+
+      it 'detects os as macosx' do
+        expect(OsDetector.instance.identifier).to eq(:macosx)
+      end
     end
 
-    it 'detects os as windows' do
-      RbConfig::CONFIG['host_os'] = 'mingw'
-      expect(OsDetector.instance.identifier).to eq(:windows)
+    context 'when os is windows' do
+      before do
+        RbConfig::CONFIG['host_os'] = 'mingw'
+      end
+
+      it 'detects os as windows' do
+        expect(OsDetector.instance.identifier).to eq(:windows)
+      end
     end
 
-    it 'detects os as solaris' do
-      RbConfig::CONFIG['host_os'] = 'solaris'
-      expect(OsDetector.instance.identifier).to eq(:solaris)
+    context 'when os is solaris' do
+      before do
+        RbConfig::CONFIG['host_os'] = 'solaris'
+      end
+
+      it 'detects os as solaris' do
+        expect(OsDetector.instance.identifier).to eq(:solaris)
+      end
     end
 
-    it 'detects os as aix' do
-      RbConfig::CONFIG['host_os'] = 'aix'
-      expect(OsDetector.instance.identifier).to eq(:aix)
+    context 'when os is aix' do
+      before do
+        RbConfig::CONFIG['host_os'] = 'aix'
+      end
+
+      it 'detects os as aix' do
+        expect(OsDetector.instance.identifier).to eq(:aix)
+      end
     end
 
-    it 'raise error if it could not detect os' do
-      RbConfig::CONFIG['host_os'] = 'os'
-      expect { OsDetector.instance.identifier }.to raise_error(RuntimeError, 'unknown os: "os"')
+    context 'when os cannot be detected' do
+      before do
+        RbConfig::CONFIG['host_os'] = 'my_custom_os'
+      end
+
+      it 'raise error if it could not detect os' do
+        expect { OsDetector.instance.identifier }.to raise_error(RuntimeError, 'unknown os: "my_custom_os"')
+      end
     end
 
     context 'when host_os is linux' do
