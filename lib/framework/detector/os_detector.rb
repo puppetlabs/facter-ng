@@ -31,7 +31,7 @@ class OsDetector
                     raise "unknown os: #{host_os.inspect}"
                   end
 
-    @hierarchy = @os_hierarchy.construct_hierarchy(@identifier.to_s.capitalize)
+    @hierarchy = @os_hierarchy.construct_hierarchy(@identifier)
 
     @identifier
   end
@@ -47,6 +47,6 @@ class OsDetector
       break if @identifier
     end
 
-    @identifier
+    @identifier&.downcase&.to_sym
   end
 end
