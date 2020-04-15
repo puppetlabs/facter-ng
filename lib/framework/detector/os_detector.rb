@@ -8,8 +8,8 @@ class OsDetector
   attr_reader :identifier, :version, :hierarchy
 
   def initialize(*_args)
+    @os_hierarchy = Facter::OsHierarchy.new
     @identifier = detect
-    @hierarchy = create_hierarchy(@identifier)
   end
 
   def detect
@@ -30,6 +30,10 @@ class OsDetector
                   else
                     raise "unknown os: #{host_os.inspect}"
                   end
+
+    @hierarchy = @os_hierarchy.construct_hierarchy(@identifier.to_s.capitalize)
+
+    @identifier
   end
 
   private
@@ -44,32 +48,5 @@ class OsDetector
     end
 
     @identifier
-  end
-
-  def create_hierarchy(operating_system)
-    return [] unless operating_system
-
-    case operating_system.to_sym
-    when :ubuntu
-      %w[Debian]
-    when :elementary
-      %w[Debian]
-    when :raspbian
-      %w[Debian]
-    when :fedora
-      %w[El]
-    when :amzn
-      %w[El]
-    when :rhel
-      %w[El]
-    when :centos
-      %w[El]
-    when :opensuse
-      %w[Sles]
-    when :bsd
-      %w[Solaris Bsd]
-    else
-      [operating_system.to_s.capitalize]
-    end
   end
 end

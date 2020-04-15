@@ -1,35 +1,34 @@
+# frozen_string_literal: true
 
 module Facter
   class OsHierarchy
     @searched_path = []
 
     def initialize
-      jsonFile = Util::FileHelper.safe_read("os_hierarchy.json")
-      @jsonData = JSON.load(jsonFile)
+      json_file = Util::FileHelper.safe_read('os_hierarchy.json')
+      @json_data = JSON.parse(json_file)
     end
 
     def construct_hierarchy(searched_os)
       @searched_path = []
-      search(@jsonData, searched_os, [])
+      search(@json_data, searched_os, [])
 
-      @searched_path.map {|os_name| os_name.to_s.capitalize}
+      @searched_path.map { |os_name| os_name.to_s.capitalize }
     end
 
     private
 
-    def search(jsonData, searched_element , path)
-      return unless jsonData
+    def search(json_data, searched_element, path)
+      return unless json_data
 
-      jsonData.each do |os|
-        if os == searched_element
-          @searched_path = path.dup << os
-        end
+      json_data.each do |os|
+        @searched_path = path.dup << os if os == searched_element
 
-        if os.is_a?(Hash)
-          os.each do |k, v|
-            search(v, searched_element, path << k)
-            path.pop
-          end
+        next unless os.is_a?(Hash)
+
+        os.each do |k, v|
+          search(v, searched_element, path << k)
+          path.pop
         end
       end
     end
