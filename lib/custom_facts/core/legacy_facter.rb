@@ -245,9 +245,10 @@ module LegacyFacter
   # @return [void]
   #
   # @api public
-  def self.search_external(dirs)
-    LegacyFacter::Util::Config.external_facts_dirs += dirs
-  end
+
+  # def self.search_external(dirs)
+  #   LegacyFacter::Util::Config.external_facts_dirs += dirs
+  # end
 
   # Returns the registered search directories.
   #

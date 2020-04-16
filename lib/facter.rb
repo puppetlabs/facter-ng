@@ -58,6 +58,8 @@ module Facter
     def clear
       @already_searched = {}
       LegacyFacter.clear
+      Options[:custom_dir] = []
+      # Options[:external_dir] = []
       LegacyFacter.collection.invalidate_custom_facts
       LegacyFacter.collection.reload_custom_facts
     end
@@ -134,7 +136,7 @@ module Facter
       Options[:custom_dir] = []
       Options[:external_dir] = []
       LegacyFacter.search(*Options.custom_dir)
-      LegacyFacter.search_external(Options.external_dir)
+      # LegacyFacter.search_external(Options.external_dir)
       nil
     end
 
@@ -147,8 +149,8 @@ module Facter
     #
     # @api public
     def search(*dirs)
+      # LegacyFacter.search(*dirs)
       Options[:custom_dir] += dirs
-      LegacyFacter.search(*dirs)
     end
 
     # Registers directories to be searched for external facts.
@@ -159,8 +161,8 @@ module Facter
     #
     # @api public
     def search_external(dirs)
+      # LegacyFacter.search_external(dirs)
       Options[:external_dir] += dirs
-      LegacyFacter.search_external(dirs)
     end
 
     # Returns the registered search directories.for external facts.
