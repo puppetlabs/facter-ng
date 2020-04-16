@@ -169,7 +169,6 @@ module Facter
     #
     # @api public
     def search_external_path
-      LegacyFacter.search_external_path
       Options.external_dir
     end
 
@@ -180,7 +179,6 @@ module Facter
     # @api public
     def search_path
       Options.custom_dir
-      LegacyFacter.search_path
     end
 
     # Gets a hash mapping fact names to their values
