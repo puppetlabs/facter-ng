@@ -14,6 +14,10 @@ describe Facter::Util::FileHelper do
     allow(Facter).to receive(:debugging?).and_return(true)
   end
 
+  after do
+    Facter::Log.class_variable_set(:@@logger, Facter::MultiLogger.new([]))
+  end
+
   shared_context 'when file is readable' do
     before do
       allow(File).to receive(:readable?).with(path).and_return(true)
