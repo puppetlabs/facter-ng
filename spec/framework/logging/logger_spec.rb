@@ -14,12 +14,14 @@ describe Logger do
       allow(Facter).to receive(:debugging?).and_return(true)
     end
 
-    it 'no debug messages are sent if debugging is set to false' do
-      allow(Facter).to receive(:debugging?).and_return(false)
+    context 'when debugging is set to false' do
+      it 'no debug messages are sent' do
+        allow(Facter).to receive(:debugging?).and_return(false)
 
-      log.debug('info_message')
+        log.debug('info_message')
 
-      expect(multi_logger_double).not_to have_received(:debug)
+        expect(multi_logger_double).not_to have_received(:debug)
+      end
     end
 
     it 'logs a warn if message is nil' do
