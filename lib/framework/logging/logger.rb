@@ -98,11 +98,9 @@ module Facter
     private
 
     def debugging_active?
-      if Facter.respond_to?(:debugging?)
-        Facter.debugging?
-      else
-        true
-      end
+      return true unless Facter.respond_to?(:debugging?)
+
+      Facter.debugging?
     end
   end
 end
