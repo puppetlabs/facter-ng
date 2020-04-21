@@ -13,7 +13,7 @@ describe Facter::FactsUtils::UnitConverter do
     end
 
     it 'converts bytes if value is string' do
-      expect(converter.bytes_to_mb('2343455')).to be(2.23)
+      expect(converter.bytes_to_mb('2343455')).to eq(2.23)
     end
 
     it 'returns 0 if value is 0' do
