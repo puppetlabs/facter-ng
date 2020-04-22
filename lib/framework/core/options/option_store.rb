@@ -23,9 +23,9 @@ module Facter
     class << self
       attr_reader :debug, :verbose, :log_level, :show_legacy, :trace,
                   :custom_dir, :external_dir, :ruby,
-                  :custom_facts, :blocked_facts
+                  :custom_facts, :blocked_facts, :external_facts
 
-      attr_accessor :config, :user_query, :strict, :json, :haml, :external_facts,
+      attr_accessor :config, :user_query, :strict, :json, :haml,
                     :cache, :yaml, :puppet, :ttls, :block, :cli, :config_file_custom_dir,
                     :config_file_external_dir
 
@@ -36,6 +36,11 @@ module Facter
           options[variable_name.to_sym] = OptionStore.send(variable_name.to_sym)
         end
         options
+      end
+
+      def external_facts=(bool)
+        @external_facts = bool
+        @external_dir = [] unless bool
       end
 
       def ruby=(bool)
