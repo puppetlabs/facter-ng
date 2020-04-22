@@ -11,8 +11,10 @@ module Facter
     @show_legacy = true
     @block = true
     @custom_dir = []
+    @config_file_custom_dir = []
     @custom_facts = true
     @external_dir = []
+    @config_file_external_dir = []
     @external_facts = true
     @ruby = true
     @blocked_facts = []
@@ -24,7 +26,8 @@ module Facter
                   :custom_facts, :blocked_facts
 
       attr_accessor :config, :user_query, :strict, :json, :haml, :external_facts,
-                    :cache, :yaml, :puppet, :ttls, :block, :cli
+                    :cache, :yaml, :puppet, :ttls, :block, :cli, :config_file_custom_dir,
+                    :config_file_external_dir
 
       def all
         options = {}
@@ -46,7 +49,7 @@ module Facter
       end
 
       def external_dir=(dirs)
-        return unless dirs.any?
+        dirs = @config_file_external_dir unless dirs.any?
 
         @external_dir = dirs
       end
@@ -58,7 +61,7 @@ module Facter
       end
 
       def custom_dir=(*dirs)
-        return unless dirs.any?
+        dirs = @config_file_custom_dir unless dirs.any?
 
         @ruby = true
 

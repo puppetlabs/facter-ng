@@ -105,13 +105,13 @@ module Facter
 
     desc 'query', 'Default method', hide: true
     desc '[options] [query] [query] [...]', ''
-    def query(*args)
+    def query(*_args)
       # output, status = Facter.to_user_output(@options, *args)
       # puts output
       #
       # status = 1 if Facter::Log.errors?
       # exit status
-      puts Facter.search("/Users/bogdan.irimie/projects/facter-ng/custom_facts")
+      puts Facter.search(['/Users/bogdan.irimie/projects/facter-ng/custom_facts'])
       puts Facter.to_hash
       puts Facter.search_path
 

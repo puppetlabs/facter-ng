@@ -135,8 +135,6 @@ module Facter
       LegacyFacter.reset
       Options[:custom_dir] = []
       Options[:external_dir] = []
-      LegacyFacter.search(*Options.custom_dir)
-      # LegacyFacter.search_external(Options.external_dir)
       nil
     end
 
@@ -148,7 +146,7 @@ module Facter
     # @return [void]
     #
     # @api public
-    def search(*dirs)
+    def search(dirs)
       Options[:custom_dir] += dirs
     end
 
@@ -160,7 +158,7 @@ module Facter
     #
     # @api public
     def search_external(dirs)
-      Options[:external_dir] += dirs
+      Options[:external_dir] = dirs
     end
 
     # Returns the registered search directories.for external facts.
