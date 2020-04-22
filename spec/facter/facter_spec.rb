@@ -11,8 +11,20 @@ describe Facter do
   let(:fact_manager_spy) { instance_spy(Facter::FactManager) }
   let(:fact_collection_spy) { instance_spy(Facter::FactCollection) }
   let(:key_error) { KeyError.new('key error') }
+  let(:config_reader_double) { double(Facter::ConfigReader) }
+  let(:block_list_double) { double(Facter::BlockList) }
 
   before do
+    allow(Facter::ConfigReader).to receive(:init).and_return(config_reader_double)
+    allow(config_reader_double).to receive(:cli).and_return(nil)
+    allow(config_reader_double).to receive(:global).and_return(nil)
+    allow(config_reader_double).to receive(:ttls).and_return([])
+    allow(config_reader_double).to receive(:block_list).and_return([])
+
+    allow(Facter::BlockList).to receive(:instance).and_return(block_list_double)
+    allow(block_list_double).to receive(:blocked_facts).and_return([])
+    allow(block_list_double).to receive(:block_list).and_return([])
+
     Facter.instance_variable_set(:@logger, logger)
     Facter.clear
     allow(Facter::SessionCache).to receive(:invalidate_all_caches)
@@ -84,18 +96,14 @@ describe Facter do
     end
 
     context 'when provided with --strict option' do
-      before do
-        allow(Facter::Options).to receive(:[]).with(:config)
-        allow(Facter::Options.instance).to receive(:[]).with(:strict).and_return(true)
-      end
-
       it 'returns no fact and status 1', resolved_fact: false do
-        user_query = 'os.name'
+        user_query = ['os.name', 'missing_fact']
         expected_json_output = '{}'
-        allow(logger).to receive(:error).with('fact "os.name" does not exist.', true)
+        allow(Facter::Options).to receive(:[]).and_call_original
+        allow(Facter::Options).to receive(:[]).with(:strict).and_return(true)
         allow(OsDetector).to receive(:detect).and_return(:solaris)
 
-        formatted_facts = Facter.to_user_output({}, user_query)
+        formatted_facts = Facter.to_user_output({}, *user_query)
 
         expect(formatted_facts).to eq([expected_json_output, 1])
       end
@@ -103,6 +111,8 @@ describe Facter do
       it 'returns one fact and status 0', resolved_fact: true do
         user_query = 'os.name'
         expected_json_output = '{"os" : {"name": "ubuntu"}'
+        allow(Facter::Options).to receive(:[]).with(anything)
+        allow(Facter::Options).to receive(:[]).with(:strict).and_return(true)
 
         formated_facts = Facter.to_user_output({}, user_query)
 
@@ -176,7 +186,7 @@ describe Facter do
       expect(Facter.core_value('os.name')).to eq('Ubuntu')
     end
 
-    it 'searches ion core facts and return no value' do
+    it 'searches os core fact and returns no value' do
       mock_fact_manager(:resolve_core, [])
       mock_collection(:dig, nil)
 
@@ -207,8 +217,8 @@ describe Facter do
     end
 
     describe '#search_path' do
-      it 'sends call to LegacyFacter' do
-        expect(LegacyFacter).to receive(:search_path).once
+      it 'sends call to Facter::Options' do
+        expect(Facter::Options).to receive(:custom_dir).once
         Facter.search_path
       end
     end
@@ -223,10 +233,12 @@ describe Facter do
     end
 
     describe '#search_external_path' do
-      it 'sends call to LegacyFacter' do
-        allow(LegacyFacter).to receive(:search_external_path)
+      it 'sends call to Facter::Options' do
+        allow(Facter::Options).to receive(:external_dir)
+
         Facter.search_external_path
-        expect(LegacyFacter).to have_received(:search_external_path).once
+
+        expect(Facter::Options).to have_received(:external_dir).once
       end
     end
 
@@ -277,7 +289,7 @@ describe Facter do
     let(:message) { 'test' }
 
     before do
-      allow(Facter::Options.instance).to receive(:[]).with(:debug).and_return(is_debug)
+      allow(Facter::Options).to receive(:[]).with(:debug).and_return(is_debug)
     end
 
     context 'when log level is debug' do
@@ -302,21 +314,15 @@ describe Facter do
   end
 
   describe '#debugging' do
-    let(:priority_options) { {} }
-
-    before do
-      allow(Facter::Options.instance).to receive(:priority_options).and_return(priority_options)
-    end
-
     it 'sets log level to debug' do
-      expect(priority_options).to receive(:[]=).with(:debug, true)
+      expect(Facter::Options).to receive(:[]=).with(:debug, true)
       Facter.debugging(true)
     end
   end
 
   describe '#debugging?' do
     it 'returns that log_level is not debug' do
-      expect(Facter::Options.instance).to receive(:[]).with(:debug).and_return(false)
+      expect(Facter::Options).to receive(:[]).with(:debug).and_return(false)
       Facter.debugging?
     end
   end
