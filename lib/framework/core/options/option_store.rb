@@ -15,6 +15,7 @@ module Facter
     @custom_facts = true
     @external_dir = []
     @config_file_external_dir = []
+    @default_external_dir = []
     @external_facts = true
     @ruby = true
     @blocked_facts = []
@@ -27,7 +28,7 @@ module Facter
 
       attr_accessor :config, :user_query, :strict, :json, :haml,
                     :cache, :yaml, :puppet, :ttls, :block, :cli, :config_file_custom_dir,
-                    :config_file_external_dir
+                    :config_file_external_dir, :default_external_dir
 
       def all
         options = {}
@@ -38,9 +39,15 @@ module Facter
         options
       end
 
+      def external_dir
+        return @default_external_dir if @external_dir.empty?
+
+        @external_dir
+      end
+
       def external_facts=(bool)
         @external_facts = bool
-        @external_dir = [] unless bool
+        # @external_dir = [] unless bool
       end
 
       def ruby=(bool)
@@ -56,6 +63,7 @@ module Facter
       def external_dir=(dirs)
         dirs = @config_file_external_dir unless dirs.any?
 
+        @default_external_dir = []
         @external_dir = dirs
       end
 

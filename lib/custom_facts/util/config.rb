@@ -35,16 +35,16 @@ module LegacyFacter
       def self.setup_default_ext_facts_dirs
         if LegacyFacter::Util::Root.root?
           windows_dir = windows_data_dir
-          Facter::Options[:external_dir] = if windows_dir
+          Facter::Options[:default_external_dir] = if windows_dir
                                              [File.join(windows_dir, 'PuppetLabs', 'facter', 'facts.d')]
                                            else
                                              ['/opt/puppetlabs/facter/facts.d']
                                            end
         elsif ENV['HOME']
-          Facter::Options[:external_dir] =
+          Facter::Options[:default_external_dir] =
             [File.expand_path(File.join(ENV['HOME'], '.puppetlabs', 'opt', 'facter', 'facts.d'))]
         else
-          Facter::Options[:external_dir] = []
+          Facter::Options[:default_external_dir] = []
         end
       end
 
