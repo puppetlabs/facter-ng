@@ -238,18 +238,6 @@ module LegacyFacter
 
   reset_search_path!
 
-  # Registers directories to be searched for external facts.
-  #
-  # @param dirs [Array<String>] directories to search
-  #
-  # @return [void]
-  #
-  # @api public
-
-  # def self.search_external(dirs)
-  #   LegacyFacter::Util::Config.external_facts_dirs += dirs
-  # end
-
   # Returns the registered search directories.
   #
   # @return [Array<String>] An array of the directories searched

@@ -28,13 +28,7 @@ module LegacyFacter
         ENV['ProgramData'] || ENV['APPDATA'] if LegacyFacter::Util::Config.windows?
       end
 
-      # def self.external_facts_dirs=(dir)
-      #   Facter::Options[:external_dir] = dir
-      #   @external_facts_dirs = dir
-      # end
-
       def self.external_facts_dirs
-        # @external_facts_dirs
         Facter::Options.external_dir
       end
 
