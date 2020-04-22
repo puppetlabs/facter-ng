@@ -106,11 +106,19 @@ module Facter
     desc 'query', 'Default method', hide: true
     desc '[options] [query] [query] [...]', ''
     def query(*args)
-      output, status = Facter.to_user_output(@options, *args)
-      puts output
+      # output, status = Facter.to_user_output(@options, *args)
+      # puts output
+      #
+      # status = 1 if Facter::Log.errors?
+      # exit status
+      puts Facter.search("/Users/bogdan.irimie/projects/facter-ng/custom_facts")
+      puts Facter.to_hash
+      puts Facter.search_path
 
-      status = 1 if Facter::Log.errors?
-      exit status
+      # puts Facter.search_external(["/Users/bogdan.irimie/projects/facter-ng/external_facts"])
+      # puts Facter.to_hash
+      # puts Facter.search_external_path
+      # puts LegacyFacter.search_external_path
     end
 
     desc '--version, -v', 'Print the version', hide: true

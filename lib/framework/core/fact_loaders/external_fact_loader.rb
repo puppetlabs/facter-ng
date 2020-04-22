@@ -21,7 +21,7 @@ module Facter
     def load_search_paths
       LegacyFacter.reset_search_path!
       LegacyFacter.search(*Options.custom_dir) if Options.custom_dir?
-      LegacyFacter.search_external(Options.external_dir) if Options.external_dir?
+      # LegacyFacter.search_external(Options.external_dir) if Options.external_dir?
     end
 
     def load_custom_facts
