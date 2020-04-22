@@ -14,8 +14,7 @@ module Facts
 
             versions = fact_value.split('.')
             release = { 'full' => fact_value, 'major' => versions[0] }
-            release['minor'] = versions[1].gsub(/^0([1-9])/, '\1') unless versions[1].nil?
-
+            release['minor'] = versions[1].gsub(/^0([1-9])/, '\1') if versions[1]
             Facter::ResolvedFact.new(FACT_NAME, release)
           end
 
