@@ -146,7 +146,7 @@ module Facter
     # @return [void]
     #
     # @api public
-    def search(dirs)
+    def search(*dirs)
       Options[:custom_dir] += dirs
     end
 
