@@ -195,7 +195,7 @@ module LegacyFacter
   # @api public
   def self.reset
     @collection = nil
-    reset_search_path!
+    # reset_search_path!
   end
 
   # Loads all facts.
@@ -215,35 +215,35 @@ module LegacyFacter
   # @return [void]
   #
   # @api public
-  def self.search(*dirs)
-    @search_path += dirs
-  end
+  # def self.search(*dirs)
+  #   @search_path += dirs
+  # end
 
   # Returns the registered search directories.
   #
   # @return [Array<String>] An array of the directories searched
   #
   # @api public
-  def self.search_path
-    @search_path.dup
-  end
+  # def self.search_path
+  #   @search_path.dup
+  # end
 
   # Reset the Facter search directories.
   #
   # @api private
   # @return [void]
-  def self.reset_search_path!
-    @search_path = []
-  end
+  # def self.reset_search_path!
+  #   @search_path = []
+  # end
 
-  reset_search_path!
+  # reset_search_path!
 
   # Returns the registered search directories.
   #
   # @return [Array<String>] An array of the directories searched
   #
   # @api public
-  def self.search_external_path
-    LegacyFacter::Util::Config.external_facts_dirs.dup
-  end
+  # def self.search_external_path
+  #   LegacyFacter::Util::Config.external_facts_dirs.dup
+  # end
 end
