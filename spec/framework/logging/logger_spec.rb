@@ -9,6 +9,10 @@ describe Logger do
     Facter::Log.class_variable_set(:@@logger, multi_logger_double)
   end
 
+  after do
+    Facter::Log.class_variable_set(:@@logger, Facter::MultiLogger.new([]))
+  end
+
   describe '#debug' do
     before do
       allow(Facter).to receive(:debugging?).and_return(true)
