@@ -8,23 +8,24 @@ module Facter
       class << self
         DEBUG_MESSAGE = 'File at: %s is not accessible.'
 
-        def safe_read(path, result_if_not_readable = '')
+        def safe_read(path, default_return = '')
           return File.read(path) if File.readable?(path)
 
-          failed_to_read(path, result_if_not_readable)
+          log_failed_to_read(path)
+          default_return
         end
 
-        def safe_readlines(path, result_if_not_readable = [])
+        def safe_readlines(path, default_return = [])
           return File.readlines(path) if File.readable?(path)
 
-          failed_to_read(path, result_if_not_readable)
+          log_failed_to_read(path)
+          default_return
         end
 
         private
 
-        def failed_to_read(path, result_if_not_readable)
+        def log_failed_to_read(path)
           @log.debug(DEBUG_MESSAGE % path)
-          result_if_not_readable
         end
       end
     end
