@@ -31,6 +31,11 @@ describe Facter::Resolvers::Solaris::ZPool do
 
     context 'when zpool has featureflags' do
       let(:output) { load_fixture('zpool-with-featureflags').read }
+      let(:zpool_featureflags) do
+        'async_destroy,empty_bpobj,lz4_compress,multi_vdev_crash_dump,spacemap_histogram,enabled_txg,' \
+        'hole_birth,extensible_dataset,embedded_data,bookmarks,filesystem_limits,large_blocks,large_dnode,' \
+        'sha512,skein,device_removal,obsolete_counts,zpool_checkpoint,spacemap_v2'
+      end
 
       it 'returns zpool version fact' do
         result = Facter::Resolvers::Solaris::ZPool.resolve(:zpool_version)
@@ -39,10 +44,7 @@ describe Facter::Resolvers::Solaris::ZPool do
 
       it 'returns zpool featureflags fact' do
         result = Facter::Resolvers::Solaris::ZPool.resolve(:zpool_featureflags)
-        expect(result).to eq('async_destroy,empty_bpobj,lz4_compress,multi_vdev_crash_dump,' \
-          'spacemap_histogram,enabled_txg,hole_birth,extensible_dataset,embedded_data,bookmarks,' \
-          'filesystem_limits,large_blocks,large_dnode,sha512,skein,device_removal,obsolete_counts,' \
-          'zpool_checkpoint,spacemap_v2')
+        expect(result).to eq(zpool_featureflags)
       end
     end
   end
