@@ -39,8 +39,11 @@ jobs:
         with:
           ruby-version: '2.6'
 
-      - name: Install beaker
-        run: gem install beaker
+      - name: Set agent latest SHA
+        run: echo ::set-env name=SHA::`curl --fail --silent GET --url http://builds.delivery.puppetlabs.net/passing-agent-SHAs/puppet-agent-master`
+
+      - name: SHA value
+        run: echo $SHA
 
       - name: Run presuite
         run: bash facter_4/.github/actions/presuite.sh
