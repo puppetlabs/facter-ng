@@ -22,8 +22,7 @@ module Facter
     @user_query = []
 
     class << self
-      attr_reader :debug, :verbose, :log_level, :show_legacy, :trace,
-                  :custom_dir, :ruby,
+      attr_reader :debug, :verbose, :log_level, :show_legacy, :trace, :ruby,
                   :custom_facts, :blocked_facts
 
       attr_accessor :config, :user_query, :strict, :json, :haml, :external_facts,
@@ -50,17 +49,16 @@ module Facter
       end
 
       def external_dir
-        return @config_file_external_dir if @external_dir.empty? && @external_facts && !@config_file_external_dir.nil? && @config_file_external_dir.any?
+        if @external_dir.empty? && @external_facts && !@config_file_external_dir.nil? && @config_file_external_dir.any?
+          return @config_file_external_dir
+        end
+
         return @default_external_dir if @external_dir.empty? && @external_facts
 
         @external_dir
       end
 
-      def external_dir=(dirs)
-        # dirs = @config_file_external_dir unless dirs.any?
-
-        @external_dir = dirs
-      end
+      attr_writer :external_dir
 
       def blocked_facts=(*facts)
         @blocked_facts += [*facts]
@@ -69,13 +67,13 @@ module Facter
       end
 
       def custom_dir
-        return @config_file_custom_dir unless @custom_dir.any?
+        return @config_file_custom_dir || [] unless @custom_dir.any?
 
         @custom_dir
       end
 
       def custom_dir=(*dirs)
-        dirs = @config_file_custom_dir unless dirs.any?
+        dirs = @config_file_custom_dir || [] unless dirs.any?
 
         @ruby = true
 
