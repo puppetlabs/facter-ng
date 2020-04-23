@@ -17,12 +17,16 @@ jobs:
         with:
           path: facter_4
 
-      - name: Checkout facter 3 repo
+      - name: Clone facter 3 repo
         uses: actions/checkout@v2
         with:
           repository: puppetlabs/facter
           ref: master
           path: facter_3
 
-      - name: Print facter 4 versions
-        run: cat $GITHUB_WORKSPACE/facter_4/VERSION
+      - name: Clone beaker-puppet repo
+        uses: actions/checkout@v2
+          with:
+            repository: puppetlabs/beaker-puppet
+            ref: master
+            path: beaker-puppet
