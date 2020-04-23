@@ -23,7 +23,7 @@ module Facter
 
     class << self
       attr_reader :debug, :verbose, :log_level, :show_legacy, :trace,
-                  :custom_dir, :external_dir, :ruby,
+                  :custom_dir, :ruby,
                   :custom_facts, :blocked_facts, :external_facts
 
       attr_accessor :config, :user_query, :strict, :json, :haml,
@@ -161,6 +161,7 @@ module Facter
         @custom_dir = []
         @custom_facts = true
         @external_dir = []
+        @default_external_dir = []
         @external_facts = true
         @ruby = true
         @blocked_facts = []

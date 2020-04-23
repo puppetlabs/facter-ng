@@ -280,7 +280,7 @@ describe Facter do
       dirs = ['/dir1', '/dir2']
 
       expect(Facter::Options).to receive(:[]=).with(:custom_dir, dirs)
-      Facter.search(dirs)
+      Facter.search(*dirs)
     end
   end
 

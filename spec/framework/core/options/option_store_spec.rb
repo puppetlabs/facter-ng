@@ -23,6 +23,7 @@ describe Facter::OptionStore do
         debug: false,
         external_dir: [],
         config_file_external_dir: [],
+        default_external_dir: [],
         external_facts: true,
         log_level: :warn,
         ruby: true,
