@@ -157,7 +157,7 @@ module Facter
     #
     # @api public
     def search_external(dirs)
-      Options[:external_dir] = dirs
+      Options[:external_dir] += dirs
     end
 
     # Returns the registered search directories.for external facts.
