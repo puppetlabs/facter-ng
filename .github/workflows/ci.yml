@@ -39,9 +39,6 @@ jobs:
         with:
           ruby-version: '2.6'
 
-      - name: Install beaker
-        run: gem install beaker
-
       - name: Run presuite
         run: bash facter_4/.github/actions/presuite.sh
 
