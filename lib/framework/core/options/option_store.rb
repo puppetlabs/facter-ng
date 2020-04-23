@@ -39,17 +39,6 @@ module Facter
         options
       end
 
-      def external_dir
-        return @default_external_dir if @external_dir.empty?
-
-        @external_dir
-      end
-
-      def external_facts=(bool)
-        @external_facts = bool
-        @default_external_dir = [] unless bool
-      end
-
       def ruby=(bool)
         if bool == true
           @ruby = true
@@ -60,10 +49,19 @@ module Facter
         end
       end
 
+      def external_facts=(bool)
+        @external_facts = bool
+      end
+
+      def external_dir
+        return @default_external_dir if @external_dir.empty? && @external_facts
+
+        @external_dir
+      end
+
       def external_dir=(dirs)
         dirs = @config_file_external_dir unless dirs.any?
 
-        # @default_external_dir = []
         @external_dir = dirs
       end
 
