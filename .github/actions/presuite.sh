@@ -1,28 +1,33 @@
 #!/bin/sh -x
 
-export SHA=`curl --fail --silent GET --url http://builds.delivery.puppetlabs.net/passing-agent-SHAs/puppet-agent-master`
-echo 'Puppet Agent SHA is' `curl --fail --silent GET --url http://builds.delivery.puppetlabs.net/passing-agent-SHAs/puppet-agent-master`
+cwd=$(pwd)
+#apt-get install make gcc ruby-dev
 
-echo 'Install bundler'
+echo '\nInstall bundler'
 gem install bundler
 
-echo 'Install beaker'
-gem install beaker
+echo '\nInstall facter 3 dependencies'
+cd $FACTER_3_ROOT/acceptance && bundle install
 
-where beaker
-echo $PATH
-echo 'Install facter 4 dependencies'
-cd $FACTER_4_ROOT && bundle install
+BP_ROOT=`bundle info beaker-puppet --path`
+echo $BP_ROOT
 
-echo 'Starting pre-suite'
-bundle exec beaker exec pre-suite --pre-suite $BP_ROOT/setup/common/000-delete-puppet-when-none.rb,$BP_ROOT/setup/aio/010_Install_Puppet_Agent.rb
+gem which beaker
 
-echo 'Configure facter 4 as facter 3'
+bundle exec beaker init -h ubuntu1804-64a{hypervisor=none\,hostname=localhost} -o config/aio/options.rb
+bundle exec beaker provision
 
-puppet config set facterng true
+echo '\nStarting pre-suite'
+bundle exec beaker exec pre-suite --pre-suite $BP_ROOT/setup/aio/010_Install_Puppet_Agent.rb
 
-gem build $FACTER_4_ROOT/facter.gemspec
+#echo '\nInstall facter 4 dependencies'
+#cd $cwd/$FACTER_4_ROOT && bundle install
 
-ls -la
+#echo '\nConfigure facter 4 as facter 3'
+#puppet config set facterng true
 
-gem install -f facter-*.gem
+#gem build facter.gemspec
+#gem install -f facter-*.gem
+
+#cd $cwd/$FACTER_3_ROOT/acceptance
+bundle exec beaker exec tests
