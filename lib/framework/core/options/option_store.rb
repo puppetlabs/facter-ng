@@ -69,8 +69,6 @@ module Facter
       end
 
       def custom_dir=(*dirs)
-        dirs = @config_file_custom_dir unless dirs.any?
-
         @ruby = true
 
         @custom_dir = [*dirs]
