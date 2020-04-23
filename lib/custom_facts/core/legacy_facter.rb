@@ -195,7 +195,6 @@ module LegacyFacter
   # @api public
   def self.reset
     @collection = nil
-    # reset_search_path!
   end
 
   # Loads all facts.

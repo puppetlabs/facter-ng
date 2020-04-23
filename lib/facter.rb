@@ -59,7 +59,6 @@ module Facter
       @already_searched = {}
       LegacyFacter.clear
       Options[:custom_dir] = []
-      # Options[:external_dir] = []
       LegacyFacter.collection.invalidate_custom_facts
       LegacyFacter.collection.reload_custom_facts
     end
