@@ -51,6 +51,7 @@ module Facter
 
       def external_dir
         return @default_external_dir if @external_dir.empty? && @external_facts
+        return @config_file_external_dir unless @external_dir.any?
 
         @external_dir
       end
