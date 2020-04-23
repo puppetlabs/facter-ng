@@ -1,0 +1,23 @@
+---
+name: GitHub hosted Facter CI
+
+on: [push]
+  branches: FACT-2569
+
+jobs:
+  ci:
+    name: Run acceptance tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout current PR
+        uses: actions/checkout@v2
+        with:
+          path: facter-ng
+
+      - name: Checkout Facter 3 repo
+        uses: actions/checkout@v2
+        with:
+          repository: puppetlabs/facter
+          ref: master
+          path: facter
