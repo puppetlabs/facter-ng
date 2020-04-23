@@ -29,6 +29,8 @@ module Facter
                     :cache, :yaml, :puppet, :ttls, :block, :cli, :config_file_custom_dir,
                     :config_file_external_dir, :default_external_dir
 
+      attr_writer :external_dir
+
       def all
         options = {}
         instance_variables.each do |iv|
@@ -49,13 +51,10 @@ module Facter
       end
 
       def external_dir
-        return @config_file_external_dir if @external_dir.empty? && @external_facts && @config_file_external_dir.any?
-        return @default_external_dir if @external_dir.empty? && @external_facts
+        return fallback_external_dir if @external_dir.empty? && @external_facts
 
         @external_dir
       end
-
-      attr_writer :external_dir
 
       def blocked_facts=(*facts)
         @blocked_facts += [*facts]
@@ -163,6 +162,12 @@ module Facter
         @blocked_facts = []
         @user_query = []
         @cli = nil
+      end
+
+      def fallback_external_dir
+        return @config_file_external_dir if @config_file_external_dir.any?
+
+        @default_external_dir
       end
     end
   end
