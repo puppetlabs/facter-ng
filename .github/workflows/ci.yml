@@ -11,35 +11,39 @@ jobs:
     name: Run acceptance tests
     runs-on: ubuntu-latest
     env:
-      BP_ROOT: "${GITHUB_WORKSPACE}/beaker-puppet"
+      BP_ROOT: beaker-puppet
+      FACTER_4_ROOT: facter_4
 
     steps:
-#      - name: Checkout current PR
-#        uses: actions/checkout@v2
-#        with:
-#          path: facter_4
-#
-#      - name: Clone facter 3 repo
-#        uses: actions/checkout@v2
-#        with:
-#          repository: puppetlabs/facter
-#          ref: master
-#          path: facter_3
+      - name: Checkout current PR
+        uses: actions/checkout@v2
+        with:
+          path: facter_4
 
-#      - name: Clone beaker-puppet repo
-#        uses: actions/checkout@v2
-#        with:
-#          repository: puppetlabs/beaker-puppet
-#          ref: master
-#          path: beaker-puppet
+      - name: Clone facter 3 repo
+        uses: actions/checkout@v2
+        with:
+          repository: puppetlabs/facter
+          ref: master
+          path: facter_3
 
-#      - name: Install Ruby 2.6
-#        uses: actions/setup-ruby@v1
-#        with:
-#          ruby-version: '2.6'
-#
-#      - name: Install beaker
-#        run: gem install beaker
+      - name: Clone beaker-puppet repo
+        uses: actions/checkout@v2
+        with:
+          repository: puppetlabs/beaker-puppet
+          ref: master
+          path: beaker-puppet
 
-      - name: beaker path
-        run: echo $BP_ROOT
+      - name: Install Ruby 2.6
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.6'
+
+      - name: Install beaker
+        run: gem install beaker
+
+      - name: Run presuite
+        run: bash facter_4/.github/actions/presuite.sh
+
+      - name: Run acceptance tests
+        run: cd facter_3/acceptance && beaker exec tests
