@@ -67,13 +67,13 @@ module Facter
       end
 
       def custom_dir
-        return @config_file_custom_dir || [] unless @custom_dir.any?
+        return @config_file_custom_dir unless @custom_dir.any?
 
         @custom_dir
       end
 
       def custom_dir=(*dirs)
-        dirs = @config_file_custom_dir || [] unless dirs.any?
+        dirs = @config_file_custom_dir unless dirs.any?
 
         @ruby = true
 
