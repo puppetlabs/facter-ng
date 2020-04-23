@@ -47,7 +47,7 @@ module Facter
 
       def external_facts=(bool)
         @external_facts = bool
-        # @external_dir = [] unless bool
+        @default_external_dir = [] unless bool
       end
 
       def ruby=(bool)
@@ -63,7 +63,7 @@ module Facter
       def external_dir=(dirs)
         dirs = @config_file_external_dir unless dirs.any?
 
-        @default_external_dir = []
+        # @default_external_dir = []
         @external_dir = dirs
       end
 
