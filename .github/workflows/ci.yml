@@ -25,4 +25,4 @@ jobs:
           path: facter_3
 
       - name: Print facter 4 versions
-        uses: cat GITHUB_WORKSPACE/facter_4/VERSION
+        run: cat $GITHUB_WORKSPACE/facter_4/VERSION
