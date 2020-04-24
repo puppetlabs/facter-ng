@@ -11,7 +11,7 @@ jobs:
       FACTER_3_ROOT: facter_3
       FACTER_4_ROOT: facter_4
       SHA: latest
-      BEAKER_VERSION: git://github.com/mihaibuzgau/beaker#master
+      BEAKER_VERSION: git: 'https://github.com/mihaibuzgau/beaker'
 
     steps:
       - name: Checkout current PR
