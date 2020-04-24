@@ -2,7 +2,8 @@
 
 cwd=$(pwd)
 #apt-get install make gcc ruby-dev
-sudo apt install dpkg
+
+apt install vim
 
 echo '\nInstall bundler'
 gem install bundler
@@ -13,11 +14,11 @@ cd $FACTER_3_ROOT/acceptance && bundle install
 BP_ROOT=`bundle info beaker-puppet --path`
 echo $BP_ROOT
 
-sudo bundle exec beaker init -h ubuntu1804-64a{hypervisor=none\,hostname=localhost} -o config/aio/options.rb
-sudo bundle exec beaker provision
+bundle exec beaker init -h ubuntu1804-64a{hypervisor=none\,hostname=localhost} -o config/aio/options.rb
+bundle exec beaker provision
 
 echo '\nStarting pre-suite'
-sudo bundle exec beaker exec pre-suite --pre-suite $BP_ROOT/setup/aio/010_Install_Puppet_Agent.rb
+bundle exec beaker exec pre-suite --pre-suite $BP_ROOT/setup/aio/010_Install_Puppet_Agent.rb
 
 #echo '\nInstall facter 4 dependencies'
 #cd $cwd/$FACTER_4_ROOT && bundle install
@@ -29,4 +30,4 @@ sudo bundle exec beaker exec pre-suite --pre-suite $BP_ROOT/setup/aio/010_Instal
 #gem install -f facter-*.gem
 
 #cd $cwd/$FACTER_3_ROOT/acceptance
-sudo bundle exec beaker exec tests
+bundle exec beaker exec tests
