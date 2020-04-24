@@ -135,6 +135,29 @@ describe Facter::OptionStore do
     end
   end
 
+  describe '#custom_dir' do
+    context 'when @custom_dir has values' do
+      before do
+        option_store.custom_dir = ['/custom_dir_path']
+      end
+
+      it 'returns custom_dir' do
+        expect(option_store.custom_dir).to eq(['/custom_dir_path'])
+      end
+    end
+
+    context 'when @custom_dir is empty' do
+      before do
+        option_store.custom_dir = []
+        option_store.config_file_custom_dir = ['/path_from_config_file']
+      end
+
+      it 'returns config_file_custom_dir' do
+        expect(option_store.custom_dir).to eq(['/path_from_config_file'])
+      end
+    end
+  end
+
   describe '#custom_dir=' do
     context 'with array' do
       it 'overrides dirs' do
