@@ -33,12 +33,12 @@ jobs:
 
       - name: Run acceptance tests
         run: |
-          sudo gem install bundler
-          sudo cd $FACTER_3_ROOT/acceptance && bundle install
-          sudo BP_ROOT=`bundle info beaker-puppet --path`
-          sudo bundle exec beaker init -h ubuntu1804-64a{hypervisor=none\,hostname=localhost} -o config/aio/options.rb
-          sudo bundle exec beaker provision
-          sudo bundle exec beaker exec pre-suite --pre-suite $BP_ROOT/setup/aio/010_Install_Puppet_Agent.rb
+          sudo gem install bundler &
+          sudo cd $FACTER_3_ROOT/acceptance && bundle install &
+          sudo BP_ROOT=`bundle info beaker-puppet --path` &
+          sudo bundle exec beaker init -h ubuntu1804-64a{hypervisor=none\,hostname=localhost} -o config/aio/options.rb &
+          sudo bundle exec beaker provision &
+          sudo bundle exec beaker exec pre-suite --pre-suite $BP_ROOT/setup/aio/010_Install_Puppet_Agent.rb &
           sudo bundle exec beaker exec tests
 
 
