@@ -6,8 +6,6 @@ echo '---------------'
 #sudo su -
 echo '---------------'
 
-apt install vim
-
 echo '\nInstall bundler'
 gem install bundler
 
