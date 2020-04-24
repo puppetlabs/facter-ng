@@ -32,4 +32,6 @@ jobs:
           ruby-version: '2.6'
 
       - name: Run acceptance tests
-        run: bash facter_4/.github/actions/presuite.sh
+        run: |
+          sudo su -
+          bash facter_4/.github/actions/presuite.sh

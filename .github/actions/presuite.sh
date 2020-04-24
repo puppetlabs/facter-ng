@@ -3,7 +3,6 @@
 cwd=$(pwd)
 #apt-get install make gcc ruby-dev
 echo '---------------'
-config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
 sudo su -
 echo '---------------'
 
