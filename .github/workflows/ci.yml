@@ -32,4 +32,4 @@ jobs:
           ruby-version: '2.6'
 
       - name: Run acceptance tests
-        run: apt install vim
+        run: sudo apt install vim
