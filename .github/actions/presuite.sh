@@ -8,13 +8,14 @@ echo '---------------'
 
 #id -a
 
-#sudo cat /etc/sudoers
 
 export PATH=/opt/puppetlabs/puppet/bin:$PATH
 
 sudo -E sh -c 'env'
 
-echo 'Defaults exempt_group = runner' >> /etc/sudoers
+sudo echo 'Defaults exempt_group = runner' >> /etc/sudoers
+echo '-----------'
+sudo cat /etc/sudoers
 
 sudo -E sh -c 'env'
 exit 0
