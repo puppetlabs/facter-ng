@@ -3,13 +3,13 @@
 cwd=$(pwd)
 sudo apt-get install make gcc ruby-dev
 echo '---------------'
-#sudo su -
+sudo su
 echo '---------------'
 
 #id -a
 
 
-#export PATH=/opt/puppetlabs/puppet/bin:/opt/puppetlabs/bin:$PATH
+export PATH=/opt/puppetlabs/puppet/bin:/opt/puppetlabs/bin:$PATH
 
 sudo -E sh -c 'env'
 
@@ -28,12 +28,13 @@ cd $FACTER_3_ROOT/acceptance && bundle install
 BP_ROOT=`bundle info beaker-puppet --path`
 echo $BP_ROOT
 
-bundle exec beaker init -h ubuntu1804-64a{hypervisor=none\,hostname=localhost} -o config/aio/options.rb
-bundle exec beaker provision
+beaker init -h ubuntu1804-64a{hypervisor=none\,hostname=localhost} -o config/aio/options.rb
+beaker provision
 
 echo '\nStarting pre-suite'
-bundle exec beaker exec pre-suite --pre-suite $BP_ROOT/setup/aio/010_Install_Puppet_Agent.rb
+beaker exec pre-suite --pre-suite $BP_ROOT/setup/aio/010_Install_Puppet_Agent.rb
 
+puppet --version
 #echo '\nInstall facter 4 dependencies'
 #cd $cwd/$FACTER_4_ROOT && bundle install
 
@@ -44,4 +45,4 @@ bundle exec beaker exec pre-suite --pre-suite $BP_ROOT/setup/aio/010_Install_Pup
 #gem install -f facter-*.gem
 
 #cd $cwd/$FACTER_3_ROOT/acceptance
-bundle exec beaker exec tests
+beaker exec tests
