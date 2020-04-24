@@ -63,24 +63,52 @@ describe Facter::OptionStore do
     end
   end
 
-  describe '#external_dir=' do
-    # context 'with empty array' do
-    #   it 'does not override existing array' do
-    #     option_store.external_dir = ['/path1']
-    #
-    #     option_store.external_dir = []
-    #
-    #     expect(option_store.external_dir).to eq(['/path1'])
-    #   end
-    # end
+  describe '#external_dir' do
+    context 'with external_dir with values' do
+      before do
+        option_store.external_dir = ['external_dir_path']
+      end
 
-    context 'with array' do
-      it 'sets dirs' do
-        option_store.external_dir = ['/parh1']
+      it 'returns external_dir' do
+        expect(option_store.external_dir).to eq(['external_dir_path'])
+      end
+    end
 
-        option_store.external_dir = ['/path2']
+    context 'with @external_facts false' do
+      before do
+        option_store.external_facts = false
+      end
 
-        expect(option_store.external_dir).to eq(%w[/path2])
+      it 'returns external dir' do
+        expect(option_store.external_dir).to be_empty
+      end
+    end
+
+    context 'with @external_facts true and external_dir empty' do
+      before do
+        option_store.external_facts = true
+        option_store.external_dir = []
+      end
+
+      context 'with @config_file_external_dir empty' do
+        before do
+          option_store.config_file_external_dir = []
+          option_store.default_external_dir = ['/default_path']
+        end
+
+        it 'returns default dir' do
+          expect(option_store.external_dir).to eq(['/default_path'])
+        end
+      end
+
+      context 'with @config_file_external_dir with values' do
+        before do
+          option_store.config_file_external_dir = ['/path_from_config_file']
+        end
+
+        it 'returns default dir' do
+          expect(option_store.external_dir).to eq(['/path_from_config_file'])
+        end
       end
     end
   end
