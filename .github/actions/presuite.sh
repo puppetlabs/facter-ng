@@ -1,7 +1,7 @@
 #!/bin/sh -x
 
 cwd=$(pwd)
-#apt-get install make gcc ruby-dev
+apt-get install make gcc ruby-dev
 echo '---------------'
 #sudo su -
 echo '---------------'
