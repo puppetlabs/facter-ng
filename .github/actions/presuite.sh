@@ -3,18 +3,19 @@
 cwd=$(pwd)
 #apt-get install make gcc ruby-dev
 echo '---------------'
+config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
 sudo su -
 echo '---------------'
 
 apt install vim
 
 echo '\nInstall bundler'
-gem install bundler
+sudo gem install bundler
 
 echo '\nInstall facter 3 dependencies'
-cd $FACTER_3_ROOT/acceptance && bundle install
+sudo cd $FACTER_3_ROOT/acceptance && bundle install
 
-BP_ROOT=`bundle info beaker-puppet --path`
+BP_ROOT=`§bundle info beaker-puppet --path`
 echo $BP_ROOT
 
 sudo bundle exec beaker init -h ubuntu1804-64a{hypervisor=none\,hostname=localhost} -o config/aio/options.rb
