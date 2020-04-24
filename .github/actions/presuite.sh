@@ -10,7 +10,6 @@ echo '---------------'
 
 set DEBIAN_DISABLE_RUBYGEMS_INTEGRATION=salam
 export PATH=/opt/puppetlabs/puppet/bin:/opt/puppetlabs/bin:/usr/local/bin:$PATH
-
 #sudo -E sh -c 'env'
 
 #sudo sh -c "echo 'Defaults exempt_group = docker' >> /etc/sudoers"
@@ -22,6 +21,7 @@ echo '-----------'
 echo '\nInstall bundler'
 
 gem install bundler
+bundle config set git.allow_insecure true
 
 bundle config set system 'true'
 
