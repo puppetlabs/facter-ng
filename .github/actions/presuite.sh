@@ -18,7 +18,7 @@ echo '-----------'
 sudo cat /etc/sudoers
 
 sudo -E sh -c 'env'
-exit 0
+
 echo '\nInstall bundler'
 gem install bundler
 
