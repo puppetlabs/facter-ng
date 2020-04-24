@@ -8,7 +8,7 @@ echo '---------------'
 
 #id -a
 
-
+set DEBIAN_DISABLE_RUBYGEMS_INTEGRATION=salam
 export PATH=/opt/puppetlabs/puppet/bin:/opt/puppetlabs/bin:/usr/local/bin:$PATH
 
 #sudo -E sh -c 'env'
