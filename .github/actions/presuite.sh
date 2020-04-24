@@ -15,7 +15,7 @@ sudo gem install bundler
 echo '\nInstall facter 3 dependencies'
 sudo cd $FACTER_3_ROOT/acceptance && bundle install
 
-BP_ROOT=`§bundle info beaker-puppet --path`
+BP_ROOT=`bundle info beaker-puppet --path`
 echo $BP_ROOT
 
 sudo bundle exec beaker init -h ubuntu1804-64a{hypervisor=none\,hostname=localhost} -o config/aio/options.rb
