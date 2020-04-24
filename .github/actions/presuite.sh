@@ -2,6 +2,7 @@
 
 cwd=$(pwd)
 #apt-get install make gcc ruby-dev
+sudo apt install dpkg
 
 echo '\nInstall bundler'
 gem install bundler
@@ -11,8 +12,6 @@ cd $FACTER_3_ROOT/acceptance && bundle install
 
 BP_ROOT=`bundle info beaker-puppet --path`
 echo $BP_ROOT
-
-gem which beaker
 
 bundle exec beaker init -h ubuntu1804-64a{hypervisor=none\,hostname=localhost} -o config/aio/options.rb
 bundle exec beaker provision
