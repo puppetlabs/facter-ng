@@ -14,7 +14,7 @@ export PATH=/opt/puppetlabs/puppet/bin:$PATH
 
 sudo -E sh -c 'env'
 
-echo 'Defaults exempt_group = docker' >> /etc/sudoers
+echo 'Defaults exempt_group = runner' >> /etc/sudoers
 
 sudo -E sh -c 'env'
 exit 0
