@@ -28,8 +28,8 @@ cd $FACTER_3_ROOT/acceptance && bundle install
 BP_ROOT=`bundle info beaker-puppet --path`
 echo $BP_ROOT
 
-beaker init -h ubuntu1804-64a{hypervisor=none\,hostname=localhost} -o config/aio/options.rb
-beaker provision
+bundle exec beaker init -h ubuntu1804-64a{hypervisor=none\,hostname=localhost} -o config/aio/options.rb
+bundle exec beaker provision
 
 echo '\nStarting pre-suite'
 beaker exec pre-suite --pre-suite $BP_ROOT/setup/aio/010_Install_Puppet_Agent.rb
@@ -45,4 +45,4 @@ puppet --version
 #gem install -f facter-*.gem
 
 #cd $cwd/$FACTER_3_ROOT/acceptance
-beaker exec tests
+bundle exec beaker exec tests
