@@ -1,7 +1,10 @@
 ---
 name: GitHub hosted facter CI
 
-on: [push]
+on:
+  push:
+    branches:
+      - FACT-2569
 
 jobs:
   ci:
@@ -26,7 +29,7 @@ jobs:
           ref: master
           path: facter_3
 
-      - name: Install Ruby 2.6
+      - name: Install Ruby 2.5
         uses: actions/setup-ruby@v1
         with:
           ruby-version: '2.5'

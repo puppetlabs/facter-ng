@@ -9,7 +9,7 @@ echo '---------------'
 #id -a
 
 export DEBIAN_DISABLE_RUBYGEMS_INTEGRATION=salam
-export PATH=/opt/puppetlabs/puppet/bin:/opt/puppetlabs/bin:/usr/local/bin:$PATH
+export PATH=/opt/puppetlabs/puppet/bin:/opt/puppetlabs/bin:/usr/local/bin:/home/runner/work/facter-ng/facter-ng/facter_3/acceptance/vendor/bundle/ruby/2.5.0/bin/:$PATH
 #sudo -E sh -c 'env'
 
 #sudo sh -c "echo 'Defaults exempt_group = docker' >> /etc/sudoers"
