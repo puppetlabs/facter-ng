@@ -6,6 +6,14 @@ echo '---------------'
 #sudo su -
 echo '---------------'
 
+id -a
+
+sudo cat /etc/sudoers
+exit 0
+
+echo 'secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"' >> /etc/sudoers
+sudo cat /etc/sudoers
+
 echo '\nInstall bundler'
 gem install bundler
 
