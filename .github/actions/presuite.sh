@@ -27,7 +27,7 @@ bundle config set git.allow_insecure true
 bundle config set system 'true'
 
 echo '\nInstall facter 3 dependencies'
-cd $FACTER_3_ROOT/acceptance && bundle install && bundle install --deployment
+cd $FACTER_3_ROOT/acceptance && bundle install
 
 BP_ROOT=`bundle info beaker-puppet --path`
 echo $BP_ROOT
