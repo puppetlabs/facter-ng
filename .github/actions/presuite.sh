@@ -8,7 +8,7 @@ echo '---------------'
 
 #id -a
 
-set DEBIAN_DISABLE_RUBYGEMS_INTEGRATION=salam
+export DEBIAN_DISABLE_RUBYGEMS_INTEGRATION=salam
 export PATH=/opt/puppetlabs/puppet/bin:/opt/puppetlabs/bin:/usr/local/bin:$PATH
 #sudo -E sh -c 'env'
 
@@ -21,6 +21,7 @@ echo '-----------'
 echo '\nInstall bundler'
 
 gem install bundler
+git config --global http.sslVerify false
 bundle config set git.allow_insecure true
 
 bundle config set system 'true'
