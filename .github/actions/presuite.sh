@@ -1,9 +1,9 @@
 #!/bin/sh -x
 
 cwd=$(pwd)
-sudo apt-get install make gcc ruby-dev
+#sudo apt-get install make gcc ruby-dev
 echo '---------------'
-sudo su
+#sudo su
 echo '---------------'
 
 #id -a
@@ -11,13 +11,13 @@ echo '---------------'
 
 export PATH=/opt/puppetlabs/puppet/bin:/opt/puppetlabs/bin:$PATH
 
-sudo -E sh -c 'env'
+#sudo -E sh -c 'env'
 
-sudo sh -c "echo 'Defaults exempt_group = docker' >> /etc/sudoers"
+#sudo sh -c "echo 'Defaults exempt_group = docker' >> /etc/sudoers"
 echo '-----------'
-sudo cat /etc/sudoers
+#sudo cat /etc/sudoers
 
-sudo -E sh -c 'env'
+#sudo -E sh -c 'env'
 
 echo '\nInstall bundler'
 
@@ -26,7 +26,7 @@ gem install bundler
 bundle config set system 'true'
 
 echo '\nInstall facter 3 dependencies'
-cd $FACTER_3_ROOT/acceptance && bundle install
+cd $FACTER_3_ROOT/acceptance && bundle install --deployment
 
 BP_ROOT=`bundle info beaker-puppet --path`
 echo $BP_ROOT
