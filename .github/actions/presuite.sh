@@ -10,9 +10,14 @@ echo '---------------'
 
 #sudo cat /etc/sudoers
 
-echo 'Defaults exempt_group = docker' >> /etc/sudoers
-#sudo cat /etc/sudoers
+export PATH=/opt/puppetlabs/puppet/bin:$PATH
 
+sudo -E sh -c 'env'
+
+echo 'Defaults exempt_group = docker' >> /etc/sudoers
+
+sudo -E sh -c 'env'
+exit 0
 echo '\nInstall bundler'
 gem install bundler
 
