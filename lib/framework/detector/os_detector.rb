@@ -20,7 +20,7 @@ class OsDetector
                   when /darwin|mac os/
                     :macosx
                   when /linux/
-                    detect_distro || :linux
+                    detect_distro
                   when /bsd/
                     :bsd
                   when /solaris/
@@ -31,12 +31,24 @@ class OsDetector
                     raise "unknown os: #{host_os.inspect}"
                   end
 
-    @hierarchy = @os_hierarchy.construct_hierarchy(@identifier)
+    @hierarchy = detect_hierarchy
 
     @identifier
   end
 
   private
+
+  def detect_hierarchy
+    @hierarchy = @os_hierarchy.construct_hierarchy(@identifier)
+    @hierarchy = @os_hierarchy.construct_hierarchy('ubuntu') if @hierarchy.empty?
+    @hierarchy = @os_hierarchy.construct_hierarchy(:linux) if @hierarchy.empty?
+
+    @hierarchy
+  end
+
+  def detect_family
+    Facter::Resolvers::OsRelease.resolve(:id_like)
+  end
 
   def detect_distro
     [Facter::Resolvers::OsRelease,
