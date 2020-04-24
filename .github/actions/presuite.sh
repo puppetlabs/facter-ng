@@ -9,7 +9,7 @@ echo '---------------'
 #id -a
 
 
-export PATH=/opt/puppetlabs/puppet/bin:/opt/puppetlabs/bin:$PATH
+#export PATH=/opt/puppetlabs/puppet/bin:/opt/puppetlabs/bin:$PATH
 
 sudo -E sh -c 'env'
 
