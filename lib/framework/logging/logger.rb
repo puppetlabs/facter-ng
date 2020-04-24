@@ -4,6 +4,7 @@ require 'logger'
 
 module Facter
   RED = 31
+  DEFAULT_LOG_LEVEL = :warn
 
   class Log
     @@legacy_logger = nil
@@ -38,6 +39,7 @@ module Facter
       return if @@legacy_logger
 
       @@legacy_logger = Logger.new(output)
+      @@legacy_logger.level = DEFAULT_LOG_LEVEL
       set_format_for_legacy_logger
       @@logger.add_logger(@@legacy_logger)
     end
@@ -63,7 +65,7 @@ module Facter
     end
 
     def debug(msg)
-      return unless Facter.debugging?
+      return unless debugging_active?
 
       if msg.nil? || msg.empty?
         invoker = caller(1..1).first.slice(/.*:\d+/)
@@ -91,6 +93,14 @@ module Facter
 
     def colorize(msg, color)
       "\e[#{color}m#{msg}\e[0m"
+    end
+
+    private
+
+    def debugging_active?
+      return true unless Facter.respond_to?(:debugging?)
+
+      Facter.debugging?
     end
   end
 end

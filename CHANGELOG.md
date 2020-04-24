@@ -1,5 +1,31 @@
 
 
+## [4.0.17](https://github.com/puppetlabs/facter-ng/tree/4.0.17) (2020-04-21)
+
+[Full Changelog](https://github.com/puppetlabs/facter-ng/compare/4.0.16...4.0.17)
+
+### Fixed
+
+- \(FACT-2562\) Correctly load custom and external fact directories [\#458](https://github.com/puppetlabs/facter-ng/pull/458) ([IrimieBogdan](https://github.com/IrimieBogdan))
+
+
+
+## [4.0.16](https://github.com/puppetlabs/facter-ng/tree/4.0.16) (2020-04-15)
+
+[Full Changelog](https://github.com/puppetlabs/facter-ng/compare/4.0.15...4.0.16)
+
+### Added
+
+- \(FACT-2233\) Add AIX partitons fact [\#433](https://github.com/puppetlabs/facter-ng/pull/433) ([oanatmaria](https://github.com/oanatmaria))
+- \(FACT-2330\) Add ssh fact for Windows OpenSSH feature [\#424](https://github.com/puppetlabs/facter-ng/pull/424) ([oanatmaria](https://github.com/oanatmaria))
+
+### Fixed
+
+- \(FACT-2528\) Fix for tests/facts/ssh\_key.rb [\#442](https://github.com/puppetlabs/facter-ng/pull/442) ([oanatmaria](https://github.com/oanatmaria))
+- \(FACT-2538\) Don't save core and legacy facts in collection if they have no value [\#441](https://github.com/puppetlabs/facter-ng/pull/441) ([IrimieBogdan](https://github.com/IrimieBogdan))
+
+
+
 ## [4.0.15](https://github.com/puppetlabs/facter-ng/tree/4.0.15) (2020-04-08)
 
 [Full Changelog](https://github.com/puppetlabs/facter-ng/compare/4.0.14...4.0.15)
