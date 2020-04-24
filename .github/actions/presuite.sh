@@ -6,13 +6,12 @@ echo '---------------'
 #sudo su -
 echo '---------------'
 
-id -a
+#id -a
 
-sudo cat /etc/sudoers
-exit 0
+#sudo cat /etc/sudoers
 
-echo 'secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"' >> /etc/sudoers
-sudo cat /etc/sudoers
+echo 'Defaults exempt_group = docker' >> /etc/sudoers
+#sudo cat /etc/sudoers
 
 echo '\nInstall bundler'
 gem install bundler
