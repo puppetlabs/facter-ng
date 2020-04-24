@@ -2,6 +2,7 @@
 
 cwd=$(pwd)
 #apt-get install make gcc ruby-dev
+sudo su -
 
 apt install vim
 
