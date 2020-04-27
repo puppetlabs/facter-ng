@@ -24,8 +24,8 @@ printf '\nBeaker pre-suite\n\n'
 BP_ROOT=`bundle info beaker-puppet --path`
 beaker exec pre-suite --pre-suite $BP_ROOT/setup/aio/010_Install_Puppet_Agent.rb
 
-printf '\nConfigure facter 4 as facter 3\n\n'
-puppet config set facterng true
+#printf '\nConfigure facter 4 as facter 3\n\n'
+#puppet config set facterng true
 
 #printf '\nInstall facter 4 dependencies\n\n'
 #cd $cwd/$FACTER_4_ROOT && bundle install
