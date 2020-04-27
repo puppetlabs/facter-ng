@@ -29,22 +29,21 @@ mkdir -p /opt/puppetlabs/puppet/lib/ruby/gems/2.5.0
 export GEM_HOME=/opt/puppetlabs/puppet/lib/ruby/gems/2.5.0
 cd $FACTER_3_ROOT/acceptance && bundle install
 
-gem uninstall beaker --force
-gem build $cwd/$BEAKER_ROOT/beaker.gemspec
+cd $cwd/$BEAKER_ROOT
+gem build beaker.gemspec
 gem install beaker-*.gem
 
 bundle info beaker --path
 echo $PATH
 
 BP_ROOT=`bundle info beaker-puppet --path`
-
-bundle exec beaker init -h ubuntu1804-64a{hypervisor=none\,hostname=localhost} -o config/aio/options.rb
-bundle exec beaker provision
+cd $cwd/$facter_3
+beaker init -h ubuntu1804-64a{hypervisor=none\,hostname=localhost} -o config/aio/options.rb
+beaker provision
 
 echo '\nStarting pre-suite'
-bundle exec beaker exec pre-suite --pre-suite $BP_ROOT/setup/aio/010_Install_Puppet_Agent.rb
+beaker exec pre-suite --pre-suite $BP_ROOT/setup/aio/010_Install_Puppet_Agent.rb
 
-puppet --version
 #echo '\nInstall facter 4 dependencies'
 #cd $cwd/$FACTER_4_ROOT && bundle install
 
@@ -57,4 +56,4 @@ puppet --version
 #cd $cwd/$FACTER_3_ROOT/acceptance
 
 echo 'Running tests'
-bundle exec beaker exec tests
+beaker exec tests
