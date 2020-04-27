@@ -29,6 +29,10 @@ bundle config set system 'true'
 echo '\nInstall facter 3 dependencies'
 cd $FACTER_3_ROOT/acceptance && bundle install && bundle install --deployment
 
+gem uninstall beaker
+gem build $BEAKER_ROOT/beaker.gemspec
+gem install beaker.gem
+
 BP_ROOT=`bundle info beaker-puppet --path`
 echo $BP_ROOT
 
