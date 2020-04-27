@@ -28,9 +28,10 @@ echo '\nInstall facter 3 dependencies'
 cd $FACTER_3_ROOT/acceptance && bundle install
 
 gem uninstall beaker --force
-gem build $BEAKER_ROOT
+cd $BEAKER_ROOT && gem build beaker.gemspec
 ls -la
 gem install beaker.gem
+cd $FACTER_3_ROOT/acceptance
 
 BP_ROOT=`bundle info beaker-puppet --path`
 echo $BP_ROOT
