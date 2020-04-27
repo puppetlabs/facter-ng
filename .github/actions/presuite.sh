@@ -15,16 +15,16 @@ printf '\nInstall custom beaker\n'
 gem install $cwd/$BEAKER_ROOT/beaker-*.gem --bindir /bin
 bundle info beaker --path
 
-#echo '\nInstall facter 4 dependencies'
-#cd $cwd/$FACTER_4_ROOT && bundle install
+echo '\nInstall facter 4 dependencies'
+cd $cwd/$FACTER_4_ROOT && bundle install
 
-#echo '\nConfigure facter 4 as facter 3'
-#puppet config set facterng true
+echo '\nConfigure facter 4 as facter 3'
+puppet config set facterng true
 
-#gem build facter.gemspec
-#gem install -f facter-*.gem
+gem build facter.gemspec
+gem install -f facter-*.gem
 
-#cd $cwd/$FACTER_3_ROOT/acceptance
+cd $cwd/$FACTER_3_ROOT/acceptance
 
 printf '\nBeaker provision\n'
 beaker init -h ubuntu1804-64a{hypervisor=none\,hostname=localhost} -o config/aio/options.rb
