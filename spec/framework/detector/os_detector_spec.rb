@@ -161,6 +161,19 @@ describe OsDetector do
         it 'constructs hierarchy with linux' do
           expect(OsDetector.instance.hierarchy).to eq(['linux'])
         end
+
+        context 'when family is known' do
+          before do
+            allow(Facter::Resolvers::OsRelease).to receive(:resolve).with(:id_like).and_return(:ubuntu)
+            allow(os_hierarchy).to receive(:construct_hierarchy).with(:ubuntu).and_return(%w[Linux Debian Ubuntu])
+            Singleton.__init__(OsDetector)
+            OsDetector.instance
+          end
+
+          it 'constructs hierarchy with linux' do
+            expect(OsDetector.instance.hierarchy).to eq(%w[Linux Debian Ubuntu])
+          end
+        end
       end
     end
   end
