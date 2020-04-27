@@ -1,6 +1,7 @@
 #!/bin/sh -x
 
 export DEBIAN_DISABLE_RUBYGEMS_INTEGRATION=nothing
+export PATH=/opt/puppetlabs/puppet/bin/:/opt/puppetlabs/bin:$PATH
 cwd=$(pwd)
 
 printf '\nInstall bundler\n\n'
@@ -24,16 +25,16 @@ printf '\nBeaker pre-suite\n\n'
 BP_ROOT=`bundle info beaker-puppet --path`
 beaker exec pre-suite --pre-suite $BP_ROOT/setup/aio/010_Install_Puppet_Agent.rb
 
-#printf '\nConfigure facter 4 as facter 3\n\n'
-#puppet config set facterng true
+printf '\nConfigure facter 4 as facter 3\n\n'
+puppet config set facterng true
 
-#printf '\nInstall facter 4 dependencies\n\n'
-#cd $cwd/$FACTER_4_ROOT && bundle install
+printf '\nInstall facter 4 dependencies\n\n'
+cd $cwd/$FACTER_4_ROOT && bundle install
 
-#printf '\nInstall facter 4\n\n'
-#gem build facter.gemspec
-#gem install -f facter-*.gem
+printf '\nInstall facter 4\n\n'
+gem build facter.gemspec
+gem install -f facter-*.gem
 
-#printf '\nBeaker tests\n\n'
-#cd $cwd/$FACTER_3_ROOT/acceptance
-#beaker exec tests
+printf '\nBeaker tests\n\n'
+cd $cwd/$FACTER_3_ROOT/acceptance
+beaker exec tests
