@@ -32,9 +32,9 @@ gem build $cwd/$BEAKER_ROOT/beaker.gemspec
 gem install beaker-*.gem
 
 bundle info beaker --path
+echo $PATH
 
 BP_ROOT=`bundle info beaker-puppet --path`
-echo $BP_ROOT
 
 beaker init -h ubuntu1804-64a{hypervisor=none\,hostname=localhost} -o config/aio/options.rb
 beaker provision
