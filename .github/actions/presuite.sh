@@ -38,7 +38,7 @@ bundle info beaker --path
 echo $PATH
 
 BP_ROOT=`bundle info beaker-puppet --path`
-cd $cwd/$facter_3
+cd $cwd/$facter_3/acceptance
 beaker init -h ubuntu1804-64a{hypervisor=none\,hostname=localhost} -o config/aio/options.rb
 beaker provision
 
