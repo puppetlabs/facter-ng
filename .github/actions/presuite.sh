@@ -25,11 +25,12 @@ git config --global http.sslVerify false
 bundle config set git.allow_insecure true
 
 echo '\nInstall facter 3 dependencies'
-cd $FACTER_3_ROOT/acceptance && bundle install --path /opt/puppetlabs/puppet/lib/ruby/gems/2.5.0
+export GEM_PATH=/opt/puppetlabs/puppet/lib/ruby/gems/2.5.0:$GEM_PATH
+cd $FACTER_3_ROOT/acceptance && bundle install
 
 gem uninstall beaker --force
 gem build $cwd/$BEAKER_ROOT/beaker.gemspec
-gem install beaker-*.gem --path /opt/puppetlabs/puppet/lib/ruby/gems/2.5.0
+gem install beaker-*.gem
 
 bundle info beaker --path
 echo $PATH
