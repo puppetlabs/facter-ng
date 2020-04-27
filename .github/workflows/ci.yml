@@ -30,11 +30,11 @@ jobs:
           path: facter_3
 
       - name: Clone Mihai's beaker fork
-          uses: actions/checkout@v2
-          with:
-            repository: mihaibuzgau/beaker
-            ref: master
-            path: beaker
+        uses: actions/checkout@v2
+        with:
+          repository: mihaibuzgau/beaker
+          ref: master
+          path: beaker
 
       - name: Install Ruby 2.5
         uses: actions/setup-ruby@v1
