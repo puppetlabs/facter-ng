@@ -31,7 +31,8 @@ cd $FACTER_3_ROOT/acceptance && bundle install
 
 cd $cwd/$BEAKER_ROOT
 gem build beaker.gemspec
-gem install beaker-*.gem
+cd $cwd/$FACTER_3_ROOT/acceptance
+gem install $cwd/$BEAKER_ROOT/beaker-*.gem
 
 bundle info beaker --path
 echo $PATH
