@@ -18,31 +18,28 @@ echo '-----------'
 
 #sudo -E sh -c 'env'
 
-echo '\nInstall bundler'
+printf '\nInstall bundler\n'
 
 gem install bundler
 git config --global http.sslVerify false
 bundle config set git.allow_insecure true
 
-echo '\nInstall facter 3 dependencies'
-mkdir -p /opt/puppetlabs/puppet/lib/ruby/gems/2.5.0
-export GEM_HOME=/opt/puppetlabs/puppet/lib/ruby/gems/2.5.0
-cd $FACTER_3_ROOT/acceptance && bundle install
-
 cd $cwd/$BEAKER_ROOT
 gem build beaker.gemspec
-cd $cwd/$FACTER_3_ROOT/acceptance
-gem install $cwd/$BEAKER_ROOT/beaker-*.gem --bindir /bin
 
+printf '\nInstall facter 3 dependencies\n'
+mkdir -p /opt/puppetlabs/puppet/lib/ruby/gems/2.5.0
+export GEM_HOME=/opt/puppetlabs/puppet/lib/ruby/gems/2.5.0
+cd $cwd/$FACTER_3_ROOT/acceptance && bundle install
+
+gem install $cwd/$BEAKER_ROOT/beaker-*.gem --bindir /bin
 bundle info beaker --path
-echo $PATH
 
 BP_ROOT=`bundle info beaker-puppet --path`
-cd $cwd/$facter_3/acceptance
 beaker init -h ubuntu1804-64a{hypervisor=none\,hostname=localhost} -o config/aio/options.rb
 beaker provision
 
-echo '\nStarting pre-suite'
+printf '\nStarting pre-suite\n'
 beaker exec pre-suite --pre-suite $BP_ROOT/setup/aio/010_Install_Puppet_Agent.rb
 
 #echo '\nInstall facter 4 dependencies'
@@ -56,5 +53,5 @@ beaker exec pre-suite --pre-suite $BP_ROOT/setup/aio/010_Install_Puppet_Agent.rb
 
 #cd $cwd/$FACTER_3_ROOT/acceptance
 
-echo 'Running tests'
+printf '\nRunning tests\n'
 beaker exec tests
