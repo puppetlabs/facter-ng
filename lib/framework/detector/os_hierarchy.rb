@@ -10,6 +10,8 @@ module Facter
     end
 
     def construct_hierarchy(searched_os)
+      return [] if searched_os.nil?
+
       searched_os = searched_os.to_s.capitalize
       @searched_path = []
       search(@json_data, searched_os, [])

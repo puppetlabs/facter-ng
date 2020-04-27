@@ -32,7 +32,6 @@ class OsDetector
                   end
 
     @hierarchy = detect_hierarchy
-
     @identifier
   end
 
@@ -40,7 +39,7 @@ class OsDetector
 
   def detect_hierarchy
     @hierarchy = @os_hierarchy.construct_hierarchy(@identifier)
-    @hierarchy = @os_hierarchy.construct_hierarchy('ubuntu') if @hierarchy.empty?
+    @hierarchy = @os_hierarchy.construct_hierarchy(detect_family) if @hierarchy.empty?
     @hierarchy = @os_hierarchy.construct_hierarchy(:linux) if @hierarchy.empty?
 
     @hierarchy
