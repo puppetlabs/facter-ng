@@ -28,7 +28,7 @@ echo '\nInstall facter 3 dependencies'
 cd $FACTER_3_ROOT/acceptance && bundle install
 
 gem uninstall beaker --force
-gem build $BEAKER_ROOT/beaker.gemspec
+gem build $BEAKER_ROOT
 ls -la
 gem install beaker.gem
 
