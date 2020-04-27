@@ -37,4 +37,5 @@ gem install -f facter-*.gem
 
 printf '\nBeaker tests\n\n'
 cd $cwd/$FACTER_3_ROOT/acceptance
-beaker exec tests
+beaker exec tests 2>&1 | tee results.txt
+sed -n '/Failed Tests Cases:/,/Skipped Tests Cases:/p' results.txt | grep 'Test Case' | awk {'print $3'}
