@@ -16,33 +16,33 @@ class OsDetector
 
   def detect
     host_os = RbConfig::CONFIG['host_os']
-    @identifier = case host_os
-                  when /mswin|msys|mingw|cygwin|bccwin|wince|emc/
-                    :windows
-                  when /darwin|mac os/
-                    :macosx
-                  when /linux/
-                    detect_distro
-                  when /bsd/
-                    :bsd
-                  when /solaris/
-                    :solaris
-                  when /aix/
-                    :aix
-                  else
-                    raise "unknown os: #{host_os.inspect}"
-                  end
+    identifier = case host_os
+                 when /mswin|msys|mingw|cygwin|bccwin|wince|emc/
+                   :windows
+                 when /darwin|mac os/
+                   :macosx
+                 when /linux/
+                   detect_distro
+                 when /bsd/
+                   :bsd
+                 when /solaris/
+                   :solaris
+                 when /aix/
+                   :aix
+                 else
+                   raise "unknown os: #{host_os.inspect}"
+                 end
 
-    @hierarchy = detect_hierarchy
-    @identifier
+    @hierarchy = detect_hierarchy(identifier)
+    @identifier = identifier
   end
 
-  def detect_hierarchy
-    @hierarchy = @os_hierarchy.construct_hierarchy(@identifier)
-    @hierarchy = @os_hierarchy.construct_hierarchy(detect_family) if @hierarchy.empty?
-    @hierarchy = @os_hierarchy.construct_hierarchy(:linux) if @hierarchy.empty?
+  def detect_hierarchy(identifier)
+    hierarchy = @os_hierarchy.construct_hierarchy(identifier)
+    hierarchy = @os_hierarchy.construct_hierarchy(detect_family) if hierarchy.empty?
+    hierarchy = @os_hierarchy.construct_hierarchy(:linux) if hierarchy.empty?
 
-    @hierarchy
+    hierarchy
   end
 
   def detect_family
