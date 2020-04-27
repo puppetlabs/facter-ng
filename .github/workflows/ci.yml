@@ -41,5 +41,8 @@ jobs:
         with:
           ruby-version: '2.5'
 
+      - name: Setup tmate session
+          uses: mxschmitt/action-tmate@v2
+
       - name: Run acceptance tests
         run: sudo -E bash -c facter_4/.github/actions/presuite.sh
