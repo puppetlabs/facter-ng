@@ -30,7 +30,7 @@ cd $FACTER_3_ROOT/acceptance && bundle install
 gem uninstall beaker --force
 gem build $cwd/$BEAKER_ROOT/beaker.gemspec
 ls -la
-gem install beaker.gem
+gem install beaker-*.gem
 
 BP_ROOT=`bundle info beaker-puppet --path`
 echo $BP_ROOT
