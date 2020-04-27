@@ -12,6 +12,8 @@ class OsDetector
     @identifier = detect
   end
 
+  private
+
   def detect
     host_os = RbConfig::CONFIG['host_os']
     @identifier = case host_os
@@ -34,8 +36,6 @@ class OsDetector
     @hierarchy = detect_hierarchy
     @identifier
   end
-
-  private
 
   def detect_hierarchy
     @hierarchy = @os_hierarchy.construct_hierarchy(@identifier)
