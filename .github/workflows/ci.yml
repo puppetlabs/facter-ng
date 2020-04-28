@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: puppetlabs/facter
-          ref: master
+          ref: run_tests_on_ng
           path: facter_3
 
       - name: Clone Mihai's beaker fork
@@ -34,10 +34,14 @@ jobs:
           path: beaker
 
       - name: Install Ruby 2.6
-        uses: actions/setup-ruby@v1
+        uses: ruby/setup-ruby@v1
         with:
           ruby-version: '2.6'
 
+      - name: Fix permissions
+        run: |
+          sudo chmod a-w /opt /home/runner /usr/share
+          sudo chmod -R a-w /usr/share/rust /home/runner/.config
+
       - name: Run acceptance tests
         run: sudo -E bash -c facter_4/.github/actions/presuite.sh
-
