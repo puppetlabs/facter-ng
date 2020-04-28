@@ -19,6 +19,22 @@ describe Facter::OsHierarchy do
       end
     end
 
+    context 'when searched_os is debian' do
+      it 'constructs hierarchy' do
+        hierarchy = os_hierarchy.construct_hierarchy(:debian)
+
+        expect(hierarchy).to eq(%w[Linux Debian])
+      end
+    end
+
+    context 'when searched_os is linux' do
+      it 'constructs hierarchy' do
+        hierarchy = os_hierarchy.construct_hierarchy(:linux)
+
+        expect(hierarchy).to eq(%w[Linux])
+      end
+    end
+
     context 'when searched_os is nil' do
       it 'constructs hierarchy' do
         hierarchy = os_hierarchy.construct_hierarchy(nil)

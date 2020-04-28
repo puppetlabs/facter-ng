@@ -2,8 +2,6 @@
 
 module Facter
   class OsHierarchy
-    @searched_path = []
-
     def initialize
       json_file = Util::FileHelper.safe_read('os_hierarchy.json')
       @json_data = JSON.parse(json_file)
@@ -33,6 +31,8 @@ module Facter
         next unless tree_node.is_a?(Hash)
 
         tree_node.each do |k, v|
+          return @searched_path = path.dup << k if k == searched_element
+
           search(v, searched_element, path << k)
           path.pop
         end
