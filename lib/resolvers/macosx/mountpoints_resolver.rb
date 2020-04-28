@@ -18,10 +18,10 @@ module Facter
           def read_mounts # rubocop:disable Metrics/AbcSize
             mounts = {}
             FilesystemHelper.read_mountpoints.each do |fs|
-              device = fs.name
-              filesystem = fs.mount_type
-              path = fs.mount_point
-              options = fs.options.split(',').map(&:strip).map { |o| o == 'rootfs' ? 'root' : o }
+              device = fs.name.force_encoding('UTF-8')
+              filesystem = fs.mount_type.force_encoding('UTF-8')
+              path = fs.mount_point.force_encoding('UTF-8')
+              options = fs.options.force_encoding('UTF-8').split(',').map(&:strip).map { |o| o == 'rootfs' ? 'root' : o }
 
               next if path =~ %r{^/(proc|sys)} && filesystem != 'tmpfs' || filesystem == 'autofs'
 
@@ -46,13 +46,13 @@ module Facter
             end
 
             {
-              size_bytes: size_bytes,
-              used_bytes: used_bytes,
-              available_bytes: available_bytes,
-              capacity: FilesystemHelper.compute_capacity(used_bytes, size_bytes),
-              size: Facter::FactsUtils::UnitConverter.bytes_to_human_readable(size_bytes),
-              available: Facter::FactsUtils::UnitConverter.bytes_to_human_readable(available_bytes),
-              used: Facter::FactsUtils::UnitConverter.bytes_to_human_readable(used_bytes)
+              size_bytes: 2, #size_bytes,
+              used_bytes: 2, #used_bytes,
+              available_bytes: 2, #available_bytes,
+              capacity: 2, #FilesystemHelper.compute_capacity(used_bytes, size_bytes),
+              size:  2,#Facter::FactsUtils::UnitConverter.bytes_to_human_readable(size_bytes),
+              available: 2, #Facter::FactsUtils::UnitConverter.bytes_to_human_readable(available_bytes),
+              used: 2 # Facter::FactsUtils::UnitConverter.bytes_to_human_readable(used_bytes)
             }
           end
         end
