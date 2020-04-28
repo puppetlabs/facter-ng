@@ -1,6 +1,7 @@
 #!/bin/sh -x
 
 export DEBIAN_DISABLE_RUBYGEMS_INTEGRATION=no_wornings
+export DENABLE_PATH_CHECK=0
 export PATH=/opt/puppetlabs/puppet/bin/:/opt/puppetlabs/bin:$PATH
 cwd=$(pwd)
 
