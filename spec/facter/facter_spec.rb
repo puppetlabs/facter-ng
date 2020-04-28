@@ -154,7 +154,7 @@ describe Facter do
       # rubocop:enable Style/UnneededInterpolation
     end
 
-    it 'return no value' do
+    it 'returns no value' do
       mock_fact_manager(:resolve_facts, [])
       mock_collection(:value, nil, key_error)
 
