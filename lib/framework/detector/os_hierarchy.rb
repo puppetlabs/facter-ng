@@ -3,8 +3,11 @@
 module Facter
   class OsHierarchy
     def initialize
+      @log = Log.new(self)
       json_file = Util::FileHelper.safe_read('os_hierarchy.json')
       @json_data = JSON.parse(json_file)
+    rescue JSON::ParserError => _e
+      @log.error('Could not parse os_hierarchy json')
     end
 
     def construct_hierarchy(searched_os)

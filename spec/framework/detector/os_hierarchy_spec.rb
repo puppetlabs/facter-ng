@@ -39,7 +39,7 @@ describe Facter::OsHierarchy do
       it 'constructs hierarchy' do
         hierarchy = os_hierarchy.construct_hierarchy(nil)
 
-        expect(hierarchy).to eq(%w[])
+        expect(hierarchy).to eq([])
       end
     end
 

@@ -97,7 +97,7 @@ describe OsDetector do
         RbConfig::CONFIG['host_os'] = 'my_custom_os'
       end
 
-      it 'raise error if it could not detect os' do
+      it 'raises error if it could not detect os' do
         expect { OsDetector.instance.identifier }.to raise_error(RuntimeError, 'unknown os: "my_custom_os"')
       end
     end
