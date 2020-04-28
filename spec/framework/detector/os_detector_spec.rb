@@ -16,7 +16,6 @@ describe OsDetector do
       before do
         RbConfig::CONFIG['host_os'] = 'darwin'
         allow(os_hierarchy).to receive(:construct_hierarchy).with(:macosx).and_return(['macosx'])
-        OsDetector.instance
       end
 
       it 'detects os as macosx' do
@@ -24,6 +23,8 @@ describe OsDetector do
       end
 
       it 'calls hierarchy construction with macosx identifier' do
+        OsDetector.instance
+
         expect(os_hierarchy).to have_received(:construct_hierarchy).with(:macosx)
       end
 
@@ -36,7 +37,6 @@ describe OsDetector do
       before do
         RbConfig::CONFIG['host_os'] = 'mingw'
         allow(os_hierarchy).to receive(:construct_hierarchy).with(:windows).and_return(['windows'])
-        OsDetector.instance
       end
 
       it 'detects os as windows' do
@@ -44,6 +44,8 @@ describe OsDetector do
       end
 
       it 'calls hierarchy construction with windows identifier' do
+        OsDetector.instance
+
         expect(os_hierarchy).to have_received(:construct_hierarchy).with(:windows)
       end
 
@@ -56,7 +58,6 @@ describe OsDetector do
       before do
         RbConfig::CONFIG['host_os'] = 'solaris'
         allow(os_hierarchy).to receive(:construct_hierarchy).with(:solaris).and_return(['solaris'])
-        OsDetector.instance
       end
 
       it 'detects os as solaris' do
@@ -64,6 +65,8 @@ describe OsDetector do
       end
 
       it 'calls hierarchy construction with solaris identifier' do
+        OsDetector.instance
+
         expect(os_hierarchy).to have_received(:construct_hierarchy).with(:solaris)
       end
 
@@ -76,7 +79,6 @@ describe OsDetector do
       before do
         RbConfig::CONFIG['host_os'] = 'aix'
         allow(os_hierarchy).to receive(:construct_hierarchy).with(:aix).and_return(['aix'])
-        OsDetector.instance
       end
 
       it 'detects os as aix' do
@@ -84,6 +86,8 @@ describe OsDetector do
       end
 
       it 'calls hierarchy construction with aix identifier' do
+        OsDetector.instance
+
         expect(os_hierarchy).to have_received(:construct_hierarchy).with(:aix)
       end
 
@@ -115,8 +119,6 @@ describe OsDetector do
         allow(Facter::Resolvers::SuseRelease).to receive(:resolve).with(:version)
 
         allow(os_hierarchy).to receive(:construct_hierarchy).with(:redhat).and_return(%w[linux redhat])
-
-        OsDetector.instance
       end
 
       it 'detects linux distro' do
@@ -124,22 +126,32 @@ describe OsDetector do
       end
 
       it 'calls Facter::OsHierarchy with construct_hierarchy' do
+        OsDetector.instance
+
         expect(os_hierarchy).to have_received(:construct_hierarchy).with(:redhat)
       end
 
       it 'calls Facter::Resolvers::OsRelease with identifier' do
+        OsDetector.instance
+
         expect(Facter::Resolvers::OsRelease).to have_received(:resolve).with(:identifier)
       end
 
       it 'calls Facter::Resolvers::RedHatRelease with identifier' do
+        OsDetector.instance
+
         expect(Facter::Resolvers::RedHatRelease).to have_received(:resolve).with(:identifier)
       end
 
       it 'calls Facter::Resolvers::OsRelease with version' do
+        OsDetector.instance
+
         expect(Facter::Resolvers::OsRelease).to have_received(:resolve).with(:version)
       end
 
       it 'calls Facter::Resolvers::RedHatRelease with version' do
+        OsDetector.instance
+
         expect(Facter::Resolvers::RedHatRelease).to have_received(:resolve).with(:version)
       end
 
@@ -151,7 +163,6 @@ describe OsDetector do
           allow(os_hierarchy).to receive(:construct_hierarchy).and_return([])
           allow(os_hierarchy).to receive(:construct_hierarchy).with(:linux).and_return(['linux'])
           Singleton.__init__(OsDetector)
-          OsDetector.instance
         end
 
         it 'falls back to linux' do
@@ -167,7 +178,6 @@ describe OsDetector do
             allow(Facter::Resolvers::OsRelease).to receive(:resolve).with(:id_like).and_return(:ubuntu)
             allow(os_hierarchy).to receive(:construct_hierarchy).with(:ubuntu).and_return(%w[Linux Debian Ubuntu])
             Singleton.__init__(OsDetector)
-            OsDetector.instance
           end
 
           it 'constructs hierarchy with linux' do
