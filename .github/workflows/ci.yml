@@ -1,7 +1,7 @@
 ---
 name: GitHub hosted facter CI
 
-on: [pull_request, push]
+on: [pull_request]
 
 jobs:
   ci:
