@@ -18,10 +18,10 @@ module Facter
           def read_mounts # rubocop:disable Metrics/AbcSize
             mounts = {}
             FilesystemHelper.read_mountpoints.each do |fs|
-              device = fs.name.force_encoding('UTF-8')
-              filesystem = fs.mount_type.force_encoding('UTF-8')
-              path = fs.mount_point.force_encoding('UTF-8')
-              options = fs.options.force_encoding('UTF-8').split(',').map(&:strip).map { |o| o == 'rootfs' ? 'root' : o }
+              device = fs.name
+              filesystem = fs.mount_type
+              path = fs.mount_point
+              options = fs.options.split(',').map(&:strip).map { |o| o == 'rootfs' ? 'root' : o }
 
               next if path =~ %r{^/(proc|sys)} && filesystem != 'tmpfs' || filesystem == 'autofs'
 
