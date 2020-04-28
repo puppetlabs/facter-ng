@@ -38,4 +38,6 @@ gem install -f facter-*.gem
 
 printf '\nBeaker tests\n\n'
 cd $cwd/$FACTER_3_ROOT/acceptance
-beaker exec tests --test-tag-exclude=server,facter_3 --test-tag-or=risk:high,audit:high
+
+beaker exec tests/external_facts/external_fact_stderr_messages_output_to_stderr.rb --test-tag-exclude=server,facter_3 --test-tag-or=risk:high,audit:high
+echo $PATH
