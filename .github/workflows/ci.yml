@@ -1,10 +1,7 @@
 ---
 name: GitHub hosted facter CI
 
-on:
-  push:
-    branches:
-      - FACT-2569
+on: [pull_request, push]
 
 jobs:
   ci:
@@ -36,10 +33,10 @@ jobs:
           ref: master
           path: beaker
 
-      - name: Install Ruby 2.5
+      - name: Install Ruby 2.6
         uses: actions/setup-ruby@v1
         with:
-          ruby-version: '2.5'
+          ruby-version: '2.6'
 
       - name: Run acceptance tests
         run: sudo -E bash -c facter_4/.github/actions/presuite.sh
