@@ -7,7 +7,7 @@ module Facter
       json_file = Util::FileHelper.safe_read('os_hierarchy.json')
 
       begin
-        @json_data = JSON.parse(json_file)
+        @json_os_hierarchy = JSON.parse(json_file)
       rescue JSON::ParserError => _e
         @log.error('Could not parse os_hierarchy json')
       end
@@ -17,13 +17,13 @@ module Facter
       return [] if searched_os.nil?
 
       searched_os = searched_os.to_s.capitalize
-      if @json_data.nil?
-        @log.debug('There is no os_hierarchy, will fall back on current os name')
+      if @json_os_hierarchy.nil?
+        @log.debug("There is no os_hierarchy, will fall back to: #{searched_os}")
         return [searched_os]
       end
 
       @searched_path = []
-      search(@json_data, searched_os, [])
+      search(@json_os_hierarchy, searched_os, [])
 
       @searched_path.map { |os_name| os_name.to_s.capitalize }
     end
