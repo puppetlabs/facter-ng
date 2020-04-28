@@ -1,10 +1,7 @@
 ---
 name: GitHub hosted facter CI
 
-on:
-  push:
-    branches:
-      - FACT-2569
+on: [pull_request]
 
 jobs:
   ci:
