@@ -12,7 +12,7 @@ describe Facter do
   let(:fact_collection_spy) { instance_spy(Facter::FactCollection) }
   let(:key_error) { KeyError.new('key error') }
   let(:config_reader_double) { double(Facter::ConfigReader) }
-  let(:block_list_double) { double(Facter::BlockList) }
+  let(:block_list_double) { instance_spy(Facter::FactGroups) }
 
   before do
     allow(Facter::ConfigReader).to receive(:init).and_return(config_reader_double)
@@ -21,7 +21,7 @@ describe Facter do
     allow(config_reader_double).to receive(:ttls).and_return([])
     allow(config_reader_double).to receive(:block_list).and_return([])
 
-    allow(Facter::BlockList).to receive(:instance).and_return(block_list_double)
+    allow(Facter::FactGroups).to receive(:instance).and_return(block_list_double)
     allow(block_list_double).to receive(:blocked_facts).and_return([])
     allow(block_list_double).to receive(:block_list).and_return([])
 
@@ -276,11 +276,11 @@ describe Facter do
   end
 
   describe '#search' do
-    it 'sends call to LegacyFacter' do
+    it 'sends call to Facter::Options' do
       dirs = ['/dir1', '/dir2']
 
-      expect(LegacyFacter).to receive(:search).with(dirs)
-      Facter.search(dirs)
+      expect(Facter::Options).to receive(:[]=).with(:custom_dir, dirs)
+      Facter.search(*dirs)
     end
   end
 
@@ -292,10 +292,10 @@ describe Facter do
   end
 
   describe '#search_external' do
-    it 'sends call to LegacyFacter' do
+    it 'sends call to Facter::Options' do
       dirs = ['/dir1', '/dir2']
+      expect(Facter::Options).to receive(:[]=).with(:external_dir, dirs)
 
-      expect(LegacyFacter).to receive(:search_external).with(dirs)
       Facter.search_external(dirs)
     end
   end
@@ -315,15 +315,15 @@ describe Facter do
     end
 
     it 'adds custom facts dirs' do
-      allow(LegacyFacter).to receive(:search)
+      allow(Facter::Options).to receive(:[]=)
       Facter.reset
-      expect(LegacyFacter).to have_received(:search).once
+      expect(Facter::Options).to have_received(:[]=).with(:custom_dir, [])
     end
 
     it 'add external facts dirs' do
-      allow(LegacyFacter).to receive(:search_external)
+      allow(Facter::Options).to receive(:[]=)
       Facter.reset
-      expect(LegacyFacter).to have_received(:search_external).once
+      expect(Facter::Options).to have_received(:[]=).with(:external_dir, [])
     end
   end
 
