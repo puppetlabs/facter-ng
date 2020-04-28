@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 desc 'verify that commit messages match CONTRIBUTING.md requirements'
 task(:commits) do
   # This rake task looks at the summary from every commit from this branch not
