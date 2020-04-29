@@ -46,6 +46,7 @@ module Facter
         end
 
         @options[:custom_dir] = file_global_conf['custom-dir'] unless file_global_conf['custom-dir'].nil?
+        @options[:config_file_custom_dir] = @options[:custom_dir] || []
       end
 
       def augment_external(global_conf)
@@ -56,6 +57,7 @@ module Facter
         end
 
         @options[:external_dir] = [global_conf['external-dir']].flatten unless global_conf['external-dir'].nil?
+        @options[:config_file_external_dir] = @options[:external_dir] || []
       end
 
       def augment_ruby(global_conf)
@@ -71,7 +73,7 @@ module Facter
       end
 
       def augment_facts(ttls)
-        blocked_facts = Facter::BlockList.new.blocked_facts
+        blocked_facts = Facter::FactGroups.new.blocked_facts
         @options[:blocked_facts] = blocked_facts unless blocked_facts.nil?
 
         @options[:ttls] = ttls unless ttls.nil?

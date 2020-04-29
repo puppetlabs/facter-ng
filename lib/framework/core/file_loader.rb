@@ -28,10 +28,11 @@ require "#{ROOT_DIR}/lib/framework/logging/logger"
 require "#{ROOT_DIR}/lib/util/file_helper"
 
 require "#{ROOT_DIR}/lib/resolvers/base_resolver"
+require "#{ROOT_DIR}/lib/framework/detector/os_hierarchy"
 require "#{ROOT_DIR}/lib/framework/detector/os_detector"
 
 require "#{ROOT_DIR}/lib/framework/config/config_reader"
-require "#{ROOT_DIR}/lib/framework/config/block_list"
+require "#{ROOT_DIR}/lib/framework/config/fact_groups"
 
 load_dir(['config'])
 

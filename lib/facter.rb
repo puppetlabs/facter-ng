@@ -58,6 +58,7 @@ module Facter
     def clear
       @already_searched = {}
       LegacyFacter.clear
+      Options[:custom_dir] = []
       LegacyFacter.collection.invalidate_custom_facts
       LegacyFacter.collection.reload_custom_facts
     end
@@ -133,8 +134,6 @@ module Facter
       LegacyFacter.reset
       Options[:custom_dir] = []
       Options[:external_dir] = []
-      LegacyFacter.search(*Options.custom_dir)
-      LegacyFacter.search_external(Options.external_dir)
       nil
     end
 
@@ -148,7 +147,6 @@ module Facter
     # @api public
     def search(*dirs)
       Options[:custom_dir] += dirs
-      LegacyFacter.search(*dirs)
     end
 
     # Registers directories to be searched for external facts.
@@ -160,7 +158,6 @@ module Facter
     # @api public
     def search_external(dirs)
       Options[:external_dir] += dirs
-      LegacyFacter.search_external(dirs)
     end
 
     # Returns the registered search directories.for external facts.
@@ -327,7 +324,7 @@ module Facter
     #
     # @api private
     def log_blocked_facts
-      block_list = Facter::BlockList.new(Facter::Options[:config]).block_list
+      block_list = Facter::FactGroups.new(Facter::Options[:config]).block_list
       return unless block_list.any? && Facter::Options[:block]
 
       @logger.debug("blocking collection of #{block_list.join("\s")} facts")
