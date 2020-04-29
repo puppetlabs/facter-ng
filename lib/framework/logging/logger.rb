@@ -65,7 +65,7 @@ module Facter
     end
 
     def debug(msg)
-      return unless Facter.debugging?
+      return unless debugging_active?
 
       if msg.nil? || msg.empty?
         invoker = caller(1..1).first.slice(/.*:\d+/)
@@ -87,12 +87,20 @@ module Facter
 
     def error(msg, colorize = false)
       @@has_errors = true
-      msg = colorize(msg, RED) if colorize && !OsDetector.instance.detect.eql?(:windows)
+      msg = colorize(msg, RED) if colorize && !OsDetector.instance.identifier.eql?(:windows)
       @@logger.error(@class_name + ' - ' + msg)
     end
 
     def colorize(msg, color)
       "\e[#{color}m#{msg}\e[0m"
+    end
+
+    private
+
+    def debugging_active?
+      return true unless Facter.respond_to?(:debugging?)
+
+      Facter.debugging?
     end
   end
 end
