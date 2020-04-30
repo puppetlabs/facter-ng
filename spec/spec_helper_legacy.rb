@@ -32,7 +32,8 @@ RSpec.configure do |config|
 
   config.before do
     # Ensure that we don't accidentally cache facts and environment
-    # between test cases.
+    # between test cases
+
     LegacyFacter.clear
     LegacyFacter.clear_messages
 
@@ -43,7 +44,7 @@ RSpec.configure do |config|
 
   config.after do
     # Restore environment variables after execution of each test
-    (@old_env || {}).each_pair { |k, v| ENV[k] = v }
+    @old_env.each_pair { |k, v| ENV[k] = v }
     to_remove = ENV.keys.reject { |key| @old_env.include? key }
     to_remove.each { |key| ENV.delete key }
   end
