@@ -10,6 +10,8 @@ module Facts
         def call_the_resolver
           installed_userland = Facter::Resolvers::Freebsd::FreebsdVersion.resolve(:installed_userland)
 
+          return [] if installed_userland.nil?
+
           value = build_release_hash_from_version(installed_userland)
 
           [Facter::ResolvedFact.new(FACT_NAME, value),

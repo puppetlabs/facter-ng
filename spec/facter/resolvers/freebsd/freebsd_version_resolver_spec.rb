@@ -2,11 +2,13 @@
 
 describe Facter::Resolvers::Freebsd::FreebsdVersion do
   before do
-    allow(Open3).to receive(:capture2)
+    status = instance_double('Process::Status')
+    allow(status).to receive(:success?).and_return(true)
+    allow(Open3).to receive(:capture3)
       .with('/bin/freebsd-version -kru')
-      .and_return('13.0-CURRENT
+      .and_return(['13.0-CURRENT
         12.1-RELEASE-p3
-        12.0-STABLE')
+        12.0-STABLE', nil, status])
   end
 
   it 'returns installed kernel' do
