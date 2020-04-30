@@ -208,10 +208,10 @@ describe Facter do
     describe '#search' do
       it 'sends call to Facter::Options' do
         allow(Facter::Options).to receive(:[]=)
-      	dirs = ['/dir1', '/dir2']
-      	Facter.search(*dirs)
+        dirs = ['/dir1', '/dir2']
+        Facter.search(*dirs)
 
-      	expect(Facter::Options).to have_received(:[]=).with(:custom_dir, dirs)
+        expect(Facter::Options).to have_received(:[]=).with(:custom_dir, dirs)
       end
     end
 
@@ -225,10 +225,10 @@ describe Facter do
     describe '#search_external' do
       it 'sends call to Facter::Options' do
         allow(Facter::Options).to receive(:[]=)
-      	dirs = ['/dir1', '/dir2']
-      	Facter.search_external(dirs)
+        dirs = ['/dir1', '/dir2']
+        Facter.search_external(dirs)
 
-      	expect(Facter::Options).to have_received(:[]=).with(:external_dir, dirs)
+        expect(Facter::Options).to have_received(:[]=).with(:external_dir, dirs)
       end
     end
 

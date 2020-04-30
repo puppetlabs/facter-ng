@@ -239,8 +239,7 @@ module Facter
     #
     # @api private
     def to_user_output(cli_options, *args)
-      cli_options = cli_options.map { |(k, v)| [k.to_sym, v] }.to_h
-      Facter::Options.init_from_cli(cli_options, args)
+      init_cli_options(cli_options)
       logger.info("executed with command line: #{ARGV.drop(1).join(' ')}")
       log_blocked_facts
 
@@ -272,6 +271,11 @@ module Facter
 
     def logger
       @logger ||= Log.new(self)
+    end
+
+    def init_cli_options(options)
+      options = options.map { |(k, v)| [k.to_sym, v] }.to_h
+      Facter::Options.init_from_cli(options, args)
     end
 
     def add_fact_to_searched_facts(user_query, value)
