@@ -13,13 +13,12 @@ module Facter
 
   Options.init
   Log.add_legacy_logger(STDOUT)
-  @logger = Log.new(self)
   @already_searched = {}
   @trace = false
 
   class << self
     def clear_messages
-      @logger.debug('clear_messages is not implemented')
+      logger.debug('clear_messages is not implemented')
     end
 
     # Alias method for Facter.fact()
@@ -80,7 +79,7 @@ module Facter
     def debug(msg)
       return unless debugging?
 
-      @logger.debug(msg)
+      logger.debug(msg)
       nil
     end
 
@@ -134,6 +133,7 @@ module Facter
       LegacyFacter.reset
       Options[:custom_dir] = []
       Options[:external_dir] = []
+      @logger = nil
       nil
     end
 
@@ -241,7 +241,7 @@ module Facter
     def to_user_output(cli_options, *args)
       cli_options = cli_options.map { |(k, v)| [k.to_sym, v] }.to_h
       Facter::Options.init_from_cli(cli_options, args)
-      @logger.info("executed with command line: #{ARGV.drop(1).join(' ')}")
+      logger.info("executed with command line: #{ARGV.drop(1).join(' ')}")
       log_blocked_facts
 
       resolved_facts = Facter::FactManager.instance.resolve_facts(args)
@@ -265,10 +265,14 @@ module Facter
         arr.concat(exception.backtrace)
       end
 
-      @logger.error(arr.flatten.join("\n"))
+      logger.error(arr.flatten.join("\n"))
     end
 
     private
+
+    def logger
+      @logger ||= Log.new(self)
+    end
 
     def add_fact_to_searched_facts(user_query, value)
       @already_searched[user_query] ||= ResolvedFact.new(user_query, value)
@@ -327,7 +331,7 @@ module Facter
       block_list = Facter::FactGroups.new(Facter::Options[:config]).block_list
       return unless block_list.any? && Facter::Options[:block]
 
-      @logger.debug("blocking collection of #{block_list.join("\s")} facts")
+      logger.debug("blocking collection of #{block_list.join("\s")} facts")
     end
 
     # Used for printing errors regarding CLI user input validation
@@ -340,7 +344,7 @@ module Facter
     # @api private
     def log_errors(missing_names)
       missing_names.each do |missing_name|
-        @logger.error("fact \"#{missing_name}\" does not exist.", true)
+        logger.error("fact \"#{missing_name}\" does not exist.", true)
       end
     end
 
@@ -354,7 +358,7 @@ module Facter
     #
     # @api private
     def method_missing(name, *args, &block)
-      @logger.error(
+      logger.error(
         "--#{name}-- not implemented but required \n" \
         'with params: ' \
         "#{args.inspect} \n" \
