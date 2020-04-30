@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
 module Facts
-  module El
+  module Rhel
     module Os
       module Distro
-        class Codename
-          FACT_NAME = 'os.distro.codename'
-          ALIASES = 'lsbdistcodename'
+        class Description
+          FACT_NAME = 'os.distro.description'
+          ALIASES = 'lsbdistdescription'
 
           def call_the_resolver
-            fact_value = Facter::Resolvers::LsbRelease.resolve(:codename)
+            fact_value = Facter::Resolvers::LsbRelease.resolve(:description)
 
             [Facter::ResolvedFact.new(FACT_NAME, fact_value),
              Facter::ResolvedFact.new(ALIASES, fact_value, :legacy)]

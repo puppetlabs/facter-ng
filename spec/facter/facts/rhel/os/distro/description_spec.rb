@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-describe Facts::El::Os::Distro::Description do
+describe Facts::Rhel::Os::Distro::Description do
   describe '#call_the_resolver' do
-    subject(:fact) { Facts::El::Os::Distro::Description.new }
+    subject(:fact) { Facts::Rhel::Os::Distro::Description.new }
 
     let(:value) { 'CentOS Linux release 7.2.1511 (Core)' }
 

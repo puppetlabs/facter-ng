@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-describe Facts::El::Os::Distro::Release do
+describe Facts::Rhel::Os::Distro::Release do
   describe '#call_the_resolver' do
-    subject(:fact) { Facts::El::Os::Distro::Release.new }
+    subject(:fact) { Facts::Rhel::Os::Distro::Release.new }
 
     let(:value) { '7.2.1511' }
     let(:release) { { 'full' => '7.2.1511', 'major' => '7', 'minor' => '2' } }

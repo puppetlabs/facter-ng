@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-describe Facts::El::Os::Name do
+describe Facts::Rhel::Os::Name do
   describe '#call_the_resolver' do
-    subject(:fact) { Facts::El::Os::Name.new }
+    subject(:fact) { Facts::Rhel::Os::Name.new }
 
     let(:value) { 'RedHat' }
 
