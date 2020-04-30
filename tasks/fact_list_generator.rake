@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 desc 'Create a fact list for the specified os'
 task :fact_list_generator, [:os_name] do |_, args|
   ROOT_DIR = Pathname.new(File.expand_path('..', __dir__)) unless defined?(ROOT_DIR)
@@ -13,7 +15,7 @@ task :fact_list_generator, [:os_name] do |_, args|
 
   fact_mapping = []
   facts.each do |loaded_fact|
-    fact_hash  = Hash.new
+    fact_hash = {}
     fact_hash[:name] = loaded_fact.name
     fact_hash[:klass] = loaded_fact.klass
     fact_hash[:type] = loaded_fact.type
