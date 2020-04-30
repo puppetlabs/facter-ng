@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Facts
-  module El
+  module Linux
     class Sshalgorithmkey
       FACT_NAME = 'ssh.*key'
       TYPE = :legacy

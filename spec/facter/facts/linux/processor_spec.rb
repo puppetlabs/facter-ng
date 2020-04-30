@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-describe Facts::El::Processor do
+describe Facts::Linux::Processor do
   describe '#call_the_resolver' do
-    subject(:fact) { Facts::El::Processor.new }
+    subject(:fact) { Facts::Linux::Processor.new }
 
     let(:processor) { ['Intel(R) Xeon(R) Gold 6138 CPU @ 2.00GHz', 'Intel(R) Xeon(R) Gold 6138 CPU @ 2.00GHz'] }
 

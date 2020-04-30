@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Facts
-  module El
+  module Linux
     class Processor
       FACT_NAME = 'processor.*'
       TYPE = :legacy
