@@ -171,6 +171,26 @@ describe OsDetector do
           expect(OsDetector.instance.identifier).to eq(:my_linux_distro)
         end
 
+        context 'when no hierarchy for os identifier' do
+          it 'logs debug message' do
+            OsDetector.instance
+
+            expect(logger)
+              .to have_received(:debug)
+              .with('Could not detect hierarchy using os identifier: my_linux_distro , trying with family')
+          end
+        end
+
+        context 'when no os family detected' do
+          it 'logs debug message' do
+            OsDetector.instance
+
+            expect(logger)
+              .to have_received(:debug)
+              .with('Could not detect hierarchy using family , falling back to Linux')
+          end
+        end
+
         it 'constructs hierarchy with linux' do
           expect(OsDetector.instance.hierarchy).to eq(['linux'])
         end
@@ -184,6 +204,14 @@ describe OsDetector do
 
           it 'constructs hierarchy with linux' do
             expect(OsDetector.instance.hierarchy).to eq(%w[Linux Debian Ubuntu])
+          end
+
+          it 'logs debug message' do
+            OsDetector.instance
+
+            expect(logger)
+              .to have_received(:debug)
+              .with('Could not detect hierarchy using os identifier: my_linux_distro , trying with family')
           end
         end
       end
