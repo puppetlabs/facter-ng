@@ -16,9 +16,10 @@ describe Facts::Linux::Dmi::Product::Uuid do
       expect(Facter::Resolvers::Linux::DmiBios).to have_received(:resolve).with(:product_uuid)
     end
 
-    it 'returns product uuid fact' do
-      expect(fact.call_the_resolver).to be_an_instance_of(Facter::ResolvedFact).and \
-        have_attributes(name: 'dmi.product.uuid', value: product_uuid)
+    it 'returns resolved facts' do
+      expect(fact.call_the_resolver).to be_an_instance_of(Array).and \
+        contain_exactly(an_object_having_attributes(name: 'dmi.product.uuid', value: product_uuid),
+                        an_object_having_attributes(name: 'uuid', value: product_uuid, type: :legacy))
     end
   end
 end
