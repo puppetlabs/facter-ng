@@ -11,7 +11,7 @@ describe Facts::Bsd::Processors::Count do
         receive(:resolve).with(:logical_count).and_return(processors)
     end
 
-    it 'calls Facter::Resolvers::Macosx::Processors' do
+    it 'calls Facter::Resolvers::Bsd::Processors' do
       fact.call_the_resolver
       expect(Facter::Resolvers::Bsd::Processors).to have_received(:resolve).with(:logical_count)
     end
