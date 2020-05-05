@@ -33,7 +33,7 @@ describe Facter do
   end
 
   after do
-    Facter.reset
+    Facter.instance_variable_set(:@logger, nil)
   end
 
   def mock_fact_manager(method, return_value)

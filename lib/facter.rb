@@ -133,7 +133,6 @@ module Facter
       LegacyFacter.reset
       Options[:custom_dir] = []
       Options[:external_dir] = []
-      @logger = nil
       nil
     end
 
