@@ -48,3 +48,4 @@ jobs:
 
       - name: Run acceptance tests
         run: sudo -E bash -c facter_4/.github/actions/presuite.sh
+
