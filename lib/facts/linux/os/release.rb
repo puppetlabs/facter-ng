@@ -9,19 +9,10 @@ module Facts
 
         def call_the_resolver
           version = Facter::Resolvers::OsRelease.resolve(:version_id)
-          fact_value = build_fact_list(version)
 
-          [Facter::ResolvedFact.new(FACT_NAME, fact_value),
-           Facter::ResolvedFact.new(ALIASES.first, fact_value[:major], :legacy),
-           Facter::ResolvedFact.new(ALIASES.last, fact_value[:full], :legacy)]
-        end
-
-        def build_fact_list(version)
-          {
-            full: version,
-            major: version.split('.').first,
-            minor: version.split('.').last
-          }
+          [Facter::ResolvedFact.new(FACT_NAME, full: version, major: version),
+           Facter::ResolvedFact.new(ALIASES.first, version, :legacy),
+           Facter::ResolvedFact.new(ALIASES.last, version, :legacy)]
         end
       end
     end

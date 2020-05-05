@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Facts
-  module Rhel
+  module Ubuntu
     module Os
       class Release
         FACT_NAME = 'os.release'

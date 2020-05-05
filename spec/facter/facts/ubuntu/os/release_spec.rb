@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-describe Facts::Rhel::Os::Release do
+describe Facts::Ubuntu::Os::Release do
   describe '#call_the_resolver' do
-    subject(:fact) { Facts::Rhel::Os::Release.new }
+    subject(:fact) { Facts::Ubuntu::Os::Release.new }
 
     let(:value) { '10.9' }
 

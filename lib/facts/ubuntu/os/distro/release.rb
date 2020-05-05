@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Facts
-  module Debian
+  module Ubuntu
     module Os
       module Distro
         class Release
@@ -16,15 +16,13 @@ module Facts
           private
 
           def determine_release_for_os
-            release = Facter::Resolvers::DebianVersion.resolve(:version)
+            release = Facter::Resolvers::OsRelease.resolve(:version_id)
             return unless release
 
-            versions = release.split('.')
-            fact_value = {}
-            fact_value['full'] = release
-            fact_value['major'] = versions[0]
-            fact_value['minor'] = versions[1].gsub(/^0([1-9])/, '\1') if versions[1]
-            fact_value
+            {
+              'full' => release,
+              'major' => release
+            }
           end
         end
       end
