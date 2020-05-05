@@ -38,6 +38,9 @@ jobs:
         with:
           ruby-version: '2.6'
 
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v2
+
       - name: Fix permissions
         run: |
           sudo chmod a-w /opt /home/runner /usr/share
