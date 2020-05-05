@@ -6,22 +6,13 @@ module Facts
       module Distro
         class Codename
           FACT_NAME = 'os.distro.codename'
+          ALIASES = 'lsbdistcodename'
 
           def call_the_resolver
-            fact_value = Facter::Resolvers::OsRelease.resolve(:version_codename)
-            fact_value ||= retrieve_from_version
+            fact_value = Facter::Resolvers::LsbRelease.resolve(:codename)
 
-            Facter::ResolvedFact.new(FACT_NAME, fact_value)
-          end
-
-          def retrieve_from_version
-            version = Facter::Resolvers::OsRelease.resolve(:version)
-            return unless version
-
-            codename = /\(.*\)$/.match(version).to_s.gsub(/\(|\)/, '')
-            return codename unless codename.empty?
-
-            /[A-Za-z]+\s[A-Za-z]+/.match(version).to_s.split(' ').first.downcase
+            [Facter::ResolvedFact.new(FACT_NAME, fact_value),
+             Facter::ResolvedFact.new(ALIASES, fact_value, :legacy)]
           end
         end
       end

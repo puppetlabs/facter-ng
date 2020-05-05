@@ -8,39 +8,20 @@ module Facts
         ALIASES = %w[operatingsystemmajrelease operatingsystemrelease].freeze
 
         def call_the_resolver
-          fact_value = determine_release_for_os
-
-          return Facter::ResolvedFact.new(FACT_NAME, fact_value) unless fact_value
+          version = Facter::Resolvers::OsRelease.resolve(:version_id)
+          fact_value = build_fact_list(version)
 
           [Facter::ResolvedFact.new(FACT_NAME, fact_value),
-           Facter::ResolvedFact.new(ALIASES.first, fact_value['major'], :legacy),
-           Facter::ResolvedFact.new(ALIASES.last, fact_value['full'], :legacy)]
+           Facter::ResolvedFact.new(ALIASES.first, fact_value[:major], :legacy),
+           Facter::ResolvedFact.new(ALIASES.last, fact_value[:full], :legacy)]
         end
 
-        private
-
-        def determine_release_for_os
-          os_name = Facter::Resolvers::OsRelease.resolve(:name)
-
-          if os_name =~ /Debian|Raspbian/
-            release = Facter::Resolvers::DebianVersion.resolve(:version)
-            return unless release
-
-            versions = release.split('.')
-            fact_value = {}
-            fact_value['full'] = release
-            fact_value['major'] = versions[0]
-            fact_value['minor'] = versions[1].gsub(/^0([1-9])/, '\1') if versions[1]
-            fact_value
-          else
-            release = Facter::Resolvers::OsRelease.resolve(:version_id)
-            return unless release
-
-            {
-              'full' => release,
-              'major' => release
-            }
-          end
+        def build_fact_list(version)
+          {
+            full: version,
+            major: version.split('.').first,
+            minor: version.split('.').last
+          }
         end
       end
     end
