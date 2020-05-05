@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-describe Facts::Linux::Lsbdistdescription do
+describe Facts::Debian::Lsbdistdescription do
   describe '#call_the_resolver' do
-    subject(:fact) { Facts::Linux::Lsbdistdescription.new }
+    subject(:fact) { Facts::Debian::Lsbdistdescription.new }
 
     let(:value) { 'stretch' }
 

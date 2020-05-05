@@ -212,10 +212,10 @@ describe Facter::InternalFactLoader do
         allow(class_discoverer_mock)
           .to receive(:discover_classes)
           .with(:Linux)
-          .and_return([Facts::Linux::Lsbdistid])
+          .and_return([Facts::Debian::Lsbdistid])
         allow(Facter::ClassDiscoverer).to receive(:instance).and_return(class_discoverer_mock)
 
-        stub_const('Facts::Linux::Lsbdistid::FACT_NAME', 'lsbdistid')
+        stub_const('Facts::Debian::Lsbdistid::FACT_NAME', 'lsbdistid')
       end
 
       it 'loads one fact' do
