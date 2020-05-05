@@ -1,7 +1,7 @@
 #!/bin/sh -x
 
 export DEBIAN_DISABLE_RUBYGEMS_INTEGRATION=no_wornings
-export PATH=/opt/puppetlabs/puppet/bin/:/opt/puppetlabs/bin:$PATH
+export PATH=/opt/puppetlabs/bin/:/opt/puppetlabs/puppet/bin:$PATH
 cwd=$(pwd)
 
 printf '\nInstall bundler\n\n'
@@ -35,8 +35,8 @@ agent_facter_ng_version=`facter-ng --version | tr -d '\r'`
 cp -r $cwd/$FACTER_4_ROOT/* /opt/puppetlabs/puppet/lib/ruby/gems/2.5.0/gems/facter-ng-$agent_facter_ng_version/
 mv /opt/puppetlabs/puppet/bin/facter-ng /opt/puppetlabs/bin/facter
 
-puts facter -version
-puts puppet facts | grep facterversion
+facter -v
+puppet facts | grep facterversion
 
 printf '\nBeaker tests\n\n'
 cd $cwd/$FACTER_3_ROOT/acceptance
