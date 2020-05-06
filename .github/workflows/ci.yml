@@ -47,4 +47,4 @@ jobs:
           sudo chmod -R a-w /usr/share/rust /home/runner/.config
 
       - name: Run acceptance tests
-        run: sudo -E bash -c facter_4/.github/actions/presuite.sh
+        run: echo $ImageOS
