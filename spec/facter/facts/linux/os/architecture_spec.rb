@@ -4,42 +4,21 @@ describe Facts::Linux::Os::Architecture do
   describe '#call_the_resolver' do
     subject(:fact) { Facts::Linux::Os::Architecture.new }
 
-    context 'when resolver does not return x86_64' do
-      let(:value) { 'i86pc' }
+    let(:value) { 'x86_64' }
 
-      before do
-        allow(Facter::Resolvers::Uname).to receive(:resolve).with(:machine).and_return(value)
-      end
-
-      it 'calls Facter::Resolvers::Uname' do
-        fact.call_the_resolver
-        expect(Facter::Resolvers::Uname).to have_received(:resolve).with(:machine)
-      end
-
-      it 'returns architecture fact' do
-        expect(fact.call_the_resolver).to be_an_instance_of(Array).and \
-          contain_exactly(an_object_having_attributes(name: 'os.architecture', value: value),
-                          an_object_having_attributes(name: 'architecture', value: value, type: :legacy))
-      end
+    before do
+      allow(Facter::Resolvers::Uname).to receive(:resolve).with(:machine).and_return(value)
     end
 
-    context 'when resolver returns x86_64' do
-      let(:value) { 'x86_64' }
+    it 'calls Facter::Resolvers::Uname' do
+      fact.call_the_resolver
+      expect(Facter::Resolvers::Uname).to have_received(:resolve).with(:machine)
+    end
 
-      before do
-        allow(Facter::Resolvers::Uname).to receive(:resolve).with(:machine).and_return(value)
-      end
-
-      it 'calls Facter::Resolvers::Uname' do
-        fact.call_the_resolver
-        expect(Facter::Resolvers::Uname).to have_received(:resolve).with(:machine)
-      end
-
-      it 'returns architecture fact' do
-        expect(fact.call_the_resolver).to be_an_instance_of(Array).and \
-          contain_exactly(an_object_having_attributes(name: 'os.architecture', value: 'amd64'),
-                          an_object_having_attributes(name: 'architecture', value: 'amd64', type: :legacy))
-      end
+    it 'returns architecture fact' do
+      expect(fact.call_the_resolver).to be_an_instance_of(Array).and \
+        contain_exactly(an_object_having_attributes(name: 'os.architecture', value: value),
+                        an_object_having_attributes(name: 'architecture', value: value, type: :legacy))
     end
   end
 end
