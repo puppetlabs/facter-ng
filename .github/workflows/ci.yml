@@ -8,7 +8,7 @@ jobs:
     name: Run acceptance tests
     strategy:
       matrix:
-        os: [ubuntu-18.04, ubuntu-16.04, macos-10.15]
+        os: [ubuntu-18.04, ubuntu-16.04]
     runs-on: ${{ matrix.os }}
     env:
       FACTER_3_ROOT: facter_3
@@ -40,6 +40,9 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '2.6'
+
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v2
 
       - name: Fix permissions
         run: |
