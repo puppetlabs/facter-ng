@@ -1,5 +1,7 @@
 #!/bin/sh -x
 
+declare -A PLATFORMS=( [ubuntu18]=ubuntu1804-64a [ubuntu16]=ubuntu1604-64a [macos1015]=osx1015-64a )
+
 export DEBIAN_DISABLE_RUBYGEMS_INTEGRATION=no_wornings
 export PATH=/opt/puppetlabs/bin/:/opt/puppetlabs/puppet/bin:$PATH
 
@@ -18,7 +20,7 @@ gem install beaker-*.gem --bindir /bin
 
 printf '\nBeaker provision\n\n'
 cd $cwd/$FACTER_3_ROOT/acceptance
-beaker init -h ubuntu1804-64a{hypervisor=none\,hostname=localhost} -o config/aio/options.rb
+beaker init -h ${PLATFORMS[$ImageOS]}{hypervisor=none\,hostname=localhost} -o config/aio/options.rb
 beaker provision
 
 printf '\nBeaker pre-suite\n\n'
