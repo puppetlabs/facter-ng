@@ -37,6 +37,12 @@ $puppet_gem_command install -f facter-ng-*.gem
 cd /opt/puppetlabs/puppet/bin
 mv facter-ng facter
 
+printf "\nFacter version\n\n"
+facter --version
+
+printf "\Puppet facts facter version\n\n"
+puppet facts | grep facterversion
+
 printf '\nBeaker tests\n\n'
 cd $cwd/$FACTER_3_ROOT/acceptance
 beaker exec tests --test-tag-exclude=server,facter_3 --test-tag-or=risk:high,audit:high 2>&1
