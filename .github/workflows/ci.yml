@@ -8,7 +8,7 @@ jobs:
     name: Run acceptance tests
     strategy:
       matrix:
-        os: [ubuntu-18.04, ubuntu-16.04, macos-10.15]
+        os: [ubuntu-18.04]
     runs-on: ${{ matrix.os }}
     env:
       FACTER_3_ROOT: facter_3
@@ -29,21 +29,21 @@ jobs:
           ref: skip_failures_on_ng
           path: facter_3
 
-      - name: Clone Mihai's beaker fork
+      - name: Clone custom beaker fork
         uses: actions/checkout@v2
         with:
           repository: mihaibuzgau/beaker
           ref: master
           path: beaker
 
-      - name: Install Ruby 2.6.x
+      - name: Install Ruby 2.6
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '2.6'
 
       - name: Fix permissions
         run: |
-          if [ $ImageOS == ubuntu18 ]
+          if [ $ImageOS != macos1015 ]
           then
             sudo chmod a-w /opt /home/runner /usr/share &&
             sudo chmod -R a-w /usr/share/rust /home/runner/.config
@@ -51,4 +51,4 @@ jobs:
 
       - name: Run acceptance tests
         run: |
-          sudo -E ruby facter_4/.github/actions/presuite.rb
+          sudo -E "PATH=$PATH" ruby facter_4/.github/actions/presuite.rb
