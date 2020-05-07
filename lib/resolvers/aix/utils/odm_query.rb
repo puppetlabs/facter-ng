@@ -12,6 +12,7 @@ module Facter
     def initialize
       @query = ''
       @conditions = []
+      @log = Facter::Log.new(self)
     end
 
     def equals(field, value)
@@ -29,7 +30,7 @@ module Facter
       REPOS.each do |repo|
         break if result && !result.empty?
 
-        result, _stderr, _s = Open3.capture3("#{query} #{repo}")
+        result = Facter::Core::Execution.execute("#{query} #{repo}", logger: @log)
       end
       result
     end

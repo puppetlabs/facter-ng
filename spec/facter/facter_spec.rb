@@ -12,7 +12,6 @@ describe Facter do
   let(:fact_collection_spy) { instance_spy(Facter::FactCollection) }
   let(:key_error) { KeyError.new('key error') }
   let(:config_reader_double) { double(Facter::ConfigReader) }
-  let(:block_list_double) { instance_spy(Facter::FactGroups) }
 
   before do
     allow(Facter::ConfigReader).to receive(:init).and_return(config_reader_double)
@@ -20,12 +19,13 @@ describe Facter do
     allow(config_reader_double).to receive(:global).and_return(nil)
     allow(config_reader_double).to receive(:ttls).and_return([])
     allow(config_reader_double).to receive(:block_list).and_return([])
+    allow(config_reader_double).to receive(:fact_groups).and_return({})
 
-    allow(Facter::FactGroups).to receive(:instance).and_return(block_list_double)
-    allow(block_list_double).to receive(:blocked_facts).and_return([])
-    allow(block_list_double).to receive(:block_list).and_return([])
+    allow(Facter::Options).to receive(:[]).and_call_original
+    allow(Facter::Options).to receive(:[]).with(:blocked_facts).and_return([])
+    allow(Facter::Options).to receive(:[]).with(:block_list).and_return([])
 
-    Facter.instance_variable_set(:@logger, logger)
+    allow(Facter::Log).to receive(:new).and_return(logger)
     Facter.clear
     allow(Facter::SessionCache).to receive(:invalidate_all_caches)
     allow(Facter::FactManager).to receive(:instance).and_return(fact_manager_spy)
@@ -33,7 +33,7 @@ describe Facter do
   end
 
   after do
-    Facter.remove_instance_variable(:@logger)
+    Facter.instance_variable_set(:@logger, nil)
   end
 
   def mock_fact_manager(method, return_value)
@@ -99,9 +99,7 @@ describe Facter do
       it 'returns no fact and status 1', resolved_fact: false do
         user_query = ['os.name', 'missing_fact']
         expected_json_output = '{}'
-        allow(Facter::Options).to receive(:[]).and_call_original
         allow(Facter::Options).to receive(:[]).with(:strict).and_return(true)
-        allow(OsDetector).to receive(:detect).and_return(:solaris)
 
         formatted_facts = Facter.to_user_output({}, *user_query)
 
@@ -112,6 +110,7 @@ describe Facter do
         user_query = 'os.name'
         expected_json_output = '{"os" : {"name": "ubuntu"}'
         allow(Facter::Options).to receive(:[]).with(anything)
+        allow(Facter::Options).to receive(:[]).with(:block_list).and_return([])
         allow(Facter::Options).to receive(:[]).with(:strict).and_return(true)
 
         formated_facts = Facter.to_user_output({}, user_query)
@@ -208,10 +207,11 @@ describe Facter do
 
     describe '#search' do
       it 'sends call to Facter::Options' do
+        allow(Facter::Options).to receive(:[]=)
         dirs = ['/dir1', '/dir2']
-
-        expect(Facter::Options).to receive(:[]=).with(:custom_dir, dirs)
         Facter.search(*dirs)
+
+        expect(Facter::Options).to have_received(:[]=).with(:custom_dir, dirs)
       end
     end
 
@@ -224,10 +224,11 @@ describe Facter do
 
     describe '#search_external' do
       it 'sends call to Facter::Options' do
+        allow(Facter::Options).to receive(:[]=)
         dirs = ['/dir1', '/dir2']
-        expect(Facter::Options).to receive(:[]=).with(:external_dir, dirs)
-
         Facter.search_external(dirs)
+
+        expect(Facter::Options).to have_received(:[]=).with(:external_dir, dirs)
       end
     end
 
@@ -314,8 +315,10 @@ describe Facter do
 
   describe '#debugging' do
     it 'sets log level to debug' do
-      expect(Facter::Options).to receive(:[]=).with(:debug, true)
+      allow(Facter::Options).to receive(:[]=)
       Facter.debugging(true)
+
+      expect(Facter::Options).to have_received(:[]=).with(:debug, true)
     end
   end
 

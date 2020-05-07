@@ -102,7 +102,7 @@ describe Facter::Util::Resolution do
     end
 
     it 'fact_type does not raise error' do
-      expect { resolution.options(fact_type: 'simple') }.not_to raise_error(ArgumentError)
+      expect { resolution.options(fact_type: 'simple') }.not_to raise_error
     end
 
     it 'fails on unhandled options' do
@@ -120,8 +120,9 @@ describe Facter::Util::Resolution do
 
   describe 'evaluating' do
     it 'evaluates the block in the context of the given resolution' do
-      expect(resolution).to receive(:weight).with(5)
-      resolution.evaluate { weight(5) }
+      expect(resolution).to receive(:setcode).with('code')
+
+      resolution.evaluate { setcode('code') }
     end
 
     it 'raises a warning if the resolution is evaluated twice' do
