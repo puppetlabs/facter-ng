@@ -11,11 +11,13 @@ def install_facter_3_dependecies
 end
 
 def install_custom_beaker
+  bin_path = {macos1015: 'usr/local/bin'}
+
   message('BUILD CUSTOM BEAKER GEM')
   run('gem build beaker.gemspec')
 
   message('INSTALL CUSTOM BEAKER GEM')
-  run('gem install beaker-*.gem --bindir /bin')
+  run("gem install beaker-*.gem --bindir #{bin_path.fetch(ENV['ImageOS'].to_sym, '/bin')}")
 end
 
 def initialize_beaker
