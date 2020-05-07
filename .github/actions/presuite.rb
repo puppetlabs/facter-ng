@@ -11,33 +11,42 @@ def install_facter_3_dependecies
 end
 
 def install_custom_beaker
-  bin_path = {macos1015: 'usr/local/bin'}
-
   message('BUILD CUSTOM BEAKER GEM')
   run('gem build beaker.gemspec')
 
   message('INSTALL CUSTOM BEAKER GEM')
-  run("gem install beaker-*.gem --bindir #{bin_path.fetch(ENV['ImageOS'].to_sym, '/bin')}")
+  run('gem install beaker-*.gem')
 end
 
 def initialize_beaker
-  beaker_platforms = {
-      ubuntu18: 'ubuntu1804-64a',
-      ubuntu16: 'ubuntu1604-64a',
-      macos1015: 'osx1015-64a'
-  }
-  platform = beaker_platforms[ENV['ImageOS'].to_sym]
+  beaker_platform = get_beaker_platform(ENV['ImageOS'].to_sym)
+  beaker_platform_with_options = get_platform_with_options(beaker_platform)
 
   message('BEAKER INITIALIZE')
-  run("beaker init -h #{platform}{hypervisor=none,hostname=localhost} -o config/aio/options.rb")
+  run("beaker init -h #{beaker_platform_with_options} -o config/aio/options.rb")
 
   message('BEAKER PROVISION')
   run('beaker provision')
 end
 
+def get_beaker_platform(host_platform)
+  beaker_platforms = {
+      ubuntu18: 'ubuntu1804-64a',
+      ubuntu16: 'ubuntu1604-64a',
+      macos1015: 'osx1015-64a'
+  }
+
+  beaker_platforms[host_platform]
+end
+
+def get_platform_with_options(platform)
+  return "#{platform}{hypervisor=none,hostname=localhost}" if platform.include? 'ubuntu'
+  "\"#{platform}{hypervisor=none,hostname=localhost}\"" if platform.include? 'osx'
+end
+
 def install_puppet_agent
-  beaker_puppet_root = run('bundle info beaker-puppet --path').chomp
-  install_puppet_file_path = File.join(beaker_puppet_root, 'setup', 'aio', '010_Install_Puppet_Agent.rb')
+  beaker_puppet_root, _ = run('bundle info beaker-puppet --path')
+  install_puppet_file_path = File.join(beaker_puppet_root.chomp, 'setup', 'aio', '010_Install_Puppet_Agent.rb')
 
   message('INSTALL PUPPET AGENT')
   run("beaker exec pre-suite --pre-suite #{install_puppet_file_path}")
@@ -46,7 +55,7 @@ end
 def replace_facter_3_with_facter_4
   linux_puppet_bin_dir = '/opt/puppetlabs/puppet/bin'
   gem_command = File.join(linux_puppet_bin_dir, 'gem')
-  puppet_command = File.join(linux_puppet_bin_dir,'puppet')
+  puppet_command = File.join(linux_puppet_bin_dir, 'puppet')
 
   message('SET FACTER 4 FLAG TO TRUE')
   run("#{puppet_command} config set facterng true")
@@ -66,7 +75,7 @@ end
 
 def run_acceptance_tests
   message('RUN ACCEPTANCE TESTS')
-  run('beaker exec tests --test-tag-exclude=server,facter_3 --test-tag-or=risk:high,audit:high 2>&1')
+  run('beaker exec tests --test-tag-exclude=server,facter_3 --test-tag-or=risk:high,audit:high')
 end
 
 def message(message)
@@ -78,10 +87,10 @@ def message(message)
 end
 
 def run(command, dir = './')
-  output, std_err, _status = Open3.capture3(command, chdir: dir)
+  puts command
+  output, status = Open3.capture2(command, chdir: dir)
   puts output
-  puts std_err
-  output
+  [output, status]
 end
 
 ENV['DEBIAN_DISABLE_RUBYGEMS_INTEGRATION'] = 'no_wornings'
@@ -100,4 +109,7 @@ end
 
 replace_facter_3_with_facter_4
 
-Dir.chdir(FACTER_3_ACCEPTANCE_PATH) { run_acceptance_tests }
+Dir.chdir(FACTER_3_ACCEPTANCE_PATH) do
+  _, status = run_acceptance_tests
+  exit(status.exitstatus)
+end

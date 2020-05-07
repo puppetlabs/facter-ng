@@ -1,7 +1,7 @@
 ---
 name: GitHub hosted facter CI
 
-on: [push]
+on: [pull_request]
 
 jobs:
   ci:
@@ -43,15 +43,12 @@ jobs:
 
       - name: Fix permissions
         run: |
-          if [ $ImageOS != macos1015 ]
+          if [[ $ImageOS == *ubuntu* ]]
           then
-            sudo chmod a-w /opt /home/runner /usr/share &&
+            sudo chmod a-w /home/runner /usr/share &&
             sudo chmod -R a-w /usr/share/rust /home/runner/.config
-          elif [ $ImageOS == macos1015 ]
-          then
-            sudo chmod a+w /bin
           fi
+          sudo chmod a-w /opt
 
       - name: Run acceptance tests
-        run: |
-          sudo -E "PATH=$PATH" ruby facter_4/.github/actions/presuite.rb
+        run: sudo -E "PATH=$PATH" ruby facter_4/.github/actions/presuite.rb
