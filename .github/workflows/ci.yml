@@ -8,7 +8,7 @@ jobs:
     name: Run acceptance tests
     strategy:
       matrix:
-        os: [ubuntu-18.04]
+        os: [ubuntu-16.04, ubuntu-18.04]
     runs-on: ${{ matrix.os }}
     env:
       FACTER_3_ROOT: facter_3
