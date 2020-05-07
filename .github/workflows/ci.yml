@@ -8,7 +8,7 @@ jobs:
     name: Run acceptance tests
     strategy:
       matrix:
-        os: [ubuntu-16.04, ubuntu-18.04]
+        os: [ubuntu-18.04, ubuntu-16.04, macos-10.15]
     runs-on: ${{ matrix.os }}
     env:
       FACTER_3_ROOT: facter_3
@@ -47,6 +47,9 @@ jobs:
           then
             sudo chmod a-w /opt /home/runner /usr/share &&
             sudo chmod -R a-w /usr/share/rust /home/runner/.config
+          elif [ $ImageOS == macos1015 ]
+          then
+            sudo chmod a+w /bin
           fi
 
       - name: Run acceptance tests

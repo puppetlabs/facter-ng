@@ -43,19 +43,20 @@ end
 
 def replace_facter_3_with_facter_4
   linux_puppet_bin_dir = '/opt/puppetlabs/puppet/bin'
-  linux_puppet_gem_command = File.join(linux_puppet_bin_dir, 'gem')
+  gem_command = File.join(linux_puppet_bin_dir, 'gem')
+  puppet_command = File.join(linux_puppet_bin_dir,'puppet')
 
   message('SET FACTER 4 FLAG TO TRUE')
-  run("#{File.join(linux_puppet_bin_dir,'puppet')}  config set facterng true")
+  run("#{puppet_command} config set facterng true")
 
   message('BUILD FACTER 4 LATEST AGENT GEM')
-  run("#{linux_puppet_gem_command} build agent/facter-ng.gemspec", ENV['FACTER_4_ROOT'])
+  run("#{gem_command} build agent/facter-ng.gemspec", ENV['FACTER_4_ROOT'])
 
   message('UNINSTALL DEFAULT FACTER 4 AGENT GEM')
-  run("#{linux_puppet_gem_command} uninstall facter-ng")
+  run("#{gem_command} uninstall facter-ng")
 
   message('INSTALL FACTER 4 GEM')
-  run("#{linux_puppet_gem_command} install -f facter-ng-*.gem", ENV['FACTER_4_ROOT'])
+  run("#{gem_command} install -f facter-ng-*.gem", ENV['FACTER_4_ROOT'])
 
   message('CHANGE FACTER 3 WITH FACTER 4')
   run('mv facter-ng facter', linux_puppet_bin_dir)
