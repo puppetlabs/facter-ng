@@ -49,13 +49,13 @@ def replace_facter_3_with_facter_4
   run('puppet config set facterng true', FACTER_3_ACCEPTANCE_PATH)
 
   message('BUILD FACTER 4 LATEST AGENT GEM')
-  run("#{linux_puppet_gem_command} build agent/facter-ng.gemspec")
+  run("#{linux_puppet_gem_command} build agent/facter-ng.gemspec", ENV['FACTER_4_ROOT'])
 
   message('UNINSTALL DEFAULT FACTER 4 AGENT GEM')
   run("#{linux_puppet_gem_command} uninstall facter-ng")
 
   message('INSTALL FACTER 4 GEM')
-  run("#{linux_puppet_gem_command} install -f facter-ng-*.gem")
+  run("#{linux_puppet_gem_command} install -f facter-ng-*.gem", ENV['FACTER_4_ROOT'])
 
   message('CHANGE FACTER 3 WITH FACTER 4')
   run('mv facter-ng facter', linux_puppet_bin_dir)
@@ -94,6 +94,6 @@ Dir.chdir(FACTER_3_ACCEPTANCE_PATH) do
   install_puppet_agent
 end
 
-Dir.chdir(ENV['FACTER_4_ROOT']) { replace_facter_3_with_facter_4 }
+replace_facter_3_with_facter_4
 
 Dir.chdir(FACTER_3_ACCEPTANCE_PATH) { run_acceptance_tests }
