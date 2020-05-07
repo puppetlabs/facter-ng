@@ -46,7 +46,7 @@ def replace_facter_3_with_facter_4
   linux_puppet_gem_command = File.join(linux_puppet_bin_dir, 'gem')
 
   message('SET FACTER 4 FLAG TO TRUE')
-  run('puppet config set facterng true', '/opt/puppetlabs/bin')
+  run('/opt/puppetlabs/puppet/bin/puppet config set facterng true')
 
   message('BUILD FACTER 4 LATEST AGENT GEM')
   run("#{linux_puppet_gem_command} build agent/facter-ng.gemspec", ENV['FACTER_4_ROOT'])
@@ -75,8 +75,9 @@ def message(message)
 end
 
 def run(command, dir = './')
-  output, _status = Open3.capture2(command, chdir: dir)
+  output, std_err, _status = Open3.capture3(command, chdir: dir)
   puts output
+  puts std_err
   output
 end
 
