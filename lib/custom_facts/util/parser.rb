@@ -95,7 +95,7 @@ module LegacyFacter
 
       class YamlParser < Base
         def parse_results
-          YAML.safe_load(content)
+          YAML.safe_load(content, [Date, Time])
         end
       end
 
