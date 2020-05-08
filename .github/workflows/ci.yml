@@ -15,6 +15,7 @@ jobs:
       FACTER_4_ROOT: facter_4
       BEAKER_ROOT: beaker
       SHA: latest
+      BEAKER_VERSION: 4.21.0
 
     steps:
       - name: Checkout current PR
@@ -41,14 +42,18 @@ jobs:
         with:
           ruby-version: '2.6'
 
-      - name: Fix permissions
+      - name: Fix common permissions
+        run: sudo chmod a-w /opt
+
+      - name: Fix Linux permissions
+        if: runner.os == 'Linux'
         run: |
-          if [[ $ImageOS == *ubuntu* ]]
-          then
-            sudo chmod a-w /home/runner /usr/share &&
-            sudo chmod -R a-w /usr/share/rust /home/runner/.config
-          fi
-          sudo chmod a-w /opt
+          sudo chmod a-w /home/runner /usr/share &&
+          sudo chmod -R a-w /usr/share/rust /home/runner/.config
+
+      - name: Fix ubuntu-16.04 permissions
+        if: matrix.os == 'ubuntu-16.04'
+        run: sudo chmod -R a-w /home/linuxbrew
 
       - name: Run acceptance tests
         run: sudo -E "PATH=$PATH" ruby facter_4/.github/actions/presuite.rb

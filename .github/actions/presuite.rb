@@ -19,11 +19,10 @@ def install_custom_beaker
 end
 
 def initialize_beaker
-  beaker_platform = get_beaker_platform(ENV['ImageOS'].to_sym)
-  beaker_platform_with_options = get_platform_with_options(beaker_platform)
+  beaker_options = "#{get_beaker_platform(ENV['ImageOS'].to_sym)}{hypervisor=none\\,hostname=localhost}"
 
   message('BEAKER INITIALIZE')
-  run("beaker init -h #{beaker_platform_with_options} -o config/aio/options.rb")
+  run("beaker init -h #{beaker_options} -o config/aio/options.rb")
 
   message('BEAKER PROVISION')
   run('beaker provision')
@@ -37,11 +36,6 @@ def get_beaker_platform(host_platform)
   }
 
   beaker_platforms[host_platform]
-end
-
-def get_platform_with_options(platform)
-  return "#{platform}{hypervisor=none,hostname=localhost}" if platform.include? 'ubuntu'
-  "\"#{platform}{hypervisor=none,hostname=localhost}\"" if platform.include? 'osx'
 end
 
 def install_puppet_agent
