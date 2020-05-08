@@ -56,7 +56,6 @@ def replace_facter_3_with_facter_4
   gem_command = File.join(puppet_bin_dir, 'gem')
   puppet_command = File.join(puppet_bin_dir, 'puppet')
 
-  run('')
   message('SET FACTER 4 FLAG TO TRUE')
   run("#{puppet_command} config set facterng true")
 
@@ -68,9 +67,9 @@ end
 
 def puppet_bin_dir
   linux_puppet_bin_dir = '/opt/puppetlabs/puppet/bin'
-  windows_puppet_bin_dir = 'c:\Program\ Files\Puppet\ Labs\Puppet\bin'
+  windows_puppet_bin_dir = 'C:\Program\ Files\Puppet\ Labs\Puppet\bin'
 
-  HOST_PLATFORM.to_s.include? 'windows' ? windows_puppet_bin_dir : linux_puppet_bin_dir
+  (HOST_PLATFORM.to_s.include? 'windows') ? windows_puppet_bin_dir : linux_puppet_bin_dir
 end
 
 def install_latest_facter_4(gem_command)
