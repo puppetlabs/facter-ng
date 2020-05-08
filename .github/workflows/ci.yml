@@ -1,14 +1,17 @@
 ---
 name: GitHub hosted facter CI
 
-on: [pull_request]
+on: [push]
 
 jobs:
-  ci:
+  linux:
     name: Run acceptance tests
     strategy:
       matrix:
-        os: [ubuntu-18.04, ubuntu-16.04, macos-10.15]
+        os: [macos-10.15]
+#        os: [ubuntu-18.04, ubuntu-16.04, macos-10.15]
+#        os: [windows-2016]
+#        os: [windows-2016, windows-2019]
     runs-on: ${{ matrix.os }}
     env:
       FACTER_3_ROOT: facter_3
@@ -41,14 +44,20 @@ jobs:
         with:
           ruby-version: '2.6'
 
-      - name: Fix permissions
+      - name: Fix Linux specific permissions
+        if: runner.os == 'Linux'
         run: |
-          if [[ $ImageOS == *ubuntu* ]]
-          then
-            sudo chmod a-w /home/runner /usr/share &&
-            sudo chmod -R a-w /usr/share/rust /home/runner/.config
-          fi
-          sudo chmod a-w /opt
+          sudo chmod a-w /home/runner /usr/share &&
+          sudo chmod -R a-w /usr/share/rust /home/runner/.config
 
-      - name: Run acceptance tests
-        run: sudo -E "PATH=$PATH" ruby facter_4/.github/actions/presuite.rb
+      - name: Fix /opt permissions for Linux and MacOs
+        if: runner.os != 'Windows'
+        run: sudo chmod a-w /opt
+
+      - name: Run acceptance tests on Linux like platform
+        if: runner.os != 'Windows'
+        run: sudo -E "PATH=$PATH" ruby facter_4/.github/actions/presuite.rb ${{ matrix.os }}
+
+      - name: Run acceptance tests on Windows like platform
+        if: runner.os == 'Windows'
+        run: ruby facter_4/.github/actions/presuite.rb ${{ matrix.os }}

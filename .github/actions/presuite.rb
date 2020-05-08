@@ -19,8 +19,7 @@ def install_custom_beaker
 end
 
 def initialize_beaker
-  beaker_platform = get_beaker_platform(ENV['ImageOS'].to_sym)
-  beaker_platform_with_options = get_platform_with_options(beaker_platform)
+  beaker_platform_with_options = platform_with_options(beaker_platform)
 
   message('BEAKER INITIALIZE')
   run("beaker init -h #{beaker_platform_with_options} -o config/aio/options.rb")
@@ -29,19 +28,20 @@ def initialize_beaker
   run('beaker provision')
 end
 
-def get_beaker_platform(host_platform)
-  beaker_platforms = {
-      ubuntu18: 'ubuntu1804-64a',
-      ubuntu16: 'ubuntu1604-64a',
-      macos1015: 'osx1015-64a'
-  }
-
-  beaker_platforms[host_platform]
+def beaker_platform
+  {
+      'ubuntu-18.04': 'ubuntu1804-64a',
+      'ubuntu-16.04': 'ubuntu1604-64a',
+      'macos-10.15': 'osx1015-64a',
+      'windows-2016': 'windows2016-64a',
+      'windows-2019': 'windows2019-64a'
+  }[HOST_PLATFORM]
 end
 
-def get_platform_with_options(platform)
+def platform_with_options(platform)
   return "#{platform}{hypervisor=none,hostname=localhost}" if platform.include? 'ubuntu'
-  "\"#{platform}{hypervisor=none,hostname=localhost}\"" if platform.include? 'osx'
+  return "\"#{platform}{hypervisor=none,hostname=localhost}\"" if platform.include? 'osx'
+  "\"#{platform}{hypervisor=none,hostname=localhost,is_cygwin=false}\"" if platform.include? 'windows'
 end
 
 def install_puppet_agent
@@ -53,13 +53,27 @@ def install_puppet_agent
 end
 
 def replace_facter_3_with_facter_4
-  linux_puppet_bin_dir = '/opt/puppetlabs/puppet/bin'
-  gem_command = File.join(linux_puppet_bin_dir, 'gem')
-  puppet_command = File.join(linux_puppet_bin_dir, 'puppet')
+  gem_command = File.join(puppet_bin_dir, 'gem')
+  puppet_command = File.join(puppet_bin_dir, 'puppet')
 
+  run('')
   message('SET FACTER 4 FLAG TO TRUE')
   run("#{puppet_command} config set facterng true")
 
+  install_latest_facter_4(gem_command)
+
+  message('CHANGE FACTER 3 WITH FACTER 4')
+  run('mv facter-ng facter', puppet_bin_dir)
+end
+
+def puppet_bin_dir
+  linux_puppet_bin_dir = '/opt/puppetlabs/puppet/bin'
+  windows_puppet_bin_dir = 'c:\Program\ Files\Puppet\ Labs\Puppet\bin'
+
+  HOST_PLATFORM.to_s.include? 'windows' ? windows_puppet_bin_dir : linux_puppet_bin_dir
+end
+
+def install_latest_facter_4(gem_command)
   message('BUILD FACTER 4 LATEST AGENT GEM')
   run("#{gem_command} build agent/facter-ng.gemspec", ENV['FACTER_4_ROOT'])
 
@@ -68,9 +82,6 @@ def replace_facter_3_with_facter_4
 
   message('INSTALL FACTER 4 GEM')
   run("#{gem_command} install -f facter-ng-*.gem", ENV['FACTER_4_ROOT'])
-
-  message('CHANGE FACTER 3 WITH FACTER 4')
-  run('mv facter-ng facter', linux_puppet_bin_dir)
 end
 
 def run_acceptance_tests
@@ -93,8 +104,9 @@ def run(command, dir = './')
   [output, status]
 end
 
-ENV['DEBIAN_DISABLE_RUBYGEMS_INTEGRATION'] = 'no_wornings'
+ENV['DEBIAN_DISABLE_RUBYGEMS_INTEGRATION'] = 'no_warnings'
 FACTER_3_ACCEPTANCE_PATH = File.join(ENV['FACTER_3_ROOT'], 'acceptance')
+HOST_PLATFORM = ARGV[0].to_sym
 
 install_bundler
 
