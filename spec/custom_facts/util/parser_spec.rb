@@ -269,15 +269,28 @@ describe LegacyFacter::Util::Parser do
   end
 
   describe LegacyFacter::Util::Parser::YamlParser do
-    let(:yaml_content) { load_fixture('external_fact_yaml').read }
     let(:yaml_parser) { LegacyFacter::Util::Parser::YamlParser.new(nil, yaml_content) }
 
     describe '#parse_results' do
       context 'when yaml is in Time format' do
-        it 'treats it as a string' do
-          expected_result = { 'testsfact' => { 'time' => '2020-04-28 01:44:08.148119000 +01:01' } }
+        context 'when time zone is present' do
+          let(:yaml_content) { load_fixture('external_fact_yaml').read }
 
-          expect(yaml_parser.parse_results).to eq(expected_result)
+          it 'treats it as a string' do
+            expected_result = { 'testsfact' => { 'time' => '2020-04-28 01:44:08.148119000 +01:01' } }
+
+            expect(yaml_parser.parse_results).to eq(expected_result)
+          end
+        end
+
+        context 'when time zone is missing' do
+          let(:yaml_content) { load_fixture('external_fact_yaml_no_zone').read }
+
+          it 'is interpreted as a string' do
+            expected_result = { 'testsfact' => { 'time' => '2020-04-28 01:44:08.148119000' } }
+
+            expect(yaml_parser.parse_results).to eq(expected_result)
+          end
         end
       end
     end
