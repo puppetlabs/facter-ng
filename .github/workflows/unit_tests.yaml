@@ -23,8 +23,3 @@ jobs:
       - run: bundle update
       - run: bundle exec rubocop
       - run: bundle exec rake spec
-
-      - name: Coveralls
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
