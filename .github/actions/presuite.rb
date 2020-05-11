@@ -5,8 +5,9 @@ def install_bundler
   run('gem install bundler')
 end
 
-def install_facter_3_dependecies
+def install_facter_3_dependencies_without_beaker
   message('INSTALL FACTER 3 ACCEPTANCE DEPENDENCIES')
+  run('export BEAKER_VERSION=4.21.0')
   run('bundle install')
 end
 
@@ -109,7 +110,7 @@ HOST_PLATFORM = ARGV[0].to_sym
 
 install_bundler
 
-Dir.chdir(FACTER_3_ACCEPTANCE_PATH) { install_facter_3_dependecies }
+Dir.chdir(FACTER_3_ACCEPTANCE_PATH) { install_facter_3_dependencies_without_beaker }
 
 Dir.chdir(ENV['BEAKER_ROOT']) { install_custom_beaker }
 
