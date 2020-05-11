@@ -267,4 +267,19 @@ describe LegacyFacter::Util::Parser do
       expect(LegacyFacter::Util::Parser.parser_for('this.is.not.valid').results).to be nil
     end
   end
+
+  describe LegacyFacter::Util::Parser::YamlParser do
+    let(:yaml_content) { load_fixture('external_fact_yaml').read }
+    let(:yaml_parser) { LegacyFacter::Util::Parser::YamlParser.new(nil, yaml_content) }
+
+    describe '#parse_results' do
+      context 'when yaml is in Time format' do
+        it 'treats it as a string' do
+          expected_result = { 'testsfact' => { 'time' => '2020-04-28 01:44:08.148119000 +01:01' } }
+
+          expect(yaml_parser.parse_results).to eq(expected_result)
+        end
+      end
+    end
+  end
 end

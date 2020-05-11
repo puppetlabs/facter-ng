@@ -96,7 +96,8 @@ module LegacyFacter
       # This regex was taken from Psych
       # https://github.com/ruby/psych/blob/d2deaa9adfc88fc0b870df022a434d6431277d08/lib/psych/scalar_scanner.rb#L9
       # It is used to detect Time in YAML, but we use it wrap time objects in quotes to be treated as strings.
-      TIME = /^-?\d{4}-\d{1,2}-\d{1,2}(?:[Tt]|\s+)\d{1,2}:\d\d:\d\d(?:\.\d*)?(?:\s*(?:Z|[-+]\d{1,2}:?(?:\d\d)?))?$/
+      TIME =
+        /^-?\d{4}-\d{1,2}-\d{1,2}(?:[Tt]|\s+)\d{1,2}:\d\d:\d\d(?:\.\d*)?(?:\s*(?:Z|[-+]\d{1,2}:?(?:\d\d)?))?$/.freeze
 
       class YamlParser < Base
         def parse_results
@@ -106,8 +107,8 @@ module LegacyFacter
           yaml_stream = Psych.parse_stream(yaml_hash.to_yaml)
           yaml_stream
             .grep(Psych::Nodes::Scalar)
-            .select{ |node| node.value =~ TIME }
-            .each { |node| node.value = "#{node.value}"}
+            .select { |node| node.value =~ TIME }
+            .each { |node| node.value = node.value.to_s }
 
           YAML.safe_load(yaml_stream.yaml, [Date, Time])
         end
