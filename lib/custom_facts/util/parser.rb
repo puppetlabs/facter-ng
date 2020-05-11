@@ -5,115 +5,6 @@
 #
 # Parsers must subclass this class and provide their own #results method.
 
-# module Psych
-#   class ScalarScanner
-#     def parse_time string
-#       string
-#     end
-#   end
-# end
-
-class MyScanner < Psych::ScalarScanner
-  def parse_time string
-    string
-  end
-end
-
-
-module MyPsych
-  include Psych
-
-  def self.safe_load yaml, legacy_permitted_classes = NOT_GIVEN, legacy_permitted_symbols = NOT_GIVEN, legacy_aliases = NOT_GIVEN, legacy_filename = NOT_GIVEN, permitted_classes: [], permitted_symbols: [], aliases: false, filename: nil, fallback: nil, symbolize_names: false
-    if legacy_permitted_classes != NOT_GIVEN
-      warn_with_uplevel 'Passing permitted_classes with the 2nd argument of Psych.safe_load is deprecated. Use keyword argument like Psych.safe_load(yaml, permitted_classes: ...) instead.', uplevel: 1 if $VERBOSE
-      permitted_classes = legacy_permitted_classes
-    end
-
-    if legacy_permitted_symbols != NOT_GIVEN
-      warn_with_uplevel 'Passing permitted_symbols with the 3rd argument of Psych.safe_load is deprecated. Use keyword argument like Psych.safe_load(yaml, permitted_symbols: ...) instead.', uplevel: 1 if $VERBOSE
-      permitted_symbols = legacy_permitted_symbols
-    end
-
-    if legacy_aliases != NOT_GIVEN
-      warn_with_uplevel 'Passing aliases with the 4th argument of Psych.safe_load is deprecated. Use keyword argument like Psych.safe_load(yaml, aliases: ...) instead.', uplevel: 1 if $VERBOSE
-      aliases = legacy_aliases
-    end
-
-    if legacy_filename != NOT_GIVEN
-      warn_with_uplevel 'Passing filename with the 5th argument of Psych.safe_load is deprecated. Use keyword argument like Psych.safe_load(yaml, filename: ...) instead.', uplevel: 1 if $VERBOSE
-      filename = legacy_filename
-    end
-
-    result = Psych::parse(yaml, filename: filename)
-    return fallback unless result
-
-    class_loader = Psych::ClassLoader::Restricted.new(permitted_classes.map(&:to_s),
-                                                      permitted_symbols.map(&:to_s))
-    scanner      = MyScanner.new class_loader
-    visitor = if aliases
-                Psych::Visitors::ToRuby.new scanner, class_loader
-              else
-                Psych::Visitors::NoAliasRuby.new scanner, class_loader
-              end
-    result = visitor.accept result
-    Psych.symbolize_names!(result) if symbolize_names
-    result
-  end
-end
-
-
-module Test
-  refine Psych::ScalarScanner do
-    def parse_time string
-      string
-    end
-  end
-
-  refine Psych.singleton_class do
-    NOT_GIVEN = Object.new
-    def safe_load yaml, legacy_permitted_classes = NOT_GIVEN, legacy_permitted_symbols = NOT_GIVEN, legacy_aliases = NOT_GIVEN, legacy_filename = NOT_GIVEN, permitted_classes: [], permitted_symbols: [], aliases: false, filename: nil, fallback: nil, symbolize_names: false
-        if legacy_permitted_classes != NOT_GIVEN
-          warn_with_uplevel 'Passing permitted_classes with the 2nd argument of Psych.safe_load is deprecated. Use keyword argument like Psych.safe_load(yaml, permitted_classes: ...) instead.', uplevel: 1 if $VERBOSE
-          permitted_classes = legacy_permitted_classes
-        end
-
-        if legacy_permitted_symbols != NOT_GIVEN
-          warn_with_uplevel 'Passing permitted_symbols with the 3rd argument of Psych.safe_load is deprecated. Use keyword argument like Psych.safe_load(yaml, permitted_symbols: ...) instead.', uplevel: 1 if $VERBOSE
-          permitted_symbols = legacy_permitted_symbols
-        end
-
-        if legacy_aliases != NOT_GIVEN
-          warn_with_uplevel 'Passing aliases with the 4th argument of Psych.safe_load is deprecated. Use keyword argument like Psych.safe_load(yaml, aliases: ...) instead.', uplevel: 1 if $VERBOSE
-          aliases = legacy_aliases
-        end
-
-        if legacy_filename != NOT_GIVEN
-          warn_with_uplevel 'Passing filename with the 5th argument of Psych.safe_load is deprecated. Use keyword argument like Psych.safe_load(yaml, filename: ...) instead.', uplevel: 1 if $VERBOSE
-          filename = legacy_filename
-        end
-
-        result = Psych::parse(yaml, filename: filename)
-        return fallback unless result
-
-        class_loader = Psych::ClassLoader::Restricted.new(permitted_classes.map(&:to_s),
-                                                   permitted_symbols.map(&:to_s))
-        scanner      = MyScanner.new class_loader
-        visitor = if aliases
-                    Psych::Visitors::ToRuby.new scanner, class_loader
-                  else
-                    Psych::Visitors::NoAliasRuby.new scanner, class_loader
-                  end
-        result = visitor.accept result
-        Psych.symbolize_names!(result) if symbolize_names
-        result
-    end
-  end
-end
-
-# require 'yaml'
-
-# using ::Test
-
 module LegacyFacter
   module Util
     module Parser
@@ -201,39 +92,16 @@ module LegacyFacter
         end
       end
 
-      # This regex was taken from Psych
+      # This regex was taken from Psych and adapted
       # https://github.com/ruby/psych/blob/d2deaa9adfc88fc0b870df022a434d6431277d08/lib/psych/scalar_scanner.rb#L9
-      # It is used to detect Time in YAML, but we use it wrap time objects in quotes to be treated as strings.
-      TIME =
-        /^-?\d{4}-\d{1,2}-\d{1,2}(?:[Tt]|\s+)\d{1,2}:\d\d:\d\d(?:\.\d*)?(?:\s*(?:Z|[-+]\d{1,2}:?(?:\d\d)?))?$/.freeze
+      # It is used to detect Time in YAML, but we use it to wrap time objects in quotes to be treated as strings.
+      TIME = /(\d{4}-\d{1,2}-\d{1,2}(?:[Tt]|\s+)\d{1,2}:\d\d:\d\d(?:\.\d*)?(?:\s*(?:Z|[-+]\d{1,2}:?(?:\d\d)?))?)/.freeze
 
       class YamlParser < Base
-        using ::Test
-
         def parse_results
+          cont = content.gsub(TIME, '"\1"')
 
-          # require 'psych'
-          # ss = Psych::ScalarScanner.new("cl")
-          # ss.parse_time("tt")
-
-          # yaml_hash = Psych.sl(content, [Date, Time])
-          yaml_hash = MyPsych.safe_load(content, [Date, Time])
-
-          # add quotes to YAML time in order to interpret is as string
-          # yaml_stream = Psych.parse_stream(yaml_hash.to_yaml)
-          # yaml_stream
-          #   .grep(Psych::Nodes::Scalar)
-          #   .select { |node| node.value =~ TIME }
-          #   .each do |node|
-          #     node.plain  = true
-          #     # node.quoted = true
-          #     node.tag = "!!str"
-          #     node.value = node.value.to_s
-          # end
-          #
-          # YAML.safe_load(yaml_stream.yaml, [Date, Time])
-
-          yaml_hash
+          YAML.safe_load(cont)
         end
       end
 
