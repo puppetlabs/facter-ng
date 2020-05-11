@@ -272,7 +272,7 @@ describe LegacyFacter::Util::Parser do
     let(:yaml_parser) { LegacyFacter::Util::Parser::YamlParser.new(nil, yaml_content) }
 
     describe '#parse_results' do
-      context 'when yaml is in Time format' do
+      context 'when yaml contains Time formatted fields' do
         context 'when time zone is present' do
           let(:yaml_content) { load_fixture('external_fact_yaml').read }
 
@@ -291,6 +291,16 @@ describe LegacyFacter::Util::Parser do
 
             expect(yaml_parser.parse_results).to eq(expected_result)
           end
+        end
+      end
+
+      context 'when yaml contains Date formatted fields' do
+        let(:yaml_content) { load_fixture('external_fact_yaml_date').read }
+
+        it 'loads date' do
+          expected_result = { 'testsfact' => { 'date' => '2020-04-28' } }
+
+          expect(yaml_parser.parse_results).to eq(expected_result)
         end
       end
     end

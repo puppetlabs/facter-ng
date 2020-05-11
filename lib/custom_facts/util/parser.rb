@@ -97,12 +97,17 @@ module LegacyFacter
       # It is used to detect Time in YAML, but we use it to wrap time objects in quotes to be treated as strings.
       TIME = /(\d{4}-\d{1,2}-\d{1,2}(?:[Tt]|\s+)\d{1,2}:\d\d:\d\d(?:\.\d*)?(?:\s*(?:Z|[-+]\d{1,2}:?(?:\d\d)?))?)/.freeze
 
+      DATE = /(\d{4}-\d{1,2}-\d{1,2})/
+
       class YamlParser < Base
         def parse_results
           # Add quotes to Yaml time
           cont = content.gsub(TIME, '"\1"')
 
-          YAML.safe_load(cont, [Date])
+          # Add quotes to Yaml date
+          cont = content.gsub(DATE, '"\1"')
+
+          YAML.safe_load(cont)
         end
       end
 

@@ -16,7 +16,7 @@ module LegacyFacter
       # @return [void]
       def normalize(value)
         case value
-        when Integer, Float, TrueClass, FalseClass, NilClass, Symbol, Date
+        when Integer, Float, TrueClass, FalseClass, NilClass, Symbol
           value
         when String
           normalize_string(value)
