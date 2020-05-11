@@ -9,7 +9,7 @@ printf '\nInstall bundler\n\n'
 gem install bundler
 
 printf '\nInstall facter 3 acceptance dependencies\n\n'
-cd $cwd/$FACTER_3_ROOT/acceptance && bundle install
+cd $cwd/$FACTER_3_ROOT/acceptance && bundle remove beaker --install
 
 printf '\nInstall custom beaker\n\n'
 cd $cwd/$BEAKER_ROOT
