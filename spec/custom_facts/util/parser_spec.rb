@@ -298,7 +298,7 @@ describe LegacyFacter::Util::Parser do
         let(:yaml_content) { load_fixture('external_fact_yaml_date').read }
 
         it 'loads date' do
-          expected_result = { 'testsfact' => { 'date' => '2020-04-28' } }
+          expected_result = { 'testsfact' => { 'date' => Date.parse('2020-04-28') } }
 
           expect(yaml_parser.parse_results).to eq(expected_result)
         end

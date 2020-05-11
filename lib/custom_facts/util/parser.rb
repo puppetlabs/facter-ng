@@ -98,17 +98,12 @@ module LegacyFacter
       TIME =
         /(\d{4}-\d{1,2}-\d{1,2}(?:[Tt]|\s+)\d{1,2}:\d\d:\d\d(?:\.\d*)?(?:\s*(?:Z|[-+]\d{1,2}:?(?:\d\d)?))?\s*$)/.freeze
 
-      DATE = /(\d{4}-\d{1,2}-\d{1,2}\s*$)/.freeze
-
       class YamlParser < Base
         def parse_results
           # Add quotes to Yaml time
           cont = content.gsub(TIME, '"\1"')
 
-          # Add quotes to Yaml date
-          cont = cont.gsub(DATE, '"\1"')
-
-          YAML.safe_load(cont)
+          YAML.safe_load(cont, [Date])
         end
       end
 
