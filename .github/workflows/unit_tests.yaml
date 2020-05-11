@@ -8,9 +8,8 @@ jobs:
     name: Run unit tests
     strategy:
       matrix:
-        os: [ubuntu-18.04, macos-10.15]
         ruby: [ 2.4, 2.5, 2.6, 2.7, jruby ]
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-18.04
 
     steps:
       - name: Checkout current PR
