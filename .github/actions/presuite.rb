@@ -5,11 +5,9 @@ def install_bundler
   run('gem install bundler')
 end
 
-def install_facter_3_dependencies_without_beaker
+def install_facter_3_dependencies
   message('INSTALL FACTER 3 ACCEPTANCE DEPENDENCIES')
   run('bundle install')
-  run('export BEAKER_VERSION=4.21.0')
-  run('bundle update')
 end
 
 def install_custom_beaker
@@ -41,17 +39,23 @@ def beaker_platform
 end
 
 def platform_with_options(platform)
-  return "#{platform}{hypervisor=none,hostname=localhost}" if platform.include? 'ubuntu'
-  return "\"#{platform}{hypervisor=none,hostname=localhost}\"" if platform.include? 'osx'
-  "\"#{platform}{hypervisor=none,hostname=localhost,is_cygwin=false}\"" if platform.include? 'windows'
+  return "\"#{platform}{hypervisor=none,hostname=localhost,is_cygwin=false}\"" if platform.include? 'windows'
+  "#{platform}{hypervisor=none\\,hostname=localhost}"
 end
 
 def install_puppet_agent
-  beaker_puppet_root, _ = run('bundle info beaker-puppet --path')
-  install_puppet_file_path = File.join(beaker_puppet_root.chomp, 'setup', 'aio', '010_Install_Puppet_Agent.rb')
-
   message('INSTALL PUPPET AGENT')
-  run("beaker exec pre-suite --pre-suite #{install_puppet_file_path}")
+
+  beaker_puppet_root, _ = run('bundle info beaker-puppet --path')
+  path_tokens = ['setup', 'common']
+  presuite_files = ['012_Finalize_Installs.rb', '025_StopFirewall.rb', '030_StopSssd.rb']
+
+  abs_presuite_file_paths = [File.join(beaker_puppet_root.chomp, 'setup', 'aio', '010_Install_Puppet_Agent.rb')]
+  presuite_files.each do |file|
+    abs_presuite_file_paths << File.join(beaker_puppet_root.chomp, path_tokens, file)
+  end
+
+  run("beaker exec pre-suite --pre-suite #{abs_presuite_file_paths.join(',')}, --preserve-state")
 end
 
 def replace_facter_3_with_facter_4
@@ -111,7 +115,7 @@ HOST_PLATFORM = ARGV[0].to_sym
 
 install_bundler
 
-Dir.chdir(FACTER_3_ACCEPTANCE_PATH) { install_facter_3_dependencies_without_beaker }
+Dir.chdir(FACTER_3_ACCEPTANCE_PATH) { install_facter_3_dependencies }
 
 Dir.chdir(ENV['BEAKER_ROOT']) { install_custom_beaker }
 
