@@ -15,6 +15,12 @@ jobs:
       - name: Checkout current PR
         uses: actions/checkout@v2
 
+      - name: Setup Code Climate test-reporter
+        run: |
+          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+          chmod +x ./cc-test-reporter
+          ./cc-test-reporter before-build
+
       - name: Rubocop & rspec checks
         uses: ruby/setup-ruby@v1
         with:
@@ -23,21 +29,3 @@ jobs:
       - run: bundle update
       - run: bundle exec rubocop
       - run: bundle exec rake spec
-
-  coverage:
-    needs: [ unit_tests ]
-    name: coverage
-    runs-on: ubuntu-18.04
-    steps:
-      - uses: actions/checkout@master
-      - uses: actions/setup-node@master
-        with:
-          node-version: '12'
-      - run: npm install -g yarn
-      - run: yarn install
-      - run: yarn build
-      - uses: paambaati/codeclimate-action@v2.6.0
-        env:
-          CC_TEST_REPORTER_ID: 5d6407440da5cb25dc0010de
-        with:
-          coverageCommand: yarn coverage
