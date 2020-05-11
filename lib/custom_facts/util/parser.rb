@@ -95,9 +95,10 @@ module LegacyFacter
       # This regex was taken from Psych and adapted
       # https://github.com/ruby/psych/blob/d2deaa9adfc88fc0b870df022a434d6431277d08/lib/psych/scalar_scanner.rb#L9
       # It is used to detect Time in YAML, but we use it to wrap time objects in quotes to be treated as strings.
-      TIME = /(\d{4}-\d{1,2}-\d{1,2}(?:[Tt]|\s+)\d{1,2}:\d\d:\d\d(?:\.\d*)?(?:\s*(?:Z|[-+]\d{1,2}:?(?:\d\d)?))?)/.freeze
+      TIME =
+        /(\d{4}-\d{1,2}-\d{1,2}(?:[Tt]|\s+)\d{1,2}:\d\d:\d\d(?:\.\d*)?(?:\s*(?:Z|[-+]\d{1,2}:?(?:\d\d)?))?\s*$)/.freeze
 
-      DATE = /(\d{4}-\d{1,2}-\d{1,2})/
+      DATE = /(\d{4}-\d{1,2}-\d{1,2}\s*$)/.freeze
 
       class YamlParser < Base
         def parse_results
@@ -105,7 +106,7 @@ module LegacyFacter
           cont = content.gsub(TIME, '"\1"')
 
           # Add quotes to Yaml date
-          cont = content.gsub(DATE, '"\1"')
+          cont = cont.gsub(DATE, '"\1"')
 
           YAML.safe_load(cont)
         end
