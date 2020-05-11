@@ -18,8 +18,6 @@ module LegacyFacter
         case value
         when Integer, Float, TrueClass, FalseClass, NilClass, Symbol, Date
           value
-        when Time
-          value.strftime('%Y-%m-%d %H:%M:%S.%9N %:z')
         when String
           normalize_string(value)
         when Array

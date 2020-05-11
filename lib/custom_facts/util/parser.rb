@@ -99,9 +99,10 @@ module LegacyFacter
 
       class YamlParser < Base
         def parse_results
+          # Add quotes to Yaml time
           cont = content.gsub(TIME, '"\1"')
 
-          YAML.safe_load(cont)
+          YAML.safe_load(cont, [Date])
         end
       end
 
