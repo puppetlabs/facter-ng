@@ -22,10 +22,10 @@ def initialize_beaker
   beaker_platform_with_options = platform_with_options(beaker_platform)
 
   message('BEAKER INITIALIZE')
-  run("beaker init -h #{beaker_platform_with_options} -o config/aio/options.rb")
+  run("beaker init -h #{beaker_platform_with_options} -o config/aio/options.rb --debug")
 
   message('BEAKER PROVISION')
-  run('beaker provision')
+  run('beaker provision --debug')
 end
 
 def beaker_platform
