@@ -1,7 +1,7 @@
 ---
 name: Facter 4 unit test
 
-on: [pull_request, push]
+on: [pull_request]
 
 jobs:
   unit_tests:
