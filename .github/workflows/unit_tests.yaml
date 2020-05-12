@@ -15,11 +15,24 @@ jobs:
       - name: Checkout current PR
         uses: actions/checkout@v2
 
-      - name: Rubocop & rspec checks
+      - name: Rspec checks
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
       - run: gem install bundler
       - run: bundle update
-      - run: bundle exec rubocop
       - run: bundle exec rake spec
+
+  rspec_checks:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout current PR
+        uses: actions/checkout@v2
+
+      - name: Rubocop checks
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.6
+      - run: gem install bundler
+      - run: bundle update
+      - run: bundle exec rubocop
