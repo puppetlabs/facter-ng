@@ -8,7 +8,7 @@ jobs:
     name: Ruby version
     strategy:
       matrix:
-        ruby: [ 2.3, 2.4, 2.5, 2.6, 2.7, jruby ]
+        ruby: [ 2.3, 2.7, jruby ]
     runs-on: ubuntu-18.04
 
     steps:
@@ -22,31 +22,3 @@ jobs:
       - run: gem install bundler
       - run: bundle update
       - run: bundle exec rake spec
-
-  rspec_checks:
-    runs-on: ubuntu-18.04
-    steps:
-      - name: Checkout current PR
-        uses: actions/checkout@v2
-
-      - name: Rubocop checks
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 2.6
-      - run: gem install bundler
-      - run: bundle update
-      - run: bundle exec rubocop
-
-  commit_checks:
-    runs-on: ubuntu-18.04
-    steps:
-      - name: Checkout current PR
-        uses: actions/checkout@v2
-
-      - name: Commit message checks
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 2.6
-      - run: gem install bundler
-      - run: bundle update
-      - run: bundle exec rake commits
