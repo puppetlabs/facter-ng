@@ -4,7 +4,7 @@ name: Checks
 on: [pull_request]
 
 jobs:
-  rspec_checks:
+  rubocop_checks:
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout current PR
