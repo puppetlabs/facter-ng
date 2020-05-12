@@ -1,7 +1,7 @@
 # facter-ng
 
 [![Build Status](https://travis-ci.org/puppetlabs/facter-ng.svg?branch=master)](https://travis-ci.org/puppetlabs/facter-ng?branch=master)
-[![Coverage Status](https://coveralls.io/repos/github/puppetlabs/facter-ng/badge.svg?branch=master)](https://coveralls.io/github/puppetlabs/facter-ng?branch=master)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/bf43445f767f2d64170a/test_coverage)](https://codeclimate.com/github/puppetlabs/facter-ng/test_coverage)
 [![Maintainability](https://api.codeclimate.com/v1/badges/bf43445f767f2d64170a/maintainability)](https://codeclimate.com/github/puppetlabs/facter-ng/maintainability)
 [<img src="https://img.shields.io/badge/slack-puppet--dev-brightgreen?logo=slack">](https://puppetcommunity.slack.com/messages/C0W1X7ZAL)
 
