@@ -228,7 +228,7 @@ describe LegacyFacter::Util::Parser do
         expects_to_parse_powershell(ps1, data)
       end
 
-      context 'when executing powershell', if: LegacyFacter::Util::Config.windows? do
+      context 'when executing powershell' do
         let(:sysnative_powershell) { "#{ENV['SYSTEMROOT']}\\sysnative\\WindowsPowershell\\v1.0\\powershell.exe" }
         let(:system32_powershell)  { "#{ENV['SYSTEMROOT']}\\system32\\WindowsPowershell\\v1.0\\powershell.exe" }
 
@@ -237,7 +237,7 @@ describe LegacyFacter::Util::Parser do
         let(:powershell_regexp) { /^\"#{Regexp.escape("powershell.exe")}\"/ }
 
         it 'prefers the sysnative alias to resolve 64-bit powershell on 32-bit ruby' do
-          allow(File).to receive(:exists?).with(sysnative_powershell).and_return(true)
+          allow(File).to receive(:readable?).with(sysnative_powershell).and_return(true)
           allow(Facter::Core::Execution)
             .to receive(:exec)
             .with(sysnative_regexp)
@@ -247,16 +247,16 @@ describe LegacyFacter::Util::Parser do
         end
 
         it "uses system32 if sysnative alias doesn't exist on 64-bit ruby" do
-          allow(File).to receive(:exists?).with(sysnative_powershell).and_return(false)
-          allow(File).to receive(:exists?).with(system32_powershell).and_return(true)
+          allow(File).to receive(:readable?).with(sysnative_powershell).and_return(false)
+          allow(File).to receive(:readable?).with(system32_powershell).and_return(true)
           allow(Facter::Core::Execution).to receive(:exec).with(system32_regexp).and_return(data_in_txt)
 
           expects_to_parse_powershell(ps1, data)
         end
 
         it "uses 'powershell' as a last resort" do
-          allow(File).to receive(:exists?).with(sysnative_powershell).and_return(false)
-          allow(File).to receive(:exists?).with(system32_powershell).and_return(false)
+          allow(File).to receive(:readable?).with(sysnative_powershell).and_return(false)
+          allow(File).to receive(:readable?).with(system32_powershell).and_return(false)
           allow(Facter::Core::Execution)
             .to receive(:exec)
             .with(powershell_regexp)
