@@ -237,24 +237,30 @@ describe LegacyFacter::Util::Parser do
         let(:powershell_regexp) { /^\"#{Regexp.escape("powershell.exe")}\"/ }
 
         it 'prefers the sysnative alias to resolve 64-bit powershell on 32-bit ruby' do
-          File.expects(:exists?).with(sysnative_powershell).returns(true)
-          Facter::Core::Execution.expects(:exec).with(regexp_matches(sysnative_regexp)).returns(data_in_txt)
+          allow(File).to receive(:exists?).with(sysnative_powershell).and_return(true)
+          allow(Facter::Core::Execution)
+            .to receive(:exec)
+            .with(sysnative_regexp)
+            .and_return(data_in_txt)
 
           expects_to_parse_powershell(ps1, data)
         end
 
         it "uses system32 if sysnative alias doesn't exist on 64-bit ruby" do
-          File.expects(:exists?).with(sysnative_powershell).returns(false)
-          File.expects(:exists?).with(system32_powershell).returns(true)
-          Facter::Core::Execution.expects(:exec).with(regexp_matches(system32_regexp)).returns(data_in_txt)
+          allow(File).to receive(:exists?).with(sysnative_powershell).and_return(false)
+          allow(File).to receive(:exists?).with(system32_powershell).and_return(true)
+          allow(Facter::Core::Execution).to receive(:exec).with(system32_regexp).and_return(data_in_txt)
 
           expects_to_parse_powershell(ps1, data)
         end
 
         it "uses 'powershell' as a last resort" do
-          File.expects(:exists?).with(sysnative_powershell).returns(false)
-          File.expects(:exists?).with(system32_powershell).returns(false)
-          Facter::Core::Execution.expects(:exec).with(regexp_matches(powershell_regexp)).returns(data_in_txt)
+          allow(File).to receive(:exists?).with(sysnative_powershell).and_return(false)
+          allow(File).to receive(:exists?).with(system32_powershell).and_return(false)
+          allow(Facter::Core::Execution)
+            .to receive(:exec)
+            .with(powershell_regexp)
+            .and_return(data_in_txt)
 
           expects_to_parse_powershell(ps1, data)
         end
