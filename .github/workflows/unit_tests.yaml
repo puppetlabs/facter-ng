@@ -1,11 +1,11 @@
 ---
-name: Facter 4 unit test
+name: Unit tests
 
 on: [pull_request]
 
 jobs:
   unit_tests:
-    name: Run unit tests on Ruby
+    name: Ruby version
     strategy:
       matrix:
         ruby: [ 2.3, 2.4, 2.5, 2.6, 2.7, jruby ]
