@@ -11,21 +11,24 @@ def install_facter_3_dependencies
 end
 
 def install_custom_beaker
-  message('BUILD CUSTOM BEAKER GEM')
-  run('gem build beaker.gemspec')
-
-  message('INSTALL CUSTOM BEAKER GEM')
-  run('gem install beaker-*.gem')
+  message('INSTALL CUSTOM BEAKE GEM')
+  beaker_path, _ = run('bundle info beaker --path', FACTER_3_ACCEPTANCE_PATH)
+  Dir.chdir(beaker_path.split("\n").last) do
+    run('git init')
+    run('git remote add origin https://github.com/mihaibuzgau/beaker.git')
+    run('git fetch')
+    run('git reset --hard origin/master')
+  end
 end
 
 def initialize_beaker
   beaker_platform_with_options = platform_with_options(beaker_platform)
 
   message('BEAKER INITIALIZE')
-  run("beaker init -h #{beaker_platform_with_options} -o config/aio/options.rb --debug")
+  run("beaker init -h #{beaker_platform_with_options} -o config/aio/options.rb")
 
   message('BEAKER PROVISION')
-  run('beaker provision --debug')
+  run('beaker provision')
 end
 
 def beaker_platform
@@ -51,9 +54,9 @@ def install_puppet_agent
   presuite_files = ['012_Finalize_Installs.rb', '025_StopFirewall.rb', '030_StopSssd.rb']
 
   abs_presuite_file_paths = [File.join(beaker_puppet_root.chomp, 'setup', 'aio', '010_Install_Puppet_Agent.rb')]
-  presuite_files.each do |file|
-    abs_presuite_file_paths << File.join(beaker_puppet_root.chomp, path_tokens, file)
-  end
+  # presuite_files.each do |file|
+  #   abs_presuite_file_paths << File.join(beaker_puppet_root.chomp, path_tokens, file)
+  # end
 
   run("beaker exec pre-suite --pre-suite #{abs_presuite_file_paths.join(',')}, --preserve-state")
 end
@@ -116,8 +119,7 @@ HOST_PLATFORM = ARGV[0].to_sym
 install_bundler
 
 Dir.chdir(FACTER_3_ACCEPTANCE_PATH) { install_facter_3_dependencies }
-
-Dir.chdir(ENV['BEAKER_ROOT']) { install_custom_beaker }
+install_custom_beaker
 
 Dir.chdir(FACTER_3_ACCEPTANCE_PATH) do
   initialize_beaker
