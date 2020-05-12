@@ -28,6 +28,12 @@ jobs:
       - name: Checkout current PR
         uses: actions/checkout@v2
 
+      - name: Setup Code Climate test-reporter
+        run: |
+          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+          chmod +x ./cc-test-reporter
+          ./cc-test-reporter before-build
+
       - name: Rspec checks
         uses: ruby/setup-ruby@v1
         with:
@@ -36,7 +42,7 @@ jobs:
       - run: bundle install --jobs 3 --retry 3
       - run: bundle exec rake spec
 
-      - name: Coveralls
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish code coverage
+        run: |
+          export GIT_BRANCH="${GITHUB_REF/refs\/heads\//}"
+          ./cc-test-reporter after-build -r ${{secrets.CC_TEST_REPORTER_ID}}
