@@ -11,8 +11,8 @@ describe Facts::Windows::NetmaskInterfaces do
     let(:interfaces) { { 'eth0' => { netmask: '10.255.255.255' }, 'en1' => { netmask: '10.17.255.255' } } }
 
     it 'calls Facter::Resolvers::Networking' do
-      expect(Facter::Resolvers::Networking).to receive(:resolve).with(:interfaces)
       fact.call_the_resolver
+      expect(Facter::Resolvers::Networking).to have_received(:resolve).with(:interfaces)
     end
 
     it 'returns legacy facts with names netmask_<interface_name>' do

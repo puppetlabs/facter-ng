@@ -228,7 +228,7 @@ describe LegacyFacter::Util::Parser do
         expects_to_parse_powershell(ps1, data)
       end
 
-      context 'when executing powershell', if: LegacyFacter::Util::Config.windows? do
+      context 'when executing powershell' do
         let(:sysnative_powershell) { "#{ENV['SYSTEMROOT']}\\sysnative\\WindowsPowershell\\v1.0\\powershell.exe" }
         let(:system32_powershell)  { "#{ENV['SYSTEMROOT']}\\system32\\WindowsPowershell\\v1.0\\powershell.exe" }
 
@@ -237,24 +237,30 @@ describe LegacyFacter::Util::Parser do
         let(:powershell_regexp) { /^\"#{Regexp.escape("powershell.exe")}\"/ }
 
         it 'prefers the sysnative alias to resolve 64-bit powershell on 32-bit ruby' do
-          File.expects(:exists?).with(sysnative_powershell).returns(true)
-          Facter::Core::Execution.expects(:exec).with(regexp_matches(sysnative_regexp)).returns(data_in_txt)
+          allow(File).to receive(:readable?).with(sysnative_powershell).and_return(true)
+          allow(Facter::Core::Execution)
+            .to receive(:exec)
+            .with(sysnative_regexp)
+            .and_return(data_in_txt)
 
           expects_to_parse_powershell(ps1, data)
         end
 
         it "uses system32 if sysnative alias doesn't exist on 64-bit ruby" do
-          File.expects(:exists?).with(sysnative_powershell).returns(false)
-          File.expects(:exists?).with(system32_powershell).returns(true)
-          Facter::Core::Execution.expects(:exec).with(regexp_matches(system32_regexp)).returns(data_in_txt)
+          allow(File).to receive(:readable?).with(sysnative_powershell).and_return(false)
+          allow(File).to receive(:readable?).with(system32_powershell).and_return(true)
+          allow(Facter::Core::Execution).to receive(:exec).with(system32_regexp).and_return(data_in_txt)
 
           expects_to_parse_powershell(ps1, data)
         end
 
         it "uses 'powershell' as a last resort" do
-          File.expects(:exists?).with(sysnative_powershell).returns(false)
-          File.expects(:exists?).with(system32_powershell).returns(false)
-          Facter::Core::Execution.expects(:exec).with(regexp_matches(powershell_regexp)).returns(data_in_txt)
+          allow(File).to receive(:readable?).with(sysnative_powershell).and_return(false)
+          allow(File).to receive(:readable?).with(system32_powershell).and_return(false)
+          allow(Facter::Core::Execution)
+            .to receive(:exec)
+            .with(powershell_regexp)
+            .and_return(data_in_txt)
 
           expects_to_parse_powershell(ps1, data)
         end
@@ -265,6 +271,44 @@ describe LegacyFacter::Util::Parser do
   describe 'nothing parser' do
     it 'uses the nothing parser when there is no other parser' do
       expect(LegacyFacter::Util::Parser.parser_for('this.is.not.valid').results).to be nil
+    end
+  end
+
+  describe LegacyFacter::Util::Parser::YamlParser do
+    let(:yaml_parser) { LegacyFacter::Util::Parser::YamlParser.new(nil, yaml_content) }
+
+    describe '#parse_results' do
+      context 'when yaml contains Time formatted fields' do
+        context 'when time zone is present' do
+          let(:yaml_content) { load_fixture('external_fact_yaml').read }
+
+          it 'treats it as a string' do
+            expected_result = { 'testsfact' => { 'time' => '2020-04-28 01:44:08.148119000 +01:01' } }
+
+            expect(yaml_parser.parse_results).to eq(expected_result)
+          end
+        end
+
+        context 'when time zone is missing' do
+          let(:yaml_content) { load_fixture('external_fact_yaml_no_zone').read }
+
+          it 'is interpreted as a string' do
+            expected_result = { 'testsfact' => { 'time' => '2020-04-28 01:44:08.148119000' } }
+
+            expect(yaml_parser.parse_results).to eq(expected_result)
+          end
+        end
+      end
+
+      context 'when yaml contains Date formatted fields' do
+        let(:yaml_content) { load_fixture('external_fact_yaml_date').read }
+
+        it 'loads date' do
+          expected_result = { 'testsfact' => { 'date' => Date.parse('2020-04-28') } }
+
+          expect(yaml_parser.parse_results).to eq(expected_result)
+        end
+      end
     end
   end
 end

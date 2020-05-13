@@ -11,8 +11,8 @@ describe Facts::Windows::MtuInterfaces do
     let(:interfaces) { { 'eth0' => { mtu: 1500 }, 'en1' => { mtu: 1500 } } }
 
     it 'calls Facter::Resolvers::Networking' do
-      expect(Facter::Resolvers::Networking).to receive(:resolve).with(:interfaces)
       fact.call_the_resolver
+      expect(Facter::Resolvers::Networking).to have_received(:resolve).with(:interfaces)
     end
 
     it 'returns legacy facts with names mtu_<interface_name>' do

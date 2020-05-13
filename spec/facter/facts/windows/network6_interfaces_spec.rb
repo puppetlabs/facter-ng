@@ -11,8 +11,8 @@ describe Facts::Windows::Network6Interfaces do
     let(:interfaces) { { 'eth0' => { network6: '::1' }, 'en1' => { network6: 'fe80::' } } }
 
     it 'calls Facter::Resolvers::Networking' do
-      expect(Facter::Resolvers::Networking).to receive(:resolve).with(:interfaces)
       fact.call_the_resolver
+      expect(Facter::Resolvers::Networking).to have_received(:resolve).with(:interfaces)
     end
 
     it 'returns legacy facts with names network6_<interface_name>' do
