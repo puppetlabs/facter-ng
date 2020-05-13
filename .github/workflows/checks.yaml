@@ -12,6 +12,7 @@ on:
 jobs:
   rubocop_checks:
     runs-on: ubuntu-18.04
+    name: RuboCop
     steps:
       - name: Checkout current PR
         uses: actions/checkout@v2
@@ -20,12 +21,19 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.6
-      - run: gem install bundler
       - run: bundle install --jobs 3 --retry 3
       - run: bundle exec rubocop --parallel
 
+  rtc:
+    runs-on: ubuntu-latest
+    name: RuboCop TODO
+    steps:
+      - uses: actions/checkout@v1
+      - uses: gimmyxd/rtc-action@0.0.5
+
   commit_checks:
     runs-on: ubuntu-18.04
+    name: commit message
     steps:
       - name: Checkout current PR
         uses: actions/checkout@v2
@@ -34,7 +42,6 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.6
-      - run: gem install bundler
       - run: bundle install --jobs 3 --retry 3
       - run: bundle exec rake commits
 
@@ -55,7 +62,6 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.6
-      - run: gem install bundler
       - run: bundle install --jobs 3 --retry 3
       - run: bundle exec rake spec
 
