@@ -4,6 +4,11 @@ require 'logger'
 
 module Facter
   RED = 31
+  GREEN = 32
+  YELLOW = 33
+  CYAN = 36
+
+
   DEFAULT_LOG_LEVEL = :warn
 
   class Log
@@ -73,25 +78,31 @@ module Facter
       elsif @@message_callback
         @@message_callback.call(:debug, msg)
       else
+        msg = colorize(msg, CYAN) if Options[:color]
         @@logger.debug(@class_name + ' - ' + msg)
       end
     end
 
     def info(msg)
+      msg = colorize(msg, GREEN) if Options[:color]
       @@logger.info(@class_name + ' - ' + msg)
     end
 
     def warn(msg)
+      msg = colorize(msg, YELLOW) if Options[:color]
+
       @@logger.warn(@class_name + ' - ' + msg)
     end
 
     def error(msg, colorize = false)
       @@has_errors = true
-      msg = colorize(msg, RED) if colorize && !OsDetector.instance.identifier.eql?(:windows)
+      msg = colorize(msg, RED) if colorize || Options[:color]
       @@logger.error(@class_name + ' - ' + msg)
     end
 
     def colorize(msg, color)
+      return msg if OsDetector.instance.identifier.eql?(:windows)
+
       "\e[#{color}m#{msg}\e[0m"
     end
 
