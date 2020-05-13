@@ -4,7 +4,8 @@ name: Acceptance tests
 on:
   push:
     branches:
-      - master
+#      - master
+      - FACT-2600
   pull_request:
     branches:
       - master
@@ -15,7 +16,7 @@ jobs:
     strategy:
       matrix:
 #        os: [ubuntu-18.04, ubuntu-16.04, macos-10.15, windows-2016]
-          os: [windows-2016]
+        os: [windows-2016]
 #        os: [windows-2016, windows-2019]
     runs-on: ${{ matrix.os }}
     env:
@@ -23,7 +24,6 @@ jobs:
       FACTER_4_ROOT: facter_4
       BEAKER_ROOT: beaker
       SHA: latest
-#      BEAKER_VERSION: 4.21.0
 
     steps:
       - name: Checkout current PR
@@ -37,13 +37,6 @@ jobs:
           repository: puppetlabs/facter
           ref: skip_failures_on_ng
           path: facter_3
-
-#      - name: Clone custom beaker fork
-#        uses: actions/checkout@v2
-#        with:
-#          repository: mihaibuzgau/beaker
-#          ref: master
-#          path: beaker
 
       - name: Install Ruby 2.6
         uses: ruby/setup-ruby@v1
@@ -61,8 +54,8 @@ jobs:
           sudo chmod -R a-w /usr/share/rust /home/runner/.config /home/linuxbrew
 
       - name: Run acceptance tests on Linux like platform
-          if: runner.os != 'Windows'
-          run: sudo -E "PATH=$PATH" ruby $FACTER_4_ROOT/.github/actions/presuite.rb ${{ matrix.os }}
+        if: runner.os != 'Windows'
+        run: sudo -E "PATH=$PATH" ruby $FACTER_4_ROOT/.github/actions/presuite.rb ${{ matrix.os }}
 
       - name: Run acceptance tests on Windows like platform
         if: runner.os == 'Windows'

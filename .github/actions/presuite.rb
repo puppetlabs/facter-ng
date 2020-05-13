@@ -11,7 +11,7 @@ def install_facter_3_dependencies
 end
 
 def install_custom_beaker
-  message('INSTALL CUSTOM BEAKE GEM')
+  message('INSTALL CUSTOM BEAKER GEM')
   beaker_path, _ = run('bundle info beaker --path', FACTER_3_ACCEPTANCE_PATH)
   Dir.chdir(beaker_path.split("\n").last) do
     run('git init')
@@ -29,6 +29,7 @@ def initialize_beaker
 
   message('BEAKER PROVISION')
   run('beaker provision')
+  message('done')
 end
 
 def beaker_platform
@@ -50,15 +51,18 @@ def install_puppet_agent
   message('INSTALL PUPPET AGENT')
 
   beaker_puppet_root, _ = run('bundle info beaker-puppet --path')
-  path_tokens = ['setup', 'common']
-  presuite_files = ['012_Finalize_Installs.rb', '025_StopFirewall.rb', '030_StopSssd.rb']
+  presuite_file_paths = [File.join(beaker_puppet_root.chomp, 'setup', 'aio', '010_Install_Puppet_Agent.rb')]
 
-  abs_presuite_file_paths = [File.join(beaker_puppet_root.chomp, 'setup', 'aio', '010_Install_Puppet_Agent.rb')]
-  # presuite_files.each do |file|
-  #   abs_presuite_file_paths << File.join(beaker_puppet_root.chomp, path_tokens, file)
-  # end
+  unless HOST_PLATFORM.to_s.include? 'windows'
+    path_tokens = ['setup', 'common']
+    presuite_files = ['012_Finalize_Installs.rb', '025_StopFirewall.rb', '030_StopSssd.rb']
 
-  run("beaker exec pre-suite --pre-suite #{abs_presuite_file_paths.join(',')}, --preserve-state")
+    presuite_files.each do |file|
+      presuite_file_paths << File.join(beaker_puppet_root.chomp, path_tokens, file)
+    end
+  end
+
+  run("beaker exec pre-suite --pre-suite #{presuite_file_paths.join(',')}, --preserve-state")
 end
 
 def replace_facter_3_with_facter_4
