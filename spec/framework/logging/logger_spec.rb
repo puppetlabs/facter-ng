@@ -110,7 +110,7 @@ describe Logger do
           Facter::Options[:color] = true
         end
 
-        it 'print CYAN (36) debug message' do
+        it 'print debug message' do
           log.debug('debug_message')
 
           expect(multi_logger_double).to have_received(:debug).with('Class - debug_message')
@@ -154,7 +154,7 @@ describe Logger do
           Facter::Options[:color] = true
         end
 
-        it 'print Green (32) info message' do
+        it 'print info message' do
           log.info('info_message')
 
           expect(multi_logger_double).to have_received(:info).with('Class - info_message')
@@ -198,7 +198,7 @@ describe Logger do
           Facter::Options[:color] = true
         end
 
-        it 'print Yellow (33) info message' do
+        it 'print warn message' do
           log.warn('warn_message')
 
           expect(multi_logger_double).to have_received(:warn).with('Class - warn_message')
