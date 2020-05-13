@@ -29,7 +29,6 @@ def initialize_beaker
 
   message('BEAKER PROVISION')
   run('beaker provision')
-  message('done')
 end
 
 def beaker_platform
@@ -62,7 +61,7 @@ def install_puppet_agent
     end
   end
 
-  run("beaker exec pre-suite --pre-suite #{presuite_file_paths.join(',')}, --preserve-state")
+  run("beaker exec pre-suite --pre-suite #{presuite_file_paths.join(',')} --preserve-state")
 end
 
 def replace_facter_3_with_facter_4
@@ -111,9 +110,9 @@ end
 
 def run(command, dir = './')
   puts command
-  output, status = Open3.capture2(command, chdir: dir)
-  puts output
-  [output, status]
+  # output, status = Open3.capture2(command, chdir: dir)
+  # puts output
+  # [output, status]
 end
 
 ENV['DEBIAN_DISABLE_RUBYGEMS_INTEGRATION'] = 'no_warnings'
@@ -123,7 +122,7 @@ HOST_PLATFORM = ARGV[0].to_sym
 install_bundler
 
 Dir.chdir(FACTER_3_ACCEPTANCE_PATH) { install_facter_3_dependencies }
-install_custom_beaker
+# install_custom_beaker
 
 Dir.chdir(FACTER_3_ACCEPTANCE_PATH) do
   initialize_beaker
