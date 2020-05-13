@@ -8,7 +8,6 @@ module Facter
   YELLOW = 33
   CYAN = 36
 
-
   DEFAULT_LOG_LEVEL = :warn
 
   class Log
@@ -74,7 +73,7 @@ module Facter
 
       if msg.nil? || msg.empty?
         invoker = caller(1..1).first.slice(/.*:\d+/)
-        self.warn "#{self.class}#debug invoked with invalid message #{msg.inspect}:#{msg.class} at #{invoker}"
+        empty_message_error(msg, invoker)
       elsif @@message_callback
         @@message_callback.call(:debug, msg)
       else
@@ -112,6 +111,10 @@ module Facter
       return true unless Facter.respond_to?(:debugging?)
 
       Facter.debugging?
+    end
+
+    def empty_message_error(msg, invoker)
+      self.warn "#{self.class}#debug invoked with invalid message #{msg.inspect}:#{msg.class} at #{invoker}"
     end
   end
 end
