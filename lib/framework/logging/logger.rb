@@ -103,7 +103,7 @@ module Facter
     def colorize(msg, color)
       return msg if OsDetector.instance.identifier.eql?(:windows)
 
-      "\e[#{color}m#{msg}\e[0m"
+      "\e[0;#{color}m#{msg}\e[0m"
     end
 
     private
