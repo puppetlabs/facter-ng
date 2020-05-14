@@ -192,5 +192,4 @@ describe Facter::Util::Resolution do
       end
     end
   end
-
 end
