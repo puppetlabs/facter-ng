@@ -134,7 +134,7 @@ describe Facter::Util::Resolution do
   end
 
   describe '#<=>' do
-    let(:other_fact) { double(Facter::Util::Fact, name: :other_fact) }
+    let(:other_fact) { instance_spy(Facter::Util::Fact, name: :other_fact) }
     let(:other_resolution) { Facter::Util::Resolution.new(:other_fact, other_fact) }
 
     context 'when self has greater weight than other' do
