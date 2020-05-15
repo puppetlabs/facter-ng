@@ -4,8 +4,7 @@ name: Acceptance tests
 on:
   push:
     branches:
-#      - master
-      - FACT-2600
+      - master
   pull_request:
     branches:
       - master
