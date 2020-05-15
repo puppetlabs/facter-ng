@@ -46,7 +46,7 @@ module LegacyFacter
                                                        '/etc/puppetlabs/facter/facts.d',
                                                        '/etc/facter/facts.d/',
                                                        '/opt/puppetlabs/facter/facts.d'
-                                                      ]
+                                                     ]
                                                    end
         elsif ENV['HOME']
           Facter::Options[:default_external_dir] =
