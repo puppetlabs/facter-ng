@@ -61,7 +61,7 @@ def install_puppet_agent
   beaker_puppet_root, _ = run('bundle info beaker-puppet --path')
   presuite_file_path = "#{beaker_puppet_root.chomp}/setup/aio/010_Install_Puppet_Agent.rb"
 
-  env = { 'PATH' => "#{puppet_bin_dir};#{ENV['PATH']}" } if HOST_PLATFORM.to_s.include? 'windows'
+  env = (HOST_PLATFORM.to_s.include? 'windows') ? { 'PATH' => "#{puppet_bin_dir};#{ENV['PATH']}" } : {}
   run("beaker exec pre-suite --pre-suite #{presuite_file_path} --preserve-state", './', env)
 end
 
@@ -105,7 +105,8 @@ end
 
 def run_acceptance_tests
   message('RUN ACCEPTANCE TESTS')
-  env = { 'PATH' => "#{puppet_bin_dir};#{ENV['PATH']}" }
+
+  env = (HOST_PLATFORM.to_s.include? 'windows') ? { 'PATH' => "#{puppet_bin_dir};#{ENV['PATH']}" } : {}
   run('beaker exec tests --test-tag-exclude=server,facter_3 --test-tag-or=risk:high,audit:high', './', env)
 end
 
