@@ -14,12 +14,11 @@ jobs:
     name: Platform
     strategy:
       matrix:
-        os: [ubuntu-16.04, ubuntu-18.04, macos-10.15, windows-2016, windows-2019]
+        os: [windows-2019]
     runs-on: ${{ matrix.os }}
     env:
       FACTER_3_ROOT: facter_3
       FACTER_4_ROOT: facter_4
-      BEAKER_ROOT: beaker
       SHA: latest
 
     steps:
