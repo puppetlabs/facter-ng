@@ -11,7 +11,7 @@ def install_facter_3_dependencies
 end
 
 def install_custom_beaker
-  message('INSTALL CUSTOM BEAKER GEM')
+  message('USE CUSTOM BEAKER')
   beaker_path, _ = run('bundle info beaker --path', FACTER_3_ACCEPTANCE_PATH)
   Dir.chdir(beaker_path.split("\n").last) do
     run('git init')
@@ -20,7 +20,7 @@ def install_custom_beaker
     run('git reset --hard origin/master')
   end
 
-  message('INSTALL CUSTOM BEAKER-PUPPET')
+  message('USE CUSTOM BEAKER-PUPPET')
   beaker_puppet_path, _ = run('bundle info beaker-puppet --path', FACTER_3_ACCEPTANCE_PATH)
   Dir.chdir(beaker_puppet_path.split("\n").last) do
     run('git init')
@@ -59,22 +59,10 @@ def install_puppet_agent
   message('INSTALL PUPPET AGENT')
 
   beaker_puppet_root, _ = run('bundle info beaker-puppet --path')
-  presuite_file_path = [File.join(beaker_puppet_root.chomp, 'setup', 'aio', '010_Install_Puppet_Agent.rb')]
+  presuite_file_path = "#{beaker_puppet_root.chomp}/setup/aio/010_Install_Puppet_Agent.rb"
 
-  env = { 'PATH' => "#{puppet_bin_dir};#{ENV['PATH']}" }
-  run("beaker exec pre-suite --pre-suite #{presuite_file_path.join(',')} --preserve-state", './', env)
-end
-
-def replace_facter_3_with_facter_4
-  puppet_command = File.join(puppet_bin_dir, 'puppet')
-
-  message('SET FACTER 4 FLAG TO TRUE')
-  run("#{puppet_command} config set facterng true")
-
-  install_latest_facter_4(gem_command)
-
-  message('CHANGE FACTER 3 WITH FACTER 4')
-  run('mv "facter-ng" "facter"', puppet_bin_dir)
+  env = { 'PATH' => "#{puppet_bin_dir};#{ENV['PATH']}" } if HOST_PLATFORM.to_s.include? 'windows'
+  run("beaker exec pre-suite --pre-suite #{presuite_file_path} --preserve-state", './', env)
 end
 
 def puppet_bin_dir
@@ -84,9 +72,24 @@ def puppet_bin_dir
   (HOST_PLATFORM.to_s.include? 'windows') ? windows_puppet_bin_dir : linux_puppet_bin_dir
 end
 
+def replace_facter_3_with_facter_4
+  message('SET FACTER 4 FLAG TO TRUE')
+  run("#{puppet_command} config set facterng true")
+
+  install_latest_facter_4(gem_command)
+
+  message('CHANGE FACTER 3 WITH FACTER 4')
+  run('mv "facter-ng" "facter"', puppet_bin_dir)
+end
+
+def puppet_command
+  return '/opt/puppetlabs/puppet/bin/puppet' unless HOST_PLATFORM.to_s.include? 'windows'
+  "\"C:\\Program Files\\Puppet Labs\\Puppet\\bin\\puppet\""
+end
+
 def gem_command
-  return File.join(puppet_bin_dir, 'gem') unless HOST_PLATFORM.to_s.include? 'windows'
-  "C:\\Program Files\\Puppet Labs\\Puppet\\puppet\\bin\\gem"
+  return '/opt/puppetlabs/puppet/bin/gem' unless HOST_PLATFORM.to_s.include? 'windows'
+  "\"C:\\Program Files\\Puppet Labs\\Puppet\\puppet\\bin\\gem\""
 end
 
 def install_latest_facter_4(gem_command)
@@ -102,7 +105,8 @@ end
 
 def run_acceptance_tests
   message('RUN ACCEPTANCE TESTS')
-  run('beaker exec tests --test-tag-exclude=server,facter_3 --test-tag-or=risk:high,audit:high')
+  env = { 'PATH' => "#{puppet_bin_dir};#{ENV['PATH']}" }
+  run('beaker exec tests --test-tag-exclude=server,facter_3 --test-tag-or=risk:high,audit:high', './', env)
 end
 
 def message(message)

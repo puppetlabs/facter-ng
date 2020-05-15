@@ -15,8 +15,8 @@ jobs:
     name: Platform
     strategy:
       matrix:
-#        os: [ubuntu-18.04, macos-10.15, windows-2016]
-        os: [windows-2016]
+        os: [macos-10.15]
+#        os: [windows-2016]
 #        os: [windows-2016, windows-2019]
     runs-on: ${{ matrix.os }}
     env:
@@ -43,6 +43,9 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '2.6'
+
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v2
 
       - name: Fix common Linux and MacOs permissions
         if: runner.os != 'Windows'
