@@ -71,35 +71,48 @@ module Facter
     def debug(msg)
       return unless debugging_active?
 
-      color = CYAN if Options[:color]
-      log_message(msg, :debug, color)
+      if msg.nil? || msg.empty?
+        empty_message_error(msg)
+      elsif @@message_callback
+        @@message_callback.call(:debug, msg)
+      else
+        msg = colorize(msg, CYAN) if Options[:color]
+        @@logger.debug(@class_name + ' - ' + msg)
+      end
     end
 
     def info(msg)
-      color = GREEN if Options[:color]
-      log_message(msg, :info, color)
+      if msg.nil? || msg.empty?
+        empty_message_error(msg)
+      elsif @@message_callback
+        @@message_callback.call(:info, msg)
+      else
+        msg = colorize(msg, GREEN) if Options[:color]
+        @@logger.info(@class_name + ' - ' + msg)
+      end
     end
 
     def warn(msg)
-      color = YELLOW if Options[:color]
-      log_message(msg, :warn, color)
+      if msg.nil? || msg.empty?
+        empty_message_error(msg)
+      elsif @@message_callback
+        @@message_callback.call(:warn, msg)
+      else
+        msg = colorize(msg, YELLOW) if Options[:color]
+        @@logger.warn(@class_name + ' - ' + msg)
+      end
     end
 
     def error(msg, colorize = false)
       @@has_errors = true
-      color = RED if colorize || Options[:color]
-      log_message(msg, :error, color)
-    end
 
-    def log_message(msg, log_level, color)
       if msg.nil? || msg.empty?
-        invoker = caller(1..1).first.slice(/.*:\d+/)
-        empty_message_error(msg, invoker)
+        empty_message_error(msg)
       elsif @@message_callback
-        @@message_callback.call(log_level, msg)
+        @@message_callback.call(:error, msg)
       else
-        msg = colorize(msg, color) if color
-        @@logger.send(log_level, @class_name + ' - ' + msg)
+        msg = colorize(msg, RED) if colorize || Options[:color]
+        @@logger.error(@class_name + ' - ' + msg)
       end
     end
 
@@ -117,7 +130,8 @@ module Facter
       Facter.debugging?
     end
 
-    def empty_message_error(msg, invoker)
+    def empty_message_error(msg)
+      invoker = caller(1..1).first.slice(/.*:\d+/)
       @@logger.warn "#{self.class}#debug invoked with invalid message #{msg.inspect}:#{msg.class} at #{invoker}"
     end
   end

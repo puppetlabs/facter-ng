@@ -164,10 +164,6 @@ describe Logger do
   end
 
   describe '#warn' do
-    before do
-      allow(multi_logger_double).to receive(:warn)
-    end
-
     it 'writes warn message' do
       log.warn('warn_message')
 
