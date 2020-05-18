@@ -11,9 +11,7 @@ module Facter
   DEFAULT_LOG_LEVEL = :warn
 
   class Log
-    @@legacy_logger = nil
-    @@logger = MultiLogger.new([])
-    @@logger.level = :warn
+    @@logger = Logger.new(STDOUT)
     @@message_callback = nil
     @@has_errors = false
 
@@ -39,13 +37,19 @@ module Facter
       determine_callers_name(logged_class)
     end
 
-    def self.add_legacy_logger(output)
-      return if @@legacy_logger
+    def self.output(output)
+      return if @@logger
 
-      @@legacy_logger = Logger.new(output)
-      @@legacy_logger.level = DEFAULT_LOG_LEVEL
-      set_format_for_legacy_logger
-      @@logger.add_logger(@@legacy_logger)
+      set_logger_format
+      @@logger = Logger.new(output)
+      @@logger.level = DEFAULT_LOG_LEVEL
+    end
+
+    def self.set_logger_format
+      @@logger.formatter = proc do |severity, datetime, _progname, msg|
+        datetime = datetime.strftime(@datetime_format || '%Y-%m-%d %H:%M:%S.%6N ')
+        "[#{datetime}] #{severity} #{msg} \n"
+      end
     end
 
     def determine_callers_name(sender_self)
@@ -59,13 +63,6 @@ module Facter
                     else # when class is singleton
                       sender_self.class.name
                     end
-    end
-
-    def self.set_format_for_legacy_logger
-      @@legacy_logger.formatter = proc do |severity, datetime, _progname, msg|
-        datetime = datetime.strftime(@datetime_format || '%Y-%m-%d %H:%M:%S.%6N ')
-        "[#{datetime}] #{severity} #{msg} \n"
-      end
     end
 
     def debug(msg)
