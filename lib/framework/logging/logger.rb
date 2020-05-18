@@ -36,6 +36,7 @@ module Facter
 
     def initialize(logged_class)
       determine_callers_name(logged_class)
+      @@logger ||= Logger.new(STDOUT)
     end
 
     def self.output(output)
