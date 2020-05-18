@@ -71,32 +71,38 @@ module Facter
     def debug(msg)
       return unless debugging_active?
 
-      if msg.nil? || msg.empty?
-        invoker = caller(1..1).first.slice(/.*:\d+/)
-        empty_message_error(msg, invoker)
-      elsif @@message_callback
-        @@message_callback.call(:debug, msg)
-      else
-        msg = colorize(msg, CYAN) if Options[:color]
-        @@logger.debug(@class_name + ' - ' + msg)
-      end
+      color = CYAN if Options[:color]
+      log_message(msg, :debug, color)
     end
 
     def info(msg)
-      msg = colorize(msg, GREEN) if Options[:color]
-      @@logger.info(@class_name + ' - ' + msg)
+      color = GREEN if Options[:color]
+      log_message(msg, :info, color)
     end
 
     def warn(msg)
-      msg = colorize(msg, YELLOW) if Options[:color]
-
-      @@logger.warn(@class_name + ' - ' + msg)
+      color = YELLOW if Options[:color]
+      log_message(msg, :warn, color)
     end
 
     def error(msg, colorize = false)
       @@has_errors = true
-      msg = colorize(msg, RED) if colorize || Options[:color]
-      @@logger.error(@class_name + ' - ' + msg)
+      color = RED if colorize || Options[:color]
+      log_message(msg, :error, color)
+    end
+
+
+    def log_message(msg, log_level, color)
+      if msg.nil? || msg.empty?
+        invoker = caller(1..1).first.slice(/.*:\d+/)
+        empty_message_error(msg, invoker)
+      elsif @@message_callback
+        @@message_callback.call(log_level, msg)
+      else
+        msg = colorize(msg, color) if color
+        @@logger.send(log_level, @class_name + ' - ' + msg)
+        # @@logger.warn(@class_name + ' - ' + msg)
+      end
     end
 
     def colorize(msg, color)
@@ -114,7 +120,7 @@ module Facter
     end
 
     def empty_message_error(msg, invoker)
-      self.warn "#{self.class}#debug invoked with invalid message #{msg.inspect}:#{msg.class} at #{invoker}"
+      @@logger.warn "#{self.class}#debug invoked with invalid message #{msg.inspect}:#{msg.class} at #{invoker}"
     end
   end
 end

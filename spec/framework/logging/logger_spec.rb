@@ -165,6 +165,8 @@ describe Logger do
 
   describe '#warn' do
     it 'writes warn message' do
+      allow(multi_logger_double).to receive(:warn)
+
       log.warn('warn_message')
 
       expect(multi_logger_double).to have_received(:warn).with('Class - warn_message')
