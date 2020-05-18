@@ -11,8 +11,8 @@ module Facter
   DEFAULT_LOG_LEVEL = :warn
 
   class Log
-    @@logger = Logger.new(STDOUT)
-    @@logger.level = DEFAULT_LOG_LEVEL
+    @@logger = nil
+
     @@message_callback = nil
     @@has_errors = false
 
@@ -41,8 +41,8 @@ module Facter
     def self.output(output)
       return if @@logger
 
-      set_logger_format
       @@logger = Logger.new(output)
+      set_logger_format
       @@logger.level = DEFAULT_LOG_LEVEL
     end
 
