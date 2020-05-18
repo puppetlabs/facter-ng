@@ -12,6 +12,7 @@ module Facter
 
   class Log
     @@logger = Logger.new(STDOUT)
+    @@logger.level = DEFAULT_LOG_LEVEL
     @@message_callback = nil
     @@has_errors = false
 
