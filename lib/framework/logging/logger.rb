@@ -91,7 +91,6 @@ module Facter
       log_message(msg, :error, color)
     end
 
-
     def log_message(msg, log_level, color)
       if msg.nil? || msg.empty?
         invoker = caller(1..1).first.slice(/.*:\d+/)
@@ -101,7 +100,6 @@ module Facter
       else
         msg = colorize(msg, color) if color
         @@logger.send(log_level, @class_name + ' - ' + msg)
-        # @@logger.warn(@class_name + ' - ' + msg)
       end
     end
 
