@@ -12,7 +12,6 @@ module Facter
 
   class Log
     @@logger = nil
-
     @@message_callback = nil
     @@has_errors = false
 
@@ -32,43 +31,29 @@ module Facter
       def errors?
         @@has_errors
       end
+
+      def output(output)
+        return if @@logger
+
+        @@logger = Logger.new(output)
+        set_logger_format
+        @@logger.level = DEFAULT_LOG_LEVEL
+      end
+
+      def set_logger_format
+        @@logger.formatter = proc do |severity, datetime, _progname, msg|
+          datetime = datetime.strftime(@datetime_format || '%Y-%m-%d %H:%M:%S.%6N ')
+          "[#{datetime}] #{severity} #{msg} \n"
+        end
+      end
     end
 
     def initialize(logged_class)
-      determine_callers_name(logged_class)
-
+      @class_name = LoggerHelper.determine_callers_name(logged_class)
       return unless @@logger.nil?
 
       @@logger = Logger.new(STDOUT)
       @@logger.level = DEFAULT_LOG_LEVEL
-    end
-
-    def self.output(output)
-      return if @@logger
-
-      @@logger = Logger.new(output)
-      set_logger_format
-      @@logger.level = DEFAULT_LOG_LEVEL
-    end
-
-    def self.set_logger_format
-      @@logger.formatter = proc do |severity, datetime, _progname, msg|
-        datetime = datetime.strftime(@datetime_format || '%Y-%m-%d %H:%M:%S.%6N ')
-        "[#{datetime}] #{severity} #{msg} \n"
-      end
-    end
-
-    def determine_callers_name(sender_self)
-      @class_name = case sender_self
-                    when String
-                      sender_self
-                    when Class
-                      sender_self.name
-                    when Module
-                      sender_self.name
-                    else # when class is singleton
-                      sender_self.class.name
-                    end
     end
 
     def debug(msg)
