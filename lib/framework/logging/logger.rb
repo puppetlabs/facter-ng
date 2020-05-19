@@ -104,13 +104,13 @@ module Facter
       end
     end
 
+    private
+
     def colorize(msg, color)
       return msg if OsDetector.instance.identifier.eql?(:windows)
 
       "\e[0;#{color}m#{msg}\e[0m"
     end
-
-    private
 
     def debugging_active?
       return true unless Facter.respond_to?(:debugging?)
