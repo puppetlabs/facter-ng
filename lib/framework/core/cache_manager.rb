@@ -17,6 +17,7 @@ module Facter
         res = resolve_fact(fact)
         facts << res if res
       end
+      facts.flatten!
       facts.each do |fact|
         searched_facts.delete_if { |f| f.name == fact.name }
       end
@@ -40,13 +41,12 @@ module Facter
     private
 
     def resolve_fact(searched_fact)
-      # if searched_fact.type == :external
-      #   group_name = searched_fact.file
-      # else
-      #   group_name = @fact_groups.get_fact_group(searched_fact.name)
-      # end
+      group_name =  if searched_fact.type == :external
+                      File.basepath(searched_fact.file)
+                    else 
+                      @fact_groups.get_fact_group(searched_fact.name)
+                    end
 
-      group_name = @fact_groups.get_fact_group(searched_fact.name)
       return unless group_name
 
       return unless group_cached?(group_name)
@@ -57,7 +57,18 @@ module Facter
       return unless data
 
       @log.debug("loading cached values for #{group_name} facts")
-      create_fact(searched_fact, data[searched_fact.name])
+
+      resolved_facts = []
+      if searched_fact.type == :external
+        data.each do |k, v|
+          searched_fact.name = k
+          resolve_facts << create_fact(searched_fact, v)
+        end
+      else
+        resolve_facts << create_fact(searched_fact, data[searched_fact.name])
+      end
+
+      resolved_facts
     end
 
     def create_fact(searched_fact, value)
