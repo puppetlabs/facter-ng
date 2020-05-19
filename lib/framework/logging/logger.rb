@@ -37,6 +37,7 @@ module Facter
     def initialize(logged_class)
       determine_callers_name(logged_class)
       @@logger ||= Logger.new(STDOUT)
+      @@logger.level = DEFAULT_LOG_LEVEL
     end
 
     def self.output(output)
