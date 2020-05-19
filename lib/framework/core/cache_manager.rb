@@ -40,6 +40,12 @@ module Facter
     private
 
     def resolve_fact(searched_fact)
+      # if searched_fact.type == :external
+      #   group_name = searched_fact.file
+      # else
+      #   group_name = @fact_groups.get_fact_group(searched_fact.name)
+      # end
+
       group_name = @fact_groups.get_fact_group(searched_fact.name)
       return unless group_name
 

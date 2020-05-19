@@ -90,7 +90,10 @@ module Facter
         fact_name = loaded_fact.name.to_s
         klass_name = loaded_fact.klass
         type = loaded_fact.type
-        SearchedFact.new(fact_name, klass_name, filter_tokens, user_query, type)
+        sf = SearchedFact.new(fact_name, klass_name, filter_tokens, user_query, type)
+        sf.file = loaded_fact.file
+
+        sf
       end
 
       def construct_filter_tokens(query_tokens, query_token_range)
