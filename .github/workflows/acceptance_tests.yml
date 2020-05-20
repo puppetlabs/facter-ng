@@ -31,7 +31,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: puppetlabs/facter
-          ref: skip_failures_on_ng
+          ref: windows_github
           path: facter_3
 
       - name: Install Ruby 2.6
