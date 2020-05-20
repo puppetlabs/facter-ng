@@ -15,9 +15,9 @@ def install_custom_beaker
   beaker_path, _ = run('bundle info beaker --path', FACTER_3_ACCEPTANCE_PATH)
   Dir.chdir(beaker_path.split("\n").last) do
     run('git init')
-    run('git remote add origin https://github.com/mihaibuzgau/beaker.git')
+    run('git remote add origin https://github.com/Filipovici-Andrei/beaker.git')
     run('git fetch')
-    run('git reset --hard origin/master')
+    run('git reset --hard origin/github_actions')
   end
 
   message('USE CUSTOM BEAKER-PUPPET')
