@@ -41,8 +41,8 @@ module Facter
     private
 
     def resolve_fact(searched_fact)
-      group_name =  if searched_fact.type == :external
-                      File.basepath(searched_fact.file)
+      group_name =  if searched_fact.type == :file
+                      searched_fact.name
                     else 
                       @fact_groups.get_fact_group(searched_fact.name)
                     end
@@ -59,7 +59,7 @@ module Facter
       @log.debug("loading cached values for #{group_name} facts")
 
       resolved_facts = []
-      if searched_fact.type == :external
+      if searched_fact.type == :file
         data.each do |k, v|
           searched_fact.name = k
           resolve_facts << create_fact(searched_fact, v)

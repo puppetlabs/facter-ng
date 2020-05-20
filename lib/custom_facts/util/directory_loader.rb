@@ -55,6 +55,10 @@ module LegacyFacter
       def load(collection)
         weight = @weight
         entries.each do |file|
+          sf = Facter::SearchedFact.new(File.basename(file), nil, [], nil, :file)
+          cm = Facter::CacheManager.new
+          cm.resolve_facts([sf])
+
           parser = LegacyFacter::Util::Parser.parser_for(file)
           next if parser.nil?
 
