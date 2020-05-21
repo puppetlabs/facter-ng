@@ -15,18 +15,9 @@ def install_custom_beaker
   beaker_path, _ = run('bundle info beaker --path', FACTER_3_ACCEPTANCE_PATH)
   Dir.chdir(beaker_path.split("\n").last) do
     run('git init')
-    run('git remote add origin https://github.com/Filipovici-Andrei/beaker.git')
+    run("git remote add origin https://github.com/Filipovici-Andrei/beaker.git")
     run('git fetch')
-    run('git reset --hard origin/github_actions')
-  end
-
-  message('USE CUSTOM BEAKER-PUPPET')
-  beaker_puppet_path, _ = run('bundle info beaker-puppet --path', FACTER_3_ACCEPTANCE_PATH)
-  Dir.chdir(beaker_puppet_path.split("\n").last) do
-    run('git init')
-    run('git remote add origin https://github.com/Filipovici-Andrei/beaker-puppet.git')
-    run('git fetch')
-    run('git reset --hard origin/BKR-1654')
+    run("git reset --hard origin/github_actions")
   end
 end
 
@@ -42,11 +33,11 @@ end
 
 def beaker_platform
   {
-      'ubuntu-18.04': 'ubuntu1804-64a',
-      'ubuntu-16.04': 'ubuntu1604-64a',
-      'macos-10.15': 'osx1015-64a',
-      'windows-2016': 'windows2016-64a',
-      'windows-2019': 'windows2019-64a'
+      'ubuntu-18.04' => 'ubuntu1804-64a',
+      'ubuntu-16.04' => 'ubuntu1604-64a',
+      'macos-10.15' => 'osx1015-64a',
+      'windows-2016' => 'windows2016-64a',
+      'windows-2019' => 'windows2019-64a'
   }[HOST_PLATFORM]
 end
 
@@ -61,7 +52,7 @@ def install_puppet_agent
   beaker_puppet_root, _ = run('bundle info beaker-puppet --path')
   presuite_file_path = "#{beaker_puppet_root.chomp}/setup/aio/010_Install_Puppet_Agent.rb"
 
-  env = (HOST_PLATFORM.to_s.include? 'windows') ? { 'PATH' => "#{puppet_bin_dir};#{ENV['PATH']}" } : {}
+  env = (HOST_PLATFORM.include? 'windows') ? { 'PATH' => "#{puppet_bin_dir};#{ENV['PATH']}" } : {}
   run("beaker exec pre-suite --pre-suite #{presuite_file_path} --preserve-state", './', env)
 end
 
@@ -69,7 +60,17 @@ def puppet_bin_dir
   linux_puppet_bin_dir = '/opt/puppetlabs/puppet/bin'
   windows_puppet_bin_dir = 'C:\\Program Files\\Puppet Labs\\Puppet\\bin'
 
-  (HOST_PLATFORM.to_s.include? 'windows') ? windows_puppet_bin_dir : linux_puppet_bin_dir
+  (HOST_PLATFORM.include? 'windows') ? windows_puppet_bin_dir : linux_puppet_bin_dir
+end
+
+def puppet_command
+  return '/opt/puppetlabs/puppet/bin/puppet' unless HOST_PLATFORM.include? 'windows'
+  "\"C:\\Program Files\\Puppet Labs\\Puppet\\bin\\puppet\""
+end
+
+def gem_command
+  return '/opt/puppetlabs/puppet/bin/gem' unless HOST_PLATFORM.include? 'windows'
+  "\"C:\\Program Files\\Puppet Labs\\Puppet\\puppet\\bin\\gem\""
 end
 
 def replace_facter_3_with_facter_4
@@ -79,18 +80,13 @@ def replace_facter_3_with_facter_4
   install_latest_facter_4(gem_command)
 
   message('CHANGE FACTER 3 WITH FACTER 4')
-  run('mv "facter-ng" "facter"', puppet_bin_dir)
+  if HOST_PLATFORM.include? 'windows'
+    run('mv facter-ng.bat facter.bat', puppet_bin_dir)
+  else
+    run('mv facter-ng facter', puppet_bin_dir)
+  end
 end
 
-def puppet_command
-  return '/opt/puppetlabs/puppet/bin/puppet' unless HOST_PLATFORM.to_s.include? 'windows'
-  "\"C:\\Program Files\\Puppet Labs\\Puppet\\bin\\puppet\""
-end
-
-def gem_command
-  return '/opt/puppetlabs/puppet/bin/gem' unless HOST_PLATFORM.to_s.include? 'windows'
-  "\"C:\\Program Files\\Puppet Labs\\Puppet\\puppet\\bin\\gem\""
-end
 
 def install_latest_facter_4(gem_command)
   message('BUILD FACTER 4 LATEST AGENT GEM')
@@ -106,7 +102,7 @@ end
 def run_acceptance_tests
   message('RUN ACCEPTANCE TESTS')
 
-  env = (HOST_PLATFORM.to_s.include? 'windows') ? { 'PATH' => "#{puppet_bin_dir};#{ENV['PATH']}" } : {}
+  env = (HOST_PLATFORM.include? 'windows') ? { 'PATH' => "#{puppet_bin_dir};#{ENV['PATH']}" } : {}
   run('beaker exec tests --test-tag-exclude=server,facter_3 --test-tag-or=risk:high,audit:high', './', env)
 end
 
@@ -134,7 +130,7 @@ end
 
 ENV['DEBIAN_DISABLE_RUBYGEMS_INTEGRATION'] = 'no_warnings'
 FACTER_3_ACCEPTANCE_PATH = File.join(ENV['FACTER_3_ROOT'], 'acceptance')
-HOST_PLATFORM = ARGV[0].to_sym
+HOST_PLATFORM = ARGV[0]
 
 install_bundler
 
@@ -146,7 +142,7 @@ Dir.chdir(FACTER_3_ACCEPTANCE_PATH) do
   install_puppet_agent
 end
 
-replace_facter_3_with_facter_4
+# replace_facter_3_with_facter_4
 
 Dir.chdir(FACTER_3_ACCEPTANCE_PATH) do
   _, status = run_acceptance_tests
