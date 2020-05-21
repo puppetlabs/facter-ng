@@ -123,6 +123,8 @@ module LegacyFacter
       # @return [Boolean]
       def kernel_load(file)
         Kernel.load(file)
+      rescue StandardError => e
+        Facter.log_exception(e, "error while resolving custom facts in #{file} #{e.message}")
       end
 
       # Load facts from the environment.  If no name is provided,
