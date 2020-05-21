@@ -13,15 +13,17 @@ module Facter
       return searched_facts, [] if !File.directory?(@cache_dir) || !Options[:cache]
 
       facts = []
-      searched_facts.each do |fact|
+      searched_facts.delete_if do |fact|
         res = resolve_fact(fact)
-        facts << res if res
+        if res
+          facts << res
+          true
+        else
+          false
+        end
       end
-      facts.flatten!
-      facts.each do |fact|
-        searched_facts.delete_if { |f| f.name == fact.name }
-      end
-      [searched_facts, facts]
+
+      [searched_facts, facts.flatten]
     end
 
     def cache_facts(resolved_facts)
@@ -41,7 +43,7 @@ module Facter
     private
 
     def resolve_fact(searched_fact)
-      group_name =  if searched_fact.type == :file
+      group_name =  if searched_fact.file
                       searched_fact.name
                     else 
                       @fact_groups.get_fact_group(searched_fact.name)
@@ -61,23 +63,25 @@ module Facter
       resolved_facts = []
       if searched_fact.type == :file
         data.each do |k, v|
-          searched_fact.name = k
-          resolve_facts << create_fact(searched_fact, v)
+          resolved_facts << create_fact(searched_fact, k, v)
         end
       else
-        resolve_facts << create_fact(searched_fact, data[searched_fact.name])
+        resolved_facts << create_fact(searched_fact, searched_fact.name, data[searched_fact.name])
       end
-
       resolved_facts
     end
 
-    def create_fact(searched_fact, value)
-      Facter::ResolvedFact.new(searched_fact.name, value, searched_fact.type,
-                               searched_fact.user_query, searched_fact.filter_tokens)
+    def create_fact(searched_fact, name, value)
+      Facter::ResolvedFact.new(name, value, searched_fact.type,
+                               searched_fact.user_query, searched_fact.filter_tokens, searched_fact.file)
     end
 
     def cache_fact(fact)
-      group_name = @fact_groups.get_fact_group(fact.name)
+      group_name =  if fact.file
+                      File.basename(fact.file)
+                    else 
+                      @fact_groups.get_fact_group(fact.name)
+                    end
       return if !group_name || fact.value.nil?
 
       return unless group_cached?(group_name)

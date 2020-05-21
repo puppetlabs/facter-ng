@@ -54,21 +54,30 @@ module LegacyFacter
       # parse them.
       def load(collection)
         weight = @weight
+        cm = Facter::CacheManager.new
+        sf = []
         entries.each do |file|
-          sf = Facter::SearchedFact.new(File.basename(file), nil, [], nil, :file)
-          cm = Facter::CacheManager.new
-          cm.resolve_facts([sf])
+          f = Facter::SearchedFact.new(File.basename(file), nil, [], nil, :file)
+          f.file = file
+          sf << f
+        end
+        searched_facts, cached_facts = cm.resolve_facts(sf)
 
-          parser = LegacyFacter::Util::Parser.parser_for(file)
+        cached_facts.each do |cached_fact|
+          collection.add(cached_fact.name, value: cached_fact.value, fact_type: :external, file: cached_fact.file) { has_weight(weight) }
+        end
+
+        searched_facts.each do |fact|
+          parser = LegacyFacter::Util::Parser.parser_for(fact.file)
           next if parser.nil?
 
           data = parser.results
           if data == false
-            LegacyFacter.warn "Could not interpret fact file #{file}"
+            LegacyFacter.warn "Could not interpret fact file #{fact.file}"
           elsif (data == {}) || data.nil?
-            LegacyFacter.warn "Fact file #{file} was parsed but returned an empty data set"
+            LegacyFacter.warn "Fact file #{fact.file} was parsed but returned an empty data set"
           else
-            data.each { |p, v| collection.add(p, value: v, fact_type: :external, file: file) { has_weight(weight) } }
+            data.each { |p, v| collection.add(p, value: v, fact_type: :external, file: fact.file) { has_weight(weight) } }
           end
         end
       end

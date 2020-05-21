@@ -95,8 +95,7 @@ module LegacyFacter
         return @external_facts unless @external_facts.nil?
 
         load_external_facts
-        external_facts = @facts.select { |_k, v| v.options[:fact_type] == :external }
-        @external_facts = Facter::Utils.deep_copy(external_facts)
+        @external_facts = @facts.select { |_k, v| v.options[:fact_type] == :external }
       end
 
       def invalidate_custom_facts
@@ -118,6 +117,7 @@ module LegacyFacter
 
         custom_facts = @facts.select { |_k, v| v.options[:fact_type] == :custom }
         @custom_facts = Facter::Utils.deep_copy(custom_facts.keys)
+
       end
 
       def load(name)
