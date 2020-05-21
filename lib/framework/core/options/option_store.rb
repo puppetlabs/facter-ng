@@ -122,7 +122,6 @@ module Facter
         end
 
         Facter::Log.level = @log_level
-        Facter.trace(@trace)
       end
 
       def show_legacy=(bool)
@@ -140,7 +139,6 @@ module Facter
         else
           @log_level = Facter::DEFAULT_LOG_LEVEL
           @trace = false
-          Facter.trace(false)
         end
       end
 
