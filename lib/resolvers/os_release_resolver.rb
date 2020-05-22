@@ -49,7 +49,7 @@ module Facter
         end
 
         def pad_version_id
-          @fact_list[:version_id] = "#{@fact_list[:version_id]}.0" unless @fact_list[:version_id] =~ /\./
+          @fact_list[:version_id] = "#{@fact_list[:version_id]}.0" unless /\./.match?(@fact_list[:version_id])
         end
 
         def process_name

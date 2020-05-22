@@ -53,14 +53,14 @@ module Facter
             }
             mount = info_hash['MOUNTPOINT']
             label = info_hash['LABEL']
-            part_info[:mount] = mount unless %r{N/A} =~ mount
-            part_info[:label] = label unless /None/ =~ label
+            part_info[:mount] = mount unless %r{N/A}.match?(mount)
+            part_info[:label] = label unless /None/.match?(label)
             part_info
           end
 
           def extract_info(lsl_content)
             lsl_content = lsl_content.strip.split("\n").map do |line|
-              next unless /PPs:|PP SIZE|TYPE:|LABEL:|MOUNT/ =~ line
+              next unless /PPs:|PP SIZE|TYPE:|LABEL:|MOUNT/.match?(line)
 
               line.split(/:|\s\s/).reject(&:empty?)
             end

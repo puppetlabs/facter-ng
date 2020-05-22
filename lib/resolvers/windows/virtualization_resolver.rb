@@ -39,11 +39,13 @@ module Facter
 
         def determine_hypervisor_by_manufacturer(comp)
           manufacturer = comp.Manufacturer
-          if comp.Model =~ /^Virtual Machine/ && manufacturer =~ /^Microsoft/
+          return 'physical' unless manufacturer
+
+          if comp.Model&.start_with?('Virtual Machine') && manufacturer.start_with?('Microsoft')
             'hyperv'
-          elsif manufacturer =~ /^Xen/
+          elsif manufacturer.start_with?('Xen')
             'xen'
-          elsif manufacturer =~ /^Amazon EC2/
+          elsif manufacturer.start_with?('Amazon EC2')
             'kvm'
           else
             'physical'

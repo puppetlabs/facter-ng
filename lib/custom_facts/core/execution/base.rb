@@ -77,7 +77,7 @@ module Facter
 
         def builtin_command?(command)
           output, _status = Open3.capture2("type #{command}")
-          output.chomp =~ /builtin/ ? true : false
+          /builtin/.match?(output.chomp) ? true : false
         end
 
         def execute_command(command, on_fail, logger = nil)

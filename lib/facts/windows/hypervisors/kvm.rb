@@ -18,7 +18,7 @@ module Facts
           product_name = Facter::Resolvers::DMIComputerSystem.resolve(:name)
 
           (Facter::Resolvers::Virtualization.resolve(:virtual) == 'kvm' || Facter::Resolvers::NetKVM.resolve(:kvm)) &&
-            product_name != 'VirtualBox' && !product_name.match(/^Parallels/)
+            product_name != 'VirtualBox' && !product_name.start_with?('Parallels')
         end
 
         def discover_provider
@@ -26,9 +26,9 @@ module Facts
 
           return { google: true } if manufacturer == 'Google'
 
-          return { openstack: true } if Facter::Resolvers::DMIComputerSystem.resolve(:name) =~ /^OpenStack/
+          return { openstack: true } if Facter::Resolvers::DMIComputerSystem.resolve(:name).start_with?('OpenStack')
 
-          return { amazon: true } if manufacturer =~ /^Amazon/
+          return { amazon: true } if manufacturer.start_with?('Amazon')
         end
       end
     end

@@ -15,7 +15,7 @@ module Facts
         private
 
         def hvm?
-          Facter::Resolvers::DMIComputerSystem.resolve(:name) =~ /^HVM/
+          Facter::Resolvers::DMIComputerSystem.resolve(:name).start_with?('HVM')
         end
       end
     end

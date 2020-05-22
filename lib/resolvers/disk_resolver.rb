@@ -27,7 +27,7 @@ module Facter
                 next if result.empty?
 
                 # Linux always considers sectors to be 512 bytes long independently of the devices real block size.
-                value[key] = file =~ /size/ ? construct_size(value, result) : result
+                value[key] = /size/.match?(file) ? construct_size(value, result) : result
               end
             end
 

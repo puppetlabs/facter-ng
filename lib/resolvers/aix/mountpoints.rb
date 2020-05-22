@@ -19,7 +19,7 @@ module Facter
             @fact_list[:mountpoints] = {}
             output = Facter::Core::Execution.execute('mount', logger: log)
             output.split("\n").map do |line|
-              next if line =~ /node|---|procfs|ahafs/
+              next if /node|---|procfs|ahafs/.match?(line)
 
               elem = line.split("\s")
 
@@ -34,7 +34,7 @@ module Facter
           def retrieve_sizes_for_mounts
             output = Facter::Core::Execution.execute('df -P', logger: log)
             output.split("\n").map do |line|
-              next if line =~ /Filesystem|-\s+-\s+-/
+              next if /Filesystem|-\s+-\s+-/.match?(line)
 
               mount_info = line.split("\s")
               mount_info[3] = translate_to_bytes(mount_info[3])
