@@ -40,6 +40,12 @@ module Facter
       end
     end
 
+    def group_cached?(group_name)
+      cached = @fact_groups.get_group_ttls(group_name) ? true : false
+      delete_cache(group_name) unless cached
+      cached
+    end
+
     private
 
     def resolve_fact(searched_fact)
@@ -117,12 +123,6 @@ module Facter
         delete_cache(group_name)
       end
       @groups[group_name] = data
-    end
-
-    def group_cached?(group_name)
-      cached = @fact_groups.get_group_ttls(group_name) ? true : false
-      delete_cache(group_name) unless cached
-      cached
     end
 
     def check_ttls?(group_name)
