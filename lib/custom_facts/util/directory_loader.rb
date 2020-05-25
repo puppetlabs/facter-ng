@@ -30,11 +30,11 @@ module LegacyFacter
       EXTERNAL_FACT_WEIGHT = 10_000
 
       # Directory for fact loading
-      attr_reader :directory
+      attr_reader :directories
 
-      def initialize(dir, weight = nil)
-        @directory = dir
-        @weight = weight || EXTERNAL_FACT_WEIGHT
+      def initialize(dir = LegacyFacter::Util::Config.external_facts_dirs, weight = EXTERNAL_FACT_WEIGHT)
+        @directories = dir
+        @weight = weight
       end
 
       def self.loader_for(dir)
@@ -43,12 +43,12 @@ module LegacyFacter
         LegacyFacter::Util::DirectoryLoader.new(dir)
       end
 
-      def self.default_loader
-        loaders = LegacyFacter::Util::Config.external_facts_dirs.collect do |dir|
-          LegacyFacter::Util::DirectoryLoader.new(dir)
-        end
-        LegacyFacter::Util::CompositeLoader.new(loaders)
-      end
+      # def self.default_loader
+      #   loaders = LegacyFacter::Util::Config.external_facts_dirs.collect do |dir|
+      #     LegacyFacter::Util::DirectoryLoader.new(dir)
+      #   end
+      #   LegacyFacter::Util::CompositeLoader.new(loaders)
+      # end
 
       # Load facts from files in fact directory using the relevant parser classes to
       # parse them.
@@ -58,8 +58,8 @@ module LegacyFacter
         sf = []
         entries.each do |file|
           basename = File.basename(file)
-          if sf.select { |f| f.name == basename } && cm.group_cached?(basename)
-            LegacyFacter.error "Caching is enabled for group #{basename} while there are at least two external facts files with the same filename"
+          if sf.find { |f| f.name == basename } && cm.group_cached?(basename)
+            Facter.log_exception(Exception.new("Caching is enabled for group #{basename} while there are at least two external facts files with the same filename"))
           else
             f = Facter::SearchedFact.new(basename, nil, [], nil, :file)
             f.file = file
@@ -90,13 +90,16 @@ module LegacyFacter
       private
 
       def entries
-        Dir.entries(directory).find_all { |f| should_parse?(f) }.sort.map { |f| File.join(directory, f) }
+        # Dir.entries(directories).find_all { |f| should_parse?(f) }.sort.map { |f| File.join(directories, f) }
+
+        # @directories.each{|directory| Dir.entries(directory) }.find_all { |f| should_parse?(f) }.sort.map { |f| File.join(directories, f) }
+        @directories.map{|directory| Dir.entries(directory).map{|d| directory + "/" + d} }.flatten.find_all { |f| should_parse?(f) }
       rescue Errno::ENOENT
         []
       end
 
       def should_parse?(file)
-        file !~ /^\./
+        file !~ /\.$/
       end
     end
   end
