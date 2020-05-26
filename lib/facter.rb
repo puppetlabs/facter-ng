@@ -312,7 +312,9 @@ module Facter
     # @api private
     def error_check(args, resolved_facts)
       if Options[:strict]
-        missing_names = args - resolved_facts.map(&:user_query).uniq
+        # missing_names = args - resolved_facts.map(&:user_query).uniq
+        missing_names =  resolved_facts.select { |fact| fact.type == :nil}.map(&:user_query)
+
         if missing_names.count.positive?
           status = 1
           log_errors(missing_names)

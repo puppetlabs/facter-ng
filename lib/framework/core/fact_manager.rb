@@ -32,6 +32,10 @@ module Facter
 
       FactFilter.new.filter_facts!(resolved_facts)
 
+      searched_facts.select { |fact| fact.type == :nil }.each do |fact|
+        resolved_facts << ResolvedFact.new(fact.name, nil, :nil, fact.name)
+      end
+
       resolved_facts
     end
 

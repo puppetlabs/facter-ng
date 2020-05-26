@@ -50,6 +50,8 @@ module Facter
           return resolvable_fact_list if resolvable_fact_list.any?
         end
 
+        resolvable_fact_list << SearchedFact.new(query, nil, [], query, :nil) if resolvable_fact_list.empty?
+
         resolvable_fact_list
       end
 

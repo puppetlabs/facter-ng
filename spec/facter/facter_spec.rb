@@ -3,8 +3,10 @@
 describe Facter do
   let(:fact_name) { 'os.name' }
   let(:fact_value) { 'ubuntu' }
+  let(:type) { :core }
   let(:os_fact) do
-    double(Facter::ResolvedFact, name: fact_name, value: fact_value, user_query: fact_name, filter_tokens: [])
+    double(Facter::ResolvedFact, name: fact_name, value: fact_value,
+           user_query: fact_name, filter_tokens: [], type: type)
   end
   let(:empty_fact_collection) { Facter::FactCollection.new }
   let(:logger) { instance_spy(Facter::Log) }
@@ -96,7 +98,7 @@ describe Facter do
     end
 
     context 'when provided with --strict option' do
-      it 'returns no fact and status 1', resolved_fact: false do
+      it 'returns no fact and status 1', resolved_fact: true do
         user_query = ['os.name', 'missing_fact']
         expected_json_output = '{}'
         allow(Facter::Options).to receive(:[]).with(:strict).and_return(true)
