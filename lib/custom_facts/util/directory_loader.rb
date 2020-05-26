@@ -59,7 +59,7 @@ module LegacyFacter
         entries.each do |file|
           basename = File.basename(file)
           if sf.find { |f| f.name == basename } && cm.group_cached?(basename)
-            Facter.log_exception(Exception.new("Caching is enabled for group #{basename} while there are at least two external facts files with the same filename"))
+            Facter.log_exception(Exception.new("Caching is enabled for group \"#{basename}\" while there are at least two external facts files with the same filename"))
           else
             f = Facter::SearchedFact.new(basename, nil, [], nil, :file)
             f.file = file
