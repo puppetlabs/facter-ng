@@ -37,11 +37,11 @@ module LegacyFacter
         @weight = weight
       end
 
-      def self.loader_for(dir)
-        raise NoSuchDirectoryError unless File.directory?(dir)
-
-        LegacyFacter::Util::DirectoryLoader.new(dir)
-      end
+      # def self.loader_for(dir)
+      #   raise NoSuchDirectoryError unless File.directory?(dir)
+      #
+      #   LegacyFacter::Util::DirectoryLoader.new(dir)
+      # end
 
       # def self.default_loader
       #   loaders = LegacyFacter::Util::Config.external_facts_dirs.collect do |dir|
@@ -90,10 +90,9 @@ module LegacyFacter
       private
 
       def entries
-        # Dir.entries(directories).find_all { |f| should_parse?(f) }.sort.map { |f| File.join(directories, f) }
+        # @directories.map { |directory| Dir.entries(directory).map { |d| directory + "/" + d } }.flatten.filter { |f| should_parse?(f) }
 
-        # @directories.each{|directory| Dir.entries(directory) }.find_all { |f| should_parse?(f) }.sort.map { |f| File.join(directories, f) }
-        @directories.map{|directory| Dir.entries(directory).map{|d| directory + "/" + d} }.flatten.find_all { |f| should_parse?(f) }
+        @directories.select{ |directory| File.directory?(directory)}.map { |directory| Dir.entries(directory).map { |d| directory + "/" + d } }.flatten.select { |f| should_parse?(f) }
       rescue Errno::ENOENT
         []
       end
