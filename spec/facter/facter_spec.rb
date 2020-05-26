@@ -5,19 +5,19 @@ describe Facter do
   let(:fact_value) { 'ubuntu' }
   let(:type) { :core }
   let(:os_fact) do
-    double(Facter::ResolvedFact, name: fact_name, value: fact_value,
-                                 user_query: fact_name, filter_tokens: [], type: type)
+    instance_spy(Facter::ResolvedFact, name: fact_name, value: fact_value,
+                                       user_query: fact_name, filter_tokens: [], type: type)
   end
   let(:missing_fact) do
-    double(Facter::ResolvedFact, name: 'missing_fact', value: nil,
-                                 user_query: 'missing_fact', filter_tokens: [], type: :nil)
+    instance_spy(Facter::ResolvedFact, name: 'missing_fact', value: nil,
+                                       user_query: 'missing_fact', filter_tokens: [], type: :nil)
   end
   let(:empty_fact_collection) { Facter::FactCollection.new }
   let(:logger) { instance_spy(Facter::Log) }
   let(:fact_manager_spy) { instance_spy(Facter::FactManager) }
   let(:fact_collection_spy) { instance_spy(Facter::FactCollection) }
   let(:key_error) { KeyError.new('key error') }
-  let(:config_reader_double) { double(Facter::ConfigReader) }
+  let(:config_reader_double) { class_spy(Facter::ConfigReader) }
 
   before do
     allow(Facter::ConfigReader).to receive(:init).and_return(config_reader_double)
@@ -82,7 +82,7 @@ describe Facter do
                              end
 
       allow(fact_manager_spy).to receive(:resolve_facts).and_return(resolved_fact)
-      json_fact_formatter = double(Facter::JsonFactFormatter)
+      json_fact_formatter = instance_spy(Facter::JsonFactFormatter)
       allow(json_fact_formatter).to receive(:format).with(resolved_fact).and_return(expected_json_output)
       allow(Facter::FormatterFactory).to receive(:build).and_return(json_fact_formatter)
     end
@@ -224,8 +224,10 @@ describe Facter do
 
     describe '#search_path' do
       it 'sends call to Facter::Options' do
-        expect(Facter::Options).to receive(:custom_dir).once
+        allow(Facter::Options).to receive(:custom_dir)
         Facter.search_path
+
+        expect(Facter::Options).to have_received(:custom_dir).once
       end
     end
 
@@ -331,8 +333,9 @@ describe Facter do
 
   describe '#debugging?' do
     it 'returns that log_level is not debug' do
-      expect(Facter::Options).to receive(:[]).with(:debug).and_return(false)
       Facter.debugging?
+
+      expect(Facter::Options).to have_received(:[]).with(:debug)
     end
   end
 
