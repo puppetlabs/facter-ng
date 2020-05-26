@@ -6,7 +6,11 @@ describe Facter do
   let(:type) { :core }
   let(:os_fact) do
     double(Facter::ResolvedFact, name: fact_name, value: fact_value,
-           user_query: fact_name, filter_tokens: [], type: type)
+                                 user_query: fact_name, filter_tokens: [], type: type)
+  end
+  let(:missing_fact) do
+    double(Facter::ResolvedFact, name: 'missing_fact', value: nil,
+                                 user_query: 'missing_fact', filter_tokens: [], type: :nil)
   end
   let(:empty_fact_collection) { Facter::FactCollection.new }
   let(:logger) { instance_spy(Facter::Log) }
@@ -70,8 +74,12 @@ describe Facter do
 
   describe '#to_user_output' do
     before do |example|
-      resolved_fact = example.metadata[:resolved_fact] ? [os_fact] : []
-      expected_json_output = example.metadata[:resolved_fact] ? '{"os" : {"name": "ubuntu"}' : '{}'
+      resolved_fact = example.metadata[:multiple_facts] ? [os_fact, missing_fact] : [os_fact]
+      expected_json_output = if example.metadata[:multiple_facts]
+                               '{"os" : {"name": "ubuntu"}, "missing_fact": null}'
+                             else
+                               '{"os" : {"name": "ubuntu"}}'
+                             end
 
       allow(fact_manager_spy).to receive(:resolve_facts).and_return(resolved_fact)
       json_fact_formatter = double(Facter::JsonFactFormatter)
@@ -79,28 +87,28 @@ describe Facter do
       allow(Facter::FormatterFactory).to receive(:build).and_return(json_fact_formatter)
     end
 
-    it 'returns one fact and status 0', resolved_fact: true do
-      user_query = 'os.name'
-      expected_json_output = '{"os" : {"name": "ubuntu"}'
-
-      formated_facts = Facter.to_user_output({}, [user_query])
-
-      expect(formated_facts).to eq([expected_json_output, 0])
-    end
-
-    it 'returns no facts and status 0', resolved_fact: false do
-      user_query = 'os.name'
-      expected_json_output = '{}'
+    it 'returns one fact with value and status 0', multiple_facts: false do
+      user_query = ['os.name']
+      expected_json_output = '{"os" : {"name": "ubuntu"}}'
 
       formatted_facts = Facter.to_user_output({}, [user_query])
 
       expect(formatted_facts).to eq([expected_json_output, 0])
     end
 
+    it 'returns one fact with value, one without and status 0', multiple_facts: true do
+      user_query = ['os.name', 'missing_fact']
+      expected_json_output = '{"os" : {"name": "ubuntu"}, "missing_fact": null}'
+
+      formated_facts = Facter.to_user_output({}, [user_query])
+
+      expect(formated_facts).to eq([expected_json_output, 0])
+    end
+
     context 'when provided with --strict option' do
-      it 'returns no fact and status 1', resolved_fact: true do
+      it 'returns one fact with value, one without and status 1', multiple_facts: true do
         user_query = ['os.name', 'missing_fact']
-        expected_json_output = '{}'
+        expected_json_output = '{"os" : {"name": "ubuntu"}, "missing_fact": null}'
         allow(Facter::Options).to receive(:[]).with(:strict).and_return(true)
 
         formatted_facts = Facter.to_user_output({}, *user_query)
@@ -108,9 +116,9 @@ describe Facter do
         expect(formatted_facts).to eq([expected_json_output, 1])
       end
 
-      it 'returns one fact and status 0', resolved_fact: true do
+      it 'returns one fact and status 0', multiple_facts: false do
         user_query = 'os.name'
-        expected_json_output = '{"os" : {"name": "ubuntu"}'
+        expected_json_output = '{"os" : {"name": "ubuntu"}}'
         allow(Facter::Options).to receive(:[]).with(anything)
         allow(Facter::Options).to receive(:[]).with(:block_list).and_return([])
         allow(Facter::Options).to receive(:[]).with(:strict).and_return(true)
