@@ -80,11 +80,9 @@ def replace_facter_3_with_facter_4
   install_latest_facter_4(gem_command)
 
   message('CHANGE FACTER 3 WITH FACTER 4')
-  if HOST_PLATFORM.include? 'windows'
-    run('mv facter-ng.bat facter.bat', puppet_bin_dir)
-  else
-    run('mv facter-ng facter', puppet_bin_dir)
-  end
+
+  extension = (HOST_PLATFORM.include? 'windows') ? '.bat' : ''
+  run("mv facter-ng#{extension} facter#{extension}", puppet_bin_dir)
 end
 
 
@@ -118,7 +116,7 @@ def run(command, dir = './', env = {})
   puts command
   output = ''
   status = 0
-  Open3.popen2e(env, command, chdir: dir) do |stdin, stdout_and_err, wait_thr|
+  Open3.popen2e(env, command, chdir: dir) do |_stdin, stdout_and_err, wait_thr|
     stdout_and_err.each do |line|
       puts line
       output += line
@@ -142,7 +140,7 @@ Dir.chdir(FACTER_3_ACCEPTANCE_PATH) do
   install_puppet_agent
 end
 
-# replace_facter_3_with_facter_4
+replace_facter_3_with_facter_4
 
 Dir.chdir(FACTER_3_ACCEPTANCE_PATH) do
   _, status = run_acceptance_tests
