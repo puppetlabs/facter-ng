@@ -52,8 +52,7 @@ def install_puppet_agent
   beaker_puppet_root, _ = run('bundle info beaker-puppet --path')
   presuite_file_path = "#{beaker_puppet_root.chomp}/setup/aio/010_Install_Puppet_Agent.rb"
 
-  env = (HOST_PLATFORM.include? 'windows') ? { 'PATH' => "#{puppet_bin_dir};#{ENV['PATH']}" } : {}
-  run("beaker exec pre-suite --pre-suite #{presuite_file_path} --preserve-state", './', env)
+  run("beaker exec pre-suite --pre-suite #{presuite_file_path} --preserve-state", './', env_path_var)
 end
 
 def puppet_bin_dir
@@ -71,6 +70,10 @@ end
 def gem_command
   return '/opt/puppetlabs/puppet/bin/gem' unless HOST_PLATFORM.include? 'windows'
   "\"C:\\Program Files\\Puppet Labs\\Puppet\\puppet\\bin\\gem\""
+end
+
+def env_path_var
+  (HOST_PLATFORM.include? 'windows') ? { 'PATH' => "#{puppet_bin_dir};#{ENV['PATH']}" } : {}
 end
 
 def replace_facter_3_with_facter_4
@@ -100,8 +103,7 @@ end
 def run_acceptance_tests
   message('RUN ACCEPTANCE TESTS')
 
-  env = (HOST_PLATFORM.include? 'windows') ? { 'PATH' => "#{puppet_bin_dir};#{ENV['PATH']}" } : {}
-  run('beaker exec tests --test-tag-exclude=server,facter_3 --test-tag-or=risk:high,audit:high', './', env)
+  run('beaker exec tests --test-tag-exclude=server,facter_3 --test-tag-or=risk:high,audit:high', './', env_path_var)
 end
 
 def message(message)
