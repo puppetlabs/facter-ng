@@ -53,6 +53,7 @@ def install_puppet_agent
   presuite_file_path = "#{beaker_puppet_root.chomp}/setup/aio/010_Install_Puppet_Agent.rb"
 
   run("beaker exec pre-suite --pre-suite #{presuite_file_path} --preserve-state", './', env_path_var)
+  # run("facter -v", puppet_bin_dir)
 end
 
 def puppet_bin_dir
@@ -85,7 +86,9 @@ def replace_facter_3_with_facter_4
   message('CHANGE FACTER 3 WITH FACTER 4')
 
   extension = (HOST_PLATFORM.include? 'windows') ? '.bat' : ''
+  run("mv facter#{extension} facter-old#{extension}", puppet_bin_dir)
   run("mv facter-ng#{extension} facter#{extension}", puppet_bin_dir)
+  # run("facter -v", puppet_bin_dir)
 end
 
 

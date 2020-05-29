@@ -245,7 +245,7 @@ module Facter
       SessionCache.invalidate_all_caches
       fact_formatter = Facter::FormatterFactory.build(Facter::Options.get)
 
-      status = error_check(args, resolved_facts)
+      status = error_check(resolved_facts)
 
       [fact_formatter.format(resolved_facts), status || 0]
     end
@@ -310,9 +310,10 @@ module Facter
     #  facts that are not found or resolved, otherwise it will return nil
     #
     # @api private
-    def error_check(args, resolved_facts)
+    def error_check(resolved_facts)
       if Options[:strict]
-        missing_names = args - resolved_facts.map(&:user_query).uniq
+        missing_names = resolved_facts.select { |fact| fact.type == :nil }.map(&:user_query)
+
         if missing_names.count.positive?
           status = 1
           log_errors(missing_names)
