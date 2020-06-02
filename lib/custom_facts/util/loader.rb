@@ -40,6 +40,7 @@ module LegacyFacter
         paths = search_path
         paths&.each do |dir|
           # dir is already an absolute path
+          dir = dir.gsub(/[\/\\]+/, File::SEPARATOR)
           Dir.glob(File.join(dir, '*.rb')).each do |path|
             # exclude dirs that end with .rb
             load_file(path) if FileTest.file?(path)
