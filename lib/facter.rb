@@ -289,6 +289,9 @@ module Facter
       user_query = user_query.to_s
       resolved_facts = Facter::FactManager.instance.resolve_facts([user_query])
       SessionCache.invalidate_all_caches
+      # we must make a distinction between custom facts that return nil and nil facts
+      # Nil facts should not be packaged as ResolvedFacts! (add_fact_to_searched_facts packages facts)
+      resolved_facts = resolved_facts.reject { |fact| fact.type == :nil }
       fact_collection = FactCollection.new.build_fact_collection!(resolved_facts)
       splitted_user_query = Facter::Utils.split_user_query(user_query)
 
