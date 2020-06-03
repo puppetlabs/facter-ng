@@ -166,6 +166,24 @@ describe Facter do
 
       expect(Facter.fact('os.name')).to be_nil
     end
+
+    context 'when there is a resolved fact with type nil' do
+      before do
+        allow(fact_manager_spy).to receive(:resolve_facts).and_return([missing_fact])
+        allow(fact_collection_spy).to receive(:build_fact_collection!).with([]).and_return(empty_fact_collection)
+        allow(fact_collection_spy).to receive(:value).and_raise(KeyError)
+      end
+
+      it 'is rejected' do
+        Facter.fact('missing_fact')
+
+        expect(fact_collection_spy).to have_received(:build_fact_collection!).with([])
+      end
+
+      it 'returns nil' do
+        expect(Facter.fact('missing_fact')).to be_nil
+      end
+    end
   end
 
   describe '#[]' do

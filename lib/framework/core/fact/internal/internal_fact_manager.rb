@@ -9,8 +9,7 @@ module Facter
       threads = start_threads(internal_searched_facts)
       resolved_facts = join_threads(threads, internal_searched_facts)
 
-      nil_searched_facts = filter_nil_facts(searched_facts)
-      nil_resolved_facts = resolve_nil_facts(nil_searched_facts)
+      nil_resolved_facts = resolve_nil_facts(searched_facts)
 
       resolved_facts.concat(nil_resolved_facts)
     end
@@ -19,10 +18,6 @@ module Facter
 
     def filter_internal_facts(searched_facts)
       searched_facts.select { |searched_fact| %i[core legacy].include? searched_fact.type }
-    end
-
-    def filter_nil_facts(searched_facts)
-      searched_facts.select { |searched_fact| %i[nil].include? searched_fact.type }
     end
 
     def resolve_nil_facts(searched_facts)

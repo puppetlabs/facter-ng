@@ -10,7 +10,7 @@ def install_facter_3_dependencies
   run('bundle install')
 end
 
-def install_custom_beaker
+def use_custom_beaker
   message('USE CUSTOM BEAKER')
   beaker_path, _ = run('bundle info beaker --path', FACTER_3_ACCEPTANCE_PATH)
   Dir.chdir(beaker_path.split("\n").last) do
@@ -25,7 +25,7 @@ def initialize_beaker
   beaker_platform_with_options = platform_with_options(beaker_platform)
 
   message('BEAKER INITIALIZE')
-  run("beaker init -h #{beaker_platform_with_options} -o config/aio/options.rb")
+  run("beaker init -h #{beaker_platform_with_options} -o #{File.join('config', 'aio', 'options.rb')}")
 
   message('BEAKER PROVISION')
   run('beaker provision')
@@ -50,7 +50,7 @@ def install_puppet_agent
   message('INSTALL PUPPET AGENT')
 
   beaker_puppet_root, _ = run('bundle info beaker-puppet --path')
-  presuite_file_path = "#{beaker_puppet_root.chomp}/setup/aio/010_Install_Puppet_Agent.rb"
+  presuite_file_path = File.join(beaker_puppet_root.chomp, 'setup', 'aio', '010_Install_Puppet_Agent.rb')
 
   run("beaker exec pre-suite --pre-suite #{presuite_file_path} --preserve-state", './', env_path_var)
 end
@@ -86,7 +86,6 @@ def replace_facter_3_with_facter_4
 
   extension = (HOST_PLATFORM.include? 'windows') ? '.bat' : ''
   run("mv facter-ng#{extension} facter#{extension}", puppet_bin_dir)
-  # run("facter -v", puppet_bin_dir)
 end
 
 
@@ -104,7 +103,7 @@ end
 def run_acceptance_tests
   message('RUN ACCEPTANCE TESTS')
 
-  run('beaker exec tests', './', env_path_var)
+  run('beaker exec tests --test-tag-exclude=server,facter_3 --test-tag-or=risk:high,audit:high', './', env_path_var)
 end
 
 def message(message)
@@ -136,7 +135,7 @@ HOST_PLATFORM = ARGV[0]
 install_bundler
 
 Dir.chdir(FACTER_3_ACCEPTANCE_PATH) { install_facter_3_dependencies }
-install_custom_beaker
+use_custom_beaker
 
 Dir.chdir(FACTER_3_ACCEPTANCE_PATH) do
   initialize_beaker
