@@ -32,7 +32,7 @@ describe Facter::InternalFactManager do
       expect(resolved_facts).to eq([resolved_fact])
     end
 
-    context 'when resolved fac is of type nil' do
+    context 'when resolved fact is of type nil' do
       let(:searched_fact) do
         instance_spy(Facter::SearchedFact, name: 'missing_fact', fact_class: nil,
                                            filter_tokens: [], user_query: '', type: :nil)
