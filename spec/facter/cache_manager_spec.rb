@@ -6,11 +6,11 @@ describe Facter::CacheManager do
   let(:cache_dir) { '/etc/facter/cache' }
   let(:searched_core_fact) do
     instance_spy(Facter::SearchedFact, name: 'os', fact_class: instance_spy(Facts::Linux::Os::Name),
-                                       filter_tokens: [], user_query: '', type: :core)
+                                       filter_tokens: [], user_query: '', type: :core, file: nil)
   end
   let(:searched_custom_fact) do
     instance_spy(Facter::SearchedFact, name: 'my_custom_fact', fact_class: nil, filter_tokens: [],
-                                       user_query: '', type: :custom)
+                                       user_query: '', type: :custom, file: nil)
   end
   let(:searched_facts) { [searched_core_fact, searched_custom_fact] }
   let(:cached_core_fact) { "{\n  \"os\": \"Ubuntu\"\n}" }

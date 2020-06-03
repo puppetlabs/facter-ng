@@ -5,13 +5,12 @@ module Facter
     attr_reader :name, :type
     attr_accessor :user_query, :filter_tokens, :value, :file
 
-    def initialize(name, value = '', type = :core, user_query = nil, filter_tokens = [], file = nil)
+    def initialize(name, value = '', type = :core, user_query = nil, filter_tokens = [])
       @name = name
       @value = Utils.deep_stringify_keys(value)
       @type = type
       @user_query = user_query
       @filter_tokens = filter_tokens
-      @file = file
     end
 
     def legacy?

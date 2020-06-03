@@ -51,7 +51,7 @@ module Facter
     def resolve_fact(searched_fact)
       group_name =  if searched_fact.file
                       searched_fact.name
-                    else 
+                    else
                       @fact_groups.get_fact_group(searched_fact.name)
                     end
 
@@ -66,28 +66,31 @@ module Facter
 
       @log.debug("loading cached values for #{group_name} facts")
 
-      resolved_facts = []
-      if searched_fact.type == :file
-        data.each do |k, v|
-          resolved_facts << create_fact(searched_fact, k, v)
-        end
-      else
-        resolved_facts << create_fact(searched_fact, searched_fact.name, data[searched_fact.name])
-      end
-      resolved_facts
+      create_fact(searched_fact, data)
     end
 
-    def create_fact(searched_fact, name, value)
-      Facter::ResolvedFact.new(name, value, searched_fact.type,
-                               searched_fact.user_query, searched_fact.filter_tokens, searched_fact.file)
+    def create_fact(searched_fact, data)
+      if searched_fact.type == :file
+        facts = []
+        data.each do |k, v|
+          fact = Facter::ResolvedFact.new(k, v, searched_fact.type,
+                                          searched_fact.user_query, searched_fact.filter_tokens)
+          fact.file = searched_fact.file
+          facts << fact
+        end
+        facts
+      else
+        [Facter::ResolvedFact.new(searched_fact.name, data[searched_fact.name], searched_fact.type,
+                                  searched_fact.user_query, searched_fact.filter_tokens)]
+      end
     end
 
     def cache_fact(fact)
-      group_name =  if fact.file
-                      File.basename(fact.file)
-                    else 
-                      @fact_groups.get_fact_group(fact.name)
-                    end
+      group_name = if fact.file
+                     File.basename(fact.file)
+                   else
+                     @fact_groups.get_fact_group(fact.name)
+                   end
       return if !group_name || fact.value.nil?
 
       return unless group_cached?(group_name)

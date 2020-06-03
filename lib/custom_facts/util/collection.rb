@@ -117,7 +117,6 @@ module LegacyFacter
 
         custom_facts = @facts.select { |_k, v| v.options[:fact_type] == :custom }
         @custom_facts = Facter::Utils.deep_copy(custom_facts.keys)
-
       end
 
       def load(name)
@@ -153,7 +152,7 @@ module LegacyFacter
         #
         # core_value = Facter.core_value(name) if fact.used_resolution_weight <= 0
         # core_value.nil? ? fact_value : core_value
-        fact.value
+        fact&.value
       end
 
       private

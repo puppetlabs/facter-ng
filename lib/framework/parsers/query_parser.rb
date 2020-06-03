@@ -39,9 +39,9 @@ module Facter
         matched_facts.flatten(1)
       end
 
-      def no_user_query(loaded_fact)
+      def no_user_query(loaded_facts)
         searched_facts = []
-        loaded_fact.each do |loaded_fact|
+        loaded_facts.each do |loaded_fact|
           searched_facts << SearchedFact.new(loaded_fact.name, loaded_fact.klass, [], '', loaded_fact.type)
         end
         searched_facts
