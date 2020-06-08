@@ -12,7 +12,7 @@ def check(known_arguments, program_arguments)
     return true if known_arguments.key?(argument)
   end
 
-  return false
+  false
 end
 
 def reorder!(program_arguments)
@@ -23,7 +23,7 @@ def reorder!(program_arguments)
 
   program_arguments.each do |argument|
     if priority_arguments.include?(argument)
-      priority_args << (argument)
+      priority_args << argument
     else
       normal_args << argument
     end
@@ -31,7 +31,6 @@ def reorder!(program_arguments)
 
   priority_args.concat(normal_args)
 end
-
 
 Facter::OptionsValidator.validate(ARGV)
 ARGV.unshift(Facter::Cli.default_task) unless
