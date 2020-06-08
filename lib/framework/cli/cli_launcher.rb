@@ -18,7 +18,7 @@ class CliLauncher
 
   def prepare_arguments
     @args.unshift(Facter::Cli.default_task) unless
-      Facter::Cli.all_tasks.key?(@args[0]) ||
+      check_if_arguments_is_known(Facter::Cli.all_tasks, @args) ||
       check_if_arguments_is_known(Facter::Cli.instance_variable_get(:@map), @args)
 
     @args = reorder_program_arguments(@args)
@@ -57,9 +57,3 @@ class CliLauncher
     priority_args.concat(normal_args)
   end
 end
-
-cli_launcher = CliLauncher.new(ARGV)
-
-cli_launcher.validate_options
-cli_launcher.prepare_arguments
-cli_launcher.start
