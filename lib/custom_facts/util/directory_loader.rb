@@ -37,19 +37,6 @@ module LegacyFacter
         @weight = weight
       end
 
-      # def self.loader_for(dir)
-      #   raise NoSuchDirectoryError unless File.directory?(dir)
-      #
-      #   LegacyFacter::Util::DirectoryLoader.new(dir)
-      # end
-
-      # def self.default_loader
-      #   loaders = LegacyFacter::Util::Config.external_facts_dirs.collect do |dir|
-      #     LegacyFacter::Util::DirectoryLoader.new(dir)
-      #   end
-      #   LegacyFacter::Util::CompositeLoader.new(loaders)
-      # end
-
       # Load facts from files in fact directory using the relevant parser classes to
       # parse them.
       def load(collection)
@@ -57,10 +44,7 @@ module LegacyFacter
 
         searched_facts, cached_facts = load_directory_entries(collection)
 
-        cached_facts.each do |cached_fact|
-          collection.add(cached_fact.name, value: cached_fact.value, fact_type: :external,
-                                           file: cached_fact.file) { has_weight(weight) }
-        end
+        load_cached_facts(collection, cached_facts, weight)
 
         load_searched_facts(collection, searched_facts, weight)
       end
@@ -76,13 +60,20 @@ module LegacyFacter
             Facter.log_exception(Exception.new("Caching is enabled for group \"#{basename}\" while "\
               'there are at least two external facts files with the same filename'))
           else
-            f = Facter::SearchedFact.new(basename, nil, [], nil, :file)
-            f.file = file
-            sf << f
+            searched_fact = Facter::SearchedFact.new(basename, nil, [], nil, :file)
+            searched_fact.file = file
+            sf << searched_fact
           end
         end
 
         cm.resolve_facts(sf)
+      end
+
+      def load_cached_facts(collection, cached_facts, weight)
+        cached_facts.each do |cached_fact|
+          collection.add(cached_fact.name, value: cached_fact.value, fact_type: :external,
+                                           file: cached_fact.file) { has_weight(weight) }
+        end
       end
 
       def load_searched_facts(collection, searched_facts, weight)

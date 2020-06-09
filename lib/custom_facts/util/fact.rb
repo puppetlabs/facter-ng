@@ -123,8 +123,10 @@ module Facter
           announce_when_no_suitable_resolution(suitable_resolutions)
           announce_when_no_value_found(@value)
 
-          resolve_value
+          @value = resolve_value
         end
+
+        @value
       end
 
       # @api private
