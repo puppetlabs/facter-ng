@@ -15,17 +15,6 @@ describe LegacyFacter::Util::DirectoryLoader do
     expect(dir_loader.directories).to be_instance_of(Array)
   end
 
-  # it "can be created with a given directory" do
-  #   expect(Facter::Util::DirectoryLoader.loader_for("lib").directory).to eq "../lib"
-  # end
-
-  # it 'raises an error when the directory does not exist' do
-  #   missing_dir = 'missing'
-  #   allow(File).to receive(:directory?).with(missing_dir).and_return(false)
-  #   expect { LegacyFacter::Util::DirectoryLoader.loader_for(missing_dir) }
-  #     .to raise_error LegacyFacter::Util::DirectoryLoader::NoSuchDirectoryError
-  # end
-
   it "does nothing bad when dir doesn't exist" do
     fakepath = '/foobar/path'
     my_loader = LegacyFacter::Util::DirectoryLoader.new(fakepath)

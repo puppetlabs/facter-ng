@@ -66,14 +66,14 @@ module Facter
 
       @log.debug("loading cached values for #{group_name} facts")
 
-      create_fact(searched_fact, data)
+      create_facts(searched_fact, data)
     end
 
-    def create_fact(searched_fact, data)
+    def create_facts(searched_fact, data)
       if searched_fact.type == :file
         facts = []
-        data.each do |k, v|
-          fact = Facter::ResolvedFact.new(k, v, searched_fact.type,
+        data.each do |fact_name, fact_value|
+          fact = Facter::ResolvedFact.new(fact_name, fact_value, searched_fact.type,
                                           searched_fact.user_query, searched_fact.filter_tokens)
           fact.file = searched_fact.file
           facts << fact

@@ -34,11 +34,6 @@ module Facter
 
       external_facts_to_load = LegacyFacter.collection.external_facts
 
-      # external_facts_to_load&.each do |external_fact_name|
-      #   loaded_fact = LoadedFact.new(external_fact_name.to_s, nil, :external)
-      #   external_facts << loaded_fact
-      # end
-      #
       external_facts_to_load&.each do |k, v|
         loaded_fact = LoadedFact.new(k.to_s, nil, :external)
         loaded_fact.file = v.options[:file]

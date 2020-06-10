@@ -53,20 +53,20 @@ module LegacyFacter
 
       def load_directory_entries(_collection)
         cm = Facter::CacheManager.new
-        sf = []
+        facts = []
         entries.each do |file|
           basename = File.basename(file)
-          if sf.find { |f| f.name == basename } && cm.group_cached?(basename)
+          if facts.find { |f| f.name == basename } && cm.group_cached?(basename)
             Facter.log_exception(Exception.new("Caching is enabled for group \"#{basename}\" while "\
               'there are at least two external facts files with the same filename'))
           else
             searched_fact = Facter::SearchedFact.new(basename, nil, [], nil, :file)
             searched_fact.file = file
-            sf << searched_fact
+            facts << searched_fact
           end
         end
 
-        cm.resolve_facts(sf)
+        cm.resolve_facts(facts)
       end
 
       def load_cached_facts(collection, cached_facts, weight)
@@ -97,7 +97,7 @@ module LegacyFacter
 
       def entries
         dirs = @directories.select { |directory| File.directory?(directory) }.map do |directory|
-          Dir.entries(directory).map { |d| directory + '/' + d }
+          Dir.entries(directory).map { |directory_entry| File.join(directory, directory_entry) }
         end
         dirs.flatten.select { |f| should_parse?(f) }
       rescue Errno::ENOENT

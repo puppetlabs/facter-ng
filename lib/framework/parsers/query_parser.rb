@@ -26,7 +26,6 @@ module Facter
         matched_facts = []
         @log.debug "User query is: #{query_list}"
         @query_list = query_list
-        # query_list = loaded_fact.map(&:name) unless query_list.any?
 
         return no_user_query(loaded_fact) unless query_list.any?
 
