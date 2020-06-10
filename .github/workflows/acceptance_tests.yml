@@ -4,7 +4,7 @@ name: Acceptance tests
 on:
   push:
     branches:
-      - master
+      - FACT-2600
   pull_request:
     branches:
       - master
@@ -30,8 +30,8 @@ jobs:
       - name: Clone facter 3 repo
         uses: actions/checkout@v2
         with:
-          repository: puppetlabs/facter
-          ref: windows_github
+          repository: Filipovici-Andrei/facter
+          ref: FACT-2648_github
           path: facter_3
 
       - name: Install Ruby 2.6
