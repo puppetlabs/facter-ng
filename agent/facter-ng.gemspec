@@ -21,6 +21,9 @@ Gem::Specification.new do |spec|
                  Dir.glob('**/*')
                end
 
+  # Add puppet AIO version version file if it exists
+  spec.files << 'agent/AIO_VERSION' if File.exist?('agent/AIO_VERSION')
+
   spec.required_ruby_version = '~> 2.3'
   spec.files.reject! do |f|
     f.match(%r{^(test|spec|features)/})
