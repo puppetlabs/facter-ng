@@ -14,7 +14,7 @@ module Facter
         end
 
         def read_agent_version
-          version_file = ::File.join(ROOT_DIR, 'lib/puppet/VERSION')
+          version_file = ::File.join(ROOT_DIR, 'agent/AIO_VERSION')
           @fact_list[:aio_agent_version] = ::File.read(version_file)
         end
       end
