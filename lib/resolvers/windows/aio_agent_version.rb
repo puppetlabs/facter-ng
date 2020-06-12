@@ -4,7 +4,6 @@
 module Facter
   module Resolvers
     class AioAgentVersion < BaseResolver
-      @log = Facter::Log.new(self)
       @semaphore = Mutex.new
       @fact_list ||= {}
 
@@ -26,9 +25,11 @@ module Facter
         end
 
           def build_fact_list(reg)
-            # rubocop:disable Performance/InefficientHashSearch
-            @fact_list[:path] = reg['RememberedInstallDir64'] if reg.keys.include?('RememberedInstallDir64')
-            # rubocop:enable Performance/InefficientHashSearch
+            puppet_aio_path = reg.read('RememberedInstallDir64')
+            aio_version  = Util::FileHelper.safe_read(puppet_aio_path, nil)
+            @fact_list[:aio_version] = aio_version
+          rescue Exception => e
+            log.error("Could not read Puppet AIO path from registry")
           end
       end
     end
