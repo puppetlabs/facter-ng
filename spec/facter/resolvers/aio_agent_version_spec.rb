@@ -1,10 +1,14 @@
 # frozen_string_literal: true
 
-describe Facter::Resolvers::Windows::AioAgentVersion do
+describe Facter::Resolvers::AioAgentVersion do
   describe '#resolve' do
-    # it 'detects puppet version' do
-    #   allow(File).to receive(:read).with("#{ROOT_DIR}/agent/AIO_VERSION").and_return('7.0.1')
-    #   expect(Facter::Resolvers::Agent.resolve(:aio_agent_version)).to eql('7.0.1')
-    # end
+    it 'detects puppet version' do
+      allow(Facter::Util::FileHelper)
+        .to receive(:safe_read)
+        .with('/opt/puppetlabs/puppet/VERSION', nil)
+        .and_return('7.0.1')
+
+      expect(Facter::Resolvers::AioAgentVersion.resolve(:aio_agent_version)).to eql('7.0.1')
+    end
   end
 end
