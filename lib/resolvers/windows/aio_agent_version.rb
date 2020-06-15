@@ -21,16 +21,18 @@ module Facter
           reg.close
 
           @fact_list[fact_name]
-
         end
 
-          def build_fact_list(reg)
-            puppet_aio_path = reg.read('RememberedInstallDir64')
-            aio_version  = Util::FileHelper.safe_read(puppet_aio_path, nil)
-            @fact_list[:aio_version] = aio_version
-          rescue Exception => e
-            log.error("Could not read Puppet AIO path from registry")
-          end
+        def build_fact_list(reg)
+          puppet_aio_path = reg.read('RememberedInstallDir64')[1]
+          puppet_aio_version_path = File.join(puppet_aio_path, 'VERSION')
+
+          aio_version  = Util::FileHelper.safe_read(puppet_aio_version_path, nil)
+          @fact_list[:aio_version] = aio_version
+        rescue Win32::Registry::Error => e
+          log.error("Could not read Puppet AIO path from registry")
+          @fact_list[:aio_version] = nil
+        end
       end
     end
   end
