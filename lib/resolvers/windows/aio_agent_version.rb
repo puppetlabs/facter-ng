@@ -4,6 +4,7 @@ module Facter
   module Resolvers
     module Windows
       class AioAgentVersion < BaseResolver
+        REGISTRY_PATH = 'SOFTWARE\\Puppet Labs\\Puppet'
         @semaphore = Mutex.new
         @fact_list ||= {}
 
@@ -15,11 +16,13 @@ module Facter
           end
 
           def read_version(fact_name)
-            ::Win32::Registry::HKEY_LOCAL_MACHINE.open('SOFTWARE\\Puppet Labs\\Puppet') do |reg|
+            ::Win32::Registry::HKEY_LOCAL_MACHINE.open(REGISTRY_PATH) do |reg|
               build_fact_list(reg)
             end
 
             @fact_list[fact_name]
+          rescue Win32::Registry::Error
+            log.debug("The registry path #{REGISTRY_PATH} does not exist")
           end
 
           def build_fact_list(reg)
