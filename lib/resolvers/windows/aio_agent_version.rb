@@ -15,9 +15,9 @@ module Facter
           end
 
           def read_version(fact_name)
-            reg = ::Win32::Registry::HKEY_LOCAL_MACHINE.open('SOFTWARE\\Puppet Labs\\Puppet')
-            build_fact_list(reg)
-            reg.close
+            ::Win32::Registry::HKEY_LOCAL_MACHINE.open('SOFTWARE\\Puppet Labs\\Puppet') do |reg|
+              build_fact_list(reg)
+            end
 
             @fact_list[fact_name]
           end

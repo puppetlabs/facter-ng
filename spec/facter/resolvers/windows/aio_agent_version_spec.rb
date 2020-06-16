@@ -9,7 +9,7 @@ describe Facter::Resolvers::Windows::AioAgentVersion do
     let(:log) { instance_spy(Facter::Log) }
 
     before do
-      allow(Win32::Registry::HKEY_LOCAL_MACHINE).to receive(:open).with('SOFTWARE\\Puppet Labs\\Puppet').and_return(reg)
+      allow(Win32::Registry::HKEY_LOCAL_MACHINE).to receive(:open).with('SOFTWARE\\Puppet Labs\\Puppet').and_yield(reg)
       allow(reg).to receive(:close)
       allow(Facter::Util::FileHelper)
         .to receive(:safe_read).with('path_to_puppet/VERSION', nil)
