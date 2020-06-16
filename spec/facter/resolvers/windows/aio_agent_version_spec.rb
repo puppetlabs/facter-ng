@@ -12,12 +12,29 @@ describe Facter::Resolvers::Windows::AioAgentVersion do
       allow(Win32::Registry::HKEY_LOCAL_MACHINE).to receive(:open).with('SOFTWARE\\Puppet Labs\\Puppet').and_yield(reg)
       allow(reg).to receive(:close)
       allow(Facter::Util::FileHelper)
-        .to receive(:safe_read).with('path_to_puppet/VERSION', nil)
-                               .and_return(puppet_version)
+        .to receive(:safe_read)
+        .with('path_to_puppet/VERSION', nil)
+        .and_return(puppet_version)
+      allow(Facter::Resolvers::BaseResolver).to receive(:log).and_return(log)
     end
 
     after do
       Facter::Resolvers::Windows::AioAgentVersion.invalidate_cache
+    end
+
+    context 'when the registry path is incorrect' do
+      before do
+        allow(Win32::Registry::HKEY_LOCAL_MACHINE)
+          .to receive(:open)
+          .with('SOFTWARE\\Puppet Labs\\Puppet')
+          .and_raise(Win32::Registry::Error)
+      end
+
+      it 'logs debug message specific to none existent path' do
+        aio_agent_resolver.resolve(:aio_version)
+
+        expect(log).to have_received(:debug).with('The registry path SOFTWARE\Puppet Labs\Puppet does not exist')
+      end
     end
 
     context 'when windows is 64 bit edition' do
@@ -34,7 +51,6 @@ describe Facter::Resolvers::Windows::AioAgentVersion do
       before do
         allow(reg).to receive(:read).with('RememberedInstallDir64').and_raise(Win32::Registry::Error)
         allow(reg).to receive(:read).with('RememberedInstallDir').and_return([1, 'path_to_puppet'])
-        allow(Facter::Resolvers::BaseResolver).to receive(:log).and_return(log)
       end
 
       it 'logs debug message for 64 bit register' do
