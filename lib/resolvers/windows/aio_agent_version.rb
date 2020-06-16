@@ -28,7 +28,7 @@ module Facter
           def build_fact_list(reg)
             puppet_aio_path = read_for_64_bit(reg) || read_for_32_bit(reg)
 
-            return unless puppet_aio_path
+            return if puppet_aio_path.nil? || puppet_aio_path.empty?
 
             puppet_aio_version_path = File.join(puppet_aio_path, 'VERSION')
             @fact_list[:aio_version] = Util::FileHelper.safe_read(puppet_aio_version_path, nil)&.chomp

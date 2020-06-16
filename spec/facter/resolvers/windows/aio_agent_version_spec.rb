@@ -10,7 +10,6 @@ describe Facter::Resolvers::Windows::AioAgentVersion do
 
     before do
       allow(Win32::Registry::HKEY_LOCAL_MACHINE).to receive(:open).with('SOFTWARE\\Puppet Labs\\Puppet').and_yield(reg)
-      allow(reg).to receive(:close)
       allow(Facter::Util::FileHelper)
         .to receive(:safe_read)
         .with('path_to_puppet/VERSION', nil)
@@ -44,6 +43,16 @@ describe Facter::Resolvers::Windows::AioAgentVersion do
 
       it 'returns path from registry specific to 64 bit windows' do
         expect(aio_agent_resolver.resolve(:aio_version)).to eq(puppet_version)
+      end
+
+      context 'when RememberedInstallDir64 does not contain a value' do
+        before do
+          allow(reg).to receive(:read).with('RememberedInstallDir64').and_return([1, ''])
+        end
+
+        it 'calls file helper with empty path' do
+          expect(aio_agent_resolver.resolve(:aio_version)).to be(nil)
+        end
       end
     end
 
