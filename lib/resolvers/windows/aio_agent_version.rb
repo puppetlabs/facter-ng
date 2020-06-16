@@ -31,7 +31,9 @@ module Facter
             return if puppet_aio_path.nil? || puppet_aio_path.empty?
 
             puppet_aio_version_path = File.join(puppet_aio_path, 'VERSION')
-            @fact_list[:aio_version] = Util::FileHelper.safe_read(puppet_aio_version_path, nil)&.chomp
+            aio_agent_version = Util::FileHelper.safe_read(puppet_aio_version_path, nil)&.chomp
+
+            @fact_list[:aio_version] = aio_agent_version&.match(/^\d+\.\d+\.\d+(\.\d+){0,2}/)&.to_s
           end
 
           def read_for_64_bit(reg)

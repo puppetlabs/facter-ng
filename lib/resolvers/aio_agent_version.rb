@@ -15,6 +15,7 @@ module Facter
 
         def read_agent_version
           aio_agent_version = Util::FileHelper.safe_read('/opt/puppetlabs/puppet/VERSION', nil).chomp
+          aio_agent_version = aio_agent_version&.match(/^\d+\.\d+\.\d+(\.\d+){0,2}/)&.to_s
           @fact_list[:aio_agent_version] = aio_agent_version
         end
       end
