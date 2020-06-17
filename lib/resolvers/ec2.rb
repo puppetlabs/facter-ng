@@ -57,13 +57,17 @@ module Facter
           http.read_timeout = determine_session_timeout
           http.open_timeout = EC2_CONNECTION_TIMEOUT
           resp = http.get(parsed_url.path)
-          resp.code.to_i.equal?(200) ? resp.body : ''
+          response_code_valid?(resp.code) ? resp.body : ''
         rescue Net::OpenTimeout
           log.debug("#{url} timed out while trying to connect")
           ''
         rescue Errno::ENETUNREACH => e
           log.debug(e.message)
           ''
+        end
+
+        def response_code_valid?(http_code)
+          http_code.to_i.equal?(200)
         end
 
         def determine_session_timeout
