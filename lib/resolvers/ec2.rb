@@ -63,6 +63,7 @@ module Facter
           ''
         rescue Errno::ENETUNREACH => e
           log.debug(e.message)
+          ''
         end
 
         def determine_session_timeout
