@@ -61,10 +61,8 @@ module Facter
         rescue Net::OpenTimeout
           log.debug("#{url} timed out while trying to connect")
           ''
-        rescue Exception => e
-          log.debug("-------------<  ec2 exception  >------------")
-          log.debug(e.inspect)
-          log.debug(e.backtrace)
+        rescue Errno::ENETUNREACH => e
+          log.debug(e.message)
         end
 
         def determine_session_timeout
