@@ -58,8 +58,8 @@ module Facter
           http.open_timeout = EC2_CONNECTION_TIMEOUT
           resp = http.get(parsed_url.path)
           response_code_valid?(resp.code) ? resp.body : ''
-        rescue StandardError, Timeout::Error => e
-          log.debug(e.message)
+        rescue StandardError => e
+          log.debug("Trying to connect to #{url} but got: #{e.message}")
           ''
         end
 
